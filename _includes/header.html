@@ -1,0 +1,16 @@
+<header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="{{ site.url }}" class="site-title">
+      <img style="width:600px;" src="{{ site.utl }}/assets/logo.png" />
+      </a>
+      <nav class="site-nav" style="padding-top:230px;">
+        {% include navigation.html %}
+      </nav>
+      <div class="clearfix"></div>
+      {% if site.show_social_icons %}
+        {% include social_links.html %}
+      {% endif %}
+    </div>
+  </div>
+</header>
