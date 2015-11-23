@@ -8,7 +8,7 @@ categories: howto markdown
 
 # Basics
 
-Post are written in markdown. The variant of markdown we use is called 'kramdown'. Here is a [quick reference](http://kramdown.gettalong.org/quickref.html). What you just saw was the syntax for a hyperlink in markdown.
+Posts are written in markdown. The variant of markdown we use is called 'kramdown'. Here is a [quick reference](http://kramdown.gettalong.org/quickref.html). What you just saw was the syntax for a hyperlink in markdown.
 
 You can include an image like this:
 
