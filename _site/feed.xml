@@ -7,21 +7,55 @@
     <atom:link href="http://offconvex.github.io/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
-        <title>Word embeddings continued</title>
-        <description>&lt;p&gt;In an effort to make Pixyll easier to customize and more aesthetically pleasing, we’ve release version &lt;code&gt;2.0&lt;/code&gt;.&lt;/p&gt;
+        <title>How to write a post for this web site</title>
+        <description>&lt;h1 id=&quot;basics&quot;&gt;Basics&lt;/h1&gt;
 
-&lt;p&gt;Pixyll now features:&lt;/p&gt;
+&lt;p&gt;Post are written in markdown. The variant of markdown we use is called ‘kramdown’. Here is a &lt;a href=&quot;http://kramdown.gettalong.org/quickref.html&quot;&gt;quick reference&lt;/a&gt;. What you just saw was the syntax for a hyperlink in markdown.&lt;/p&gt;
+
+&lt;p&gt;You can include an image like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/logo.png&quot; alt=&quot;logo&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Below is a subsection.&lt;/p&gt;
+
+&lt;h2 id=&quot;lists&quot;&gt;Lists&lt;/h2&gt;
+
+&lt;p&gt;This is a list:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Line anchors in code blocks and new syntax highlighting&lt;/li&gt;
-  &lt;li&gt;A customizable variables file&lt;/li&gt;
-  &lt;li&gt;Modular, and lighter weight CSS&lt;/li&gt;
-  &lt;li&gt;No more &lt;code&gt;max-width&lt;/code&gt; media queries&lt;/li&gt;
+  &lt;li&gt;One&lt;/li&gt;
+  &lt;li&gt;Two&lt;/li&gt;
+  &lt;li&gt;Three&lt;/li&gt;
+  &lt;li&gt;and so on&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;This is an enumerated list:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;one&lt;/li&gt;
+  &lt;li&gt;two&lt;/li&gt;
+  &lt;li&gt;three&lt;/li&gt;
+  &lt;li&gt;four&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;using-math&quot;&gt;Using math&lt;/h1&gt;
+
+&lt;h2 id=&quot;inline-formulas&quot;&gt;Inline formulas&lt;/h2&gt;
+
+&lt;p&gt;Indicate a latex formala with double dollar signs. You do this even for inline math. Like so.
+Let &lt;script type=&quot;math/tex&quot;&gt;f\colon\mathbb{R}^n\to\mathbb{R}&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;display-formulas&quot;&gt;Display formulas&lt;/h2&gt;
+
+&lt;p&gt;To use a display formula instead of inline math, simple offset it to a new line.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f(0) = 0&lt;/script&gt;
+
+&lt;p&gt;That’s all.&lt;/p&gt;
 </description>
         <pubDate>Sat, 11 Jul 2015 00:00:00 -0700</pubDate>
-        <link>http://offconvex.github.io/jekyll/pixyll/2015/07/11/word-embeddings-2/</link>
-        <guid isPermaLink="true">http://offconvex.github.io/jekyll/pixyll/2015/07/11/word-embeddings-2/</guid>
+        <link>http://offconvex.github.io/howto/markdown/2015/07/11/word-embeddings-2/</link>
+        <guid isPermaLink="true">http://offconvex.github.io/howto/markdown/2015/07/11/word-embeddings-2/</guid>
       </item>
     
       <item>

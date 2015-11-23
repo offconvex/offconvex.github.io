@@ -1,16 +1,50 @@
 ---
 layout:     post
-title:      Word embeddings continued
+title:      How to write a post for this web site
 date:       2015-07-11
-summary:    Diving deeper into word embeddings
-categories: jekyll pixyll
+summary:    Learn markdown basics
+categories: howto markdown
 ---
 
-In an effort to make Pixyll easier to customize and more aesthetically pleasing, we've release version `2.0`.
+# Basics
 
-Pixyll now features:
+Post are written in markdown. The variant of markdown we use is called 'kramdown'. Here is a [quick reference](http://kramdown.gettalong.org/quickref.html). What you just saw was the syntax for a hyperlink in markdown.
 
-* Line anchors in code blocks and new syntax highlighting
-* A customizable variables file
-* Modular, and lighter weight CSS
-* No more `max-width` media queries
+You can include an image like this:
+
+![logo](/assets/logo.png)
+
+Below is a subsection.
+
+## Lists
+
+This is a list:
+
+* One
+* Two
+* Three
+* and so on
+
+This is an enumerated list:
+
+1. one
+2. two
+3. three
+4. four
+
+# Using math
+
+## Inline formulas
+
+Indicate a latex formala with double dollar signs. You do this even for inline math. Like so.
+Let $$f\colon\mathbb{R}^n\to\mathbb{R}$$.
+
+## Display formulas
+
+To use a display formula instead of inline math, simple offset it to a new line.
+
+$$
+f(0) = 0
+$$
+
+That's all.
