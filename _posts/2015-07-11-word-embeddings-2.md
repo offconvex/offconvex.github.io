@@ -36,7 +36,7 @@ This is an enumerated list:
 
 ## Inline formulas
 
-Indicate a latex formala with double dollar signs. You do this even for inline math. Like so.
+Indicate inline math like this.
 Let $$f\colon\mathbb{R}^n\to\mathbb{R}$$.
 
 ## Display formulas
@@ -48,3 +48,25 @@ f(0) = 0
 $$
 
 That's all.
+
+***
+
+Blah
+
+***
+
+~~~
+
+test
+
+~~~
+
+> Why is this font so large? $$1+1=2$$
+
+# Using custom html
+
+<div style="border:1px solid #333; margin:10px 10%; padding: 10px 5%;">
+
+Embedding 1: $$1 + 1 = 2$$.
+
+</div>

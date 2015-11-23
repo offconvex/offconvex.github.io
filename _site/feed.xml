@@ -10,7 +10,7 @@
         <title>How to write a post for this web site</title>
         <description>&lt;h1 id=&quot;basics&quot;&gt;Basics&lt;/h1&gt;
 
-&lt;p&gt;Post are written in markdown. The variant of markdown we use is called ‘kramdown’. Here is a &lt;a href=&quot;http://kramdown.gettalong.org/quickref.html&quot;&gt;quick reference&lt;/a&gt;. What you just saw was the syntax for a hyperlink in markdown.&lt;/p&gt;
+&lt;p&gt;Posts are written in markdown. The variant of markdown we use is called ‘kramdown’. Here is a &lt;a href=&quot;http://kramdown.gettalong.org/quickref.html&quot;&gt;quick reference&lt;/a&gt;. What you just saw was the syntax for a hyperlink in markdown.&lt;/p&gt;
 
 &lt;p&gt;You can include an image like this:&lt;/p&gt;
 
@@ -42,7 +42,7 @@
 
 &lt;h2 id=&quot;inline-formulas&quot;&gt;Inline formulas&lt;/h2&gt;
 
-&lt;p&gt;Indicate a latex formala with double dollar signs. You do this even for inline math. Like so.
+&lt;p&gt;Indicate inline math like this.
 Let &lt;script type=&quot;math/tex&quot;&gt;f\colon\mathbb{R}^n\to\mathbb{R}&lt;/script&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;display-formulas&quot;&gt;Display formulas&lt;/h2&gt;
@@ -52,6 +52,29 @@ Let &lt;script type=&quot;math/tex&quot;&gt;f\colon\mathbb{R}^n\to\mathbb{R}&lt;
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;f(0) = 0&lt;/script&gt;
 
 &lt;p&gt;That’s all.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Blah&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;pre&gt;&lt;code&gt;
+test
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Why is this font so large? &lt;script type=&quot;math/tex&quot;&gt;1+1=2&lt;/script&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;using-custom-html&quot;&gt;Using custom html&lt;/h1&gt;
+
+&lt;div style=&quot;border:1px solid #333; margin:10px 10%; padding: 10px 5%;&quot;&gt;
+
+Embedding 1: $$1 + 1 = 2$$.
+
+&lt;/div&gt;
 </description>
         <pubDate>Sat, 11 Jul 2015 00:00:00 -0700</pubDate>
         <link>http://offconvex.github.io/howto/markdown/2015/07/11/word-embeddings-2/</link>
