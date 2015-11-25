@@ -3,8 +3,8 @@ layout:     post
 title:      Semantic Word Embeddings
 date:       2015-12-01 9:00:00
 summary:    Understanding word embeddings
-categories: language words embeddings meaning
 author:     Sanjeev Arora
+visible:    False
 ---
 
 This post can be seen as an introduction to why nonconvex problems arise

@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      Mission statement
-date:       2014-06-10 12:31:19
+date:       2015-12-01 08:30:00
 summary:    What this blog is about
-categories: jekyll pixyll
+visible:    False
 ---
 
 There is a significant amount of subtle, yet precisely calibrated, styling to ensure
