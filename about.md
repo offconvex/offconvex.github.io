@@ -29,4 +29,4 @@ git pull
 git push
 ~~~
 
-If you don't have admin access, you can either create a [pull request](https://help.github.com/articles/creating-a-pull-request/) or send any regular contributor the article in markdown. If so, please start from [this template]() and follow the [guidelines](/guide/).
+If you don't have admin access, you can either create a [pull request](https://help.github.com/articles/creating-a-pull-request/) or send any regular contributor the article in markdown. If so, please start from [this template](https://raw.githubusercontent.com/offconvex/offconvex.github.io/master/_posts/2015-12-01-template.md) and follow the [guidelines](/guide/).
