@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About Off the Convex Path
+title: Off the Convex Path
 permalink: /about/
 ---
 
@@ -9,3 +9,7 @@ permalink: /about/
 * [Sanjeev Arora](http://www.cs.princeton.edu/~arora)
 * [Moritz Hardt](http://mrtz.org)
 * [Nisheeth Vishnoi](http://theory.epfl.ch/vishnoi/Home.html)
+
+##Contributing an article
+
+If you're writing an article for this post, please follow these [guidelines](/guide/).

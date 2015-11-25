@@ -26,6 +26,7 @@ ul {
   font-size: $h4;
   margin-top: 0;
   margin-bottom: $space-2;
+  text-align:justify;
 }
 
 ol,
@@ -47,22 +48,14 @@ pre {
 }
 
 hr {
-  margin-top: $space-3;
-  margin-bottom: $space-3;
-}
-
-blockquote {
-  margin-top: $space-3;
-  margin-bottom: $space-3;
-  margin-left: 0;
-  padding-left: $space-2;
-  padding-right: $space-2;
+  margin: $space-3;
 }
 
 blockquote,
 blockquote p {
   font-size: $h3;
   font-style: italic;
+  text-align: justify;
 }
 
 h1,

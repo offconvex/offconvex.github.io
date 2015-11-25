@@ -131,7 +131,8 @@ ol,
 ul {
   font-size: 1rem;
   margin-top: 0;
-  margin-bottom: 1rem; }
+  margin-bottom: 1rem;
+  text-align: justify; }
 
 ol,
 ul {
@@ -149,24 +150,17 @@ pre {
   overflow-x: scroll; }
 
 hr {
-  margin-top: 2rem;
-  margin-bottom: 2rem; }
-
-blockquote {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  margin-left: 0;
-  padding-left: 1rem;
-  padding-right: 1rem; }
+  margin: 2rem; }
 
 blockquote,
 blockquote p {
   font-size: 1.25rem;
-  font-style: italic; }
+  font-style: italic;
+  text-align: justify; }
 
 h1,
 .h1 {
-  font-size: 2.2rem; }
+  font-size: 2.5rem; }
 
 h2,
 .h2 {
@@ -859,6 +853,9 @@ sup {
 .posts .post a:hover .post-summary {
   opacity: 0.88; }
 
+.post-header {
+  text-align: center; }
+
 .site-header {
   text-align: center; }
 
@@ -1021,29 +1018,11 @@ footer {
   position: relative;
   top: 0.1em; }
 
-/* blockquote {
-  border-left: 5px solid #7a7a7a;
-  font-style: italic;
-  margin-left: $space-1;
-  padding: $space-1;
-}
-
-blockquote footer {
-  background-color: #fff;
-  border-color: transparent;
-  color: #7a7a7a;
-  font-size: .85rem;
-  font-style: normal;
-  text-align: left;
-  padding: 0;
-}
-*/
 blockquote {
   font-size: 12pt;
   background: #f9f9f9;
   border-left: 10px solid #ccc;
-  margin: 1em 5px;
-  padding: 0.2em 5px; }
+  margin: 1em 5px; }
 
 blockquote p {
   font-size: 1rem;
@@ -1093,7 +1072,7 @@ blockquote p {
 
   h1,
   .h1 {
-    font-size: 2.2rem; }
+    font-size: 2.5rem; }
 
   .site-header {
     text-align: left; }

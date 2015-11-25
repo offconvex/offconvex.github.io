@@ -4,22 +4,21 @@ title:      Semantic Word Embeddings
 date:       2015-12-01 9:00:00
 summary:    Understanding word embeddings
 categories: language words embeddings meaning
+author:     Sanjeev Arora
 ---
 
 This post can be seen as an introduction to why nonconvex problems arise
 naturally in practice, and also the relative ease by which they are often
 solved. 
 
- The topic is *word embeddings*, a geometric way to capture
+The topic is *word embeddings*, a geometric way to capture
 the “meaning” of a word via a low-dimensional vector. They are useful in
 many tasks in Information Retrieval (IR) and Natural Language Processing
 (NLP), for example answering search queries or translating from one
 language to another. 
 
-
 You may wonder: how can a 300-dimensional vector capture the many
 nuances of word meaning? And what the heck does this mean?
-
 
 A simple property of embeddings obtained by all the methods I’ll
 describe is *cosine similarity*: the  *similarity* between two words 
@@ -43,9 +42,7 @@ $$||v_w - v_{king} + v_{man} - v_{woman}||^2.$$
 
 This simple idea can solve $$75\%$$ of analogy questions on some standard testbed.
 
-
 ![linear](/assets/linearrelations.jpg)
-
 
 Good embeddings have other properties that will be covered in a future
 post. Now let’s discuss simple methods to construct them.
