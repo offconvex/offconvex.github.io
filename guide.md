@@ -73,6 +73,13 @@ cp 2015-12-01-template.md 2015-12-01-your-post-tile.md
 git add 2015-12-01-your-post-tile.md
 # edit the article using your favorite editor
 git commit -m "my post"
+git push -u origin master
+~~~
+
+If after that you make more changes you can upload them as follows:
+
+~~~
+git commit -am "new changes"
 git pull
 git push
 ~~~
