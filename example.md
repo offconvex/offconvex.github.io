@@ -8,7 +8,7 @@ permalink:  /guide/example/
 visible:    False
 ---
 
-Articles are written in markdown (kramdown). 
+Articles are written in markdown (kramdown).  
 Please use minimal formatting for your article.
 
 This is a single paragraph. It is separated by newlines. 
@@ -17,6 +17,8 @@ paragraph.
 
 This is a second paragraph. 
 You can place subsections as follows.
+
+
 
 ## Using maths
 
