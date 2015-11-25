@@ -82,25 +82,149 @@ Embedding 1: $$1 + 1 = 2$$.
       </item>
     
       <item>
-        <title>Enter word embeddings</title>
-        <description>&lt;p&gt;Hello.&lt;/p&gt;
+        <title>Semantic Word Embeddings</title>
+        <description>&lt;p&gt;This post can be seen as an introduction to why nonconvex problems arise
+naturally in practice, and also the relative ease by which they are often
+solved.&lt;/p&gt;
 
-&lt;p&gt;Pixyll is a simple, beautiful theme for Jekyll that emphasizes content rather than aesthetic fluff. It’s mobile &lt;em&gt;first&lt;/em&gt;, fluidly responsive, and delightfully lightweight.&lt;/p&gt;
+&lt;p&gt;The topic is &lt;em&gt;word embeddings&lt;/em&gt;, a geometric way to capture
+the “meaning” of a word via a low-dimensional vector. They are useful in
+many tasks in Information Retrieval (IR) and Natural Language Processing
+(NLP), for example answering search queries or translating from one
+language to another.&lt;/p&gt;
 
-&lt;p&gt;It’s pretty minimal, but leverages large type and drastic contrast to make a statement, on all devices.&lt;/p&gt;
+&lt;p&gt;You may wonder: how can a 300-dimensional vector capture the many
+nuances of word meaning? And what the heck does this mean?&lt;/p&gt;
+
+&lt;p&gt;A simple property of embeddings obtained by all the methods I’ll
+describe is &lt;em&gt;cosine similarity&lt;/em&gt;: the  &lt;em&gt;similarity&lt;/em&gt; between two words 
+(as rated by humans on a &lt;script type=&quot;math/tex&quot;&gt;[-1,1]&lt;/script&gt; scale) correlates with the &lt;em&gt;cosine&lt;/em&gt;
+of the angle between their vectors. To 
+give an example, the cosine for &lt;em&gt;milk&lt;/em&gt; and
+&lt;em&gt;cow&lt;/em&gt; may be &lt;script type=&quot;math/tex&quot;&gt;0.7&lt;/script&gt;, whereas for &lt;em&gt;milk&lt;/em&gt; and
+&lt;em&gt;stone&lt;/em&gt; it may be &lt;script type=&quot;math/tex&quot;&gt;-0.1&lt;/script&gt;, which is roughly the similarity
+human subjects assign to them.&lt;/p&gt;
+
+&lt;p&gt;A more interesting property in recent embeddings is that they can solve
+&lt;em&gt;analogy&lt;/em&gt; relationships via linear algebra on embeddings.
+For example, the word analogy question
+&lt;em&gt;man : woman ::king : ??&lt;/em&gt; can be solved by looking for the
+word &lt;script type=&quot;math/tex&quot;&gt;w&lt;/script&gt; such that &lt;script type=&quot;math/tex&quot;&gt;v_{king} - v_w&lt;/script&gt; is most similar to
+&lt;script type=&quot;math/tex&quot;&gt;v_{man} - v_{woman}&lt;/script&gt;; in other words, minimizes&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;||v_w - v_{king} + v_{man} - v_{woman}||^2.&lt;/script&gt;
+
+&lt;p&gt;This simple idea can solve &lt;script type=&quot;math/tex&quot;&gt;75\%&lt;/script&gt; of analogy questions on some standard testbed.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/linearrelations.jpg&quot; alt=&quot;linear&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Good embeddings have other properties that will be covered in a future
+post. Now let’s discuss simple methods to construct them.&lt;/p&gt;
+
+&lt;p&gt;The methods all ultimately rely on &lt;em&gt;Firth’s hypothesis&lt;/em&gt;
+from 1954, which says that Namely, the meaning of a word is determined
+by the distribution of other words around it. To give an example, if I
+ask you to think of a word that tends to co-occur with &lt;em&gt;cow,
+drink, babies, calcium&lt;/em&gt;, you would immediately answer:
+&lt;em&gt;milk&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Note that I am not suggesting that Firth’s hypothesis fully accounts
+for all aspects of semantics. (If it it did, a computer would be able to
+learn language completely in an unsupervised way by processing a large
+enough text corpus. Many experts doubt this is possible: they feel
+language –e.g. understanding new metaphors or jokes— requires some
+knowledge of the physical world, as well as some $2$-way interaction
+between teacher and student.) But it does imply a very simple 
+word embedding, albeit a very high-dimensional one.&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;
-    Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.
-  &lt;/p&gt;
-  &lt;footer&gt;&lt;cite title=&quot;Antoine de Saint-Exupéry&quot;&gt;Antoine de Saint-Exupéry&lt;/cite&gt;&lt;/footer&gt;
+  &lt;p&gt;&lt;em&gt;Embedding 1&lt;/em&gt;:&lt;/p&gt;
+
+  &lt;p&gt;Suppose the dictionary has &lt;script type=&quot;math/tex&quot;&gt;N&lt;/script&gt; distinct words (in practice, &lt;script type=&quot;math/tex&quot;&gt;N =100,000&lt;/script&gt;). Take a very large text corpus (e.g., Wikipedia) and let &lt;script type=&quot;math/tex&quot;&gt;Count_5(w_1, w_2)&lt;/script&gt; be the number of times &lt;script type=&quot;math/tex&quot;&gt;w_1&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;w_2&lt;/script&gt; occur within a distance &lt;script type=&quot;math/tex&quot;&gt;5&lt;/script&gt; of each other in the corpus. Then the word embedding for a word &lt;script type=&quot;math/tex&quot;&gt;w&lt;/script&gt; is a vector of dimension &lt;script type=&quot;math/tex&quot;&gt;N&lt;/script&gt;, with one coordinate for each dictionary word. The coordinate corresponding to word &lt;script type=&quot;math/tex&quot;&gt;w_2&lt;/script&gt; is &lt;script type=&quot;math/tex&quot;&gt;Count_5(w, w_2)&lt;/script&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&quot;where-is-it&quot;&gt;Where is it?&lt;/h2&gt;
+&lt;p&gt;The obvious problem with Embedding 1 is that it uses
+extremely high-dimensional vectors. How can we compress them?&lt;/p&gt;
 
-&lt;p&gt;Checkout the &lt;a href=&quot;https://github.com/johnotander/pixyll&quot;&gt;Github repository&lt;/a&gt; to download it, request a feature, or report a bug.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;Embedding 2&lt;/em&gt;: Do dimension reduction by taking the rank-&lt;script type=&quot;math/tex&quot;&gt;300&lt;/script&gt;
+singular value decomposition (SVD) of the above vectors.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;It’s free, and open source (&lt;a href=&quot;http://opensource.org/licenses/MIT&quot;&gt;MIT&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Recall that for an &lt;script type=&quot;math/tex&quot;&gt;N \times N&lt;/script&gt; matrix &lt;script type=&quot;math/tex&quot;&gt;M&lt;/script&gt; this means finding vectors
+&lt;script type=&quot;math/tex&quot;&gt;v_1, v_2, \ldots, v_N 
+\in \mathbb{R}^{300}&lt;/script&gt; that minimize&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{ij} (M_{ij} - v_i \cdot v_j)^2 \qquad (1).&lt;/script&gt;
+
+&lt;p&gt;Using SVD to do dimension reduction seems an obvious idea today but it
+actually is not since it is unclear &lt;em&gt;a priori&lt;/em&gt; why the
+above &lt;script type=&quot;math/tex&quot;&gt;N \times N&lt;/script&gt; matrix of cooccurance counts should be close to a
+rank-300 matrix. This was empirically discovered in the paper on
+&lt;em&gt;Latent Semantic Analysis&lt;/em&gt; or LSA. (It shows in fact that
+low-dimensional embeddings are &lt;em&gt;better&lt;/em&gt; than
+high-dimensional ones.)&lt;/p&gt;
+
+&lt;p&gt;A research area called &lt;em&gt;Vector Space Models&lt;/em&gt; (see survey by
+Turney and Pantel) studies various modifications of the above idea, most
+of which involve reweighting the above raw counts: some buzzwords are
+TF-IDF, PMI, Logarithm, Square-root, etc. In general reweighting the
+&lt;script type=&quot;math/tex&quot;&gt;(i, j)&lt;/script&gt; term in expression (1) leads to a &lt;em&gt;weighted&lt;/em&gt;
+version of SVD, which is NP-hard. (I always emphasize to my students
+what a miraculous algorithm SVD is, since modifying the problem
+statement in small ways makes it NP-hard.) But in practice, it can be
+solved by simple gradient descent on the objective in (1) —possibly with
+a regularizer—which is the usual method to solve nonconvex problems in
+machine learning. Remember, the matrix is &lt;script type=&quot;math/tex&quot;&gt;N \times  N&lt;/script&gt;, i.e., rather
+large!&lt;/p&gt;
+
+&lt;p&gt;But to the best of my knowledge, the following question had not been
+raised or debated: &lt;span&gt;&lt;em&gt;What property of human language explains the
+fact that these very high-dimensional matrices of weighted word counts
+are approximable by low-rank matrices?&lt;/em&gt;&lt;/span&gt; (In a subsequent blog
+post I will describe our new theoretical explanation.)&lt;/p&gt;
+
+&lt;p&gt;The third embedding method I wish to desribe uses so-called
+&lt;em&gt;energy-based models&lt;/em&gt;, exemplified by the famous papers on
+&lt;strong&gt;Word2Vec&lt;/strong&gt; around 2013 by the Google team of Mikolov et al..
+They were inspired by pre-existing language models based upon neural nets. Let me
+describe the simplest of the many variants. It assumes that the word
+vectors are related to word probabilities as follows:&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;em&gt;Embedding 3&lt;/em&gt; (&lt;strong&gt;Word2Vec(CBOW)&lt;/strong&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\Pr[w|w_1, w_2, \ldots, w_5] \propto \exp(v_w \cdot (\frac{1}{5} \sum_i v_{w_i})),\qquad (2)&lt;/script&gt;
+where the left hand side gives the empirical probability that word &lt;script type=&quot;math/tex&quot;&gt;w&lt;/script&gt; occurs in the text
+conditional on the last five words being &lt;script type=&quot;math/tex&quot;&gt;w_1&lt;/script&gt; through &lt;script type=&quot;math/tex&quot;&gt;w_5&lt;/script&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;(Note that there is an implicit constraint capping the dimension of the
+vectors at, say, 300.) Such models may look bizarre when you first see
+them, but they work well in a host of applications. They are fitted
+using nonconvex optimization, on very large corpora. (The optimization
+involves a clever idea called &lt;span&gt;&lt;em&gt;negative sampling&lt;/em&gt;&lt;/span&gt;, but I
+won’t go into details.)&lt;/p&gt;
+
+&lt;p&gt;In fact, the application of embeddings to word analogy tasks is also due
+to the &lt;strong&gt;word2vec&lt;/strong&gt; papers, and the reason why this word
+created a big buzz.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;word2vec&lt;/strong&gt; papers are a bit mysterious, and have motivated much
+followup work. A paper by Levy and Goldberg explains that the &lt;strong&gt;word2vec&lt;/strong&gt;
+methods are actually modern versions of older vector space methods.
+After all, if you take logs of both sides of expression (2), you see
+that the &lt;em&gt;logarithm&lt;/em&gt; of some cooccurence probability is
+being expressed in terms of inner products of some word vectors, which
+is very much in the spirit of the older work.&lt;/p&gt;
+
+&lt;p&gt;A paper by Pennington et al. at Stanford suggests a model called GLOVE
+that uses an explicit weighted-SVD strategy for finding word embeddings.
+In a future post I will talk more about the subsequent work; why word
+embeddings solve analogy tasks; and some other cool properties of word
+embeddings.&lt;/p&gt;
+
 </description>
         <pubDate>Wed, 11 Jun 2014 08:31:19 -0700</pubDate>
         <link>http://offconvex.github.io/jekyll/pixyll/2014/06/11/word-embeddings/</link>

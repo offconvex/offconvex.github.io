@@ -1021,11 +1021,12 @@ footer {
   position: relative;
   top: 0.1em; }
 
-blockquote {
+/* blockquote {
   border-left: 5px solid #7a7a7a;
   font-style: italic;
-  margin-left: 0.5rem;
-  padding: 0.5rem; }
+  margin-left: $space-1;
+  padding: $space-1;
+}
 
 blockquote footer {
   background-color: #fff;
@@ -1034,7 +1035,19 @@ blockquote footer {
   font-size: .85rem;
   font-style: normal;
   text-align: left;
-  padding: 0; }
+  padding: 0;
+}
+*/
+blockquote {
+  font-size: 12pt;
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1em 5px;
+  padding: 0.2em 5px; }
+
+blockquote p {
+  font-size: 1rem;
+  display: inline; }
 
 .posts {
   margin: 0; }

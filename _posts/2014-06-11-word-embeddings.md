@@ -1,14 +1,12 @@
 ---
 layout:     post
-title:      Enter word embeddings
+title:      Semantic Word Embeddings
 date:       2014-06-11 15:31:19
 summary:    Understanding word embeddings
 categories: jekyll pixyll
 ---
 
-# Semantic Word Embeddings
-
- This post can be seen as an introduction to why nonconvex problems arise
+This post can be seen as an introduction to why nonconvex problems arise
 naturally in practice, and also the relative ease by which they are often
 solved. 
 
@@ -23,7 +21,6 @@ You may wonder: how can a 300-dimensional vector capture the many
 nuances of word meaning? And what the heck does this mean?
 
 
-
 A simple property of embeddings obtained by all the methods I’ll
 describe is *cosine similarity*: the  *similarity* between two words 
 (as rated by humans on a $$[-1,1]$$ scale) correlates with the *cosine*
@@ -34,15 +31,17 @@ give an example, the cosine for *milk* and
 human subjects assign to them.
 
 
-
 A more interesting property in recent embeddings is that they can solve
 *analogy* relationships via linear algebra on embeddings.
 For example, the word analogy question
 *man : woman ::king : ??* can be solved by looking for the
 word $$w$$ such that $$v_{king} - v_w$$ is most similar to
 $$v_{man} - v_{woman}$$; in other words, minimizes
-$||v_w - v_{king} + v_{man} - v_{woman}||^2$. This simple idea can solve
-$75\%$ of analogy questions on some standard testbed.
+
+
+$$||v_w - v_{king} + v_{man} - v_{woman}||^2.$$ 
+
+This simple idea can solve $$75\%$$ of analogy questions on some standard testbed.
 
 
 ![linear](/assets/linearrelations.jpg)
@@ -73,10 +72,10 @@ word embedding, albeit a very high-dimensional one.
 
 
 
-***
- *Embedding 1*  Suppose the dictionary has $$N$$ distinct words (in practice, $$N =100,000$$). Take a very large text corpus (e.g., Wikipedia) and let $$Count_5(w_1, w_2)$$ be the number of times $$w_1$$ and $$w_2$$ occur within a distance $$5$$ of each other in the corpus. Then the word embedding for a word $$w$$ is a vector of dimension $$N$$, with one coordinate for each dictionary word. The coordinate corresponding to word $$w_2$$ is $$Count_5(w, w_2)$$.
 
-***
+> *Embedding 1*:
+> 
+> Suppose the dictionary has $$N$$ distinct words (in practice, $$N =100,000$$). Take a very large text corpus (e.g., Wikipedia) and let $$Count_5(w_1, w_2)$$ be the number of times $$w_1$$ and $$w_2$$ occur within a distance $$5$$ of each other in the corpus. Then the word embedding for a word $$w$$ is a vector of dimension $$N$$, with one coordinate for each dictionary word. The coordinate corresponding to word $$w_2$$ is $$Count_5(w, w_2)$$.
 
 
 The obvious problem with Embedding 1 is that it uses
@@ -84,17 +83,15 @@ extremely high-dimensional vectors. How can we compress them?
 
 
 
-***
 
-*Embedding 2*: Do dimension reduction by taking the rank-$300$ 
-singular value decomposition (SVD) of the above vectors. 
+> *Embedding 2*: Do dimension reduction by taking the rank-$$300$$
+> singular value decomposition (SVD) of the above vectors. 
 
-***
 
 
 Recall that for an $$N \times N$$ matrix $$M$$ this means finding vectors
 $$v_1, v_2, \ldots, v_N 
-\in \Re^{300}$$ that minimize
+\in \mathbb{R}^{300}$$ that minimize
 
 
 $$
