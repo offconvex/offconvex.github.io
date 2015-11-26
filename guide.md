@@ -8,7 +8,7 @@ If you're contributing an article, please read these instructions on how to writ
 
 ##Using Markdown
 
-All articles are written in markdown with minimal formatting necessary. To a first approximation your article should simply be a plain text file. Here's the basic template you're article should use:
+All articles are written in markdown with minimal formatting necessary. To a first approximation your article should simply be a plain text file. Here's the basic template your article should use:
 
 ~~~
 ---
@@ -24,10 +24,10 @@ Articles are written in markdown (kramdown).
 Please use minimal formatting for your article.
 
 This is a single paragraph. It is separated by newlines. 
-No need for html tags. A single line break does not start a new
-paragraph.
+No need for html tags. 
+A single line break does not start a new paragraph.
 
-This is a second paragraph. 
+This is a another paragraph. 
 You can place subsections as follows.
 
 ## Using maths
@@ -61,6 +61,10 @@ There really isn't more you need to know.
 ~~~
 
 The post would appear like [this](/guide/example/) on the web.
+If you need more than what is in the above example, check out this 
+[kramdown reference](http://kramdown.gettalong.org/quickref.html). 
+You may also use any valid HTML tag in your article, but please try to avoid this.
+
 
 ##Submitting an article
 
