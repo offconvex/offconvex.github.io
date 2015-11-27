@@ -1,10 +1,12 @@
 ---
-layout:     post
-title:      Mission statement
-date:       2015-12-01 08:30:00
-summary:    What this blog is about
-visible:    False
+layout: post
+title: Mission statement
+date: {}
+summary: What this blog is about
+visible: false
+published: true
 ---
+
 
 There is a significant amount of subtle, yet precisely calibrated, styling to ensure
 that your content is emphasized while still looking aesthetically pleasing.
@@ -129,6 +131,8 @@ Checkout the [Github repository](https://github.com/johnotander/pixyll) to reque
 or add, features.
 
 Happy writing.
+
+test
 
 ---
 
