@@ -1066,6 +1066,13 @@ blockquote p {
 .related-post-title {
   border-bottom: thin solid #f3f3f3; }
 
+.generic-box {
+  text-align: center;
+  border: 1px solid #eee;
+  padding: 10px;
+  background: #f9f9f9;
+  margin: 30px; }
+
 @media screen and (min-width: 32em) {
   html {
     font-size: 16px; }

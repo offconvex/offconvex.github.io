@@ -43,7 +43,7 @@ flattr_button:
 
 # Post sharing icons
 show_sharing_icons: true
-share_text: 'Share this post: '
+share_text: 'Spread the word: '
 # Change to 'true' to enable individual icons
 share_facebook: true
 share_twitter: true
