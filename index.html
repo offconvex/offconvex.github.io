@@ -8,7 +8,6 @@ layout: default
     {% for post in paginator.posts %}
      {% if post.visible %}
       <div class="post py3">
-        <p class="post-meta">{{ post.date | date: site.date_format }}</p>
         
     <h3 class="h1 post-title">
       <a href="{{ post.url | prepend: site.baseurl }}" class="post-link">
@@ -16,7 +15,8 @@ layout: default
       </a>
     </h3>
         <p class="post-summary">
-{{ post.content | strip_html | truncatewords:50}} <a href="{{ post.url }}">Read more...</a>
+        <span class="post-meta">{{ post.date | date: site.date_format }}.&nbsp;&nbsp;</span>
+{{ post.content | strip_html | truncatewords:45}} <a href="{{ post.url }}">Continue</a>
         </p>
       </div>
      {% endif %}
