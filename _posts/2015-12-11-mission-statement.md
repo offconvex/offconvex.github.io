@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Off the convex path
+title:      Why go off the convex path?
 date:       2015-12-11 11:34:00
 visible:    true
 ---
