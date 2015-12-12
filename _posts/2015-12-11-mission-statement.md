@@ -2,7 +2,6 @@
 layout:     post
 title:      Off the convex path
 date:       2015-12-11 11:34:00
-summary:    Our mission statement
 visible:    true
 ---
 
