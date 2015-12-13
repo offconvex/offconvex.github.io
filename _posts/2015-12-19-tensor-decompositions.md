@@ -1,4 +1,4 @@
-﻿---
+---
 layout:     post
 title:      Tensor Methods in Machine Learning
 date:       2015-12-19 9:00:00
