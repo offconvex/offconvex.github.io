@@ -46,7 +46,9 @@ $v_{man} - v_{woman}$; in other words, minimizes&lt;/p&gt;
 &lt;p&gt;This simple idea can solve $75\%$ of analogy questions on some standard testbed. Note that the method is completely unsupervised: it constructs the embeddings using a big (unannotated) text corpus; and receives &lt;em&gt;no training&lt;/em&gt; specific to analogy solving). 
 Here is a rendering of this linear algebraic relationship between &lt;em&gt;masculine-feminine&lt;/em&gt; pairs.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/analogy-small.jpg&quot; alt=&quot;linear&quot; /&gt;&lt;/p&gt;
+&lt;div style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;/assets/analogy-small.jpg&quot; style=&quot;width:400px;&quot; /&gt;
+&lt;/div&gt;
 
 &lt;p&gt;Good embeddings have other properties that will be covered in a future
 post. (Also, I can’t resist mentioning  that fMRI-imaging of the brain suggests that word embeddings are related to how the human brain

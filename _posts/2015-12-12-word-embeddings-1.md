@@ -43,7 +43,9 @@ $$||v_w - v_{king} + v_{man} - v_{woman}||^2.$$
 This simple idea can solve $75\%$ of analogy questions on some standard testbed. Note that the method is completely unsupervised: it constructs the embeddings using a big (unannotated) text corpus; and receives *no training* specific to analogy solving). 
 Here is a rendering of this linear algebraic relationship between *masculine-feminine* pairs.
 
-![linear](/assets/analogy-small.jpg)
+<div style="text-align:center;">
+<img src="/assets/analogy-small.jpg" style="width:400px;" />
+</div>
 
 Good embeddings have other properties that will be covered in a future
 post. (Also, I can't resist mentioning  that fMRI-imaging of the brain suggests that word embeddings are related to how the human brain

@@ -129,7 +129,7 @@ p,
 dl,
 ol,
 ul {
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin-top: 0;
   margin-bottom: 1rem;
   text-align: justify; }
@@ -154,25 +154,25 @@ hr {
 
 blockquote,
 blockquote p {
-  font-size: 1.25rem;
+  font-size: 0.9rem;
   font-style: italic;
   text-align: justify; }
 
 h1,
 .h1 {
-  font-size: 2rem; }
+  font-size: 1.8rem; }
 
 h2,
 .h2 {
-  font-size: 1.5rem; }
+  font-size: 1.4rem; }
 
 h3,
 .h3 {
-  font-size: 1.25rem; }
+  font-size: 1.2rem; }
 
 h4,
 .h4 {
-  font-size: 1rem; }
+  font-size: 0.9rem; }
 
 h5,
 .h5 {
@@ -821,15 +821,15 @@ sup {
 
 .site-header {
   padding-top: 0.5rem;
-  padding-bottom: 1rem; }
+  padding-bottom: 0; }
 
 .site-header a {
   color: #333;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 300; }
 
 .site-header .site-title {
-  font-size: 1.5rem; }
+  font-size: 1.4rem; }
 
 .site-nav {
   margin-top: 1rem; }
@@ -1057,6 +1057,7 @@ blockquote p {
 .meta,
 .post-meta {
   width: auto;
+  font-size: 16pt;
   font-weight: 300;
   margin: 0;
   padding: .25em 0;
@@ -1079,7 +1080,7 @@ blockquote p {
 
   h1,
   .h1 {
-    font-size: 2rem; }
+    font-size: 1.8rem; }
 
   .site-header {
     text-align: left; }
@@ -1088,10 +1089,10 @@ blockquote p {
     margin-top: 0; }
 
   .site-header a {
-    font-size: 1rem; }
+    font-size: 0.9rem; }
 
   .site-header .site-title {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     float: left; }
 
   .site-header .site-nav {
