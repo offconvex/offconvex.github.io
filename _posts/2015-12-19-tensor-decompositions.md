@@ -1,8 +1,7 @@
 ﻿---
 layout:     post
 title:      Tensor Methods in Machine Learning
-date:       2015-12-12 9:00:00
-summary:    How tensor decomposition algorithms are helpful in learning many models.
+date:       2015-12-19 9:00:00
 author:     Rong Ge
 visible:    False
 ---
