@@ -9,6 +9,170 @@
      
     
      
+      <item>
+        <title>Semantic Word Embeddings</title>
+        <description>&lt;p&gt;This post can be seen as an introduction to how nonconvex problems arise
+naturally in practice, and also the relative ease with which they are often
+solved.&lt;/p&gt;
+
+&lt;p&gt;I will talk about &lt;em&gt;word embeddings&lt;/em&gt;, a geometric way to capture
+the “meaning” of a word via a low-dimensional vector. They are useful in
+many tasks in Information Retrieval (IR) and Natural Language Processing
+(NLP), such as answering search queries or translating from one
+language to another.&lt;/p&gt;
+
+&lt;p&gt;You may wonder: how can a 300-dimensional vector capture the many
+nuances of word meaning? And what the heck does it mean to “capture meaning?”&lt;/p&gt;
+
+&lt;h2 id=&quot;properties-of-word-embeddings&quot;&gt;Properties of Word Embeddings&lt;/h2&gt;
+&lt;p&gt;A simple property of embeddings obtained by all the methods I’ll
+describe is &lt;em&gt;cosine similarity&lt;/em&gt;: the  &lt;em&gt;similarity&lt;/em&gt; between two words 
+(as rated by humans on a $[-1,1]$ scale) correlates with the &lt;em&gt;cosine&lt;/em&gt;
+of the angle between their vectors. To 
+give an example, the cosine for &lt;em&gt;milk&lt;/em&gt; and
+&lt;em&gt;cow&lt;/em&gt; may be $0.6$, whereas for &lt;em&gt;milk&lt;/em&gt; and
+&lt;em&gt;stone&lt;/em&gt; it may be $0.2$, which is roughly the similarity
+human subjects assign to them.&lt;/p&gt;
+
+&lt;p&gt;A more interesting property of recent embeddings is that they can solve
+&lt;em&gt;analogy&lt;/em&gt; relationships via linear algebra.
+For example, the word analogy question
+&lt;em&gt;man : woman ::king : ??&lt;/em&gt; can be solved by looking for the
+word $w$ such that $v_{king} - v_w$ is most similar to
+$v_{man} - v_{woman}$; in other words, minimizes&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;||v_w - v_{king} + v_{man} - v_{woman}||^2.&lt;/script&gt;
+
+&lt;p&gt;This simple idea can solve $75\%$ of analogy questions on some standard testbed. Note that the method is completely unsupervised: it constructs the embeddings using a big (unannotated) text corpus; and receives &lt;em&gt;no training&lt;/em&gt; specific to analogy solving). 
+Here is a rendering of this linear algebraic relationship between &lt;em&gt;masculine-feminine&lt;/em&gt; pairs.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/analogy-small.jpg&quot; alt=&quot;linear&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Good embeddings have other properties that will be covered in a future
+post. (Also, I can’t resist mentioning  that fMRI-imaging of the brain suggests that word embeddings are related to how the human brain
+encodes meaning; see the &lt;a href=&quot;http://www.cs.cmu.edu/~tom/pubs/science2008.pdf&quot;&gt;well-known paper of Mitchell et al.&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;h2 id=&quot;computing-word-embeddings-via-firths-hypothesis&quot;&gt;Computing Word embeddings (via Firth’s Hypothesis)&lt;/h2&gt;
+
+&lt;p&gt;In all methods, the word vector is a succinct representation of the &lt;em&gt;distribution&lt;/em&gt; of other words around this word. That this suffices to capture meaning is asserted by &lt;a href=&quot;https://en.wikipedia.org/wiki/Distributional_semantics&quot;&gt;&lt;em&gt;Firth’s hypothesis&lt;/em&gt;&lt;/a&gt;
+from 1957, “&lt;em&gt;You shall know a word by the company it keeps.&lt;/em&gt;”  To give an example, if I
+ask you to think of a word that tends to co-occur with &lt;em&gt;cow,
+drink, babies, calcium&lt;/em&gt;, you would immediately answer:
+&lt;em&gt;milk&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Note that we don’t believe Firth’s hypothesis fully accounts
+for all aspects of semantics —understanding new metaphors or jokes, for example,
+seems to require other modes of experiencing the real world than simply reading text.&lt;/p&gt;
+
+&lt;p&gt;But Firth’s hypothesis does imply a very simple 
+word embedding, albeit a very high-dimensional one.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;Embedding 1&lt;/em&gt;: Suppose the dictionary has $N$ distinct words (in practice, $N =100,000$). Take a very large text corpus (e.g., Wikipedia) and let $Count_5(w_1, w_2)$ be the number of times $w_1$ and $w_2$ occur within a distance $5$ of each other in the corpus. Then the word embedding for a word $w$ is a vector of dimension $N$, with one coordinate for each dictionary word. The coordinate corresponding to word $w_2$ is $Count_5(w, w_2)$. (Variants of this method involve considering cooccurence of $w$ with various phrases or $n$-tuples.)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The obvious problem with Embedding 1 is that it uses
+extremely high-dimensional vectors. How can we compress them?&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;Embedding 2&lt;/em&gt;: Do dimension reduction by taking the rank-300
+singular value decomposition (SVD) of the above vectors.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Recall that for an $N \times N$ matrix $M$ this means finding vectors
+$v_1, v_2, \ldots, v_N \in \mathbb{R}^{300}$ that minimize&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{ij} (M_{ij} - v_i \cdot v_j)^2 \qquad (1).&lt;/script&gt;
+
+&lt;p&gt;Using SVD to do dimension reduction seems an obvious idea these days but it
+actually is not. After all,  it is unclear &lt;em&gt;a priori&lt;/em&gt; why the
+above $N \times N$ matrix of cooccurance counts should be close to a
+rank-300 matrix. That this is the case was empirically discovered in the paper on
+&lt;a href=&quot;http://lsa.colorado.edu/papers/JASIS.lsi.90.pdf&quot;&gt;&lt;em&gt;Latent Semantic Indexing&lt;/em&gt; or LSI&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Empirically, the method can be improved by replacing the counts by their logarithm, as in &lt;a href=&quot;http://lsa.colorado.edu/papers/plato/plato.annote.html&quot;&gt;Latent Semantic Analysis or LSA&lt;/a&gt;. Other authors claim  square root
+is even better than logarithm.  Another interesting empirical fact in the LSA paper is that dimension reduction via SVD not only compresses the embedding but &lt;em&gt;improves&lt;/em&gt; its quality. (Improvement via compression is a familiar phenomenon in machine learning.) In fact they can use word vectors to solve word similarity tasks as well as the average American high schooler.&lt;/p&gt;
+
+&lt;p&gt;A research area called &lt;em&gt;Vector Space Models&lt;/em&gt; (see &lt;a href=&quot;https://www.jair.org/media/2934/live-2934-4846-jair.pdf&quot;&gt;survey by Turney and Pantel&lt;/a&gt;) studies various modifications of the above idea. Embeddings are also known to improve if we reweight the various terms in the above expression (2): popular reweightings include TF-IDF, PMI, Logarithm, etc.&lt;/p&gt;
+
+&lt;p&gt;Let me point out that reweighting the
+$(i, j)$ term in expression (1) leads to a &lt;em&gt;weighted&lt;/em&gt;
+version of SVD, which is NP-hard. (I always emphasize to my students
+that a polynomial-time algorithm to compute rank-k  SVD is a miracle, since 
+modifying the problem
+statement in small ways makes it NP-hard.) But in practice, weighted SVD can be
+solved on a laptop in less than a day —remember, $N$ is rather large, about $10^5$!—
+by simple gradient descent on the objective (1), possibly also using
+a regularizer. (Of course,  &lt;a href=&quot;http://blog.mrtz.org/2013/09/07/the-zen-of-gradient-descent.html&quot;&gt;a lot has been proven about such gradient descent methods in context of convex optimization&lt;/a&gt;; the surprise is that they work also in such nonconvex settings.) Weighted SVD is a subcase of &lt;em&gt;Matrix Factorization&lt;/em&gt; approaches in machine learning, which we will also encounter again in upcoming posts.&lt;/p&gt;
+
+&lt;p&gt;But returning to word embeddings, the following question had not been
+raised or debated, to the best of my knowledge: &lt;em&gt;What property of human language explains the
+fact that these very high-dimensional matrices derived (in a nonlinear way) from word cooccurences
+are close to low-rank matrices?&lt;/em&gt; (In a future blog
+post I will describe our new &lt;a href=&quot;http://arxiv.org/abs/1502.03520&quot;&gt;theoretical explanation&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;The third embedding method I wish to describe uses 
+&lt;em&gt;energy-based models&lt;/em&gt;, for instance the
+&lt;a href=&quot;https://code.google.com/p/word2vec/&quot;&gt;&lt;strong&gt;Word2Vec&lt;/strong&gt; family of methods&lt;/a&gt; from 2013 by the Google team of Mikolov et al., which also created a buzz due to the above-mentioned linear algebraic method to solve word analogy tasks.
+The &lt;strong&gt;word2vec&lt;/strong&gt; models are inspired by pre-existing neural net models for language
+(basically, the word embedding corresponds to the neural net’s internal representation of the word; see &lt;a href=&quot;http://colah.github.io/posts/2014-07-NLP-RNNs-Representations/&quot;&gt;this blog&lt;/a&gt;.).  Let me
+describe the simplest variant, which assumes that the word
+vectors are related to word probabilities as follows:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;Embedding 3&lt;/em&gt; (&lt;strong&gt;Word2Vec(CBOW)&lt;/strong&gt;):&lt;/p&gt;
+
+  &lt;script type=&quot;math/tex; mode=display&quot;&gt;\textstyle\Pr[w|w_1, w_2, \ldots, w_5] \propto \exp(v_w \cdot (\frac{1}{5} \sum_i v_{w_i})),\qquad (2)&lt;/script&gt;
+
+  &lt;p&gt;where the left hand side gives the empirical probability that word $w$ occurs in the text
+conditional on the last five words being $w_1$ through $w_5$.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Assume we can estimate the left hand side using a large text corpus. Then expression (2) for the word vectors—together with  a constraint capping the dimension of the
+vectors to, say, 300 — implicitly defines a nonconvex optimization problem which is solved in practice as follows. Let $S$ be the set of all the $6$-tuples of words that occur in the text. Let $N$ be a set of random $6$-tuples; this set is called the 
+&lt;em&gt;negative sample&lt;/em&gt; since presumably these tuples are gibberish. The method consists of finding word embeddings that give high probability to 
+tuples in $S$ and low probability to tuples in $N$. Roughly speaking, they maximise the &lt;em&gt;difference&lt;/em&gt; between the following two quantities: (i) sum of $\exp(v_w \cdot (\frac{1}{5} \sum_i v_{w_i}))$ (suitably scaled) over all $6$-tuples in $S$, and
+(ii) the corresponding sum over tuples in $N$.  The &lt;strong&gt;word2vec&lt;/strong&gt; team introduced some other tweaks that allowed them to solve this optimization for very large corpora containing 10 billion words.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;word2vec&lt;/strong&gt; papers are a bit mysterious, and have motivated much
+followup work. A paper by Levy and Goldberg (See &lt;a href=&quot;https://levyomer.wordpress.com/&quot;&gt;Omer Levy’s Blog&lt;/a&gt;) explains that the &lt;strong&gt;word2vec&lt;/strong&gt;
+methods are actually modern versions of older vector space methods.
+After all, if you take logs of both sides of expression (2), you see
+that the &lt;em&gt;logarithm&lt;/em&gt; of some cooccurence probability is
+being expressed in terms of inner products of some word vectors, which
+is very much in the spirit of the older work. (Levy and Goldberg have more to say about this, backed up by interesting experiments comparing the vectors obtained by various approaches.)&lt;/p&gt;
+
+&lt;p&gt;Another paper by Pennington et al. at Stanford suggests a &lt;a href=&quot;http://nlp.stanford.edu/projects/glove/&quot;&gt;model called GLOVE&lt;/a&gt;
+that uses an explicit weighted-SVD strategy for finding word embeddings.
+They also give an intuitive explanation of why these embeddings solve 
+word analogy tasks, though the explanation isn’t quite rigorous.&lt;/p&gt;
+
+&lt;p&gt;In a future post I will talk more about our &lt;a href=&quot;http://arxiv.org/abs/1502.03520&quot;&gt;subsequent theoretical work&lt;/a&gt; that tries to unify these different approaches, and also explains some  cool linear algebraic properties of word
+embeddings. I note that linear structure  also arises in &lt;a href=&quot;http://web.eecs.umich.edu/~honglak/nips2015-analogy.pdf&quot;&gt;representations of images learnt
+via deep learning.&lt;/a&gt;, and it is tantalising to wonder if similar theory applies to that setting.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 12 Dec 2015 01:00:00 -0800</pubDate>
+        <link>http://offconvex.github.io/2015/12/12/word-embeddings-1/</link>
+        <guid isPermaLink="true">http://offconvex.github.io/2015/12/12/word-embeddings-1/</guid>
+      </item>
+     
+    
+     
+      <item>
+        <title>Why go off the convex path?</title>
+        <description>&lt;p&gt;The notion of convexity underlies a lot of beautiful mathematics. When combined with computation, it gives rise to the area of convex optimization that has had a huge impact on understanding and improving the world we live in. However, convexity does not provide all the answers. Many procedures in statistics, machine learning and nature at large—Bayesian inference, deep learning, protein folding—successfully solve non-convex problems that are NP-hard, i.e., intractable on worst-case instances. Moreover, often nature or humans choose methods that are inefficient in the worst case to solve problems in &lt;a href=&quot;https://en.wikipedia.org/wiki/P_(complexity)&quot;&gt;P&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Can we develop a theory to resolve this mismatch between reality and the predictions of worst-case analysis?  Such a theory could identify structure in natural inputs that helps sidestep worst-case complexity.&lt;/p&gt;
+
+&lt;p&gt;This blog is dedicated to the idea that optimization methods—whether created by humans or nature, whether convex or nonconvex—are exciting objects of study and, often lead to useful algorithms and insights into nature. This study can be seen as an extension of classical mathematical fields such as dynamical systems and differential equations among others, but with the important addition of the notion of computational efficiency.&lt;/p&gt;
+
+&lt;p&gt;We will report on interesting research directions and open problems, and highlight progress that has been made. We will write articles ourselves as well as encourage others to contribute. In doing so, we hope to generate an active dialog between theorists, scientists and practitioners and to motivate a generation of young researchers to work on these important problems.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 11 Dec 2015 03:34:00 -0800</pubDate>
+        <link>http://offconvex.github.io/2015/12/11/mission-statement/</link>
+        <guid isPermaLink="true">http://offconvex.github.io/2015/12/11/mission-statement/</guid>
+      </item>
+     
     
      
     
