@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      Tensor Methods in Machine Learning
-date:       2015-12-19 9:00:00
+date:       2015-12-17 15:00:00
 author:     Rong Ge
-visible:    False
+visible:    true
 ---
 
 *Tensors* are high dimensional generalizations of matrices. In recent years *tensor decompositions* were used to design learning algorithms for estimating parameters of latent variable models like Hidden Markov Model, Mixture of Gaussians and Latent Dirichlet Allocation (many of these works were considered as examples of "spectral learning", read on to find out why). In this post I will briefly describe why *tensors* are useful in these settings.
