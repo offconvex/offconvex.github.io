@@ -6,6 +6,8 @@ author:     Rong Ge
 visible:    False
 ---
 
+*Tensors* are high dimensional generalizations of matrices. In recent years *tensor decompositions* were used to design learning algorithms for estimating parameters of latent variable models like Hidden Markov Model, Mixture of Gaussians and Latent Dirichlet Allocation (many of these works were considered as examples of "spectral learning", read on to find out why). In this post I will briefly describe why *tensors* are useful in these settings.
+
 Using [Singular Value Decomposition (SVD)](https://en.wikipedia.org/wiki/Singular_value_decomposition), we can write a matrix $M \in \mathbb{R}^{n\times m}$ as the sum of many rank one matrices:
 
 $$
@@ -14,9 +16,7 @@ $$
 
 When the *rank* $r$ is small, this gives a concise representation for the matrix $M$ (using $(m+n)r$ parameters instead of $mn$). Such decompositions are widely applied in machine learning.
 
-*Tensors* are high dimensional generalizations of matrices, and *tensor decomposition* is a generalization of low rank matrix decomposition. Although [most tensor problems are NP-hard](http://arxiv.org/abs/0911.1393) in the worst case, several natural subcases of tensor decomposition can be solved in polynomial time. In recent years such ideas were used to design learning algorithms for estimating parameters of latent variable models like Hidden Markov Model, Mixture of Gaussians and Latent Dirichlet Allocation. 
-
-In this post I will briefly describe why **tensors** are useful in these settings.
+*Tensor decomposition* is a generalization of low rank matrix decomposition. Although [most tensor problems are NP-hard](http://arxiv.org/abs/0911.1393) in the worst case, several natural subcases of tensor decomposition can be solved in polynomial time. Later we will see that these subcases are still very powerful in learning latent variable models.
 
 ##Matrix Decompositions
 
