@@ -14,7 +14,7 @@ $$
 
 When the *rank* $r$ is small, this gives a concise representation for the matrix $M$ (using $(m+n)r$ parameters instead of $mn$). Such decompositions are widely applied in machine learning.
 
-*Tensors* are high dimensional generalizations of matrices, and *tensor decomposition* is a generalization of low rank matrix decompositions. Although [most tensor problems are NP-hard](http://arxiv.org/abs/0911.1393) in the worst case, several natural subcases of tensor decomposition can be solved in polynomial time. In recent years such ideas were used to design learning algorithms for estimating parameters of latent variable models like Hidden Markov Model, Mixture of Gaussians and Latent Dirichlet Allocation. 
+*Tensors* are high dimensional generalizations of matrices, and *tensor decomposition* is a generalization of low rank matrix decomposition. Although [most tensor problems are NP-hard](http://arxiv.org/abs/0911.1393) in the worst case, several natural subcases of tensor decomposition can be solved in polynomial time. In recent years such ideas were used to design learning algorithms for estimating parameters of latent variable models like Hidden Markov Model, Mixture of Gaussians and Latent Dirichlet Allocation. 
 
 In this post I will briefly describe why **tensors** are useful in these settings.
 
@@ -68,7 +68,7 @@ $$
 score = x_{quant} \times y_{quant} \times z_{quant} + x_{verb}\times y_{verb} \times z_{verb}.
 $$
 
-Keep in mind that this is the formula for **one entry** in the tensor: the score of one student, in one test and at a specific time. Who the student is specifies $x_{quant}$ and $x_{verb}$; what the test is specifies weights $y_{quant}$ and $y_{verb}$; when the test took place specifies $z_{quant}$ and $z_{verb}$.
+Keep in mind that this is the formula for **one entry** in the tensor: the score of one student, in one test and at a specific time. Who the student is specifies $x_{quant}$ and $x_{verb}$; what the test is specifies weights $y_{quant}$ and $y_{verb}$; when the test takes place specifies $z_{quant}$ and $z_{verb}$.
 
 Similar to matrices, we can view this as a **rank 2** decomposition of the tensor $T$. In particular, if we use $\vec x_{quant}, \vec x_{verb}$ to denote the strengths of students, $\vec y_{quant},\vec y_{verb}$ to denote the weights of the tests and $\vec z_{quant}, \vec z_{verb}$ to denote the variations of strengths in time, then we can write the decomposition as
 
@@ -99,7 +99,7 @@ In Hidden Markov Model, we observe a sequence of words (a sentence) that is gene
 
 More concretely, to generate a sentence in Hidden Markov Model, we start with some initial *topic* $h_1$. This topic will evolve as a Markov Chain to generate the topics for future words $h_2, h_3,...,h_t$. We observe *words* $x_1,...,x_t$ from these topics. In particular, word $x_1$ is drawn according to topic $h_1$, word $x_2$ is drawn according to topic $h_2$ and so on.
 
-Given many sentences that are *generated exactly* according to this model, how can we construct a tensor? A natural idea is to compute *correlations*: for every triple of words $(i,j,k)$, we count the number of times that these are the first three words of a sentence. Enumerating over $i,j,k$ gives us a three dimensional array (a *tensor*) $T$. We can further normalize it by the total number of sentences. After normalization the entries of the tensor will be estimations of the *probability* that the first three words are $(i,j,k)$.
+Given many sentences that are *generated exactly* according to this model, how can we construct a tensor? A natural idea is to compute *correlations*: for every triple of words $(i,j,k)$, we count the number of times that these are the first three words of a sentence. Enumerating over $i,j,k$ gives us a three dimensional array (a *tensor*) $T$. We can further normalize it by the total number of sentences. After normalization the $(i,j,k)$-th entry of the tensor will be an estimation of the *probability* that the first three words are $(i,j,k)$. For simplicity assume we have enough samples and the estimation is accurate:
 
 $$T_{i,j,k} = \mbox{Pr}[x_1 = i, x_2=j, x_3=k].$$
 
@@ -133,7 +133,7 @@ In the worst case we have bad news: [most tensor problems are NP-hard](http://ar
 
 In the algorithm, "$^+$" denotes *pseudo-inverse* of a matrix (think of it as inverse if this is not familiar).
 
-The algorithm looks at weighted *slices* of the tensor: a weighted slice is a matrix that is the projection of the tensor along the $z$ direction (similarly if we take a *slice* of a matrix $M$, it will be a vector that is equal to $M\vec u$). Because of the low rank structure, all the slices must share matrix factorizations with the **same** components. 
+The algorithm looks at weighted *slices* of the tensor: a weighted slice is a matrix that is the projection of the tensor along the $z$ direction (similarly if we take a *slice* of a matrix $M$, it will be a vector that is equal to $M\vec u$). Because of the low rank structure, all the slices must share matrix decompositions with the **same** components. 
 
 The main observation of the algorithm is that although a *single* matrix can have infinitely many low rank decompositions, *two* matrices can only have a **unique** decomposition if we require them to have the same components. In fact, it is highly unlikely for two *arbitrary* matrices to share decompositions with the same components. In the tensor case, because of the low rank structure we have
 
@@ -141,7 +141,7 @@ $$
 T_\vec u = XD_\vec u Y^\top; \quad T_\vec v = XD_\vec v Y^\top,
 $$
 
-where $D_\vec u,D_\vec v$ are diagonal matrices. This is called a *simultaneous diagonalization* for $T_\vec u$ and $T_\vec v$). With this structure it is easy to show that $\vec x_i$'s are eigenvectors of $T_\vec u (T_\vec v)^{+} = X D_\vec u D_\vec v^{-1} X^+$. So we can actually compute *tensor decompositions* using *spectral decompositions* for matrices.
+where $D_\vec u,D_\vec v$ are diagonal matrices. This is called a *simultaneous diagonalization* for $T_\vec u$ and $T_\vec v$. With this structure it is easy to show that $\vec x_i$'s are eigenvectors of $T_\vec u (T_\vec v)^{+} = X D_\vec u D_\vec v^{-1} X^+$. So we can actually compute *tensor decompositions* using *spectral decompositions* for matrices.
 
 Many of the earlier works (including [Mossel and Roch 2006](https://projecteuclid.org/euclid.aoap/1151592244)) that apply tensor decompositions to learning problems have actually independently *rediscovered* this algorithm, and the word "tensor" never appeared in the papers. In fact,  tensor decomposition techniques are traditionally called "spectral learning" since they are seen as derived from SVD.  But now we have other methods to do tensor decompositions that have better theoretical guarantees and practical performances. See the survey by [Kolda and Bader 2009](http://dl.acm.org/citation.cfm?id=1655230) for more discussions.
 
