@@ -54,7 +54,7 @@ The properties of a natural environment in which the population is evolving can 
 
 ## Solving Linear Programs by Molds?
 
-Let us conclude with an interesting dynamical system, again, arrived at by looking at nature, a slime mold; see [here](), [here]() or [here]() for a detailed discussion on how this class of dynamics was discovered. Suppose $A \in \mathbb{R}^{n \times m}$ is a matrix and $b \in \mathbb{R}^n$ is a vector. The domain is the positive orthant $\Omega = \mathbb{R}_{>0}{^n}.$ For a point $x \in \mathbb{R}^n,$ let $X$ denote the diagonal matrix such that $X_{ii}=x_i.$  The evolution function  is then:
+Let us conclude with an interesting dynamical system, again, arrived at by looking at nature, a slime mold; see [here](), [here]() or [here]() for a detailed discussion on how this class of dynamics was discovered. Suppose $A \in \mathbb{R}^{n \times m}$ is a matrix and $b \in \mathbb{R}^n$ is a vector. The domain is the positive orthant $\Omega = \mathbb{R}{^n}_{>0}.$ For a point $x \in \mathbb{R}^n,$ let $X$ denote the diagonal matrix such that $X_{ii}=x_i.$  The evolution function  is then:
 \[ \frac{dx}{dt} = X ( A^\top (AXA^\top)^{-1} b - 1), \]
 where $1$ is the vector of all ones. 
 Now the problem of existence of a solution is neither trivial nor can be ignored as, for the dynamical system to make sense, $x$ has to be positive. Further, it can be argued in a formal sense that this dynamical system is not a gradient descent. What then can we say about the trajectories of this dynamical system? As it turns out, it can be shown that starting at any $x>0,$ the dynamical system is a gradient descent on a natural Riemannian manifold and converges to a unique point among the solutions to the following linear program:
