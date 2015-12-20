@@ -45,7 +45,7 @@ However, in many cases, $f$ may not be a gradient system and understanding what 
 ## Evolution and the Largest Eigenvector
  
 As a simple but important example, consider a population consisting of $n$-types which is subject to the forces of evolution and held at a constant size, say one unit  of mass. Thus, if we let $x_i(t)$ denote the fraction of type $i$ at time $t$ in the population, the domain becomes 
-$\Delta^n={x \in \mathbb{R}^n_{>0}: x \geq 0 \; \mathrm{and} \; \; \sum_i x_i=1},$  the unit simplex. The update  function is  $f(x)= Qx - \|Qx\|_1 \cdot x$ for a positive matrix  $Q \in \mathbb{R}_{>0}^{n \times n}.$  
+$\Delta^n=\\{x \in \mathbb{R}^n_{>0}: x \geq 0 \; \mathrm{and} \; \; \sum_i x_i=1 \\},$  the unit simplex. The update  function is  $f(x)= Qx - \\|Qx\\|_1 \cdot x$ for a positive matrix  $Q \in \mathbb{R}_{>0}^{n \times n}.$  
 The properties of a natural environment in which the population is evolving can be captured by a matrix $Q,$  see this [textbook]() which is dedicated to the study of such dynamical systems.
 Mathematically, to start with, note that $f$ maps any point in the simplex to a point in the simplex. 
   Thus, starting at any point in $\Delta^n,$ the trajectory remains in $\Delta^n.$ What are the fixed points of $f$? These are vectors $x \in \Delta^n$ such that $Qx=\|Qx\|_1  x$ or the eigenvectors of $Q.$ Since $Q>0,$ the Perron-Frobenius theorem \cite{wikipedia} tells us that $Q$ has unique  eigenvector $v \in \Delta^n$ and, starting at any $x(0),$ $x(t) \rightarrow v$. Thus, in this case, simple linear algebra can allow us to deduce that $f$ has exactly one fixed point and, thus, we can answer what is $f$ achieving globally: $f$ is nothing but nature's implementation of the [Power Method] ()  
