@@ -33,7 +33,7 @@ and $\Omega$ is compact, the trajectories either tend to  *fixed points*, *limit
  For now, we will consider the class of dynamical systems which only have fixed points, possibly many. In this setting, one can define a function $F$ which maps an  $x \in \Omega$  to its limit under the repeated application of $f.$ Note that to make this function well-defined we might have to look at the closure of $\Omega.$  
 This brings us to  the following broad,  admittedly not well-defined and widely open question that we would like to study: 
 
-**Given a dynamical system $(\Omega,f)$, what is  $F$?**
+\begin{center} Given a dynamical system $(\Omega,f)$, what is  $F$? \end{center}
   
   
 > When $f$ happens to be the negative gradient of  a convex function $g$ over some convex domain $\Omega,$ the dynamical system $(\Omega,f)$ is nothing but an implementation of gradient descent to find the minimum of $g$, answering our question perfectly.
