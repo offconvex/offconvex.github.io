@@ -7,14 +7,6 @@ author:     Nisheeth Vishnoi
 visible:    False
 ---
 
-\[% Custom commands
-\renewcommand{\vec}[1]{\mathbf{#1}}
-\let\oldhat\hat
-\renewcommand{\hat}[1]{\oldhat{\mathbf{#1}}}
-\newcommand{\d}{\mathrm{d}}
-\newcommand{\norm}[1]{\left\Vert #1\right\Vert}
-\]
-
 The language of dynamical systems is the preferred choice of scientists to model a wide variety of phenomena in nature. The reason is  that, often, it is easy to  *locally* observe or understand what happens to a system in one time-step. Could we then piece this local information together to deduce the  *global* objective of these dynamical systems? 
 In this first of a series of posts,  we give a gentle introduction to dynamical systems and, in a hope to understand nature's algorithms, explain what it means to view them from the point of view of optimization.
 
@@ -55,9 +47,9 @@ However, in many cases, $f$ may not be a gradient system and understanding what 
 As a simple but important example, consider a population consisting of $n$-types which is subject to the forces of evolution and held at a constant size, say one unit  of mass. Thus, if we let $x_i(t)$ denote the fraction of type $i$ at time $t$ in the population, the domain becomes 
 $\Delta^n=\\{x \in \mathbb{R}^n_{>0}: x \geq 0 \; \mathrm{and} \; \; \sum_i x_i=1 \\},$  the unit simplex. 
 The update  function is  
-\[ f(x)= Qx - \norm{Qx}_1 \cdot x \]
+\[ f(x)= Qx - \Vert Qx \Vert_1 \cdot x \]
 for a positive matrix  $Q \in \mathbb{R}_{>0}^{n \times n}.$ 
-The properties of a natural environment in which the population is evolving can be captured by a matrix $Q,$  see this [textbook]() which is dedicated to the study of such dynamical systems. Mathematically, to start with, note that $f$ maps any point in the simplex to a point in the simplex.  Thus, starting at any point in $\Delta^n,$ the trajectory remains in $\Delta^n.$ What are the fixed points of $f$? These are vectors $x \in \Delta^n$ such that $Qx=Qx_1  x$ or the eigenvectors of $Q.$ Since $Q>0,$ the [Perron-Frobenius theorem]()  tells us that $Q$ has unique  eigenvector $v \in \Delta^n$ and, starting at any $x(0),$ $x(t) \rightarrow v$. Thus, in this case, simple linear algebra can allow us to deduce that $f$ has exactly one fixed point and, thus, we can answer what is $f$ achieving globally: $f$ is nothing but nature's implementation of the [Power Method]() to compute the maximum eigenvector of $Q$! Biologically, the  corresponding eigenvalue can be shown to be the *average fitness* of the population which is what nature is trying to maximize. It may be worthwhile to note that the maximum eigenvalue problem is non-convex as such.
+The properties of a natural environment in which the population is evolving can be captured by a matrix $Q,$  see this [textbook]() which is dedicated to the study of such dynamical systems. Mathematically, to start with, note that $f$ maps any point in the simplex to a point in the simplex.  Thus, starting at any point in $\Delta^n,$ the trajectory remains in $\Delta^n.$ What are the fixed points of $f$? These are vectors $x \in \Delta^n$ such that $Qx=\Vert Qx \Vert_1  x$ or the eigenvectors of $Q.$ Since $Q>0,$ the [Perron-Frobenius theorem]()  tells us that $Q$ has unique  eigenvector $v \in \Delta^n$ and, starting at any $x(0),$ $x(t) \rightarrow v$. Thus, in this case, simple linear algebra can allow us to deduce that $f$ has exactly one fixed point and, thus, we can answer what is $f$ achieving globally: $f$ is nothing but nature's implementation of the [Power Method]() to compute the maximum eigenvector of $Q$! Biologically, the  corresponding eigenvalue can be shown to be the *average fitness* of the population which is what nature is trying to maximize. It may be worthwhile to note that the maximum eigenvalue problem is non-convex as such.
 
 ## Solving Linear Programs by Molds?
 
