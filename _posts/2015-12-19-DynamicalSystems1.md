@@ -45,10 +45,6 @@ However, in many cases, $f$ may not be a gradient system and understanding what 
 ## Evolution and the Largest Eigenvector
  
 As a simple but important example, consider a population consisting of $n$-types which is subject to the forces of evolution and held at a constant size, say one unit  of mass. Thus, if we let $x_i(t)$ denote the fraction of type $i$ at time $t$ in the population, the domain becomes 
-\[
-x(t+1) = \frac{Qx(t)}{\|Qx(t)\|_1}
-\] 
-where $Q \in \mathbb{R}_{>0}^{n \times n}$ is a positive matrix and encapsulates the combined effect of reproduction and mutation. What is the underlying dynamical system? 
 $\Delta^n=\{x \in \mathbb{R}^n_{>0}: x \geq 0 \; \mathrm{and} \; \; \sum_i x_i=1\},$ 
 the unit simplex. The update  function is  $f(x)= Qx - \|Qx\|_1 \cdot x$ 
 for a positive matrix $Q \in \mathbb{R}_{>0}^{n \times n}.$  The properties of a natural environment in which the population is evolving can be captured by a matrix $Q,$  see the textbook \cite{Nowak} which is dedicated to the study of such dynamical systems.
