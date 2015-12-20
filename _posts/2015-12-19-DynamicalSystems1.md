@@ -7,6 +7,14 @@ author:     Nisheeth Vishnoi
 visible:    False
 ---
 
+\[% Custom commands
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\let\oldhat\hat
+\renewcommand{\hat}[1]{\oldhat{\mathbf{#1}}}
+\newcommand{\d}{\mathrm{d}}
+\newcommand{\norm}[1]{\left\Vert #1\right\Vert}
+\]
+
 The language of dynamical systems is the preferred choice of scientists to model a wide variety of phenomena in nature. The reason is  that, often, it is easy to  *locally* observe or understand what happens to a system in one time-step. Could we then piece this local information together to deduce the  *global* objective of these dynamical systems? 
 In this first of a series of posts,  we give a gentle introduction to dynamical systems and, in a hope to understand nature's algorithms, explain what it means to view them from the point of view of optimization.
 
