@@ -25,7 +25,7 @@ In this first of a series of posts,  we give a gentle introduction to dynamical 
 
  For now, we will consider the class of dynamical systems which only have fixed points, possibly many. In this setting, one can define a function $F$ which maps an  $x \in \Omega$  to its limit under the repeated application of $f.$ Note that to make this function well-defined we might have to look at the closure of $\Omega.$  This brings us to  the following broad,  admittedly not well-defined and widely open question that we would like to study: 
 
--> **Given a dynamical system $(\Omega,f)$, what is  $F$?** <-
+<div style="text-align: center;" markdown="1"> **Given a dynamical system $(\Omega,f)$, what is  $F$?** </div>
 
   
   
