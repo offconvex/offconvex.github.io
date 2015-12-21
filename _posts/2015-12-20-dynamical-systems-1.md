@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Nature, Dynamical Systems and Optimization
-date:       2015-12-20 10:09:00
+date:       2015-12-21 10:09:00
 summary:    Introduce dynamical systems from the point of view of optimization using examples from nature. 
 author:     Nisheeth Vishnoi
 visible:    true
