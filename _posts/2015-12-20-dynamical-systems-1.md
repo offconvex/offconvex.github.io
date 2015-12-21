@@ -7,8 +7,8 @@ author:     Nisheeth Vishnoi
 visible:    False
 ---
 
-The language of dynamical systems is the preferred choice of scientists for modeling a wide variety of phenomena in nature. The reason is  that often it is easy to  *locally* observe or understand what happens to a system in one time-step. Could we then piece this local information together to deduce the  *global* objective of these dynamical systems? 
-In this first of a series of posts,  we give a gentle introduction to dynamical systems and, in a hope to understand nature's algorithms, explain what it means to view them from the point of view of optimization.
+The language of dynamical systems is the preferred choice of scientists to model a wide variety of phenomena in nature. The reason is  that, often, it is easy to  *locally* observe or understand what happens to a system in one time-step. Could we then piece this local information together to ,ake deductions about the  *global* behavior of these dynamical systems? 
+In this first of a series of posts,  we give a gentle introduction to dynamical systems and, in a hope to understand nature's algorithms and get inspired to develop new techniques, explain what it means to view them from the point of view of optimization.
 
 
 ## Dynamical Systems and the Fate of Trajectories
@@ -49,5 +49,5 @@ The properties of a natural environment in which the population is evolving can 
 Let us conclude with an interesting dynamical system inspired by the inner workings of a [slime mold](https://www.youtube.com/watch?v=czk4xgdhdY4); see [here](http://link.springer.com/chapter/10.1007%2F978-3-642-30870-3_35) for a discussion on how this class of dynamics was discovered. Suppose $A \in \mathbb{R}^{n \times m}$ is a matrix and $b \in \mathbb{R}^n$ is a vector. The domain is the positive orthant $\Omega = \\{x \in \mathbb{R}{^m}: x>0 \\}.$ For a point $x \in \mathbb{R}^m,$ let $X$ denote the diagonal matrix such that $X_{ii}=x_i.$  The evolution function  is then:
 \[ \frac{dx}{dt} = X ( A^\top (AXA^\top)^{-1} b - \mathbb{1}), \]
 where $\mathbb{1}$ is the vector of all ones.  Now the problem of existence of a solution is neither trivial nor can be ignored as, for the dynamical system to make sense, $x$ has to be positive. Further, it can be argued in a formal sense that this dynamical system is not a gradient descent. What then can we say about the trajectories of this dynamical system? As it turns out, it can be [shown](http://arxiv.org/abs/1511.07020) that starting at any $x>0,$ the dynamical system is a gradient descent on a natural Riemannian manifold and converges to a unique point among the solutions to the following linear program:
-\[ \min \; \sum_i x \ \ \  \mathrm{s.t.} \ \ \ Ax=b, \ \ x \geq 0. \] 
+\[ \min \; \sum_i x_i \ \ \  \mathrm{s.t.} \ \ \ Ax=b, \ \ x \geq 0. \] 
 We will explain how in a subsequent post. 
