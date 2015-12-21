@@ -8,7 +8,7 @@ visible:    False
 ---
 
 The language of dynamical systems is the preferred choice of scientists to model a wide variety of phenomena in nature. The reason is  that, often, it is easy to  *locally* observe or understand what happens to a system in one time-step. Could we then piece this local information together to make deductions about the  *global* behavior of these dynamical systems? 
-In this first of a series of posts,  we give a gentle introduction to dynamical systems and, in a hope to understand nature's algorithms and get inspired to develop new techniques, explain what it means to view them from the point of view of optimization.
+In this first of a series of posts,  we give a gentle introduction to dynamical systems and, in a hope to understand nature's algorithms and get inspired ny them to develop new ones, explain what it means to view them from the point of view of optimization.
 
 
 ## Dynamical Systems and the Fate of Trajectories
