@@ -7,9 +7,9 @@ layout: default
   <div class="posts">
     {% for post in paginator.posts %}
      {% if post.visible %}
-      <div class="post py3">
+      <div class="post">
         
-    <h3 class="h1 post-title" style="margin-top:-10px;">
+    <h3 class="h2 post-title">
       <a href="{{ post.url | prepend: site.baseurl }}" class="post-link">
         {{ post.title }}
       </a>
