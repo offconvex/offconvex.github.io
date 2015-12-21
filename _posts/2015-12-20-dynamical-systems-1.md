@@ -1,10 +1,10 @@
 ---
 layout:     post
 title:      Nature, Dynamical Systems and Optimization
-date:       2015-12-20 9:00:00
+date:       2015-12-20 10:09:00
 summary:    Introduce dynamical systems from the point of view of optimization using examples from nature. 
 author:     Nisheeth Vishnoi
-visible:    False
+visible:    true
 ---
 
 The language of dynamical systems is the preferred choice of scientists to model a wide variety of phenomena in nature. The reason is  that, often, it is easy to  *locally* observe or understand what happens to a system in one time-step. Could we then piece this local information together to make deductions about the  *global* behavior of these dynamical systems? The hope is to understand some of nature's algorithms and, in this quest, unveil new algorithmic techniques. In this first of a series of posts, we give a gentle introduction to dynamical systems and explain what it means to view them from the point of view of optimization.
@@ -15,7 +15,9 @@ The language of dynamical systems is the preferred choice of scientists to model
 \[ \frac{dx(t)}{dt} = f(x(t))    \ \ \  \mathrm{or} \ \ \ x(t+1)=x(t) + f(x(t))\] 
  in continuous or discrete time respectively. In other words, $f$ describes  what happens  in one unit of time to each point in the domain $\Omega.$ Classically, to study a dynamical system is to study  the eventual fate of its *trajectories*, i.e., the paths traced by successive states of the system starting from a given state. For this question to make sense, $f$ must not take any state out of the domain. However,  a priori, there is nothing to say that $x(t)$ remains in $\Omega$ beyond $x(0).$  This is the problem of  *global existence* of trajectories and can sometimes be quite hard  to establish. Assuming that the dynamical system at hand has a solution for all times   for all starting points, and $\Omega$ is compact, the trajectories either tend to  *fixed points*, *limit cycles* or end up in  *chaos*.  
 
-![The fate of trajectories](http://theory.epfl.ch/vishnoi/Blog/trajectories.jpg) 
+<p style="text-align:center;">
+<img src="/assets/trajectories.jpg" alt="The fate of trajectories" />
+</p>
  
   
   A fixed point of a dynamical system, as the name suggests, is a state $x \in \Omega$ which does not change on the application of $f$, i.e.,  $f(x)=0.$  A  fixed point is said to be *stable* if trajectories starting at *all* nearby points eventually converge to it and *unstable* otherwise. Stability is a property that one might expect to find in nature. Limit cycles are closed trajectories with a similar notion of stability/unstability, while limits of trajectories which are neither fixed points or limit cycles are (loosely) termed as chaos. 
