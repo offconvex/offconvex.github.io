@@ -6,7 +6,7 @@ author:     Anima Anandkumar
 visible:    false
 ---
 
-While convex analysis has received much attention by the machine learning community, theoretical analysis of non-convex optimization  is still nascent. This blog as well as the recent [NIPS 2015 workshop on non-convex optimization](https://sites.google.com/site/nips2015nonconvexoptimization/home) aim to  accelerate research in this area. Along with [Kamalika Chaudhuri](http://cseweb.ucsd.edu/~kamalika/),  [Percy Liang](http://cs.stanford.edu/~pliang/),  [Niranjan U Naresh](http://www.ics.uci.edu/~numanare/), and [Sewoong Oh](http://web.engr.illinois.edu/~swoh/), [I](http://newport.eecs.uci.edu/anandkumar/) was one of the organizers of this  NIPS workshop. 
+While convex analysis has received much attention from the machine learning community, theoretical analysis of non-convex optimization  is still nascent. This blog as well as the recent [NIPS 2015 workshop on non-convex optimization](https://sites.google.com/site/nips2015nonconvexoptimization/home) aim to  accelerate research in this area. Along with [Kamalika Chaudhuri](http://cseweb.ucsd.edu/~kamalika/),  [Percy Liang](http://cs.stanford.edu/~pliang/),  [Niranjan U Naresh](http://www.ics.uci.edu/~numanare/), and [Sewoong Oh](http://web.engr.illinois.edu/~swoh/), [I](http://newport.eecs.uci.edu/anandkumar/) was one of the organizers of this  NIPS workshop. 
 
 The workshop started with [my talk](https://docs.google.com/viewer?a=v&pid=sites&srcid=ZGVmYXVsdGRvbWFpbnxuaXBzMjAxNW5vbmNvbnZleG9wdGltaXphdGlvbnxneDo0OGYxMDE2ZjFhNjlkNGRi) on recent progress and challenges. Many interesting machine learning tasks are non-convex, e.g. maximum likelihood estimation of  latent variable models or training  multi-layer neural networks. As the input dimension grows, the  number of [critical points](https://en.wikipedia.org/wiki/Critical_point_(mathematics)) can grow exponentially, making an analysis difficult. In contrast, convex optimization has a unique critical point corresponding to the globally optimal solution.
 
@@ -60,6 +60,17 @@ Annealing methods are a form of  probabilistic search  for non-convex optimizati
 
 # Conclusion 
 
-The workshop concluded with  interactive and energetic discussions among the speakers and the audience.  The contrast between computer science theory and machine learning was stressed again: NP-hardness should not deter us from analyzing non-convex optimization in the context of machine learning. We should be creative in making new assumptions, we should try to change the problem structure and the objective function, collect relevant data to make the learning problem easier, and so on. 
+NP-hardness should not deter us from analyzing non-convex optimization in the
+context of machine learning. We should be creative in making new assumptions,
+we should try to change the problem structure and the objective function, and
+collect relevant data to make the learning problem easier.
 
-As I conclude this blog post, I am reminded of my discussion with [Leon Bottou](http://leon.bottou.org/). He said that there are three levels of thinking, with increasingly more sophistication. At the first level, we merely aim to prove statements that are already formulated. Unfortunately, almost all formal education focuses on this type of skill. At the second level, we try to draw implications, given a fixed set of assumptions. On the other hand, at the third level, we need to simultaneously come up with reasonable assumptions as well as their implications, and this level requires the highest level of creativity. In the area of machine learning, there is tremendous opportunity for such creativity, and I am hoping that the workshop managed to foster more of it. 
+As I conclude this blog post, I am reminded of my discussion with [Leon
+Bottou](http://leon.bottou.org/). He said that there are three levels of
+thinking, with increasingly more sophistication. At the first level, we merely
+aim to prove statements that are already formulated. Almost all formal
+education focuses on this type of skill. At the second level, we try to draw
+implications, given a fixed set of assumptions. At the third level, we need to
+simultaneously come up with reasonable assumptions as well as their
+implications, and this level requires the highest level of creativity. In the
+area of machine learning, there is tremendous need and opportunity for such creativity, and I am hoping that the workshop managed to foster more of it. 
