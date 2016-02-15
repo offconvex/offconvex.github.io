@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Word Embeddings: Explaining their properties
+title:      Word Embeddings&#58; Explaining their properties
 date:       2016-02-14 00:00:42
 summary:    Theoretical understanding of word embeddings
 author:     Sanjeev Arora
