@@ -1,10 +1,10 @@
 ---
 layout:     post
 title:      Semantic Word Embeddings: Explaining their properties
-date:       2015-12-01 9:00:00
+date:       2016-02-14 00:00:35
 summary:    Understanding word embeddings
 author:     Sanjeev Arora
-visible:    False
+visible:    True
 ---
 
 This is a followup to an [earlier post](http://www.offconvex.org/2015/12/12/word-embeddings-1/) about word embeddings, which capture the meaning of a word using a low-dimensional vector, and are ubiquitous in natural language processing. I will talk about [my joint work with Li, Liang, Ma, Risteski](http://arxiv.org/abs/1502.03520), which tries to mathematically explain their fascinating properties. 
