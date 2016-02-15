@@ -81,7 +81,7 @@ A striking finding in empirical work on word embeddings is that there is a sweet
 for the dimensionality of word vectors: neither too small, nor too large. This graph below from the [Latent Semantic Analysis paper (1997)](http://lsa.colorado.edu/papers/plato/plato.annote.html) shows the performance on word similarity tasks versus dimension, but a similar phenomenon also occurs for analogy solving.
 
 <p style="text-align:center;">
-<img src="http://www.cs.princeton.edu/~arora/pubs/LSAgraph.gif" alt="Performance of word embeddings vs Dimension" style="width:145px;height:126px;"/>
+<img src="http://www.cs.princeton.edu/~arora/pubs/LSAgraph.jpg" alt="Performance of word embeddings vs Dimension"/>
 </p>
 
 Such a performance curve with a bump at the "sweet spot" is very familiar in empirical work in machine learning and usually explained as follows: too few parameters make the model incapable of 
