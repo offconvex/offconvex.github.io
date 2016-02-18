@@ -36,6 +36,7 @@ Each word has a  (time-invariant) latent vector $v_w \in \Re^d$ that captures it
 $$
 \Pr[w~\mbox{emitted at time $t$}~|~c_t] \propto \exp(c_t\cdot v_w). \qquad (2)
 $$
+
 The discourse vector does a slow geometric random walk over the unit sphere in $\Re^d$. Thus $c_{t+1}$ is obtained by a small random displacement from $c_t$. Since expression (2) places much higher probability on words that are clustered around $c_t$, and  $c_t$ moves slowly, the model predicts that words occuring at successive time steps will also tend to have vectors that
 are close together. But this correlation weakens after say, $100$ steps. This model is basically the [loglinear topic model of Mnih and Hinton](http://machinelearning.wustl.edu/mlpapers/paper_files/icml2007_MnihH07.pdf), but with an added dynamic element in the form of a random walk. The model is also related to many existing notions like *Kalman filters* and *linear chain CRFs.* Also, as is usual in topic models, it ignores grammatical structure, and treats text in small windows as a [*bag of words.*](https://en.wikipedia.org/wiki/Bag-of-words_model) 
 
