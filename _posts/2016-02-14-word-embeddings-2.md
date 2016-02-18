@@ -25,7 +25,7 @@ $$
 Of course, one can compute a rank$-300$ SVD for any matrix; the surprise here is that the rank $300$ matrix is actually a reasonable approximation to the $100,000$-dimensional matrix of cooccurences. (Since then,  [*topic models*](https://en.wikipedia.org/wiki/Topic_model) have been developed which imply that  the matrix is indeed low rank.) This success motivated many extensions of the above basic idea; see the survey on [Vector space models](https://www.jair.org/media/2934/live-2934-4846-jair.pdf).  We're interested today in methods that perform *nonlinear* operations on word cooccurence probabilities. The simplest uses the old and popular [PMI measure of Church and Hanks](http://www.aclweb.org/anthology/J90-1003), where the probability $p(w,w')$ in expression (1) is replaced by the following (nonlinear) measure of correlation. (And still the $10^5 \times 10^5$ matrix turns out to have a good low-rank approximation.)
 
 $$
-PMI(w, w') = \log (\frac{p(w, w')}{p(w) p(w')})  \qquad \mbox{(Point wise mutual information (PMI))}
+PMI(w, w') = \log (\frac{p(w, w')}{p(w) p(w')})  \qquad \mbox{(Pointwise mutual information (PMI))}
 $$
 
   Of course, researchers in applied machine learning take the existence of such low-dimensional approximations for granted, but there appears to be no theory to explain their existence. 
