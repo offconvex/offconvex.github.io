@@ -33,6 +33,7 @@ $$
 
 Our paper gives an explanation using a new generative model for text, which also gives a clearer insight into the causative relationship between word meanings and the cooccurence probabilities.  We think of corpus generation as a dynamic process, where the $t$-th word is produced at step $t$. The model says that the process is driven by the random walk of a *discourse* vector $c_t \in \Re^d$. It is a unit vector whose direction in space represents *what is being talked about.*
 Each word has a  (time-invariant) latent vector $v_w \in \Re^d$ that captures its correlations with the discourse vector. We model this bias with a loglinear word production model:
+
 $$
 \Pr[w~\mbox{emitted at time $t$}~|~c_t] \propto \exp(c_t\cdot v_w). \qquad (2)
 $$
