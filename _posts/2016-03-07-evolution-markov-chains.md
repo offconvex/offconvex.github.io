@@ -136,10 +136,6 @@ vaccine design strategies.
 
 > For example,  the effective population size of HIV-1 in an infected individual is [approximately](http://www.sciencedirect.com/science/article/pii/S0966842X06002332) $10^3-10^6$  not big enough for us to use infinite population models.
 
-<p style="text-align:center;">
-<img src="/assets/virus.jpg" alt="" />
-</p>
-
 Let us see, again at a high-level, how.
 RNA viruses, due to their primitive copying mechanisms,   often undergo mutations during reproduction.
 Mutations introduce genetic variation and the population at any time is composed of different types -- some of them being highly effective (in capturing the host cell) and some not so much.
