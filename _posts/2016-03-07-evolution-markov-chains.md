@@ -107,7 +107,7 @@ Note that stochasticity necessarily means that, even if we initialize the system
 The vector
 ${{X}}^{(t+1)}$ then is the normalized frequency vector of the
 resulting population. 
-The state space  of the Markov chain described above has size ${{N+m-1}\choose{m-1}}.$
+The state space  of the Markov chain described above has size ${N+m-1}\choose{m-1}.$
 When $QA>0,$ this Markov chain is [ergodic](https://en.wikipedia.org/wiki/Markov_chain#Ergodicity)
   and, hence, has a unique steady state. 
 However, unlike the deterministic case, this steady state is not apriori easy to compute.
