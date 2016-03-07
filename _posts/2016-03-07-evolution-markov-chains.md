@@ -1,8 +1,7 @@
-﻿---
+---
 layout:     post
 title:      Evolution, Dynamical Systems and Markov Chains
 date:       2016-03-07 12:00:00
-summary:    Introduce evolution and how dynamical systems and Markov chains come in. 
 author:     Nisheeth Vishnoi
 visible:    False
 ---
@@ -172,7 +171,3 @@ In a sequence of results available [here](http://arxiv.org/abs/1203.1287), [here
  we have shown that a wide class of evolutionary Markov chains (which includes the one described in this post) can mix quickly for all parameter settings as long as the population is large enough! 
 Further, trying to analyze them  has led to *new techniques to analyze mixing time of Markov chains and stochastic processes which might be important beyond evolution*. 
 We will explain some of these techniques in a subsequent post and continue our discussion, more generally, on evolution viewed from the lens of efficiency.
-
-
-
-
