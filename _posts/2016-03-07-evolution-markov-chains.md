@@ -72,7 +72,7 @@ Since the total mass could become more than one due to reproduction, in the *sel
 Thus, the fitness of a type influences its representation in the selected population.
 Mathematically, we can then track the fraction of each type at step $t$ of the evolution by a
 vector ${x}^{(t)}\in \Delta_m$ whose evolution is then governed by the dynamical system 
-$ {x}^{(t+1)} = \frac{QA {x}^{(t)}}{\| QA {x}^{(t)}\|_1}.$
+$ {x}^{(t+1)} = \frac{QA {x}^{(t)}}{\Vert QA {x}^{(t)}\Vert_1}.$
 (This is one of the dynamical systems we considered in a previous [post](http://www.offconvex.org/2015/12/21/dynamical-systems-1/).) 
 Thus, the eventual fate of the evolutionary process is not a single type, rather  an *invariant distribution* over types. 
 We saw that when $QA>0$,  there is a *unique* fixed point of this dynamical system; the largest right eigenvalue of $QA.$
