@@ -106,7 +106,7 @@ $N$ individuals from this intermediate population.
 Each of these steps  is depicted in Figure 2. 
 Note that stochasticity necessarily means that, even if we initialize the system in the same way,  different runs of the chain could produce very different outcomes.
 The vector
-${X}^{(t+1)}$ then is the normalized frequency vector of the
+$X^{(t+1)}$ then is the normalized frequency vector of the
 resulting population. 
 The state space  of the Markov chain described above has size ${N+m-1}\choose{m-1}.$
 When $QA>0,$ this Markov chain is [ergodic](https://en.wikipedia.org/wiki/Markov_chain#Ergodicity)
@@ -125,7 +125,7 @@ Thus, at best, we can hope to have an  algorithm that samples from close to the 
 In fact, noting that each step of the Markov chain can be implemented efficiently, evolution already provides  an algorithm.
 Its efficiency, however, depends on the time it takes to reach close to steady state -- its [mixing time](https://en.wikipedia.org/wiki/Markov_chain_mixing_time).
 However, in general, there is no way to proclaim that a Markov chain has reached close to its steady state other than *providing a bound (along with a proof) on the mixing time*. 
-Proving bounds on mixing times of Markov chains is an important area in computer science which interfaces with a variety of other disciplines such as statistics, statistical physics and machine learning; see[here](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo).
+Proving bounds on mixing times of Markov chains is an important area in computer science which interfaces with a variety of other disciplines such as statistics, statistical physics and machine learning; see [here](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo).
 In evolution, however, the mixing time is important beyond computing statistics of samples from the steady state: it  tells us how quickly a steady state could be reached. 
 This has biological significance as we will momentarily see in applications of this model to viral evolution.
 
