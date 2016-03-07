@@ -106,7 +106,7 @@ $N$ individuals from this intermediate population.
 Each of these steps  is depicted in Figure 2. 
 Note that stochasticity necessarily means that, even if we initialize the system in the same way,  different runs of the chain could produce very different outcomes.
 The vector
-${{X}}^{(t+1)}$ then is the normalized frequency vector of the
+${X}^{(t+1)}$ then is the normalized frequency vector of the
 resulting population. 
 The state space  of the Markov chain described above has size ${N+m-1}\choose{m-1}.$
 When $QA>0,$ this Markov chain is [ergodic](https://en.wikipedia.org/wiki/Markov_chain#Ergodicity)
