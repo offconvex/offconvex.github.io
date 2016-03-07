@@ -2,6 +2,7 @@
 layout:     post
 title:      Evolution, Dynamical Systems and Markov Chains
 date:       2016-03-07 15:30:00 +0100
+summary:    Introduce evolution and how dynamical systems and Markov chains come in
 author:     Nisheeth Vishnoi
 visible:    true
 ---
