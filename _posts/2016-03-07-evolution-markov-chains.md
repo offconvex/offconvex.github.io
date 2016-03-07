@@ -26,6 +26,7 @@ At any given time, the population is composed of individuals of different *types
 The reproduction could be *asexual* -- a simple act of cloning,  or *sexual* -- involving the combination of two (or more) individuals to produce offspring.
 Moreover, during reproduction there could be *mutations* that transform one type into another.
 Each of the reproduction, selection or mutation steps could be deterministic or stochastic making evolution either a deterministic or randomized function of the input population.
+
 The size of the population, the number of types, the fitness of each type in the environment, the probabilities of mutation and the starting state are the parameters of the model. 
 Typically, one fixes these parameters  and studies how the population evolves over time -- whether it reaches a limiting or a steady state and, if so, how this limiting state varies with the parameters of the model and how  quickly the limiting state is reached.
 
@@ -46,9 +47,7 @@ Finally, as you might have guessed by now, in such generality, evolution encompa
  
 Given an evolutionary model (which could include stochastic steps), as a first step to understand it we typically assume that the population is  *infinite* and hence all steps are effectively deterministic; we will see an example soon. 
 This allows the evolution of the fraction of each type in the population to be modeled as a deterministic *dynamical system* from a probability simplex (denoted by $\Delta_m$)  to itself; here $m$ is the number of types.
-However, real populations are  finite and often lend themselves to substantial stochastic effects such as random [genetic drift](https://en.wikipedia.org/wiki/Genetic_drift). 
-
-In order to understand  their limiting behavior as a function of the population size, 
+However, real populations are  finite and often lend themselves to substantial stochastic effects such as random [genetic drift](https://en.wikipedia.org/wiki/Genetic_drift). In order to understand  their limiting behavior as a function of the population size, 
  we can neither  assume that the population is infinite nor  ignore stochasticity in the steps in evolution. 
  Hence, Markov chains are appealed to in order to study finite populations.
 To be concrete, we move on to describing a deterministic and stochastic model for  error-prone evolution of an asexual  population. 
@@ -65,10 +64,11 @@ The
 reproduction is error-prone and this is captured by an $m\times m$
 stochastic matrix $Q$ whose $(i,j)$th entry captures the probability
 that the $j$th type will mutate to the $i$th type during
-reproduction.
-In the reproduction stage each type $i$  in the current population produces $a_i$ copies of itself. 
+reproduction. In the reproduction stage each type $i$  in the current population produces $a_i$ copies of itself. 
 During reproduction, mutations might occur and in our deterministic model, we assume that one unit  of $j$ gives rise to $Q_{i,j}$ fraction of population of $i.$ 
 Since the total mass could become more than one due to reproduction, in the *selection* stage we normalize the mass so that it is again of unit size.
+
+
 Thus, the fitness of a type influences its representation in the selected population.
 Mathematically, we can then track the fraction of each type at step $t$ of the evolution by a
 vector ${x}^{(t)}\in \Delta_m$ whose evolution is then governed by the dynamical system 
@@ -78,6 +78,7 @@ Thus, the eventual fate of the evolutionary process is not a single type, rather
 We saw that when $QA>0$,  there is a *unique* fixed point of this dynamical system; the largest right eigenvalue of $QA.$
 Thus, no matter where one starts, this dynamical system converges to this fixed point.
 Biologically, the  corresponding eigenvalue can be shown to be the *average fitness* of the population which is, in effect, what  is being maximized. 
+
 How quickly? Well, elementary linear algebra tells us that the rate of convergence of this process is governed by the ratio of the second largest to the largest eigenvalue of $QA.$ 
 Finally, we note that the dynamical system corresponding to a sexually reproducing population is not hard to describe and has been studied [recently](http://www.pnas.org/content/111/29/10620.abstract) from an optimization point of view. 
 
@@ -90,9 +91,7 @@ After normalization, the composition of the population is again captured by a  p
 $ {X}^{(t)}$ at time $t.$ 
 How does one generate ${X^{(t+1)}}$
 in this model when the parameters are described by the matrices
-$Q$ and $A$ as in the infinite population setting?  
-In the
-reproduction stage, one first replaces an individual of type $i$ in
+$Q$ and $A$ as in the infinite population setting?  In the reproduction stage, one first replaces an individual of type $i$ in
 the current population by $a_i$ individuals of type $i$: the total
 number of individuals of type $i$ in the intermediate population is
 therefore $a_iN {X_i}^{(t)}$. 
@@ -102,6 +101,8 @@ stochastically according to the matrix $Q.$
 Finally, in the selection stage, the
 population is culled back to size $N$ by sampling 
 $N$ individuals from this intermediate population. 
+
+
 Each of these steps  is depicted in Figure 2. 
 Note that stochasticity necessarily means that, even if we initialize the system in the same way,  different runs of the chain could produce very different outcomes.
 The vector
