@@ -45,7 +45,7 @@ Finally, as you might have guessed by now, in such generality, evolution encompa
 ## Populations: Infinite = Dynamical System, Finite = Markov Chain
  
 Given an evolutionary model (which could include stochastic steps), as a first step to understand it we typically assume that the population is  *infinite* and hence all steps are effectively deterministic; we will see an example soon. 
-This allows the evolution of the fraction of each type in the population to be modeled as a deterministic {\em dynamical system} from a probability simplex (denoted by $\Delta_m$)  to itself; here $m$ is the number of types.
+This allows the evolution of the fraction of each type in the population to be modeled as a deterministic *dynamical system* from a probability simplex (denoted by $\Delta_m$)  to itself; here $m$ is the number of types.
 However, real populations are  finite and often lend themselves to substantial stochastic effects such as random [genetic drift](https://en.wikipedia.org/wiki/Genetic_drift). 
 
 In order to understand  their limiting behavior as a function of the population size, 
@@ -68,7 +68,7 @@ that the $j$th type will mutate to the $i$th type during
 reproduction.
 In the reproduction stage each type $i$  in the current population produces $a_i$ copies of itself. 
 During reproduction, mutations might occur and in our deterministic model, we assume that one unit  of $j$ gives rise to $Q_{i,j}$ fraction of population of $i.$ 
-Since the total mass could become more than one due to reproduction, in the {\em selection} stage we normalize the mass so that it is again of unit size.
+Since the total mass could become more than one due to reproduction, in the *selection* stage we normalize the mass so that it is again of unit size.
 Thus, the fitness of a type influences its representation in the selected population.
 Mathematically, we can then track the fraction of each type at step $t$ of the evolution by a
 vector ${x}^{(t)}\in \Delta_m$ whose evolution is then governed by the dynamical system 
@@ -123,7 +123,7 @@ states is more than $2^{300}$ -- more than the number of atoms in the universe!
 Thus, at best, we can hope to have an  algorithm that samples from close to the steady state.
 In fact, noting that each step of the Markov chain can be implemented efficiently, evolution already provides  an algorithm.
 Its efficiency, however, depends on the time it takes to reach close to steady state -- its [mixing time](https://en.wikipedia.org/wiki/Markov_chain_mixing_time).
-However, in general, there is no way to proclaim that a Markov chain has reached close to its steady state other than {\em providing a bound (along with a proof) on the mixing time.} 
+However, in general, there is no way to proclaim that a Markov chain has reached close to its steady state other than *providing a bound (along with a proof) on the mixing time*. 
 Proving bounds on mixing times of Markov chains is an important area in computer science which interfaces with a variety of other disciplines such as statistics, statistical physics and machine learning; see[here](https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo).
 In evolution, however, the mixing time is important beyond computing statistics of samples from the steady state: it  tells us how quickly a steady state could be reached. 
 This has biological significance as we will momentarily see in applications of this model to viral evolution.
