@@ -129,7 +129,7 @@ In evolution, however, the mixing time is important beyond computing statistics 
 This has biological significance as we will momentarily see in applications of this model to viral evolution.
 
 
-\paragraph{Viral Evolution and Drug Design: The importance of mixing time}
+## Viral Evolution and Drug Design: The importance of mixing time
 The Markov chain described above 
 has recently found use in modeling RNA viral populations which reproduce asexually and that show strong stochastic behavior (e.g., HIV-1, see [here](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002684)), which in turn has guided drug and
 vaccine design strategies. 
