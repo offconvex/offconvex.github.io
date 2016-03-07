@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      Evolution, Dynamical Systems and Markov Chains
-date:       2016-03-07 12:00:00
+date:       2016-03-07 15:30:00 -0100
 author:     Nisheeth Vishnoi
-visible:    False
+visible:    true
 ---
 
 In this post we present a high level introduction to evolution and to how we can use mathematical tools such as dynamical systems and Markov chains to model it. 
