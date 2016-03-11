@@ -3,7 +3,6 @@ layout:     post
 title:      Stability as a foundation of machine learning
 date:       2016-03-14 09:00:00 -0800
 author:     Moritz Hardt
-summary:    Stability as a foundation of machine learning
 visible:    false
 ---
 
