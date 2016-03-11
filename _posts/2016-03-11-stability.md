@@ -72,7 +72,7 @@ $$
 R_S = \frac1n \sum_{i=1}^n \ell(A(S), z_i)
 $$
 
-It's an expression that captures the average loss of the algorithm on the sample on which it was trained. To quantify out of sample performance, we define the *risk* of the algorithm as:
+This captures the average loss of the algorithm on the sample on which it was trained. To quantify out of sample performance, we define the *risk* of the algorithm as:
 
 $$
 R = \mathop{\mathbb{E}}_{z\sim D}\left[ \ell(A(S), z) \right]
