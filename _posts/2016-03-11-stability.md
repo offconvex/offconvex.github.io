@@ -72,7 +72,7 @@ $$
 R_S = \frac1n \sum_{i=1}^n \ell(A(S), z_i)
 $$
 
-This captures the average loss of the algorithm on the sample on which it was trained. To quantify out of sample performance, we define the *risk* of the algorithm as:
+This captures the average loss of the algorithm on the sample on which it was trained. To quantify *out-of-sample* performance, we define the *risk* of the algorithm as:
 
 $$
 R = \mathop{\mathbb{E}}_{z\sim D}\left[ \ell(A(S), z) \right]
@@ -143,7 +143,7 @@ $$
 Summing up $\Delta = (1/n)\sum_i \delta_i$, we have
 
 $$
-\mathbb{E}[ R_S - R] = \Delta.
+\mathbb{E}[ R - R_S ] = \Delta.
 $$
 
 The only thing left to do is to interpret the right hand side in terms of stability. Convince yourself that $\delta_i$ measures how differently the algorithm behaves on two data sets $S$ and $S'$ that differ in only one element.
