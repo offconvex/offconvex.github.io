@@ -1,10 +1,10 @@
 ---
 layout:     post
 title:      Stability as a foundation of machine learning
-date:       2016-03-14
+date:       2016-03-14 09:00:00 -0800
 summary:    Stability as a foundation of machine learning
 author:     Moritz Hardt
-visible:    false
+visible:    False
 ---
 
 Central to machine learning is our ability to relate how a learning algorithm fares on a sample to its performance on unseen instances. This is called *generalization*.
