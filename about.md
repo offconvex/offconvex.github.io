@@ -24,5 +24,3 @@ We will report on interesting research directions and open problems, and highlig
 ## Contributing an article
 
 If you're writing an article for this blog, please follow these [guidelines](/guide/).
-
-
