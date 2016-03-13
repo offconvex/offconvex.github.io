@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Stability as a foundation of machine learning
-date:       2016-03-11 6:00:00 -0800
+date:       2016-03-14 8:00:00 -0800
 summary:    Stability as a foundation of machine learning
 author:     Moritz Hardt
 visible:    false
@@ -62,7 +62,7 @@ Before we jump into the formal details, let's consider a simple example of a sta
   </script>
   <!-- end animation -->
 
-As you can see by clicking patiently through the example, the algorithm seems pretty stable. Even if we substantially move the first example it encounters, the hyperplane computed by the algorithm changes only slightly. Neat. You can check out the code [here](https://gist.github.com/mrtzh/266c37d3a274376134a6).
+As we can see by clicking impatiently through the example, the algorithm seems pretty stable. Even if we substantially move the first example it encounters, the hyperplane computed by the algorithm changes only slightly. Neat. (You can check out the code [here](https://gist.github.com/mrtzh/266c37d3a274376134a6).)
 
 ## Empirical risk jargon
 
@@ -78,19 +78,26 @@ $$
 R = \mathop{\mathbb{E}}_{z\sim D}\left[ \ell(A(S), z) \right]
 $$
 
-The difference between risk and empirical risk $R - R_S$ is called *generalization error*. You will sometimes encounter that term as a synonym for risk, but I find that confusing. We already have a perfectly short and good name for the risk $R$.
+The difference between risk and empirical risk $R - R_S$ is called *generalization error*. You will sometimes encounter that term as a synonym for risk, but I find that confusing. We already have a perfectly short and good name for the risk $R$. Always keep in mind the following tautology
+
+$$
+R = R_S + (R-R_S).
+$$
+
+Operationally, it states that if we manage to minimize empirical risk all that matters is generalization error.
 
 
 ## A fundamental theorem of machine learning
 
-An amateur like me probably shouldn't propose fundamental theorems for anything really. But if I had to, this would be the one I'd suggest for machine learning:
+I probably shouldn't propose fundamental theorems for anything really. But if I had to, this would be the one I'd suggest for machine learning:
 
 > In expectation, generalization equals stability.
 
-Somewhat more formally, we will encounter a measure of stability, denoted $\Delta$ such that the difference between risk and empirical risk in expectation equals $\Delta.$ Formally,
+Somewhat more formally, we will encounter a natural measure of stability, denoted $\Delta$ such that the difference between risk and empirical risk in expectation equals $\Delta.$ Formally,
 
 > $\mathbb{E}[R - R_S] = \Delta$
 
+Defering the exact definition of $\Delta$ to the proof, let's think about this for a second.
 What I find so remarkable about this theorem is that it turns a statistical problem into a purely algorithmic one: All we need for generalization is an algorithmic notion of robustness. Our algorithm's output shouldn't change much if perturb one of the data points. It's almost like a sanity check. Had you coded up an algorithm and this wasn't the case, you'd probably go look for a bug.
 
 ### Proof
@@ -161,18 +168,26 @@ goes back to a seminal paper by Bousquett and Elisseeff.
 
 I should say that you can find the above proof in the essssential stability paper by Shalev-Shwartz, Shamir, Srebro and Sridharan [here](http://jmlr.csail.mit.edu/papers/volume11/shalev-shwartz10a/shalev-shwartz10a.pdf).
 
+### Concentration from stability
+
+The theorem we saw shows that *expected* empirical risk equals risk up to a correction that involves the stability of the algorithm. Can we also show that empirical risk is close to its expectation with high probability? Interestingly, we can by appealing to stability once again. I won't spell out the details, but we can use the [method of bounded differences](https://en.wikipedia.org/wiki/Doob_martingale#McDiarmid.27s_inequality) to obtain strong concentration bounds. To apply the method we need a *bounded difference* condition which is just another word for *stability*. So, we're really killing two birds with one stone by using stability not only to show that the first moment of the empirical risk is correct but also that it concentrates. The only wrinkle is that, as far as I know, the weak stability notion expressed by $\Delta$ is not enough to get concentration, but uniform stability (for sufficiently small difference) will do.
+
 ## Applications of stability
 
-I could write another ten posts or so about the applications of stability in machine learning. (Actually, I probably couldn't. I'm too lazy.) But here are just some of the cool things we can do with stability:
-
-* We can use the *method of bounded differences* to obtain strong concentration bounds for the generalization error of a stable algorithm.
+There is much more that stability can do for us. We've only scratched on the surface. Here are some of the many applications of stability.
 
 * [Regularization implies stability](http://www.jmlr.org/papers/volume2/bousquet02a/bousquet02a.pdf). Specifically, the minimizer of the empirical risk subject to an $\ell_2$-penalty is uniformly stable.
 
 * [Stochastic gradient descent is stable](http://arxiv.org/abs/1509.01240) provided that we don't make too many steps.
 
-* Strengthening uniform stability a bit, we get other interesting notions of stability such as *differential privacy*.
+* Differential privacy is nothing but a strong stability guarantee. Any result ever proved about differential privacy is fundamentally about stability.
 
 * Differential privacy in turn has applications to preventing overfitting in [adaptive data analysis](http://blog.mrtz.org/2015/12/14/adaptive-data-analysis.html).
 
-Looking ahead, in my next post I will go into the stability of stochastic gradient descent in detail. We will see a simple argument to show that stochastic gradient descent is uniformly stable. I will then work towards applying these ideas to the area of deep learning. We will see that stability can help us explain why even huge models sometimes generalize well and how we can make them generalize even better.
+* Stability also has many beautiful applications and connections in statistics. I strongly encourage you to read Bin Yu's beautiful [overview paper](https://www.stat.berkeley.edu/~binyu/ps/papers2013/Yu13.pdf) on the topic.
+
+Looking ahead, I've got at least two more posts planned on this.
+
+In my next post I will go into the stability of stochastic gradient descent in detail. We will see a simple argument to show that stochastic gradient descent is uniformly stable. I will then work towards applying these ideas to the area of deep learning. We will see that stability can help us explain why even huge models sometimes generalize well and how we can make them generalize even better.
+
+In a second post I will reflect on stability as a paradigm for reliable machine learning. The focus will be on how ideas from stability can help avoid overfitting and false discovery.
