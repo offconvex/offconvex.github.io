@@ -4,7 +4,7 @@ title: Off the Convex Path
 permalink: /about/
 ---
 
-##Contributors
+## Contributors
 
 * [Sanjeev Arora](http://www.cs.princeton.edu/~arora)
 * [Moritz Hardt](http://mrtz.org)
@@ -21,8 +21,6 @@ This blog is dedicated to the idea that optimization methods---whether created b
  
 We will report on interesting research directions and open problems, and highlight progress that has been made. We will write articles ourselves as well as encourage others to contribute. In doing so, we hope to generate an active dialog between theorists, scientists and practitioners and to motivate a generation of young researchers to work on these important problems.
 
-##Contributing an article
+## Contributing an article
 
 If you're writing an article for this blog, please follow these [guidelines](/guide/).
-
-
