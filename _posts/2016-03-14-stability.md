@@ -4,7 +4,7 @@ title:      Stability as a foundation of machine learning
 date:       2016-03-14 8:00:00 -0800
 summary:    Stability as a foundation of machine learning
 author:     Moritz Hardt
-visible:    false
+visible:    true
 ---
 
 Central to machine learning is our ability to relate how a learning algorithm fares on a sample to its performance on unseen instances. This is called *generalization*.
@@ -66,7 +66,7 @@ As we can see by clicking impatiently through the example, the algorithm seems p
 
 ## Empirical risk jargon
 
-Let's introduce some terminology to relate the behavior of an algorithm on a sample to its behavior on unseen instances. Imagine we have a sample $S=(z_1,\dots,z_n)$ drawn i.i.d. from some unknown distribution $D$. There's a learning algorithm $A(S)$ that takes $S$ and produces some model (e.g., the hyperplane in the above picture). To quantify the quality of the model we crank out a *loss function* $\ell$ with the idea that $\ell(A(S), z)$ desribes the *loss* of the model $A(S)$ on one instance $z$. The *empirical risk* or *training error* of the algorithm is defined as:
+Let's introduce some terminology to relate the behavior of an algorithm on a sample to its behavior on unseen instances. Imagine we have a sample $S=(z_1,\dots,z_n)$ drawn i.i.d. from some unknown distribution $D$. There's a learning algorithm $A(S)$ that takes $S$ and produces some model (e.g., the hyperplane in the above picture). To quantify the quality of the model we crank out a *loss function* $\ell$ with the idea that $\ell(A(S), z)$ describes the *loss* of the model $A(S)$ on one instance $z$. The *empirical risk* or *training error* of the algorithm is defined as:
 
 $$
 R_S = \frac1n \sum_{i=1}^n \ell(A(S), z_i)
@@ -97,7 +97,7 @@ Somewhat more formally, we will encounter a natural measure of stability, denote
 
 > $\mathbb{E}[R - R_S] = \Delta$
 
-Defering the exact definition of $\Delta$ to the proof, let's think about this for a second.
+Deferring the exact definition of $\Delta$ to the proof, let's think about this for a second.
 What I find so remarkable about this theorem is that it turns a statistical problem into a purely algorithmic one: All we need for generalization is an algorithmic notion of robustness. Our algorithm's output shouldn't change much if perturb one of the data points. It's almost like a sanity check. Had you coded up an algorithm and this wasn't the case, you'd probably go look for a bug.
 
 ### Proof
