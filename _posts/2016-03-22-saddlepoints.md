@@ -1,10 +1,10 @@
 ---
 layout:     post
 title:      Landscape of Non-convex Function --- How to Escape from Saddle Points
-date:       2015-12-01 9:00:00
+date:       2016-03-22 9:00:00
 summary:    What are saddle points and how to escape them in nonconvex optimization.
 author:     Rong Ge
-visible:    True
+visible:    true
 ---
 
 Convex functions are simple --- they usually have only one local minimum. Non-convex functions can be much more complicated. In this post we will discuss various types of *critical points* that you might encounter when you go *off the convex path*. In particular, we will see in many cases simple heuristics based on gradient descent can lead you to a *local minimum* in polynomial time.
