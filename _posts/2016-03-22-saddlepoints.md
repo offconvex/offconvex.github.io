@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Landscape of Non-convex Function &mdash; How to Escape from Saddle Points
+title:      Escaping from Saddle Points
 date:       2016-03-22 9:00:00
 summary:    What are saddle points and how to escape them in nonconvex optimization.
 author:     Rong Ge
