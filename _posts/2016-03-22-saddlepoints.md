@@ -9,7 +9,7 @@ visible:    true
 
 Convex functions are simple --- they usually have only one local minimum. Non-convex functions can be much more complicated. In this post we will discuss various types of *critical points* that you might encounter when you go *off the convex path*. In particular, we will see in many cases simple heuristics based on gradient descent can lead you to a *local minimum* in polynomial time.
 
-##Various Types of Critical Points
+## Various Types of Critical Points
 
 ![Local Minimum, Local Maximum and Saddle Point](http://users.cs.duke.edu/~rongge/tmp/minmaxsaddle.png)
 
@@ -41,7 +41,7 @@ It is believed that for many problems including [learning deep nets](http://arxi
 
 In the rest of the post, we will first see that getting stuck at saddle points is a very realistic possibility since most natural objective functions have *exponentially* many saddle points. We will then discuss how optimization algorithms can try to escape from saddle points.
 
-##Symmetry and Saddle Points
+## Symmetry and Saddle Points
 
 Many learning problems can be abstracted as searching for $k$ distinct *components* (sometimes called *features*, *centers*,...). For example, in the [clustering](https://en.wikipedia.org/wiki/Cluster_analysis) problem, there are $n$ points, and we are searching for $k$ components that minimizes the sum of distances of points to their nearest center. In a two-layer [neural network](https://en.wikipedia.org/wiki/Artificial_neural_network), we try to find a network with $k$ distinct  *neurons* at the middle layer. In my [previous post](http://www.offconvex.org/2015/12/17/tensor-decompositions/) I talked about *tensor decomposition*, which also looks for $k$ distinct *rank-1 components*.
 
@@ -62,7 +62,7 @@ There are *exponentially* many globally optimal solutions that are all permutati
 <img src="http://users.cs.duke.edu/~rongge/tmp/symmetrysmall.png" alt="Symmetry and Saddle Points" />
 </p>
 
-##Escaping from Saddle Points
+## Escaping from Saddle Points
 
 In order to optimize these non-convex functions with many saddle points, optimization algorithms need to make progress even at (or near) saddle points. The simplest way to do this is by using the second order Taylor's expansion:
 
@@ -72,7 +72,7 @@ $$
 
 If the gradient $\nabla f(x)$ is $\vec{0}$, we can still hope to find a vector $u$ where $u^\top \nabla^2 f(x) u < 0$. This way if we let $y = x+\eta u$, the function value of $f(y)$ is likely to be smaller. Many optimization algorithms such as [trust region algorithms](http://link.springer.com/article/10.1007%2Fs10107-015-0893-2) and [cubic regularization](http://link.springer.com/article/10.1007%2Fs10107-006-0706-8) use this idea, and they can escape from saddle points in polynomial time for nice functions.
 
-###Strict Saddle Functions
+### Strict Saddle Functions
 
 As we discussed, in general it is NP-hard to find a local minimum and many algorithms may get stuck at a saddle point. How many steps do we need to escape from a saddle point? This is related to how *well-behaved* the saddle points are. Intuitively, a saddle point $x$ is well-behaved, if there is a direction $u$ such that the second order term $u^\top \nabla^2 f(x) u$ is significantly smaller than 0 --- geometrically this means there is a steep direction where the function value decreases. To quantify this, [my paper with Furong Huang, Chi Jin and Yang Yuan](http://arxiv.org/abs/1503.02101) introduced the notion of *strict saddle* functions (also known as "ridable" function in [Sun et al. 2015](http://arxiv.org/abs/1510.06096))
 
@@ -91,7 +91,7 @@ For such functions, [trust region algorithms](http://link.springer.com/article/1
 
 What functions are strict saddle? [Ge et al. 2015](http://arxiv.org/abs/1503.02101) showed a [tensor decomposition](http://www.offconvex.org/2015/12/17/tensor-decompositions/) problem is strict saddle. [Sun et al. 2015](http://arxiv.org/abs/1510.06096) observed that problems like complete [dictionary learning](https://en.wikipedia.org/wiki/Machine_learning#Sparse_dictionary_learning), [phase retrieval](https://en.wikipedia.org/wiki/Phase_retrieval) are also strict saddle.
 
-###First Order Method to Escape from Saddle Points
+### First Order Method to Escape from Saddle Points
 
 Trust region algorithms are very powerful. However they need to compute the second order derivative of the objective function, which is often too expensive in practice. If the algorithm can only access the gradient of the function, is it still possible to escape from saddle points?
 
@@ -117,7 +117,7 @@ The polynomial dependency on the dimension $n$ and the smallest eigenvalue of th
 
 A recent subsequent paper by [Lee et al.](http://arxiv.org/abs/1602.04915) showed even without adding noise, gradient descent will not converge to any strict saddle point if the initial point is chosen randomly. However their result relies on the [Stable Manifold Theorem](https://en.wikipedia.org/wiki/Stable_manifold_theorem) from dynamical systems theory, which inherently does not provide any upperbound on the number of steps.
 
-##Beyond Simple Saddle Points
+## Beyond Simple Saddle Points
 
 We have seen algorithms that can handle (simple) saddle points. However, non-convex problems can have much more complicated landscapes that involve *degenerate* saddle points --- points whose Hessian is positive semidefinite and have 0 eigenvalues. Such degenerate structure often indicates a complicated saddle point (such as a [monkey saddle](https://en.wikipedia.org/wiki/Monkey_saddle), Figure (a)) or a set of connected saddle points (Figures (b)(c)). In [Anandkumar, Ge 2016](http://arxiv.org/abs/1602.05908) we gave an algorithm that can deal with some of these *degenerate* saddle points.
 
