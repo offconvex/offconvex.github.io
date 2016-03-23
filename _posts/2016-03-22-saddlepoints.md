@@ -1,17 +1,17 @@
 ---
 layout:     post
-title:      Landscape of Non-convex Function --- How to Escape from Saddle Points
+title:      Landscape of Non-convex Function - How to Escape from Saddle Points
 date:       2016-03-22 9:00:00
 summary:    What are saddle points and how to escape them in nonconvex optimization.
 author:     Rong Ge
-visible:    true
+visible:    false
 ---
 
-Convex functions are simple --- they usually have only one local minimum. Non-convex functions can be much more complicated. In this post we will discuss various types of *critical points* that you might encounter when you go *off the convex path*. In particular, we will see in many cases simple heuristics based on gradient descent can lead you to a *local minimum* in polynomial time.
+Convex functions are simple - they usually have only one local minimum. Non-convex functions can be much more complicated. In this post we will discuss various types of *critical points* that you might encounter when you go *off the convex path*. In particular, we will see in many cases simple heuristics based on gradient descent can lead you to a *local minimum* in polynomial time.
 
 ## Various Types of Critical Points
 
-![Local Minimum, Local Maximum and Saddle Point](http://users.cs.duke.edu/~rongge/tmp/minmaxsaddle.png)
+![Local Minimum, Local Maximum and Saddle Point](/assets/saddle/minmaxsaddle.png)
 
 To minimize the function $f:\mathbb{R}^n\to \mathbb{R}$, the most popular approach is to follow the opposite direction of the gradient $\nabla f(x)$ (for simplicity, all functions we talk about are infinitely differentiable), that is,
 
@@ -31,7 +31,7 @@ $$
 
 At $x = (0,0)$, the gradient is $\vec{0}$, but it is clearly not a local minimum as $x = (0, \epsilon)$ has smaller function value. The point $(0,0)$ is called a *saddle point* of this function.
 
-To distinguish these cases we need to consider the second order derivative $\nabla^2 f(x)$ --- an $n\times n$ matrix (usually known as the *Hessian*) whose $i,j$-th entry is equal to $\frac{\partial^2}{\partial x_i \partial x_j} f(x)$. When the Hessian is positive definite (which means $u^\top\nabla^2 f(x) u > 0$ for any $u\ne 0$), by second order Taylor's expansion for any direction $u$
+To distinguish these cases we need to consider the second order derivative $\nabla^2 f(x)$ - an $n\times n$ matrix (usually known as the *Hessian*) whose $i,j$-th entry is equal to $\frac{\partial^2}{\partial x_i \partial x_j} f(x)$. When the Hessian is positive definite (which means $u^\top\nabla^2 f(x) u > 0$ for any $u\ne 0$), by second order Taylor's expansion for any direction $u$
 $$
 f(x + \eta u) \approx f(x) + \frac{\eta^2}{2} u^\top\nabla^2 f(x) u > f(x),
 $$
@@ -54,12 +54,12 @@ $$
 
 However, if we take the average of this solution, we will end up with the solution $\frac{x_1+x_2}{2}, \frac{x_1+x_2}{2}, x_3,...,x_k$, which is *not equivalent*! If the original solution is optimal this average is likely to be suboptimal. Therefore the objective function cannot be convex because for convex functions, average of optimal solutions is still optimal.
 
-![Symmetry](http://users.cs.duke.edu/~rongge/tmp/equivalent.png)
+![Symmetry](/assets/saddle/equivalent.png)
 
 There are *exponentially* many globally optimal solutions that are all permutations of the same solution. Saddle points arise naturally on the paths that connect these *isolated* local minima. The figure below shows the function $y = x_1^4-2x_1^2 + x_2^2$: between two symmetric local min $(-1,0)$ and $(1,0)$, the point $(0,0)$ is a saddle point.
 
 <p style="text-align:center;">
-<img src="http://users.cs.duke.edu/~rongge/tmp/symmetrysmall.png" alt="Symmetry and Saddle Points" />
+<img src="/assets/saddle/symmetrysmall.png" alt="Symmetry and Saddle Points" />
 </p>
 
 ## Escaping from Saddle Points
@@ -74,7 +74,7 @@ If the gradient $\nabla f(x)$ is $\vec{0}$, we can still hope to find a vector $
 
 ### Strict Saddle Functions
 
-As we discussed, in general it is NP-hard to find a local minimum and many algorithms may get stuck at a saddle point. How many steps do we need to escape from a saddle point? This is related to how *well-behaved* the saddle points are. Intuitively, a saddle point $x$ is well-behaved, if there is a direction $u$ such that the second order term $u^\top \nabla^2 f(x) u$ is significantly smaller than 0 --- geometrically this means there is a steep direction where the function value decreases. To quantify this, [my paper with Furong Huang, Chi Jin and Yang Yuan](http://arxiv.org/abs/1503.02101) introduced the notion of *strict saddle* functions (also known as "ridable" function in [Sun et al. 2015](http://arxiv.org/abs/1510.06096))
+As we discussed, in general it is NP-hard to find a local minimum and many algorithms may get stuck at a saddle point. How many steps do we need to escape from a saddle point? This is related to how *well-behaved* the saddle points are. Intuitively, a saddle point $x$ is well-behaved, if there is a direction $u$ such that the second order term $u^\top \nabla^2 f(x) u$ is significantly smaller than 0 - geometrically this means there is a steep direction where the function value decreases. To quantify this, [my paper with Furong Huang, Chi Jin and Yang Yuan](http://arxiv.org/abs/1503.02101) introduced the notion of *strict saddle* functions (also known as "ridable" function in [Sun et al. 2015](http://arxiv.org/abs/1510.06096))
 
 >A function $f(x)$ is *strict saddle* if all points $x$ satisfy at least one of the following<br>
 >1. Gradient $\nabla f(x)$ is large. <br>
@@ -83,7 +83,7 @@ As we discussed, in general it is NP-hard to find a local minimum and many algor
 
 Essentially, the local region of every point $x$ looks like one of the following pictures:
 
-![Symmetry](http://users.cs.duke.edu/~rongge/tmp/strictsaddle.png)
+![Symmetry](/assets/saddle/strictsaddle.png)
 
 For such functions, [trust region algorithms](http://link.springer.com/article/10.1007%2Fs10107-015-0893-2) and [cubic regularization](http://link.springer.com/article/10.1007%2Fs10107-006-0706-8) can find a local minimum efficiently.
 
@@ -103,10 +103,10 @@ To formalize this intuition we will try use a *noisy gradient descent*
 
 Here $\epsilon$ is a noise vector that has mean $0$. This additional noise is going to deliver the initial *nudge* that makes the ball fall along the slope. 
 
-In fact, often it is much cheaper to compute a noisy gradient than the true gradient--- this is the key idea in [stochastic gradient](https://en.wikipedia.org/wiki/Stochastic_gradient_descent) , and a large body of work shows that the noise does not interfere with convergence for convex optimization. For non-convex optimization, intuitively people believed the inherent noise *helps* in convergence because it pushes the current point away from *saddle points*. It's not a bug, it's a feature! 
+In fact, often it is much cheaper to compute a noisy gradient than the true gradient - this is the key idea in [stochastic gradient](https://en.wikipedia.org/wiki/Stochastic_gradient_descent) , and a large body of work shows that the noise does not interfere with convergence for convex optimization. For non-convex optimization, intuitively people believed the inherent noise *helps* in convergence because it pushes the current point away from *saddle points*. It's not a bug, it's a feature! 
 
 <p style="text-align:center;">
-<img src="http://users.cs.duke.edu/~rongge/tmp/escapesmall.png" alt="Escaping from saddle points" />
+<img src="/assets/saddle/escapesmall.png" alt="Escaping from saddle points" />
 </p>
 
 Previously, there were no good upper bound known  on the number of iterations  needed to escape saddle points and arrive at a local minimum. In [Ge et al. 2015](http://arxiv.org/abs/1503.02101), we show
@@ -119,8 +119,8 @@ A recent subsequent paper by [Lee et al.](http://arxiv.org/abs/1602.04915) showe
 
 ## Beyond Simple Saddle Points
 
-We have seen algorithms that can handle (simple) saddle points. However, non-convex problems can have much more complicated landscapes that involve *degenerate* saddle points --- points whose Hessian is positive semidefinite and have 0 eigenvalues. Such degenerate structure often indicates a complicated saddle point (such as a [monkey saddle](https://en.wikipedia.org/wiki/Monkey_saddle), Figure (a)) or a set of connected saddle points (Figures (b)(c)). In [Anandkumar, Ge 2016](http://arxiv.org/abs/1602.05908) we gave an algorithm that can deal with some of these *degenerate* saddle points.
+We have seen algorithms that can handle (simple) saddle points. However, non-convex problems can have much more complicated landscapes that involve *degenerate* saddle points - points whose Hessian is positive semidefinite and have 0 eigenvalues. Such degenerate structure often indicates a complicated saddle point (such as a [monkey saddle](https://en.wikipedia.org/wiki/Monkey_saddle), Figure (a)) or a set of connected saddle points (Figures (b)(c)). In [Anandkumar, Ge 2016](http://arxiv.org/abs/1602.05908) we gave an algorithm that can deal with some of these *degenerate* saddle points.
 
-![Higher order saddle points](http://users.cs.duke.edu/~rongge/tmp/highorder.png)
+![Higher order saddle points](/assets/saddle/highorder.png)
 
 The landscapes of non-convex functions can be very complicated, and there are still many open problems. What other functions are *strict saddle*? How do we make optimization algorithms that work even when there are degenerate saddle points or even *spurious* local minima? We hope more researchers will be interested in these problems!
