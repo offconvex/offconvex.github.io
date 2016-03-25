@@ -39,7 +39,7 @@ are nonnegative, the algorithm converges to a point where the gradient is equal 
 
 The random initialization is key here.  If we initialized the problem such that $x^{(0)}_i=0$ whenever $a_i<0$, then the algorithm would actually converge.  However, under the smallest perturbation away from this initial condition, gradient descent diverges to negative infinity.
 
-Most of the examples showing that algorithms converge to stationary points are fragile in a similar way.  You have to try very hard to make an algorithm converge to a saddle point!  As an example of this phenomena for a non-quadratic function, consider the following example from Nesterov’s revered [Introductory Lectures on Convex Optimization](http://www.springer.com/us/book/9781402075537). Let $f(x,y) = \frac12 x^2 +\frac14 y^4-\frac12 y^2$.  The critical points of this function are $z^{(1)}= (0,0)$, $z^{(2)} = (0,-1)$ and $z^{(3)} = (0,1)$.  The points $z^{(2)}$ and $z^{(3)}$ are local minima, and $z^{(1)}$ is a saddle point.  Now observe that gradient descent initialized from any point of the form $(x,0)$ converges to the saddle point $z^{(1)}$. *Any other initial point* either diverges or converges to a local minimum.  If one chooses an initial point at random, then gradient descent does not converge to a saddle point *with probability one.*
+Most of the examples showing that algorithms converge to stationary points are fragile in a similar way.  You have to try very hard to make an algorithm converge to a saddle point.  As an example of this phenomena for a non-quadratic function, consider the following example from Nesterov’s revered [Introductory Lectures on Convex Optimization](http://www.springer.com/us/book/9781402075537). Let $f(x,y) = \frac12 x^2 +\frac14 y^4-\frac12 y^2$.  The critical points of this function are $z^{(1)}= (0,0)$, $z^{(2)} = (0,-1)$ and $z^{(3)} = (0,1)$.  The points $z^{(2)}$ and $z^{(3)}$ are local minima, and $z^{(1)}$ is a saddle point.  Now observe that gradient descent initialized from any point of the form $(x,0)$ converges to the saddle point $z^{(1)}$. *Any other initial point* either diverges or converges to a local minimum.  If one chooses an initial point at random, then gradient descent does not converge to a saddle point *with probability one.*
 
 ### The Stable Manifold Theorem and random initialization
  
@@ -47,7 +47,7 @@ In recent work with [Jason Lee, Max Simchowitz, and Mike Jordan](http://arxiv.or
 
 With a fairly straightforward argument, we were able to show that the gradient descent algorithm satisfied the assumptions of the Stable Manifold Theorem, and, moreover, that the set of points that converge to strict saddles *always* has measure zero.  This formalizes the above argument.  If you pick a point at random and run gradient descent, you will never converge to a saddle point.
 
-In some sense, optimizers would not be particularly surprised by this theorem.  We are sure that some version of our result is already known for gradient descent, but we couldn't find it in the literature.  If you can find an earlier reference proving this theorem we would be delighted if you’d let us know!
+In some sense, optimizers would not be particularly surprised by this theorem.  We are sure that some version of our result is already known for gradient descent, but we couldn't find it in the literature.  If you can find an earlier reference proving this theorem we would be delighted if you’d let us know.
 
 ### Adding noise
 
@@ -63,7 +63,7 @@ Pemantle does not even have to assume the strict saddle point condition to prove
 
 If saddle points are easy to avoid, then the question remains as to what exactly makes nonconvex optimization difficult?  First, let me say that it’s a bit ridiculous to define a class of problems using the “non-” prefix.  Defining a research area as the complement of a small class is going to always be far too general.
 
-A reasonable approximation of what most people envision when they use the word “non-convex” is optimizing functions that are twice differentiable over simple sets.  Let’s call this “smooth optimization with convex constraints.”  While the relu and max-pooling units inside modern neural networks violate my assumptions, this is a good starting place because unconstrained smooth optimization is deceptively difficult!
+A reasonable approximation of what most people envision when they use the word “non-convex” is optimizing functions that are twice differentiable over simple sets.  Let’s call this “smooth optimization with convex constraints.”  While the relu and max-pooling units inside modern neural networks violate my assumptions, this is a good starting place because unconstrained smooth optimization is deceptively difficult.
 
 My favorite nonconvex function class is the homogeneous quartics.  These functions are infinitely differentiable and yet incredibly difficult to optimize even in practice.  Consider the simple set of instances on $\mathbb{R}^d$
 
@@ -73,7 +73,7 @@ $$
 
 Where $Q$ is some $d\times d$ matrix.  When $Q$ is positive semidefinite, then $0$ is a global minimizer of $f$.  Indeed, it’s easy to see in that case that $f$ is nonnegative everywhere, so any point where $f(x)=0$ is a global optimum.  When $Q$ has only nonnegative entries, the same argument applies.  Indeed, generalizing these two cases, it’s easy to see that if $Q$ is the sum of a positive definite matrix and a matrix with only nonnegative entries, then $0$ is a global minimizer.
 
-Now, what about for general $Q$?  Amusingly, we always have that the gradient vanishes at $0$.  So is $0$ a local minimum, a global minimum, a local maximum, a global maximum, or a saddle point?  Since $f(x)$ is homogenous in the sense that $f(tx) = t^4 f(x)$ for all scalars $t$, the only cases that can occur is that $0$ a global minimum, a global maximum, or a saddle point.  But any  of these cases can and do occur!
+Now, what about for general $Q$?  Amusingly, we always have that the gradient vanishes at $0$.  So is $0$ a local minimum, a global minimum, a local maximum, a global maximum, or a saddle point?  Since $f(x)$ is homogenous in the sense that $f(tx) = t^4 f(x)$ for all scalars $t$, the only cases that can occur is that $0$ a global minimum, a global maximum, or a saddle point.  But any  of these cases can occur.
 
 So can we check if $0$ is a global minimizer?  Well, $0$ is not a global minimizer if and only if there exists some $x$ such that $f(x)<0$.  If we perform the variable substitution, $u_i = x_i^2$, we see that $0$ is not a global minimizer if and only if there exists some $u$ with only nonnegative entries such that $u^T Q u <0$.  That is, $x$ is a global minimizer of $f$ if and only if the matrix $Q$ is *copositive* (a matrix is copositive if $u^T Q u \geq 0$ for all $u$ with only nonnegative entries).
 
