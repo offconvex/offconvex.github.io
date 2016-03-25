@@ -7,7 +7,7 @@ author:     Benjamin Recht
 visible:    false
 ---
 
-Thanks to Rong for the [very nice blog post](http://www.offconvex.org/2016/03/22/saddlepoints/) describing critical points of nonconvex functions and how to avoid them. In this post, I’d like to highlight a couple of facts that are not widely appreciated about nonlinear optimization. First, it is super hard to converge to a saddle point. (Just look at those pictures in Rong’s post!  If you move ever so slightly you fall off the saddle).  Dumb algorithms like gradient descent with constant step sizes can’t converge to saddle points unless you try really hard.  Second, and more importantly, I would like to briefly describe why the hardness of non-convex optimization likely doesn’t arise from strict saddle points but from more subtle degenerate critical phenomena.
+Thanks to Rong for the [very nice blog post](http://www.offconvex.org/2016/03/22/saddlepoints/) describing critical points of nonconvex functions and how to avoid them. In this post, I’d like to highlight a couple of facts that are not widely appreciated about nonlinear optimization. First, it is super hard to converge to a saddle point. (Just look at those pictures in Rong’s post!  If you move ever so slightly you fall off the saddle).  Dumb algorithms like gradient descent with constant step sizes can’t converge to saddle points unless you try really hard.  Second, and more importantly, I would like to briefly describe why the hardness of non-convex optimization likely doesn’t arise from strict saddle points but rather from more subtle degenerate critical phenomena.
 
 ## It’s hard to converge to a saddle.
 
