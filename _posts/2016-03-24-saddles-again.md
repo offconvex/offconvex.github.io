@@ -26,11 +26,14 @@ $$
 $$
 If one unrolls this recursive formula down to zero, we see that the $i$th coordinate of the $k$th iterate is given by the formula
 
-$$
-	x_{i}^{(k)} =(1-t a_i)^{k} x_i^{(0)}\,.
-$$
+\[
+	x_{i}^{(k)} = (1-t a_i)^{k} x_i^{(0)}\,.
+\]
 
-One can immediately see from this expression that if the step size $t$ is chosen such that $t |a_i| <1$ for all $i$, then when all of the $a_i$ are nonnegative, the algorithm converges to a point where the gradient is equal to zero from any starting point.  But if there is *a single negative $a_i$*, the function diverges to negative infinity exponentially quickly from any randomly chosen $x^{(0)}$.
+One can immediately see from this expression that if the step size $t$ is chosen such 
+that $t |a_i| < 1 $ 
+for all $i$, then when all of the $a_i$ 
+are nonnegative, the algorithm converges to a point where the gradient is equal to zero from any starting point.  But if there is *a single negative $a_i$*, the function diverges to negative infinity exponentially quickly from any randomly chosen $x^{(0)}$.
 
 The random initialization is key here.  If we initialized the problem such that $x^{(0)}_i=0$ whenever $a_i<0$, then the algorithm would actually converge.  However, under the smallest perturbation away from this initial condition, gradient descent diverges to negative infinity.
 
