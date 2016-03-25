@@ -30,6 +30,7 @@ If one unrolls this recursive formula down to zero, we see that the $i$th coordi
 	x_{i}^{(k)} = (1-t a_i)^{k} x_i^{(0)}\,.
 \]
 
+
 One can immediately see from this expression that if the step size $t$ is chosen such 
 that $t |a_i| < 1 $ 
 for all $i$, then when all of the $a_i$ 
