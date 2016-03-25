@@ -24,11 +24,12 @@ For our function, this takes the form
 $$
 	x^{(k+1)}_i = (1- t a_i) x_i^{(k)}
 $$
+
 If one unrolls this recursive formula down to zero, we see that the $i$th coordinate of the $k$th iterate is given by the formula
 
-\[
+$$
 	x_{i}^{(k)} = (1-t a_i)^{k} x_i^{(0)}\,.
-\]
+$$
 
 
 One can immediately see from this expression that if the step size $t$ is chosen such 
@@ -65,9 +66,11 @@ If saddle points are easy to avoid, then the question remains as to what exactly
 A reasonable approximation of what most people envision when they use the word “non-convex” is optimizing functions that are twice differentiable over simple sets.  Let’s call this “smooth optimization with convex constraints.”  While the relu and max-pooling units inside modern neural networks violate my assumptions, this is a good starting place because unconstrained smooth optimization is deceptively difficult!
 
 My favorite nonconvex function class is the homogeneous quartics.  These functions are infinitely differentiable and yet incredibly difficult to optimize even in practice.  Consider the simple set of instances on $\mathbb{R}^d$
+
 $$
 	f(x) = \sum_{i,j=1}^d Q_{ij} x_i^2 x_j^2
 $$
+
 Where $Q$ is some $d\times d$ matrix.  When $Q$ is positive semidefinite, then $0$ is a global minimizer of $f$.  Indeed, it’s easy to see in that case that $f$ is nonnegative everywhere, so any point where $f(x)=0$ is a global optimum.  When $Q$ has only nonnegative entries, the same argument applies.  Indeed, generalizing these two cases, it’s easy to see that if $Q$ is the sum of a positive definite matrix and a matrix with only nonnegative entries, then $0$ is a global minimizer.
 
 Now, what about for general $Q$?  Amusingly, we always have that the gradient vanishes at $0$.  So is $0$ a local minimum, a global minimum, a local maximum, a global maximum, or a saddle point?  Since $f(x)$ is homogenous in the sense that $f(tx) = t^4 f(x)$ for all scalars $t$, the only cases that can occur is that $0$ a global minimum, a global maximum, or a saddle point.  But any  of these cases can and do occur!
@@ -75,9 +78,11 @@ Now, what about for general $Q$?  Amusingly, we always have that the gradient va
 So can we check if $0$ is a global minimizer?  Well, $0$ is not a global minimizer if and only if there exists some $x$ such that $f(x)<0$.  If we perform the variable substitution, $u_i = x_i^2$, we see that $0$ is not a global minimizer if and only if there exists some $u$ with only nonnegative entries such that $u^T Q u <0$.  That is, $x$ is a global minimizer of $f$ if and only if the matrix $Q$ is *copositive* (a matrix is copositive if $u^T Q u \geq 0$ for all $u$ with only nonnegative entries).
 
 Now, here’s the tricky part.  Checking if $Q$ is a copositive matrix is NP-hard.  Indeed, it’s really easy to encode hard problems into checking copositivity.  A relatively simple example is cleanly described in [expository lecture notes](http://www.ti.inf.ethz.ch/ew/lehre/ApproxSDP09/notes/copositive.pdf) by Bernd Gaertner and Jiri Matousek.  Let $G$ be a graph with $d$ vertices. Let $A$ be the adjacency matrix of $G$. Let $I$ denote the $d\times d$ identity matrix and $E$ the $d\times d$ matrix of all ones.  Let $s$ be some positive number.  Set
+
 $$
 	Q = I + A - s\cdot E
 $$
+
 Then $G$ has an independent set of size larger than $1/s$ if and only if $Q$ is not copositive (this is Theorem 5.2.5 in Gaertner and Matousek’s notes).  In other words, finding a direction to decrease the function value of a quartic polynomial is at least as hard as deciding if a graph has an independent set of a specified size.
 
 Now, I know my theory friends are going to come back to me and say that random instances of independent set can be solved by greedy heuristics.  I used independent set because it had the simplest formulation as a smooth optimization problem.  However, there are also reductions from [Maximum Clique](http://www.caam.rice.edu/~yad1/miscellaneous/References/Math/Topology/Cliques/Maximal%20Clique%20Problem.pdf) and [Subset Sum](http://www-personal.umich.edu/~murty/np.pdf) to quartic minimization which are almost as simple.  And, moreover, note that “adding noise to the gradient” can’t provide you a particularly good heuristic to find a descent direction.  This would amount to solving Subset Sum by random guessing.  Good luck with that!
