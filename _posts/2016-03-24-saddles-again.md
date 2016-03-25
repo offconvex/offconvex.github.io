@@ -14,14 +14,18 @@ Thanks to Rong for the [very nice blog post](http://www.offconvex.org/2016/03/22
 To illustrate why gradient descent would not converge to a non-minimizing saddle points, consider the case of a non-convex quadratic, $f(x)=\frac{1}{2} \sum_{i=1}^d a_i x_i^2$.  Assume that $a_i$ is nonnegative for the $k$ values and is strictly negative for the last $d-k$ values.  The unique stationary point of this problem is $x=0$.  The Hessian at $0$ is simply the diagonal matrix with $H_{ii} = a_i$ for $i=1,\ldots,d$.  
 
 Now what happens when we run gradient descent on this function from some initial point $x^{(0)}$?  The gradient method has iterates of the form
+
 $$
 	x^{(k+1)} = x^{(k)} - t \nabla f(x^{(k)})
 $$
+
 For our function, this takes the form
+
 $$
 	x^{(k+1)}_i = (1- t a_i) x_i^{(k)}
 $$
 If one unrolls this recursive formula down to zero, we see that the $i$th coordinate of the $k$th iterate is given by the formula
+
 $$
 	x_{i}^{(k)} =(1-t a_i)^{k} x_i^{(0)}\,.
 $$
