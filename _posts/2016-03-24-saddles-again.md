@@ -55,7 +55,7 @@ As Rong [discussed](http://www.offconvex.org/2016/03/22/saddlepoints/), in his p
 
 Interestingly, a similar result also follows from the Stable Manifold Theorem. Indeed, Robin Pemantle [developed a more general result](https://www.math.upenn.edu/~pemantle/papers/nonconvergence.pdf) for stochastic processes.  Pemantle uses the Stable Manifold Theorem to show that general vector flows perturbed by noise cannot converge to unstable fixed points. As a special case, he proves that stochastic gradient descent cannot converge to a saddle point provided the gradient noise is sufficiently diverse.  In particular, this implies that additive gaussian noise is sufficient to prevent convergence to saddles.
 
-Pemantle does not even have to assume the strict saddle point condition to prove his theorem.  However, additional work would be required to extract the sort of quantitative convergence bounds that Rong and his coauthors derive from Pemantle’s argument.
+Pemantle does not have to assume the strict saddle point condition to prove his theorem.  However, additional work would be required to extract the sort of quantitative convergence bounds that Rong and his coauthors derive from Pemantle’s argument.
 
 ## What makes nonconvex optimization difficult?
 
