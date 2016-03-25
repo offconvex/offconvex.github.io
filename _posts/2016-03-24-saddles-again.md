@@ -34,7 +34,7 @@ If one unrolls this recursive formula down to zero, we see that the $i$th coordi
 One can immediately see from this expression that if the step size $t$ is chosen such 
 that $t |a_i| < 1 $ 
 for all $i$, then when all of the $a_i$ 
-are nonnegative, the algorithm converges to a point where the gradient is equal to zero from any starting point.  But if there is *a single negative $a_i$*, the function diverges to negative infinity exponentially quickly from any randomly chosen $x^{(0)}$.
+are nonnegative, the algorithm converges to a point where the gradient is equal to zero from any starting point.  But if there is *a single negative $a_i$*, the function diverges to negative infinity exponentially quickly from any randomly chosen starting point.
 
 The random initialization is key here.  If we initialized the problem such that $x^{(0)}_i=0$ whenever $a_i<0$, then the algorithm would actually converge.  However, under the smallest perturbation away from this initial condition, gradient descent diverges to negative infinity.
 
