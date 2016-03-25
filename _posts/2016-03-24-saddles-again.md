@@ -61,38 +61,4 @@ Pemantle does not even have to assume the strict saddle point condition to prove
 
 ## What makes nonconvex optimization difficult?
 
-If saddle points are easy to avoid, then the question remains as to what exactly makes nonconvex optimization difficult?  First, let me say that it’s a bit ridiculous to define a class of problems using the “non-” prefix.  Defining a research area as the complement of a small class is going to always be far too general.
-
-A reasonable approximation of what most people envision when they use the word “non-convex” is optimizing functions that are twice differentiable over simple sets.  Let’s call this “smooth optimization with convex constraints.”  While the relu and max-pooling units inside modern neural networks violate my assumptions, this is a good starting place because unconstrained smooth optimization is deceptively difficult.
-
-My favorite nonconvex function class is the homogeneous quartics.  These functions are infinitely differentiable and yet incredibly difficult to optimize even in practice.  Consider the simple set of instances on $\mathbb{R}^d$
-
-$$
-	f(x) = \sum_{i,j=1}^d Q_{ij} x_i^2 x_j^2
-$$
-
-Where $Q$ is some $d\times d$ matrix.  When $Q$ is positive semidefinite, then $0$ is a global minimizer of $f$.  Indeed, it’s easy to see in that case that $f$ is nonnegative everywhere, so any point where $f(x)=0$ is a global optimum.  When $Q$ has only nonnegative entries, the same argument applies.  Indeed, generalizing these two cases, it’s easy to see that if $Q$ is the sum of a positive definite matrix and a matrix with only nonnegative entries, then $0$ is a global minimizer.
-
-Now, what about for general $Q$?  Amusingly, we always have that the gradient vanishes at $0$.  So is $0$ a local minimum, a global minimum, a local maximum, a global maximum, or a saddle point?  Since $f(x)$ is homogenous in the sense that $f(tx) = t^4 f(x)$ for all scalars $t$, the only cases that can occur is that $0$ a global minimum, a global maximum, or a saddle point.  But any  of these cases can occur.
-
-So can we check if $0$ is a global minimizer?  Well, $0$ is not a global minimizer if and only if there exists some $x$ such that $f(x)<0$.  If we perform the variable substitution, $u_i = x_i^2$, we see that $0$ is not a global minimizer if and only if there exists some $u$ with only nonnegative entries such that $u^T Q u <0$.  That is, $x$ is a global minimizer of $f$ if and only if the matrix $Q$ is *copositive* (a matrix is copositive if $u^T Q u \geq 0$ for all $u$ with only nonnegative entries).
-
-Now, here’s the tricky part.  Checking if $Q$ is a copositive matrix is NP-hard.  Indeed, it’s really easy to encode hard problems into checking copositivity.  A relatively simple example is cleanly described in [expository lecture notes](http://www.ti.inf.ethz.ch/ew/lehre/ApproxSDP09/notes/copositive.pdf) by Bernd Gaertner and Jiri Matousek.  Let $G$ be a graph with $d$ vertices. Let $A$ be the adjacency matrix of $G$. Let $I$ denote the $d\times d$ identity matrix and $E$ the $d\times d$ matrix of all ones.  Let $s$ be some positive number.  Set
-
-$$
-	Q = I + A - s\cdot E
-$$
-
-Then $G$ has an independent set of size larger than $1/s$ if and only if $Q$ is not copositive (this is Theorem 5.2.5 in Gaertner and Matousek’s notes).  In other words, finding a direction to decrease the function value of a quartic polynomial is at least as hard as deciding if a graph has an independent set of a specified size.
-
-Now, I know my theory friends are going to come back to me and say that random instances of independent set can be solved by greedy heuristics.  I used independent set because it had the simplest formulation as a smooth optimization problem.  However, there are also reductions from [Maximum Clique](http://www.caam.rice.edu/~yad1/miscellaneous/References/Math/Topology/Cliques/Maximal%20Clique%20Problem.pdf) and [Subset Sum](http://www-personal.umich.edu/~murty/np.pdf) to quartic minimization which are almost as simple.  And, moreover, note that “adding noise to the gradient” can’t provide you a particularly good heuristic to find a descent direction.  This would amount to solving Subset Sum by random guessing.  Good luck with that!
-
-So what makes this case particularly hard?  It’s that the Hessian of $f$ at zero is the all zeros matrix.  The Hessian gives us no information whatsoever about the curvature of $f$.  In retrospect, this shouldn’t be too surprising.  $0$ is a stationary point of the functions $x^3$ and $x^4$, and the second derivatives of both functions vanish at zero.  But, of course, in one case there is a descent direction and in the other there is not.
-
-However, note that negative eigenvalues have nothing to do with the hardness here.
-
-## Is non-convex optimization hard in practice?
-
-One of the surprisingly open questions in non-convex optimization is getting a handle on whether non-smooth optimization is generically hard or generically easy.  As a counterpoint, consider the traveling salesman problem.  We know that TSP is hard to approximate, but [there is free software](http://www.math.uwaterloo.ca/tsp/concorde.html) that will quickly, *exactly* solve nearly any real instance that arises in actual path planning or circuit routing.
-
-For nonsmooth optimization, there is not as clear of a picture.  For an argument that nonsmooth optimization quite hard in practice, go browse the [Journal of Global Optimization](http://www.springer.com/mathematics/journal/10898) for a catalog of daunting problems.  On the other hand, for an argument that nonconvexity is easy, take a look at proceedings of [ICLR](http://www.iclr.cc/doku.php).  Certainly the answer lies is in the middle.  There are problems that are easy to formulate as unconstrained nonlinear problems and then solve with local search, and there are problems which are hard no matter how you formulate them.    As this post illustrates, we have a long way to go before we reach a consensus on whence nonconvexity inherits its hardness.  But an exciting challenge to the machine learning community is to determine just what makes a typical learning problem easy and to build tools that solve easy instances as efficiently as possible.
+If saddle points are easy to avoid, then the question remains as to what exactly makes nonconvex optimization difficult?  In my next post, I’ll explore why this question is so challenging, describing some apparently innocuous problems in optimization that are deviously difficult.
