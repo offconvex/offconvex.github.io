@@ -7,7 +7,7 @@ author:     Benjamin Recht
 visible:    false
 ---
 
-Thanks to Rong for the [very nice blog post](http://www.offconvex.org/2016/03/22/saddlepoints/) describing critical points of nonconvex functions and how to avoid them. In this post, I’d like to highlight a couple of facts that are not widely appreciated about nonlinear optimization. First, it is super hard to converge to a saddle point. (Just look at those pictures in Rong’s post!  If you move ever so slightly you fall off the saddle).  Dumb algorithms like gradient descent with constant step sizes can’t converge to saddle points unless you try really hard.  Second, and more importantly, I would like to briefly describe why the hardness of non-convex optimization likely doesn’t arise from strict saddle points but rather from more subtle degenerate critical phenomena.
+Thanks to Rong for the [very nice blog post](http://www.offconvex.org/2016/03/22/saddlepoints/) describing critical points of nonconvex functions and how to avoid them. In this post, I’d like to highlight a fact that is not widely appreciated about nonlinear optimization. It is super hard to converge to a saddle point. (Just look at those pictures in Rong’s post!  If you move ever so slightly you fall off the saddle).  Even dumb algorithms like gradient descent with constant step sizes can’t converge to saddle points unless you try really hard. 
 
 ## It’s hard to converge to a saddle.
 
@@ -51,13 +51,11 @@ In some sense, optimizers would not be particularly surprised by this theorem.  
 
 ### Adding noise
 
-As Rong [discussed](http://www.offconvex.org/2016/03/22/saddlepoints/), in his paper with Huang and Jin, they show that adding gaussian noise to the gradient helps to avoid saddle points.  In particular, they introduce the notion *strict saddle* functions to be those where all saddle points are either local minima or have Hessians with negative eigenvalues bounded away from 0.  As we saw above, once you have negative eigenvalues, you’ll never converge to a fixed point.  But adding noise to the gradient makes it completely impossible to converge to a saddle.
+As Rong [discussed](http://www.offconvex.org/2016/03/22/saddlepoints/), in his paper with Huang, Jin, and Yuan, adding gaussian noise to the gradient helps to avoid saddle points.  In particular, they introduce the notion *strict saddle* functions to be those where all saddle points are either local minima or have Hessians with negative eigenvalues bounded away from 0.  As we saw above, if a saddle point has negative eigenvalues, the set of initial conditions that converge to that point has measure zero.  But when one adds noise to the gradient, there are *no initial conditions* that converge to saddles.  The noise immediately pushes you off this low-dimensional manifold. 
 
-A considerably more general result for stochastic processes is developed in [this beautiful paper](https://www.math.upenn.edu/~pemantle/papers/nonconvergence.pdf) by Robin Pemantle.  Pemantle uses the Stable Manifold Theorem to show that general vector flows perturbed by noise cannot converge to unstable fixed points. As a special case, he proves that stochastic gradient descent cannot converge to a saddle point provided the gradient noise is sufficiently diverse.  In particular, this implies that additive gaussian noise is sufficient to prevent convergence to saddles.
+What is interesting is that a similar result can be proven using the Stable Manifold Theorem.  A more general result for stochastic processes is developed in [this beautiful paper](https://www.math.upenn.edu/~pemantle/papers/nonconvergence.pdf) by Robin Pemantle.  Pemantle uses the Stable Manifold Theorem to show that general vector flows perturbed by noise cannot converge to unstable fixed points. As a special case, he proves that stochastic gradient descent cannot converge to a saddle point provided the gradient noise is sufficiently diverse.  In particular, this implies that additive gaussian noise is sufficient to prevent convergence to saddles.
 
-When one adds noise to the gradient, there are *no initial conditions* that converge to saddles.  By no initial conditions, I mean that there isn’t even a set of measure zero that converges to a saddle point any more, because the noise immediately pushes you off this low-dimensional manifold. 
-
-Pemantle does not even have to assume the strict saddle point condition to prove his theorem.  However, if one assumes that all saddle points are strict, one can extract quantitative convergence bounds from his proof.
+Pemantle does not even have to assume the strict saddle point condition to prove his theorem.  However, additional work would be required to extract the sort of quantitative convergence bounds that Rong and his coauthors derive from Pemantle’s argument.
 
 ## What makes nonconvex optimization difficult?
 
