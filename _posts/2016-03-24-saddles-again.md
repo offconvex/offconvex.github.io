@@ -4,7 +4,7 @@ title:      Saddles Again
 date:       2016-03-24 9:00:00
 summary:    Why it is hard to get stuck on saddle points
 author:     Benjamin Recht
-visible:    false
+visible:    true
 ---
 
 Thanks to Rong for the [very nice blog post](http://www.offconvex.org/2016/03/22/saddlepoints/) describing critical points of nonconvex functions and how to avoid them. I’d like to follow up on his post to highlight a fact that is not widely appreciated in nonlinear optimization. Though we often teach the contrary in our intro courses, it is in fact super hard to converge to a saddle point. (Just look at those pictures in Rong’s post!  If you move ever so slightly you fall off the saddle).  Even simple algorithms like gradient descent with constant step sizes can’t converge to saddle points unless you try really hard.
