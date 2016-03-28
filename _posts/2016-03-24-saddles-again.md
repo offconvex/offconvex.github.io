@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      More on saddle points
+title:      Saddles Again
 date:       2016-03-24 9:00:00
 summary:    Why it is hard to get stuck on saddle points
 author:     Benjamin Recht
