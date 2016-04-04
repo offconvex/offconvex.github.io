@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Evolutionary Dynamics: Finite Vs. Infinite Populations  
+title:      Evolutionary Dynamics&#58; Finite Vs. Infinite Populations  
 date:       2016-04-04 15:00:00
 summary:    We show how Markov chains can be understood in terms of their expected motion in the context of evolution. We also connect evolutionary Markov chains to stochastic gradient descent. 
 author:     Nisheeth Vishnoi
