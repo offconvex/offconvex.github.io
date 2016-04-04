@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      Evolutionary Dynamics&#58; Finite Vs. Infinite Populations  
-date:       2016-04-04 15:00:00
+title:      Evolutionary Dynamics: Finite Vs. Infinite Populations  
+date:       2016-04-04 16:00:00
 summary:    We show how Markov chains can be understood in terms of their expected motion in the context of evolution. We also connect evolutionary Markov chains to stochastic gradient descent. 
 author:     Nisheeth Vishnoi
 visible:    False
@@ -57,7 +57,7 @@ Formally, because $f$ is the expected motion of the Markov chain,
 Without conditioning, we cannot say much about  the $\zeta_{s}^{(t)}$s.
 However, since we know that the state space of $\mathcal{M}$ lies in the simplex, we can deduce that $\|\zeta_s^{(t)}\| \leq 2$. 
 The facts that the expectation of the $\zeta_s^{(t)}$s are zero, they are independent and bounded imply that the variance of each coordinate of $\frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}$ 
- at each time step (again conditioned on the past) is roughly $1/N$. 
+  (again conditioned on the past) is roughly $1/N$. 
 
 
 ## Connections to Stochastic Gradient Descent
@@ -67,8 +67,7 @@ However, we will see crucial differences that require the development of new too
 Recall that in the SGD setting, one is given a function $F$ and the goal is to find a local minimum of $F.$
 The gradient descent method moves from the current point $x^{(t)}$ to a new point $x^{(t+1)}=x^{(t)} - \eta \nabla F(x^{(t)})$ for some rate $\eta$ (which could depend on time $t$).  
 Since the gradient may not be easy to compute,  SGD substitutes the gradient at the current point by an unbiased estimator  of the gradient. 
-Thus, the point at time $t$  becomes a random variable $X^{(t)}$. 
-Since the estimate is unbiased, we may write it as 
+Thus, the point at time $t$  becomes a random variable $X^{(t)}$. Since the estimate is unbiased, we may write it as 
 $$\nabla F(X^{(t)}) - \zeta^{(t+1)},$$
 where  the expectation of $\zeta^{(t+1)}$ conditioned on $X^{(t)}$ is zero.
 Thus, we can write one step of SGD as 
@@ -85,7 +84,8 @@ Further, the rate of convergence to this expectation is governed by the mixing t
 Thus, there is no getting around proving a bound on the mixing time. 
 Moreover, for biological applications (as described in our previous post),  we need to know more than the expectation: we need to obtain samples from the steady state distribution $\pi$. 
 Hence, the desired results in the setting of evolution seem  beyond the reach of current techniques.
-The reason for taking this detour and making the connection to SGD is not only to show that completely different sounding problems and areas might be related, but also that the techniques we develop in analyzing evolutionary Markov chains find use in understanding SGD beyond the quadratic case.
+
+>The reason for taking this detour and making the connection to SGD is not only to show that completely different sounding problems and areas might be related, but also that the techniques we develop in analyzing evolutionary Markov chains find use in understanding SGD beyond the quadratic case.
 
 
 
@@ -111,7 +111,7 @@ For example, we could couple $X^{(t)}$ and $Y^{(t)}$ such that if $X^{(t)} = Y^{
 
 
 <p style="text-align:center;">
-<img src="/assets/unique.jpg" alt="" />
+<img src="/assets/coupling.jpg" alt="" />
 </p>
 
 
