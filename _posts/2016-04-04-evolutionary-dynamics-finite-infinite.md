@@ -32,7 +32,7 @@ Our goal is to bound the time it takes for this distribution to stabilize, i.e.,
 As a first step towards understanding the mixing time, let us compute the expectation of $X^{(t+1)}$ for a given $X^{(t)}$. 
 This function tells us where we expect to be after one time step given the current state; [we](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) refer to this as the  *expected motion* of this Markov chain (and define it formally for all Markov chains towards the end of this post).
 An easy calculation shows that, for $\mathcal{M}$, 
-\[ \mathbb{E} \left[  X^{(t+1)} \; \vert \; X^{(t)} \right] = \frac{QA X^{(t)}}{\|QAX^{(t)}\|_1}=: f(X^{(t)}).\]
+\[ \mathbb{E} [  X^{(t+1)} \; \vert \; X^{(t)} ] = \frac{QA X^{(t)}}{\|QAX^{(t)}\|_1}=: f(X^{(t)}).\]
 This $f$ is the same function that was introduced in the previous post for the *infinite* population evolutionary dynamics with the same parameters!
 Thus, in each time step, the expected motion of the Markov chain is governed by $f$. 
 Surprisingly, something  stronger is true: we can prove (see Section 3.2 [here](http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf)) that, given some $X^{(t)},$ the point  $X^{(t+1)}$ can be equivalently obtained by taking $N$ i.i.d. samples from $f(X^{(t)})$. 
