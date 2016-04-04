@@ -2,7 +2,7 @@
 layout:     post
 title:      Evolutionary Dynamics: Finite Vs. Infinite Populations  
 date:       2016-04-04 15:00:00
-summary:    Present the technical ideas behind evolutionary dynamics and connect to stochastic gradient descent. 
+summary:    Present the technical analysis of evolutionary dynamical systems  and connect to stochastic gradient descent. 
 author:     Nisheeth Vishnoi
 visible:    False
 ---
