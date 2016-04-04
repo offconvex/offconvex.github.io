@@ -161,7 +161,7 @@ Interestingly, this proof does not use any  property of $f$ other than that it h
 However, in many cases, such as sexual evolution (see [here](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) for the model of sexual evolution or an equivalent model for how *children acquire grammar*, see [here](http://science.sciencemag.org/content/291/5501/114)) and [here](http://www.sciencedirect.com/science/article/pii/S0022519303931997), the expected motion has multiple fixed points - some stable and some unstable. 
 Such a dynamical system is inherently non-convex - trajectories starting at different points  could converge to different points. 
 Further, the presence of unstable fixed points can slow down trajectories and, hence, the mixing time.
-In an upcoming [paper](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf), we give a comprehensive treatment about how the landscape of the limit sets determines the mixing time of evolutionary Markov chains.
+In [this](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) paper, we give a comprehensive treatment about how the landscape of the limit sets determines the mixing time of evolutionary Markov chains.
 In a nutshell, while the presence of unstable fixed points does not seem to affect the mixing time, the presence of two stable fixed points results in the mixing time being $\exp(N)$!
 
 >This result allows us to prove a phase transition in the mixing time for an evolutionary Markov chain with sex where, changing the mutation  parameter  changes the geometry of the limit sets of the expected motion from multiple stable fixed points to unique stable fixed point.
