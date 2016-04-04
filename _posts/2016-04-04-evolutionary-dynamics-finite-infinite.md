@@ -32,13 +32,13 @@ Our goal is to bound the time it takes for this distribution to stabilize, i.e.,
 As a first step towards understanding the mixing time, let us compute the expectation of $X^{(t+1)}$ for a given $X^{(t)}$. 
 This function tells us where we expect to be after one time step given the current state; [we](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) refer to this as the  *expected motion* of this Markov chain (and define it formally for all Markov chains towards the end of this post).
 An easy calculation shows that, for $\mathcal{M}$, 
-$$ \mathbb{E} \left[  X^{(t+1)} \; \vert \; X^{(t)} \right] = \frac{QA X^{(t)}}{\|QAX^{(t)}\|_1}=: f(X^{(t)}).$$
+\[ \mathbb{E} \left[  X^{(t+1)} \; \vert \; X^{(t)} \right] = \frac{QA X^{(t)}}{\|QAX^{(t)}\|_1}=: f(X^{(t)}).\]
 This $f$ is the same function that was introduced in the previous post for the *infinite* population evolutionary dynamics with the same parameters!
 Thus, in each time step, the expected motion of the Markov chain is governed by $f$. 
 Surprisingly, something  stronger is true: we can prove (see Section 3.2 [here](http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf)) that, given some $X^{(t)},$ the point  $X^{(t+1)}$ can be equivalently obtained by taking $N$ i.i.d. samples from $f(X^{(t)})$. 
 Thus, 
 
-$$f \; \; \mbox{guides} \; \;  \mathcal{M}.$$
+\[f \; \; \mbox{guides} \; \;  \mathcal{M}.\]
 
 
 > In fact, a moment's thought tells us that this phenomena transcends any specific model of evolution. 
@@ -49,7 +49,7 @@ We can fix **any** dynamical system $g$ over the simplex and define a Markov cha
 
 The above observation allows us to view our evolutionary Markov chain as a noisy version of the deterministic, infinite population evolution. 
 A bit more formally, there are implicitly defined random variables $\zeta_{s}^{(t+1)}$ for $1 \leq s \leq N$ and all $t$,   such that 
-$$ X^{(t+1)} = f(X^{(t)}) + \frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}.$$
+\[ X^{(t+1)} = f(X^{(t)}) + \frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}.\]
 Here, $\zeta_s^{(t+1)}$ for $1\leq s \leq N$ is a  random vector  that corresponds to the  *error* or *noise* of  sample $s$ at the $t$-th time step.
 Formally, because $f$ is the expected motion of the Markov chain, 
  each $\zeta_s^{(t+1)}$ has expectation $0$ conditioned on $X^{(t)}$. 
@@ -68,10 +68,10 @@ Recall that in the SGD setting, one is given a function $F$ and the goal is to f
 The gradient descent method moves from the current point $x^{(t)}$ to a new point $x^{(t+1)}=x^{(t)} - \eta \nabla F(x^{(t)})$ for some rate $\eta$ (which could depend on time $t$).  
 Since the gradient may not be easy to compute,  SGD substitutes the gradient at the current point by an unbiased estimator  of the gradient. 
 Thus, the point at time $t$  becomes a random variable $X^{(t)}$. Since the estimate is unbiased, we may write it as 
-$$\nabla F(X^{(t)}) - \zeta^{(t+1)},$$
+\[ \nabla F(X^{(t)}) - \zeta^{(t+1)},\]
 where  the expectation of $\zeta^{(t+1)}$ conditioned on $X^{(t)}$ is zero.
 Thus, we can write one step of SGD as 
-$$ X^{(t+1)} = \left( X^{(t)} -\eta \nabla F(X^{(t)}) \right) +\eta \cdot  \zeta^{(t+1)}.$$
+\[ X^{(t+1)} = \left( X^{(t)} -\eta \nabla F(X^{(t)}) \right) +\eta \cdot  \zeta^{(t+1)}.\]
 Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.e., $f=\nabla G$ for some function $G$), we  may think of it as SGD with  step-size $\eta=1/N$.
 
 There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for *reasonable* non-convex $F$). 
@@ -116,7 +116,7 @@ For example, we could couple $X^{(t)}$ and $Y^{(t)}$ such that if $X^{(t)} = Y^{
 
 
 The key observation that connects the dynamical system $f$ and our Markov chain is that using the function $f$ we can construct a coupling $\mathcal{C}$ such that for all $x$,$y \in \Omega$,
-$$ \mathbb{E}_{\mathcal{C}}\left[\|{X}^{(t+1)}-{Y}^{(t+1)}\|_1 \; | \; {X}^{(t)}=x, {Y}^{(t)}=y \right]=\|f(x)-f(y)\|_1.$$
+\[ \mathbb{E}_{\mathcal{C}}\left[\|{X}^{(t+1)}-{Y}^{(t+1)}\|_1 \; | \; {X}^{(t)}=x, {Y}^{(t)}=y \right]=\|f(x)-f(y)\|_1.\]
 Thus, if $\|f(x)-f(y)\|_1 \leq \rho \cdot \|x-y\|_1$ for some $\rho<1$, we would be done. 
 However, we can prove that no such coupling exists.
 
@@ -160,7 +160,7 @@ vertex, and, at time $t+1$, a vertex determines its type by sampling with replac
 
 Now we formally define the expected motion of any Markov chain  with respect to a function $\phi$   from its state space $\Omega$ to  $\mathbb{R}^n$.
 If $X^{(t)}=x$ is the state of the Markov chain at time $t$ and $X^{(t+1)}$ its state at time $t+1,$ then the  expected motion of $\phi$  for the chain at $x$ is 
-$$  \mathbb{E}\left[\phi(X^{(t+1)}) \;| \;X^{(t)} =x \right] $$
+\[  \mathbb{E}\left[\phi(X^{(t+1)}) \;| \;X^{(t)} =x \right] \]
 where the expectation is taken over one step of the chain.
 Often, and in the application we presented in this post, the state space $\Omega$ already has a geometric structure and is  a subset of $\mathbb{R}^n$. 
 In this case, there is a canonical expected motion which corresponds to  $\phi$ being just the identity map.
