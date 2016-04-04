@@ -1,10 +1,10 @@
 ---
 layout:     post
 title:      Markov Chains Through the Lens of Dynamical Systems&#58; The Case of Evolution
-date:       2016-04-04 16:30:00
+date:       2016-04-04 21:00:00
 summary:    We show how Markov chains can be understood in terms of their expected motion in the context of evolution. We also connect evolutionary Markov chains to stochastic gradient descent. 
 author:     Nisheeth Vishnoi
-visible:    False
+visible:    True
 ---
 
 In this post, we will see the main technical ideas in the analysis of the mixing time of evolutionary Markov chains introduced in a previous [post](http://www.offconvex.org/2016/03/07/evolution-markov-chains/).
