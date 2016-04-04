@@ -21,43 +21,43 @@ Our viewpoint connects evolutionary Markov chains, *nature's algorithms*, with s
 Let us recall the parameters of the finite population evolutionary Markov chain (denoted by $\mathcal{M}$) we saw last time. 
 At any time step, the state of the Markov chain consists of a population of size $N$ where each individual could be one of $m$ types. 
 The  mutation and the fitness matrices are denoted by $Q$ and $A$ respectively.
-$X^{(t)}$ captures, after normalization by $N,$ the composition of the population is at time $t.$ 
+$X^{(t)}$ captures, after normalization by $N,$ the composition of the population is at time $t$. 
 Thus,  $X^{(t)}$ is a point in the $m$-dimensional probability simplex $\Delta_m$.
-Since we assumed that $QA>0,$ the Markov chain has a stationary distribution $\pi$ over its state space, denoted by $\Omega \subseteq \Delta_m;$ the state space has cardinality roughly $N^m.$
-Thus, $X^{(t)}$ evolves in $\Delta_m$ and, with time, its distribution converges to $\pi.$ 
+Since we assumed that $QA>0$, the Markov chain has a stationary distribution $\pi$ over its state space, denoted by $\Omega \subseteq \Delta_m$; the state space has cardinality roughly $N^m$.
+Thus, $X^{(t)}$ evolves in $\Delta_m$ and, with time, its distribution converges to $\pi$. 
 Our goal is to bound the time it takes for this distribution to stabilize, i.e., bound the mixing time of $\mathcal{M}$.
 
 ## The Expected Motion
 
-As a first step towards understanding the mixing time, let us compute the expectation of $X^{(t+1)}$ for a given $X^{(t)}.$ 
+As a first step towards understanding the mixing time, let us compute the expectation of $X^{(t+1)}$ for a given $X^{(t)}$. 
 This function tells us where we expect to be after one time step given the current state; [we](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) refer to this as the  *expected motion* of this Markov chain. 
-An easy calculation shows that, for $\mathcal{M},$ 
+An easy calculation shows that, for $\mathcal{M}$, 
 $$ \mathbb{E} \left[  X^{(t+1)} \; \vert \; X^{(t)} \right] = \frac{QA X^{(t)}}{\|QAX^{(t)}\|_1}=: f(X^{(t)}).$$
 This $f$ is the same function that was introduced in the previous post for the *infinite* population evolutionary dynamics with the same parameters!
-Thus, in each time step, the expected motion of the Markov chain is governed by $f.$ 
-Surprisingly, something  stronger is true: we can prove (see Section ?? [here](http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf})) that, given some $X^{(t)},$ the point  $X^{(t+1)}$ can be equivalently obtained by taking $N$ i.i.d. samples from $f(X^{(t)}).$ 
+Thus, in each time step, the expected motion of the Markov chain is governed by $f$. 
+Surprisingly, something  stronger is true: we can prove (see Section 3.2 [here](http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf)) that, given some $X^{(t)},$ the point  $X^{(t+1)}$ can be equivalently obtained by taking $N$ i.i.d. samples from $f(X^{(t)})$. 
 Thus, 
 
 $$f \; \; \mbox{guides} \; \;  \mathcal{M}.$$
 
 
 > In fact, a moment's thought tells us that this phenomena transcends any specific model of evolution. 
-We can fix **any** dynamical system $g$ over the simplex and define a Markov chain guided by it as follows: If $X^{(t)}$ is the population vector at time $t,$ then define $X^{(t+1)}$ as the population vector obtained by taking $N$ i.i.d. (or even correlated) copies from $g(X^{(t)}).$  
+We can fix **any** dynamical system $g$ over the simplex and define a Markov chain guided by it as follows: If $X^{(t)}$ is the population vector at time $t$, then define $X^{(t+1)}$ as the population vector obtained by taking $N$ i.i.d. (or even correlated) copies from $g(X^{(t)})$.  
 
 
 ## Evolution on Finite Populations = Noisy Evolution on Infinite Populations
 
 The above observation allows us to view our evolutionary Markov chain as a noisy version of the deterministic, infinite population evolution. 
-A bit more formally, there are implicitly defined random variables $\zeta_{s}^{(t+1)}$ for $1 \leq s \leq N$ and all $t,$   such that 
+A bit more formally, there are implicitly defined random variables $\zeta_{s}^{(t+1)}$ for $1 \leq s \leq N$ and all $t$,   such that 
 $$ X^{(t+1)} = f(X^{(t)}) + \frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}.$$
 Here, $\zeta_s^{(t+1)}$ for $1\leq s \leq N$ is a  random vector  that corresponds to the  *error* or *noise* of  sample $s$ at the $t$-th time step.
 Formally, because $f$ is the expected motion of the Markov chain, 
- each $\zeta_s^{(t+1)}$ has expectation $0$ conditioned on $X^{(t)}.$ 
- Further, the fact that $f$ guides $\mathcal{M}$  implies that for each $t,$ when conditioned on $X^{(t)},$ the vectors $\zeta_{s}^{(t+1)}$  are i.i.d. for $1 \leq s \leq N.$ 
+ each $\zeta_s^{(t+1)}$ has expectation $0$ conditioned on $X^{(t)}$. 
+ Further, the fact that $f$ guides $\mathcal{M}$  implies that for each $t$, when conditioned on $X^{(t)}$, the vectors $\zeta_{s}^{(t+1)}$  are i.i.d. for $1 \leq s \leq N$. 
 Without conditioning, we cannot say much about  the $\zeta_{s}^{(t)}$s.
 However, since we know that the state space of $\mathcal{M}$ lies in the simplex, we can deduce that $\|\zeta_s^{(t)}\| \leq 2$. 
 The facts that the expectation of the $\zeta_s^{(t)}$s are zero, they are independent and bounded imply that the variance of each coordinate of $\frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}$ 
- at each time step (again conditioned on the past) is roughly $1/N.$ 
+ at each time step (again conditioned on the past) is roughly $1/N$. 
 
 
 ## Connections to Stochastic Gradient Descent
@@ -67,13 +67,13 @@ However, we will see crucial differences that require the development of new too
 Recall that in the SGD setting, one is given a function $F$ and the goal is to find a local minimum of $F.$
 The gradient descent method moves from the current point $x^{(t)}$ to a new point $x^{(t+1)}=x^{(t)} - \eta \nabla F(x^{(t)})$ for some rate $\eta$ (which could depend on time $t$).  
 Since the gradient may not be easy to compute,  SGD substitutes the gradient at the current point by an unbiased estimator  of the gradient. 
-Thus, the point at time $t$  becomes a random variable $X^{(t)}.$ 
+Thus, the point at time $t$  becomes a random variable $X^{(t)}$. 
 Since the estimate is unbiased, we may write it as 
 $$\nabla F(X^{(t)}) - \zeta^{(t+1)},$$
 where  the expectation of $\zeta^{(t+1)}$ conditioned on $X^{(t)}$ is zero.
 Thus, we can write one step of SGD as 
 $$ X^{(t+1)} = \left( X^{(t)} -\eta \nabla F(X^{(t)}) \right) +\eta \cdot  \zeta^{(t+1)}.$$
-Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.e., $f=\nabla G$) for some function $G,$ we  may think of it as SGD with  step-size $\eta=1/N.$
+Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.e., $f=\nabla G$ for some function $G$), we  may think of it as SGD with  step-size $\eta=1/N$.
 
 There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for *reasonable* non-convex $F$). 
 Why can't we use techniques developed for SGD  to analyze our evolutionary Markov chain?
@@ -83,7 +83,7 @@ The Ergodic Theorem of Markov chains tells us that this time average will  conve
 This quantity is the same as the zero of $\nabla F$ *only when it is a linear function* (equivalently $F$ is quadratic); *certainly not the case in  our setting*.
 Further, the rate of convergence to this expectation is governed by the mixing time of the Markov chain.
 Thus, there is no getting around proving a bound on the mixing time. 
-Moreover, for biological applications (as described in our previous post),  we need to know more than the expectation: we need to obtain samples from the steady state distribution $\pi.$ 
+Moreover, for biological applications (as described in our previous post),  we need to know more than the expectation: we need to obtain samples from the steady state distribution $\pi$. 
 Hence, the desired results in the setting of evolution seem  beyond the reach of current techniques.
 The reason for taking this detour and making the connection to SGD is not only to show that completely different sounding problems and areas might be related, but also that the techniques we develop in analyzing evolutionary Markov chains find use in understanding SGD beyond the quadratic case.
 
@@ -107,7 +107,7 @@ Back to mixing time: a generic technique to bound the mixing time of a Markov ch
 
 >A coupling of a Markov chain $\mathcal M$ is a function which takes as input $X^{(t)}$ and $Y^{(t)}$ and outputs $X^{(t+1)}$ and $Y^{(t+1)}$ such that each of  $X^{(t+1)}$ and $Y^{(t+1)}$, when considered on their own, is a correct instantiation of one step of $\mathcal M$ from the states $X^{(t)}$ and $Y^{(t)}$ respectively. However, $X^{(t+1)}$ and $Y^{(t+1)}$ are allowed to  be arbitrarily correlated.
 
-For example, we could couple $X^{(t)}$ and $Y^{(t)}$ such that if $X^{(t)} = Y^{(t)}$ then $X^{(t+1)}=Y^{(t+1)}$. More generally, we can consider the *distance* between $X^{(t)}$ and $Y^{(t)}$, and consider a coupling that contracts the distance between them. If this distance is contractive by, say, a factor of $\rho<1$ at every time step, then the number of iterations required to reduce distance  below $1/N$ is $\log_{1/\rho} N$; this roughly  upper bounds the mixing time.
+For example, we could couple $X^{(t)}$ and $Y^{(t)}$ such that if $X^{(t)} = Y^{(t)}$ then $X^{(t+1)}=Y^{(t+1)}$. More generally, we can consider the *distance* between $X^{(t)}$ and $Y^{(t)}$, and consider a coupling that contracts the distance between them. If this distance is contractive by, say, a factor of $\rho<1$ at every time step, then the number of iterations required to reduce distance  below $1/N$ is about $\log_{1/\rho} N$; this roughly  upper bounds the mixing time.
 
 
 <p style="text-align:center;">
@@ -124,8 +124,7 @@ However, we can prove that no such coupling exists.
 
 
 In this case, by a first order Taylor approximation of the dynamical system $f$, we can bound the contraction $(\rho)$ by  the $1 \rightarrow 1$ norm of the [Jacobian](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant) of $f$ at $x^\star$. 
-However, this quantity is less than one [only](http://dl.acm.org/citation.cfm?id=2722129.2722234) when $m=2$. 
-% NKV cite here
+However, this quantity is less than one [only](http://dl.acm.org/citation.cfm?id=2722129.2722234) when $m=2$, see [here](http://dl.acm.org/citation.cfm?id=2722129.2722234)
 For larger $m$, we have to go back to  our intuition from dynamical systems and, using the fact that  all trajectories of $f$ converge to $x^\star$,  argue that the appropriate norm of the Jacobian of $f^k$ (i.e., $f$ applied $k$ times) is contractive.
 While there are a few technical challenges, we can use $f^k$ to construct a contractive coupling. We then use concentration to handle the case  when $x$,$y$ are not close to $x^\star$,
 see [here](http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf) for the details.
@@ -137,7 +136,7 @@ Thus,  in the world of asexual evolution the steady state can be reached quickly
 ## Markov Chains Guided by Dynamical Systems - Beyond Uniqueness
 
 Interestingly, this proof does not use any  property of $f$ other than that it has a unique  fixed point which is stable. 
-However, in many cases, such as sexual evolution (see [here](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) for the model of sexual evolution or an equivalent model for how *children acquire grammar* [here](http://science.sciencemag.org/content/291/5501/114)), the expected motion has multiple fixed points - some stable and some unstable. 
+However, in many cases, such as sexual evolution (see [here](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) for the model of sexual evolution or an equivalent model for how *children acquire grammar*, see [here](http://science.sciencemag.org/content/291/5501/114)) and [here](http://www.sciencedirect.com/science/article/pii/S0022519303931997), the expected motion has multiple fixed points - some stable and some unstable. 
 Such a dynamical system is inherently non-convex - trajectories starting at different points  could converge to different points. 
 Further, the presence of unstable fixed points can slow down trajectories and, hence, the mixing time.
 In an upcoming [paper](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf), we give a comprehensive treatment about how the landscape of the limit sets determines the mixing time of evolutionary Markov chains.
