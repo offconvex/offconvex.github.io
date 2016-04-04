@@ -65,7 +65,7 @@ Formally, because $f$ is the expected motion of the Markov chain,
  each $\zeta_s^{(t+1)}$ has expectation $0$ conditioned on $X^{(t)}$. 
  Further, the fact that $f$ guides $\mathcal{M}$  implies that for each $t$, when conditioned on $X^{(t)}$, the vectors $\zeta_{s}^{(t+1)}$  are i.i.d. for $1 \leq s \leq N$. 
 Without conditioning, we cannot say much about  the $\zeta_{s}^{(t)}$s.
-However, since we know that the state space of $\mathcal{M}$ lies in the simplex, we can deduce that $\|\zeta_s^{(t)}\| \leq 2$. 
+However, since we know that the state space of $\mathcal{M}$ lies in the simplex, we can deduce that $\Vert\zeta_s^{(t)}\Vert \leq 2$. 
 The facts that the expectation of the $\zeta_s^{(t)}$s are zero, they are independent and bounded imply that the variance of each coordinate of $\frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}$ 
   (again conditioned on the past) is roughly $1/N$. 
 
@@ -117,7 +117,7 @@ Now we delve into our results and proof ideas.
 We derive all of the information we need to bound the mixing time of $\mathcal M$ from the the limit sets of $f$ which guides it. Roughly, we show that when the limit set of  $f$ consists of a unique stable fixed point (which is akin to convexity) as in asexual evolution, then the mixing is fast and in the case of multiple stable fixed points (which is akin to non-convexity) as in sexual evolution, the mixing is slow.
 
 
-We saw in our first  [post](http://www.offconvex.org/2015/12/21/dynamical-systems-1/) that the dynamical system $f(x)=\frac{QAx}{\|QAx\|_1}$ corresponding to the case of asexual evolution has exactly one fixed point in the simplex, say $ x^\star$, when $QA$ is positive. 
+We saw in our first  [post](http://www.offconvex.org/2015/12/21/dynamical-systems-1/) that the dynamical system $f(x)=\frac{QAx}{\Vert QAx\Vert_1}$ corresponding to the case of asexual evolution has exactly one fixed point in the simplex, say $ x^\star$, when $QA$ is positive. 
 In fact,  $x^\star$ is stable  and, no matter where we initiate the dynamical system, it ends up close to $x^\star$ in a small number of iterations (which does not depend on $N$).
 
 
@@ -139,7 +139,7 @@ $$
  \mathbb{E}_{\mathcal{C}}\left[\|{X}^{(t+1)}-{Y}^{(t+1)}\|_1 \; | \; {X}^{(t)}=x, {Y}^{(t)}=y \right]=\|f(x)-f(y)\|_1.
 $$ 
  
-Thus, if $\|f(x)-f(y)\|_1 \leq \rho \cdot \|x-y\|_1$ for some $\rho<1$, we would be done. 
+Thus, if $\Vert f(x)-f(y)\Vert_1 \leq \rho \cdot \Vert x-y\Vert_1$ for some $\rho<1$, we would be done. 
 However, we can prove that no such coupling exists.
 
 >What about when $x$,$y$ are close to $x^\star$?
