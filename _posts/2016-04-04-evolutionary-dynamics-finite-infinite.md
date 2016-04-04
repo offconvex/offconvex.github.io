@@ -142,7 +142,7 @@ $$
 Thus, if $\|f(x)-f(y)\|_1 \leq \rho \cdot \|x-y\|_1$ for some $\rho<1$, we would be done. 
 However, we can prove that no such coupling exists.
 
-*What about when $x$,$y$ are close to $x^\star$?*
+>What about when $x$,$y$ are close to $x^\star$?
 
 
 In this case, by a first order Taylor approximation of the dynamical system $f$, we can bound the contraction $(\rho)$ by  the $1 \rightarrow 1$ norm of the [Jacobian](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant) of $f$ at $x^\star$. 
