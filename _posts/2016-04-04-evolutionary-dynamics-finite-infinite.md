@@ -2,13 +2,13 @@
 layout:     post
 title:      Evolutionary Dynamics: Finite Vs. Infinite Populations  
 date:       2016-04-04 15:00:00
-summary:    Present the technical analysis of evolutionary dynamical systems  and connect to stochastic gradient descent. 
+summary:    We show how Markov chains can be understood in terms of their expected motion in the context of evolution. We also connect evolutionary Markov chains to stochastic gradient descent. 
 author:     Nisheeth Vishnoi
 visible:    False
 ---
 
 In this post, we will see the main technical idea in the analysis of the mixing time of evolutionary Markov chains introduced in a previous [post](http://www.offconvex.org/2016/03/07/evolution-markov-chains/).
-Key to the analysis is the notion of the *expected motion* of a stochastic process or a Markov chain.
+We start by introducing the notion of the *expected motion* of a stochastic process or a Markov chain.
 In the case of a finite population evolutionary Markov chain, the expected motion turns out to be a dynamical system which corresponds to the infinite population evolutionary dynamics with the same parameters.
 Surprisingly, we can also completely recover the Markov chain from the dynamical system!
 Subsequently, we show that the limit sets of this dynamical system govern the mixing time of the Markov chain.
