@@ -124,7 +124,7 @@ However, we can prove that no such coupling exists.
 
 
 In this case, by a first order Taylor approximation of the dynamical system $f$, we can bound the contraction $(\rho)$ by  the $1 \rightarrow 1$ norm of the [Jacobian](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant) of $f$ at $x^\star$. 
-However, this quantity is less than one [only](http://dl.acm.org/citation.cfm?id=2722129.2722234) when $m=2$, see [here](http://dl.acm.org/citation.cfm?id=2722129.2722234)
+However, this quantity is less than one [only](http://dl.acm.org/citation.cfm?id=2722129.2722234) when $m=2$, see [here](http://dl.acm.org/citation.cfm?id=2722129.2722234).
 For larger $m$, we have to go back to  our intuition from dynamical systems and, using the fact that  all trajectories of $f$ converge to $x^\star$,  argue that the appropriate norm of the Jacobian of $f^k$ (i.e., $f$ applied $k$ times) is contractive.
 While there are a few technical challenges, we can use $f^k$ to construct a contractive coupling. We then use concentration to handle the case  when $x$,$y$ are not close to $x^\star$,
 see [here](http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf) for the details.
