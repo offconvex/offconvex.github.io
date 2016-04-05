@@ -140,7 +140,7 @@ $$
 $$ 
  
 Thus, if $ \Vert f(x)-f(y)\Vert_1 < \rho \cdot \Vert x-y\Vert_1 <1$ for some $\rho<1$ and *all* $x,y \in Omega$, we would be done. 
-The bad news is that we can show that there are $x,y$ for which $\Vert f(x)-f(y)\Vert_1 > \Vert x-y \Vert_1 >1$.
+The bad news is that we can show that there are $x,y$ for which $\Vert f(x)-f(y)\Vert_1 > \Vert x-y \Vert_1$ implying that one cannot hope of a contractive coupling for all $x$ and $y.$
 
 >What about when $x$ and $y$ are close to $x^\star$?
 
