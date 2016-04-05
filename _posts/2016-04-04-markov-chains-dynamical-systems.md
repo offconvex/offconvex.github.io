@@ -10,8 +10,7 @@ visible:    True
 In this post, we will see the main technical ideas in the analysis of the mixing time of evolutionary Markov chains introduced in a previous [post](http://www.offconvex.org/2016/03/07/evolution-markov-chains/).
 We start by introducing the notion of the *expected motion* of a stochastic process or a Markov chain.
 In the case of a finite population evolutionary Markov chain, the expected motion turns out to be a dynamical system which corresponds to the infinite population evolutionary dynamics with the same parameters.
-Surprisingly, we can also completely recover the Markov chain from the dynamical system!
-Subsequently, we show that the limit sets of this dynamical system govern the mixing time of the Markov chain.
+Surprisingly, we show that the limit sets of this dynamical system govern the mixing time of the Markov chain.
 In particular, if the underlying dynamical system has a unique stable fixed point (as in asexual evolution), then the mixing is fast and in the case of multiple stable fixed points (as in sexual evolution), the mixing is slow.
 Our viewpoint connects evolutionary Markov chains, *nature's algorithms*, with stochastic descent methods, popular in machine learning and optimization, and the readers interested in the latter might benefit from our techniques.
 
