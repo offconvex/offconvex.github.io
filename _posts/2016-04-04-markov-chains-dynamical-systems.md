@@ -89,19 +89,19 @@ Thus, we can write one step of SGD as
 $$
  X^{(t+1)} = \left( X^{(t)} -\eta \nabla F(X^{(t)}) \right) +\eta \cdot  \zeta^{(t+1)}.
 $$ 
- 
-Comparing it to our evolutionary Markov chain, *if* $f$ is a gradient system (i.e., $f=\nabla G$ for some function $G$), we  may think of it as SGD with  step-size $\eta=1/N$. For the Markov chain $\mathcal M$,  $f(x)=\frac{QA x}{\Vert QA x\Vert_1}$ is a gradient system  
+
+Comparing it to our evolutionary Markov chain, it can be shown that $f(x)=\frac{QA x}{\Vert QA x\Vert_1}$ is a gradient system (i.e., $f=\nabla G$ for some function $G$) and we  may think of the corresponding $\mathcal M$ as SGD with  step-size $\eta=1/N$. 
 
 There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for *reasonable* non-convex $F$). 
-Why can't we use techniques developed for SGD  to analyze our evolutionary Markov chain?
-
-To start with, when the step size does not go to zero with time,  $X^{(t)}$ wanders around its domain $\Omega$ and will not converge to a point.
+Why can't we use techniques developed for SGD  to analyze our evolutionary Markov chain? 
+ To start with, when the step size does not go to zero with time,  $X^{(t)}$ wanders around its domain $\Omega$ and will not converge to a point.
 In the case when the step size is fixed, typically, the time [average](http://arxiv.org/pdf/1306.2119.pdf) of $X^{(t)}$ is used in a hope that it will converge to a local minima of the function.
 The Ergodic Theorem of Markov chains tells us that the time average will  converge to the expectation of a sample drawn from $\pi$, the steady state distribution.
 This quantity is the same as the zero of $\nabla F$ *only when it is a linear function* (equivalently $F$ is quadratic); *certainly not the case in  our setting*.
 Further, the rate of convergence to this expectation is governed by the mixing time of the Markov chain.
 Thus, there is no getting around proving a bound on the mixing time. 
 Moreover, for biological applications (as described in our previous post),  we need to know more than the expectation: we need to obtain samples from the steady state distribution $\pi$. 
+Finally, in several other evolutionary Markov chains of interest, the guiding dynamical system is *not a gradient system*. 
 Hence, the desired results in the setting of evolution seem  beyond the reach of current techniques.
 
 >The reason for taking this detour and making the connection to SGD is not only to show that completely different sounding problems and areas might be related, but also that the techniques we develop in analyzing evolutionary Markov chains find use in understanding SGD beyond the quadratic case.
