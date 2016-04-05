@@ -139,8 +139,8 @@ $$
  \mathbb{E}_{\mathcal{C}}\left[\|{X}^{(t+1)}-{Y}^{(t+1)}\|_1 \; | \; {X}^{(t)}=x, {Y}^{(t)}=y \right]=\|f(x)-f(y)\|_1.
 $$ 
  
-Thus, if $\rho(x,y):= \Vert f(x)-f(y)\Vert_1 \leq \rho \cdot \Vert x-y\Vert_1 <1$ for all $x,y \in Omega$, we would be done. 
-The bad news is that we can show that there are $x,y$ for which $\rho (x,y)$ is bigger than one. 
+Thus, if $ \Vert f(x)-f(y)\Vert_1 < \rho \cdot \Vert x-y\Vert_1 <1$ for some $\rho<1$ and *all* $x,y \in Omega$, we would be done. 
+The bad news is that we can show that there are $x,y$ for which $\Vert f(x)-f(y)\Vert_1 > \Vert x-y \Vert_1 >1$.
 
 >What about when $x$ and $y$ are close to $x^\star$?
 
