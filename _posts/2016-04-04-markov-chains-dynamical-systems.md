@@ -30,7 +30,7 @@ Our goal is to bound the time it takes for this distribution to stabilize, i.e.,
 ## The Expected Motion
 
 As a first step towards understanding the mixing time, let us compute the expectation of $X^{(t+1)}$ for a given $X^{(t)}$. 
-This function tells us where we expect to be after one time step given the current state; [we](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) refer to this as the  *expected motion* of this Markov chain (and define it formally for all Markov chains towards the end of this post).
+This function tells us where we expect to be after one time step given the current state; in [this](http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf) paper we refer to this as the  *expected motion* of this Markov chain (and define it formally for all Markov chains towards the end of this post).
 An easy calculation shows that, for $\mathcal{M}$, 
 
 $$
@@ -47,7 +47,7 @@ f \; \; \mbox{guides} \; \;  \mathcal{M}.
 $$
 
 
-> In fact, a moment's thought tells us that this phenomena transcends any specific model of evolution. 
+> In fact, a moment's thought tells us that this phenomenon transcends any specific model of evolution. 
 We can fix **any** dynamical system $g$ over the simplex and define a Markov chain guided by it as follows: If $X^{(t)}$ is the population vector at time $t$, then define $X^{(t+1)}$ as the population vector obtained by taking $N$ i.i.d. (or even correlated) copies from $g(X^{(t)})$.  
 
 
@@ -95,8 +95,8 @@ Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.
 There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for *reasonable* non-convex $F$). 
 Why can't we use techniques developed for SGD  to analyze our evolutionary Markov chain?
 To start with, when the step size does not go to zero with time,  $X^{(t)}$ wanders around its domain $\Omega$ and will not converge to a point.
-In this case, typically, the time average of $X^{(t)}$ (or Polyak-Ruppert [averaging](http://arxiv.org/pdf/1306.2119.pdf) is used in a hope that it will converge to a local minima of the function.
-The Ergodic Theorem of Markov chains tells us that this time average will  converge to the expectation of a sample drawn from $\pi$, the steady state distribution.
+In the case when the step size is fixed, typically, the time average of $X^{(t)}$ (or Polyak-Ruppert [averaging](http://arxiv.org/pdf/1306.2119.pdf) is used in a hope that it will converge to a local minima of the function.
+The Ergodic Theorem of Markov chains tells us that the time average will  converge to the expectation of a sample drawn from $\pi$, the steady state distribution.
 This quantity is the same as the zero of $\nabla F$ *only when it is a linear function* (equivalently $F$ is quadratic); *certainly not the case in  our setting*.
 Further, the rate of convergence to this expectation is governed by the mixing time of the Markov chain.
 Thus, there is no getting around proving a bound on the mixing time. 
@@ -139,8 +139,8 @@ $$
  \mathbb{E}_{\mathcal{C}}\left[\|{X}^{(t+1)}-{Y}^{(t+1)}\|_1 \; | \; {X}^{(t)}=x, {Y}^{(t)}=y \right]=\|f(x)-f(y)\|_1.
 $$ 
  
-Thus, if $\Vert f(x)-f(y)\Vert_1 \leq \rho \cdot \Vert x-y\Vert_1$ for some $\rho<1$, we would be done. 
-However, we can prove that no such coupling exists.
+Thus, if $\rho(x,y):= \Vert f(x)-f(y)\Vert_1 \leq \rho \cdot \Vert x-y\Vert_1 <1$ for all $x,y \in Omega$, we would be done. 
+The bad news is that we can show that there are $x,y$ for which $\rho (x,y)$ is bigger than one. 
 
 >What about when $x$ and $y$ are close to $x^\star$?
 
