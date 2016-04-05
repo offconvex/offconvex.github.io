@@ -95,7 +95,7 @@ Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.
 There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for *reasonable* non-convex $F$). 
 Why can't we use techniques developed for SGD  to analyze our evolutionary Markov chain?
 To start with, when the step size does not go to zero with time,  $X^{(t)}$ wanders around its domain $\Omega$ and will not converge to a point.
-In the case when the step size is fixed, typically, the time average of $X^{(t)}$ (or Polyak-Ruppert [averaging](http://arxiv.org/pdf/1306.2119.pdf) is used in a hope that it will converge to a local minima of the function.
+In the case when the step size is fixed, typically, the time [average](http://arxiv.org/pdf/1306.2119.pdf) of $X^{(t)}$ is used in a hope that it will converge to a local minima of the function.
 The Ergodic Theorem of Markov chains tells us that the time average will  converge to the expectation of a sample drawn from $\pi$, the steady state distribution.
 This quantity is the same as the zero of $\nabla F$ *only when it is a linear function* (equivalently $F$ is quadratic); *certainly not the case in  our setting*.
 Further, the rate of convergence to this expectation is governed by the mixing time of the Markov chain.
