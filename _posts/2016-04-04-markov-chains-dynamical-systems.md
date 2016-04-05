@@ -40,7 +40,7 @@ $$
 This $f$ is the same function that was introduced in the previous post for the *infinite* population evolutionary dynamics with the same parameters!
 Thus, in each time step, the expected motion of the Markov chain is governed by $f$. 
 Surprisingly, something  stronger is true: we can prove (see Section 3.2 [here](http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf)) that, given some $X^{(t)},$ the point  $X^{(t+1)}$ can be equivalently obtained by taking $N$ i.i.d. samples from $f(X^{(t)})$. 
-Thus, 
+In words,  
 
 $$
 f \; \; \mbox{guides} \; \;  \mathcal{M}.
@@ -90,7 +90,7 @@ $$
  X^{(t+1)} = \left( X^{(t)} -\eta \nabla F(X^{(t)}) \right) +\eta \cdot  \zeta^{(t+1)}.
 $$ 
  
-Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.e., $f=\nabla G$ for some function $G$), we  may think of it as SGD with  step-size $\eta=1/N$.
+Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.e., $f=\nabla G$ for some function $G$), we  may think of it as SGD with  step-size $\eta=1/N$. However, the evolutionary setting is general: $f$ does not have to be a gradient system.
 
 There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for *reasonable* non-convex $F$). 
 Why can't we use techniques developed for SGD  to analyze our evolutionary Markov chain?
