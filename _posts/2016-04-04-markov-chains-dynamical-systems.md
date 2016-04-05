@@ -48,7 +48,7 @@ $$
 
 
 > In fact, a moment's thought tells us that this phenomenon transcends any specific model of evolution. 
-We can fix **any** dynamical system $g$ over the simplex and define a Markov chain guided by it as follows: If $X^{(t)}$ is the population vector at time $t$, then define $X^{(t+1)}$ as the population vector obtained by taking $N$ i.i.d. (or even correlated) copies from $g(X^{(t)})$.  
+We can fix **any** dynamical system $g$ over the simplex and define a Markov chain guided by it as follows: If $X^{(t)}$ is the population vector at time $t$, then define $X^{(t+1)}$ as the population vector obtained by taking $N$ i.i.d. (or even correlated) copies from $g(X^{(t)})$. By design, $g$ is the expected motion of this Markov chain. 
 
 
 ## Evolution on Finite Populations = Noisy Evolution on Infinite Populations
@@ -90,10 +90,11 @@ $$
  X^{(t+1)} = \left( X^{(t)} -\eta \nabla F(X^{(t)}) \right) +\eta \cdot  \zeta^{(t+1)}.
 $$ 
  
-Comparing it to our evolutionary Markov chain, when $f$ is a gradient system (i.e., $f=\nabla G$ for some function $G$), we  may think of it as SGD with  step-size $\eta=1/N$. However, the evolutionary setting is general: $f$ does not have to be a gradient system.
+Comparing it to our evolutionary Markov chain, *if* $f$ is a gradient system (i.e., $f=\nabla G$ for some function $G$), we  may think of it as SGD with  step-size $\eta=1/N$. For the Markov chain $\mathcal M$,  $f(x)=\frac{QA x}{\Vert QA x\Vert_1}$ is a gradient system  
 
 There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for *reasonable* non-convex $F$). 
 Why can't we use techniques developed for SGD  to analyze our evolutionary Markov chain?
+
 To start with, when the step size does not go to zero with time,  $X^{(t)}$ wanders around its domain $\Omega$ and will not converge to a point.
 In the case when the step size is fixed, typically, the time [average](http://arxiv.org/pdf/1306.2119.pdf) of $X^{(t)}$ is used in a hope that it will converge to a local minima of the function.
 The Ergodic Theorem of Markov chains tells us that the time average will  converge to the expectation of a sample drawn from $\pi$, the steady state distribution.
