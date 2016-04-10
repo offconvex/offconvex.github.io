@@ -18,7 +18,7 @@ When the *rank* $r$ is small, this gives a concise representation for the matrix
 
 *Tensor decomposition* is a generalization of low rank matrix decomposition. Although [most tensor problems are NP-hard](http://arxiv.org/abs/0911.1393) in the worst case, several natural subcases of tensor decomposition can be solved in polynomial time. Later we will see that these subcases are still very powerful in learning latent variable models.
 
-##Matrix Decompositions
+## Matrix Decompositions
 
 Before talking about tensors, let us first see an example of how matrix factorization can be used to learn latent variable models. In 1904, psychologist Charles Spearman tried to understand whether human intelligence is a composite of different types of measureable intelligence.  Let's describe a highly simplified version of his method, where the hypothesis is that there are exactly two kinds of intelligence: *quantitative* and *verbal*. Spearman's method consisted of making his subjects take several different kinds of tests. 
 Let's name these tests *Classics, Math, Music*, etc. The subjects scores can be represented by a *matrix* $M$, which has one row per student, and one column per test.
@@ -43,7 +43,7 @@ Thus verifying that $M$ has rank $2$ (or that it is very close to a rank $2$ mat
 
 Note that this decomposition is not the *Singular Value Decomposition* (SVD). SVD requires strong orthogonality constraints (which translates to "different intelligences are completely uncorrelated") that are not plausible in this setting.
 
-##The Ambiguity
+## The Ambiguity
 
 But ideally one would like to take the above idea further: we would like to assign a definitive quantitative/verbal intelligence score to each student. This seems simple at first sight: just read off the score from the decomposition. For instance, it shows Alice is strongest in quantitative intelligence. 
 
@@ -85,7 +85,7 @@ Now we can check that the second matrix decomposition we had is no longer valid:
 
 Note that of course the decomposition is not truly unique for two reasons. First, the two tensor factors are symmetric, and we need to decide which factor correspond to quantitative intelligence. Second, we can scale the three components $\vec x_{quant}$ ,$\vec y_{quant}$, $\vec z_{quant}$ simultaneously, as long as the product of the three scales is 1. Intuitively this is like using different units to measure the three components. Kruskal's result showed that these are the only degrees of freedom in the decomposition, and there cannot be a truly distinct decomposition as in the matrix case.
 
-##Finding the Tensor
+## Finding the Tensor
 
 In the above example we get a low rank tensor $T$ by gathering more data. In many traditional applications the extra data may be unavailable or hard to get. Luckily, many exciting recent developments show that we can *uncover* these special tensor structures even if the original data is not in a tensor form!
 
@@ -117,7 +117,7 @@ $$
 
 This is exactly the **low rank** form we are looking for! Tensor decomposition allows us to *uniquely* identify these components, and further infer the other probabilities we are interested in. For more details see the paper by [Anandkumar et al. 2012](http://arxiv.org/abs/1210.7559) (this paper uses the tensor notations, but the original idea appeared in the paper by [Mossel and Roch 2006](https://projecteuclid.org/euclid.aoap/1151592244)).
 
-##Implementing Tensor Decomposition
+## Implementing Tensor Decomposition
 
 Using method of moments, we can discover nice tensor structures from many problems. The uniqueness of tensor decomposition makes these tensors very useful in learning the parameters of the models. But how do we compute the tensor decompositions?
 
