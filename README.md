@@ -1,1 +1,1 @@
-Vist [www.offconvex.org](www.offconvex.org)
+Visit [www.offconvex.org](http://www.offconvex.org)
