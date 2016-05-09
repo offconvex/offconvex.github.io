@@ -13,7 +13,7 @@ describes a simple framework that can sometimes be used to design/analyse algori
 
 ## Measuring progress: a simple Lyapunov function 
 
-Let $f$ to be the function being optimized and suppose the algorithm produces a sequence of candidate solutions $z_1,\dots,z_k,\dots,$ via some update rule
+Let $f$ be the function being optimized and suppose the algorithm produces a sequence of candidate solutions $z_1,\dots,z_k,\dots,$ via some update rule
 $$z_{k+1} = z_k - \eta g_k.$$
 
 
