@@ -8,7 +8,7 @@ visible:    True
 ---
 
 
-Previous blog posts of [Rong](http://www.offconvex.org/2016/03/22/saddlepoints/) and [Ben](http://www.offconvex.org/2016/03/24/saddles-again/) show that (noisy) gradient descent can converge to *local* minimum of a non-convex function, and in (large) polynomial time ([Ge et al.’15](http://arxiv.org/abs/1503.02101)). This post 
+Previously [Rong's post](http://www.offconvex.org/2016/03/22/saddlepoints/) and [Ben's post](http://www.offconvex.org/2016/03/24/saddles-again/) show that (noisy) gradient descent can converge to *local* minimum of a non-convex function, and in (large) polynomial time ([Ge et al.’15](http://arxiv.org/abs/1503.02101)). This post 
 describes a simple framework that can sometimes be used to design/analyse algorithms that can quickly reach an approximate *global* optimum of the nonconvex function. The framework ---which was used to analyse alternating minimization algorithms for sparse coding  in [our COLT'15 paper with Ge and Moitra](http://arxiv.org/abs/1503.00778)---generalizes many other sufficient conditions for convergence (usually gradient-based) that were formulated in recent papers.
 
 ## Measuring progress: a simple Lyapunov function 
