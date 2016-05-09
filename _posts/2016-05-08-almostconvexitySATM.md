@@ -4,7 +4,7 @@ title:      A Framework for analysing Non-Convex Optimization.
 date:       2016-05-08 9:00:00
 summary:    Sufficient Conditions for Fast Convergence to Global Minimum
 author:     Sanjeev Arora, Tengyu Ma
-visible:    False
+visible:    True
 ---
 
 
