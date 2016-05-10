@@ -4,7 +4,7 @@ title: Subscribe to Off The Convex Path
 permalink: /subscribe/
 ---
 
-# Subscribe
+# RSS feed
 
 Our RSS feed is located here:
 
