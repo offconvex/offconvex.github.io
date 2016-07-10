@@ -41,6 +41,7 @@ The above experiment suggests that
 $$
 v_{tie} \approx \alpha_1 \cdot v_{ tie1} + \alpha_2 \cdot v_{tie2} + \alpha_3 \cdot v_{tie3} +\cdots \qquad (1)
 $$
+
  but this alone is insufficient to mathematically pin down the senses, since $v_{tie}$ can be expressed in infinitely many ways as such a combination. To pin down the senses we will interrelate the senses of different words ---for example, relate the "article of clothing" sense *tie1* with  *shoe, jacket* etc. 
 
 The word senses *tie1, tie2,..* correspond to "different things being talked about" ---in other words, different word distributions occuring around  *tie*.
