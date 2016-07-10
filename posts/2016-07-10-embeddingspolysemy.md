@@ -4,7 +4,7 @@ title:      Linear algebraic structure of word meanings
 date:       2016-10-07 13:00:00
 summary:    Understanding how polysemy relates to word embeddings, and use this to extract senses of a word.
 author:     Sanjeev Arora
-visible:    False
+visible:    True
 ---
 
 Word embeddings capture the meaning of a word using a low-dimensional vector and are ubiquitous in natural language processing (NLP). (See my  earlier [post 1](http://www.offconvex.org/2015/12/12/word-embeddings-1/)
