@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Linear algebraic structure of word meanings
-date:       2016-10-07 13:00:00
+date:       2016-07-10 13:00:00
 summary:    Understanding how polysemy relates to word embeddings, and use this to extract senses of a word.
 author:     Sanjeev Arora
 visible:    True
