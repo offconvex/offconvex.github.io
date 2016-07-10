@@ -125,7 +125,7 @@ Non-native speakers had scores roughly similar to our algorithm.
 Our algorithm works something like this: If $w$ is the target word, then take all discourse atoms 
 computed for that word, and compute a certain similarity score between each atom and each of the $m$ senses, where the words in the senses are represented by their word vectors. (Details are in the paper.)
 
-##Takeaways
+## Takeaways
 
 Word embeddings have been useful in a host of other settings, and now it appears that 
 they also can easily yield different senses of a polysemous word. We have some subsequent applications of these ideas to other previously studied settings, including topic models, creating 
