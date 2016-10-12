@@ -6,6 +6,7 @@ description: "Algorithms off the convex path."
 baseurl:     ""
 url:         "http://offconvex.github.io"
 date_format: "%b %-d, %Y"
+timezone:    America/Los_Angeles
 
 # Google services
 google_analytics:
