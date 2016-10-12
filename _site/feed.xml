@@ -3,374 +3,1143 @@
   <channel>
     <title>Off the convex path</title>
     <description>Algorithms off the convex path.</description>
-    <link>http://offconvex.github.io/</link>
-    <atom:link href="http://offconvex.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    
+     
     
      
       <item>
-        <title>Nature, Dynamical Systems and Optimization</title>
-        <description>&lt;p&gt;The language of dynamical systems is the preferred choice of scientists to model a wide variety of phenomena in nature. The reason is  that, often, it is easy to  &lt;em&gt;locally&lt;/em&gt; observe or understand what happens to a system in one time-step. Could we then piece this local information together to make deductions about the  &lt;em&gt;global&lt;/em&gt; behavior of these dynamical systems? The hope is to understand some of nature’s algorithms and, in this quest, unveil new algorithmic techniques. In this first of a series of posts, we give a gentle introduction to dynamical systems and explain what it means to view them from the point of view of optimization.&lt;/p&gt;
+        <title>Linear algebraic structure of word meanings</title>
+        <description>&lt;p&gt;Word embeddings capture the meaning of a word using a low-dimensional vector and are ubiquitous in natural language processing (NLP). (See my  earlier &lt;a href=&quot;http://www.offconvex.org/2015/12/12/word-embeddings-1/&quot;&gt;post 1&lt;/a&gt;
+and &lt;a href=&quot;http://www.offconvex.org/2016/02/14/word-embeddings-2/&quot;&gt;post2&lt;/a&gt;.) It has always been unclear how to interpret the embedding when the word in question is &lt;em&gt;polysemous,&lt;/em&gt; that is, has multiple senses. For example, &lt;em&gt;tie&lt;/em&gt; can mean an article of clothing, a drawn sports match, and a physical action.&lt;/p&gt;
 
-&lt;h2 id=&quot;dynamical-systems-and-the-fate-of-trajectories&quot;&gt;Dynamical Systems and the Fate of Trajectories&lt;/h2&gt;
-&lt;p&gt;Given a system whose state at time $t$ takes a value $x(t)$ from a domain $\Omega,$ a dynamical system over $\Omega$ is a function $f$ that describes how this state evolves: one can write the update as 
-[ \frac{dx(t)}{dt} = f(x(t))    \ \ \  \mathrm{or} \ \ \ x(t+1)=x(t) + f(x(t))] 
- in continuous or discrete time respectively. In other words, $f$ describes  what happens  in one unit of time to each point in the domain $\Omega.$ Classically, to study a dynamical system is to study  the eventual fate of its &lt;em&gt;trajectories&lt;/em&gt;, i.e., the paths traced by successive states of the system starting from a given state. For this question to make sense, $f$ must not take any state out of the domain. However,  a priori, there is nothing to say that $x(t)$ remains in $\Omega$ beyond $x(0).$  This is the problem of  &lt;em&gt;global existence&lt;/em&gt; of trajectories and can sometimes be quite hard  to establish. Assuming that the dynamical system at hand has a solution for all times   for all starting points, and $\Omega$ is compact, the trajectories either tend to  &lt;em&gt;fixed points&lt;/em&gt;, &lt;em&gt;limit cycles&lt;/em&gt; or end up in  &lt;em&gt;chaos&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Polysemy is an important issue in NLP  and much work relies upon &lt;a href=&quot;https://wordnet.princeton.edu/&quot;&gt;WordNet&lt;/a&gt;, a hand-constructed repository of word senses and their interrelationships. Unfortunately, good WordNets do not exist for most languages, and even the one in English  is believed to be rather incomplete. Thus some effort has been spent on methods to find different senses of words.&lt;/p&gt;
 
-&lt;p style=&quot;text-align:center;&quot;&gt;
-&lt;img src=&quot;/assets/trajectories.jpg&quot; alt=&quot;The fate of trajectories&quot; /&gt;
-&lt;/p&gt;
+&lt;p&gt;In this post I will talk about &lt;a href=&quot;https://arxiv.org/abs/1601.03764&quot;&gt;my joint work with Li, Liang, Ma, Risteski&lt;/a&gt; which shows that actually word senses are easily accessible in many current word embeddings. This goes against conventional wisdom in NLP, which is that &lt;em&gt;of course&lt;/em&gt;, word embeddings do not suffice to capture polysemy since they use a single vector to represent the word, regardless of whether the word has one sense, or a dozen.  Our work shows that major senses of the word lie in linear superposition within the embedding, and are extractable using sparse coding.&lt;/p&gt;
 
-&lt;p&gt;A fixed point of a dynamical system, as the name suggests, is a state $x \in \Omega$ which does not change on the application of $f$, i.e.,  $f(x)=0.$  A  fixed point is said to be &lt;em&gt;stable&lt;/em&gt; if trajectories starting at &lt;em&gt;all&lt;/em&gt; nearby points eventually converge to it and &lt;em&gt;unstable&lt;/em&gt; otherwise. Stability is a property that one might expect to find in nature. Limit cycles are closed trajectories with a similar notion of stability/unstability, while limits of trajectories which are neither fixed points or limit cycles are (loosely) termed as chaos.&lt;/p&gt;
+&lt;p&gt;This post uses embeddings constructed using our method and the wikipedia corpus, but similar techniques also apply (with some loss in precision) to  other embeddings described in &lt;a href=&quot;http://www.offconvex.org/2015/12/12/word-embeddings-1/&quot;&gt;post 1&lt;/a&gt; such as word2vec, Glove, or even the decades-old PMI embedding.&lt;/p&gt;
 
-&lt;h2 id=&quot;what-do-dynamical-systems-optimize&quot;&gt;What do Dynamical Systems Optimize?&lt;/h2&gt;
+&lt;h2 id=&quot;a-surprising-experiment&quot;&gt;A surprising experiment&lt;/h2&gt;
 
-&lt;p&gt;For now, we will consider the class of dynamical systems which only have fixed points, possibly many. In this setting, one can define a function $F$ which maps an  $x \in \Omega$  to its limit under the repeated application of $f.$ Note that to make this function well-defined we might have to look at the closure of $\Omega.$  This brings us to  the following broad,  admittedly not well-defined and widely open question that we would like to study:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Given a dynamical system $(\Omega,f)$, what is  $F$?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Take the viewpoint –simplistic yet instructive– that a polysemous word like &lt;em&gt;tie&lt;/em&gt; is a single lexical token that represents unrelated words &lt;em&gt;tie1&lt;/em&gt;, &lt;em&gt;tie2&lt;/em&gt;, …
+Here is a surprising experiment that suggests that the embedding for &lt;em&gt;tie&lt;/em&gt; should be approximately a weighted sum of the (hypothethical) embeddings of &lt;em&gt;tie1&lt;/em&gt;, &lt;em&gt;tie2&lt;/em&gt;, …&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;When $f$ happens to be the negative gradient of  a convex function $g$ over some convex domain $\Omega,$ the dynamical system $(\Omega,f)$ is nothing but an implementation of gradient descent to find the minimum of $g$, answering our question perfectly.&lt;/p&gt;
+  &lt;p&gt;Take two random  words $w_1, w_2$. Combine them into an artificial polysemous word $w_{new}$ by replacing every occurrence of $w_1$ or $w_2$ in the corpus by $w_{new}.$ Next, compute an embedding for $w_{new}$ using the same embedding method while deleting embeddings for $w_1, w_2$ but preserving the embeddings for all other words. Compare the embedding $v_{w_{new}}$ to linear combinations of $v_{w_1}$ and
+$v_{w_2}$.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;However, in many cases, $f$ may not be a gradient system and understanding what $f$ optimizes may be quite difficult. The fact that there may be multiple  fixed-points necessarily means that trajectories starting at different points  may converge to different points in the domain– giving us a sense of non-convexity. In such cases, answering our question can be a daunting task and, currently, there is no general theory for it. We present two dynamical systems from nature – one easy and one not 	quite.&lt;/p&gt;
+&lt;p&gt;Repeating this experiment with a wide range of values for the ratio $r$ between the frequencies of $w_1$ and $w_2$, we find that $v_{w_{new}}$ lies close to the subspace spanned by $v_{w_1}$ and $v_{w_2}$: the cosine of its angle with the subspace  is on average $0.97$ with standard deviation $0.02$. Thus  $v_{w_{new}} \approx \alpha v_{w_1} + \beta v_{w_2}$. 
+We find that $\alpha \approx 1$ whereas  $\beta \approx 1- c\lg r$
+ for some constant $c\approx 0.5$. (Note this formula is meaningful when the frequency ratio $r$ is not too large, i.e. when $ r &amp;lt; 10^{1/c} \approx 100$.) Thanks to this logarithm, the infrequent sense is not swamped out in the embedding, even if it is 50 times less frequent than the dominant sense. This is an important reason behind the success of our method for extracting word senses.&lt;/p&gt;
 
-&lt;h2 id=&quot;evolution-and-the-largest-eigenvector&quot;&gt;Evolution and the Largest Eigenvector&lt;/h2&gt;
+&lt;p&gt;This experiment –to which we were led by our theoretical investigations– is very surprising 
+because the embedding is the solution to a complicated, nonconvex optimization, yet it behaves in such a striking linear way. You can read our paper for an intuitive explanation using our theoretical model from &lt;a href=&quot;http://www.offconvex.org/2016/02/14/word-embeddings-2/&quot;&gt;post2&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;As a simple but important example, consider a population consisting of $n$-types which is subject to the forces of evolution and held at a constant size, say one unit  of mass. Thus, if we let $x_i(t)$ denote the fraction of type $i$ at time $t$ in the population, the domain becomes 
-$\Delta^n=\{x \in \mathbb{R}^n_{&amp;gt;0}: x \geq 0 \; \mathrm{and} \; \; \sum_i x_i=1 \},$  the unit simplex. 
-The update  function is&lt;br /&gt;
-[ f(x)= Qx - \Vert Qx \Vert_1 \cdot x ]
-for a positive matrix  $Q \in \mathbb{R}_{&amp;gt;0}^{n \times n}.$ 
-The properties of a natural environment in which the population is evolving can be captured by a matrix $Q,$  see this &lt;a href=&quot;https://books.google.ch/books?id=YXrIRDuAbE0C&amp;amp;hl=en&quot;&gt;textbook&lt;/a&gt; which is dedicated to the study of such dynamical systems. Mathematically, to start with, note that $f$ maps any point in the simplex to a point in the simplex.  Thus, starting at any point in $\Delta^n,$ the trajectory remains in $\Delta^n.$ What are the fixed points of $f$? These are vectors $x \in \Delta^n$ such that $Qx=\Vert Qx \Vert_1 \cdot x$ or the eigenvectors of $Q.$ Since $Q&amp;gt;0,$ the &lt;a href=&quot;https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem&quot;&gt;Perron-Frobenius theorem&lt;/a&gt;  tells us that $Q$ has unique  eigenvector $v \in \Delta^n$ and, starting at any $x(0) \in \Delta^n,$ $x(t) \rightarrow v$ as $t \rightarrow \infty.$ Thus, in this case, simple linear algebra can allow us to deduce that $f$ has exactly one fixed point and, thus, we can answer what is $f$ achieving globally: $f$ is nothing but nature’s implementation of the &lt;a href=&quot;https://en.wikipedia.org/wiki/Power_iteration&quot;&gt;Power Method&lt;/a&gt; to compute the maximum eigenvector of $Q$! Biologically, the  corresponding eigenvalue can be shown to be the &lt;em&gt;average fitness&lt;/em&gt; of the population which is what nature is trying to maximize. It may be worthwhile to note that the maximum eigenvalue problem is non-convex as such.&lt;/p&gt;
+&lt;h2 id=&quot;extracting-word-senses-from-embeddings&quot;&gt;Extracting word senses from embeddings&lt;/h2&gt;
 
-&lt;h2 id=&quot;solving-linear-programs-by-molds&quot;&gt;Solving Linear Programs by Molds?&lt;/h2&gt;
+&lt;p&gt;The above experiment suggests that&lt;/p&gt;
 
-&lt;p&gt;Let us conclude with an interesting dynamical system inspired by the inner workings of a &lt;a href=&quot;https://www.youtube.com/watch?v=czk4xgdhdY4&quot;&gt;slime mold&lt;/a&gt;; see &lt;a href=&quot;http://link.springer.com/chapter/10.1007%2F978-3-642-30870-3_35&quot;&gt;here&lt;/a&gt; for a discussion on how this class of dynamics was discovered. Suppose $A \in \mathbb{R}^{n \times m}$ is a matrix and $b \in \mathbb{R}^n$ is a vector. The domain is the positive orthant $\Omega = \{x \in \mathbb{R}{^m}: x&amp;gt;0 \}.$ For a point $x \in \mathbb{R}^m,$ let $X$ denote the diagonal matrix such that $X_{ii}=x_i.$  The evolution function  is then:
-[ \frac{dx}{dt} = X ( A^\top (AXA^\top)^{-1} b - \vec{1}), ]
-where $\vec{1}$ is the vector of all ones.  Now the problem of existence of a solution is neither trivial nor can be ignored as, for the dynamical system to make sense, $x$ has to be positive. Further, it can be argued in a formal sense that this dynamical system is not a gradient descent. What then can we say about the trajectories of this dynamical system? As it turns out, it can be &lt;a href=&quot;http://arxiv.org/abs/1511.07020&quot;&gt;shown&lt;/a&gt; that starting at any $x&amp;gt;0,$ the dynamical system is a gradient descent on a natural Riemannian manifold and converges to a unique point among the solutions to the following linear program,
-[ \min \; \sum_i x_i \ \ \  \mathrm{s.t.} \ \ \ Ax=b, \ \ x \geq 0, ] 
-which gives us a new algorithm for linear programming. We will explain how in a subsequent post.&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;v_{tie} \approx \alpha_1 \cdot v_{ tie1} + \alpha_2 \cdot v_{tie2} + \alpha_3 \cdot v_{tie3} +\cdots \qquad (1)&lt;/script&gt;
+
+&lt;p&gt;but this alone is insufficient to mathematically pin down the senses, since $v_{tie}$ can be expressed in infinitely many ways as such a combination. To pin down the senses we will interrelate the senses of different words —for example, relate the “article of clothing” sense &lt;em&gt;tie1&lt;/em&gt; with  &lt;em&gt;shoe, jacket&lt;/em&gt; etc.&lt;/p&gt;
+
+&lt;p&gt;The word senses &lt;em&gt;tie1, tie2,..&lt;/em&gt; correspond to “different things being talked about” —in other words, different word distributions occuring around  &lt;em&gt;tie&lt;/em&gt;.
+ Now remember that &lt;a href=&quot;http://128.84.21.199/abs/1502.03520v6&quot;&gt;our earlier paper&lt;/a&gt; described in 
+ &lt;a href=&quot;http://www.offconvex.org/2016/02/14/word-embeddings-2/&quot;&gt;post2&lt;/a&gt; gives an interpretation of “what’s being talked about”: it is called &lt;em&gt;discourse&lt;/em&gt; and 
+ it is represented by a unit vector in the embedding space. In particular, the theoretical model 
+ of &lt;a href=&quot;http://www.offconvex.org/2016/02/14/word-embeddings-2/&quot;&gt;post2&lt;/a&gt; imagines a text corpus as being generated by a random walk on 
+ discourse vectors. When the walk is at a discourse $c_t$ at time $t$, it outputs a few words using a loglinear distribution:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Pr[w~\mbox{emitted at time $t$}~|~c_t] \propto \exp(c_t\cdot v_w). \qquad (2)&lt;/script&gt;
+
+&lt;p&gt;One imagines  there exists a “clothing” discourse that has high probability of outputting the &lt;em&gt;tie1&lt;/em&gt; sense, and also of outputting related words such as &lt;em&gt;shoe, jacket,&lt;/em&gt; etc.
+Similarly there may be a  “games/matches” discourse that has high probability of outputting  &lt;em&gt;tie2&lt;/em&gt; as well as &lt;em&gt;team, score&lt;/em&gt; etc.&lt;/p&gt;
+
+&lt;p&gt;By equation (2) the probability of being output by a discourse is determined by the 
+inner product, so one expects that the vector  for  “clothing” discourse  has high inner product with all of &lt;em&gt;shoe, jacket, tie1&lt;/em&gt; etc., and thus can stand as surrogate for $v_{tie1}$ in expression (1)!  This motivates the following  global optimization:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Given word vectors in $\Re^d$, totaling  about $60,000$ in this case, a sparsity parameter $k$,
+and an upper bound $m$, find a set of unit vectors   $A_1, A_2, \ldots, A_m$  such that
+&lt;script type=&quot;math/tex&quot;&gt;v_w = \sum_{j=1}^m\alpha_{w,j}A_j + \eta_w \qquad (3)&lt;/script&gt;
+where at most $k$ of the coefficients $\alpha_{w,1},\dots,\alpha_{w,m}$ are nonzero (so-called  &lt;em&gt;hard sparsity constraint&lt;/em&gt;), and $\eta_w$ is a  noise vector.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Here  $A_1, \ldots A_m$ represent important discourses in the corpus, which 
+we refer to as  &lt;em&gt;atoms of discourse.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Optimization (3) is a surrogate for the desired expansion of $v_{tie}$ in (1)  because one can hope that the atoms of discourse  will contain atoms corresponding to  &lt;em&gt;clothing&lt;/em&gt;, &lt;em&gt;sports matches&lt;/em&gt; etc. that will have high inner product (close to $1$) with &lt;em&gt;tie1,&lt;/em&gt;  &lt;em&gt;tie2&lt;/em&gt; respectively. Furthermore, restricting $m$ to be much smaller than the number of words ensures that each atom  needs to be used for multiple words, e.g., reuse the “clothing” atom 
+for &lt;em&gt;shoes&lt;/em&gt;, &lt;em&gt;jacket&lt;/em&gt; etc. as well as for &lt;em&gt;tie&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Both $A_j$’s and $\alpha_{w,j}$’s are unknowns in this optimization. This is nothing but &lt;em&gt;sparse coding,&lt;/em&gt;  useful in neuroscience, image processing, computer vision,  etc. It is nonconvex and computationally NP-hard in the worst case, but can be solved quite efficiently in practice  using something called the k-SVD algorithm described in &lt;a href=&quot;http://www.cs.technion.ac.il/~elad/publications/others/PCMI2010-Elad.pdf&quot;&gt;Elad’s survey, lecture 4&lt;/a&gt;.  We solved this problem with sparsity
+$k=5$ and  using $m$ about $2000$. (Experimental details are in the paper. Also, some theoretical
+analysis of such an algorithm is possible; see this &lt;a href=&quot;http://www.offconvex.org/2016/05/08/almostconvexitySATM/&quot;&gt;earlier post&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;h1 id=&quot;experimental-results&quot;&gt;Experimental Results&lt;/h1&gt;
+
+&lt;p&gt;Each discourse atom defines via (2) a distribution on words, which due to the exponential appearing in (2) strongly favors words whose embeddings have a larger inner product with it. In practice, this distribution is quite concentrated on as few as  50-100 words, and the “meaning” of a discourse atom can be roughly determined by looking at a few nearby words. This is how we visualize atoms in the figures below. The first figure gives a few representative atoms of discourse.&lt;/p&gt;
+
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;http://www.cs.princeton.edu/~arora/pubs/discourseatoms.jpg&quot; alt=&quot;A few of the 2000 atoms of discourse found&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;And here are the discourse atoms used to represent two polysemous words, &lt;em&gt;tie&lt;/em&gt; and &lt;em&gt;spring&lt;/em&gt;&lt;/p&gt;
+
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;http://www.cs.princeton.edu/~arora/pubs/atomspolysemy.jpg&quot; alt=&quot;Discourse atoms expressing the words tie and spring.&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;You can see that the discourse atoms do correspond to senses of these words.&lt;/p&gt;
+
+&lt;p&gt;Finally, we also have a technique that, given a target word, generates representative sentences according to its various senses as detected by the algorithm. Below are the sentences returned for
+&lt;em&gt;ring.&lt;/em&gt; (N.B. The mathematical meaning was missing in WordNet but was picked up by our method.)&lt;/p&gt;
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;http://www.cs.princeton.edu/~arora/pubs/repsentences.jpg&quot; alt=&quot;Representative sentences for different senses of the word ring.&quot; /&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&quot;a-new-testbed-for-testing-comprehension-of-word-senses&quot;&gt;A new testbed for testing comprehension of word senses&lt;/h2&gt;
+
+&lt;p&gt;Many tests have been proposed to test an algorithm’s grasp of word senses. They often involve
+hard-to-understand metrics such as  distance in WordNet, or sometimes  tied to performance on specific applications like web search.&lt;/p&gt;
+
+&lt;p&gt;We propose a new simple test –inspired by word-intrusion tests for topic coherence
+due to &lt;a href=&quot;https://www.umiacs.umd.edu/~jbg/docs/nips2009-rtl.pdf&quot;&gt;Chang et al 2009&lt;/a&gt;– which has the advantages of being easy to understand, and can also be administered to humans.&lt;/p&gt;
+
+&lt;p&gt;We created a testbed using 200 polysemous words and their 704 senses according to WordNet. Each “sense”  is represented by a set of 8 related words; these were collected from WordNet and online dictionaries by college students who were told  to identify  most relevant other words occurring in the online definitions of this word sense as well as in the accompanying illustrative sentences.  These 8 words  are considered as &lt;em&gt;ground truth&lt;/em&gt; representation of the word sense: e.g., for the  “tool/weapon” sense of  &lt;em&gt;axe&lt;/em&gt; they were:  &lt;em&gt;handle, harvest, cutting,  split, tool, wood, battle, chop.&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Police line-up test for word senses:&lt;/strong&gt; the algorithm is given a random one of these 200 polysemous words and a set of $m$ senses which contain the true sense for the word as well as some &lt;em&gt;distractors,&lt;/em&gt; which are randomly picked senses from other words in the testbed. The test taker has to identify the word’s true senses amont these $m$ senses.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;As usual, accuracy is measured using &lt;em&gt;precision&lt;/em&gt; (what fraction of the algorithm/human’s guesses 
+were correct) and &lt;em&gt;recall&lt;/em&gt; (how many correct senses were among the guesses).&lt;/p&gt;
+
+&lt;p&gt;For $m=20$ and $k=4$, our algorithm succeeds with precision  $63\%$ and recall $70\%$, and performance remains reasonable for $m=50$. We also administered the test to a group of grad students.
+Native English speakers had precision/recall scores in the $75$ to $90$ percent range. 
+Non-native speakers had scores roughly similar to our algorithm.&lt;/p&gt;
+
+&lt;p&gt;Our algorithm works something like this: If $w$ is the target word, then take all discourse atoms 
+computed for that word, and compute a certain similarity score between each atom and each of the $m$ senses, where the words in the senses are represented by their word vectors. (Details are in the paper.)&lt;/p&gt;
+
+&lt;h2 id=&quot;takeaways&quot;&gt;Takeaways&lt;/h2&gt;
+
+&lt;p&gt;Word embeddings have been useful in a host of other settings, and now it appears that 
+they also can easily yield different senses of a polysemous word. We have some subsequent applications of these ideas to other previously studied settings, including topic models, creating 
+WordNets for other languages,  and understanding the semantic content of fMRI brain measurements. I’ll describe some of them in future posts.&lt;/p&gt;
 </description>
-        <pubDate>Sun, 20 Dec 2015 02:09:00 -0800</pubDate>
-        <link>http://offconvex.github.io/2015/12/20/dynamical-systems-1/</link>
-        <guid isPermaLink="true">http://offconvex.github.io/2015/12/20/dynamical-systems-1/</guid>
+        <pubDate>Sun, 10 Jul 2016 03:30:00 -0700</pubDate>
+        <link>http://localhost:4000/2016/07/10/embeddingspolysemy/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/07/10/embeddingspolysemy/</guid>
       </item>
      
     
      
+      <item>
+        <title>A Framework for analysing Non-Convex Optimization</title>
+        <description>&lt;p&gt;Previously &lt;a href=&quot;http://www.offconvex.org/2016/03/22/saddlepoints/&quot;&gt;Rong’s post&lt;/a&gt; and &lt;a href=&quot;http://www.offconvex.org/2016/03/24/saddles-again/&quot;&gt;Ben’s post&lt;/a&gt; show that (noisy) gradient descent can converge to &lt;em&gt;local&lt;/em&gt; minimum of a non-convex function, and in (large) polynomial time (&lt;a href=&quot;http://arxiv.org/abs/1503.02101&quot;&gt;Ge et al.’15&lt;/a&gt;). This post 
+describes a simple framework that can sometimes be used to design/analyse algorithms that can quickly reach an approximate &lt;em&gt;global&lt;/em&gt; optimum of the nonconvex function. The framework —which was used to analyse alternating minimization algorithms for sparse coding  in &lt;a href=&quot;http://arxiv.org/abs/1503.00778&quot;&gt;our COLT’15 paper with Ge and Moitra&lt;/a&gt;—generalizes many other sufficient conditions for convergence (usually gradient-based) that were formulated in recent papers.&lt;/p&gt;
+
+&lt;h2 id=&quot;measuring-progress-a-simple-lyapunov-function&quot;&gt;Measuring progress: a simple Lyapunov function&lt;/h2&gt;
+
+&lt;p&gt;Let $f$ be the function being optimized and suppose the algorithm produces a sequence of candidate solutions $z_1,\dots,z_k,\dots,$ via some update rule
+&lt;script type=&quot;math/tex&quot;&gt;z_{k+1} = z_k - \eta g_k.&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;This can be seen as a dynamical system (see &lt;a href=&quot;http://www.offconvex.org/2016/04/04/markov-chains-dynamical-systems/&quot;&gt;Nisheeth’s&lt;/a&gt; and &lt;a href=&quot;http://www.offconvex.org/2016/03/24/saddles-again/&quot;&gt;Ben’s&lt;/a&gt; posts related to dynamical systems).
+Our goal is to show that this sequence converges to (or gets close to) a target point $z^* $, which is  a global optimum of $f$. Of course, the algorithm doesn’t know $z^*$.&lt;/p&gt;
+
+&lt;p&gt;To design a framework for proving convergence it helps to indulge in daydreaming/wishful thinking: what property would we &lt;em&gt;like&lt;/em&gt; the updates to have, to simplify our job?&lt;/p&gt;
+
+&lt;p&gt;A natural idea is to define a Lyapunov function $V(z)$ and show that: (i) $V(z_k)$ decreases to $0$ (at a certain speed) as $k\rightarrow \infty$; (ii) when $V(z)$ is close to $0$, then $z$ is close to $z^* $. (Aside: One can imagine more complicated ways of proving convergence, e.g., show $V(z_k)$ ultimately goes to $0$ even though it doesn’t decrease in every step. Nesterov’s acceleration method uses such a progress measure.)&lt;/p&gt;
+
+&lt;p&gt;Consider possibly the most trivial Lyapunov function, the (squared) distance to the target point,  $V(z) = |z-z^*|^2$. This is also used in the standard convergence proof for convex functions, since moving in the opposite direction to the gradient can be shown to reduce this measure $V()$.&lt;/p&gt;
+
+&lt;p&gt;Even when the function is nonconvex, there always &lt;em&gt;exist&lt;/em&gt; update directions that reduce this $V()$ (though finding them may not be easy).  Simple algebraic manipulation shows that when the learning rate $\eta$ is small enough, then for $V(z_{k+1}) \le V(z_k)$, it is necessary and sufficient to have $\langle g_k, z_k-z^* \rangle \ge 0$.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.cs.princeton.edu/~tengyu/angle_for_blog_post.png&quot; alt=&quot;correlation condition&quot; style=&quot;float:left&quot; height=&quot;240.8&quot; width=&quot;260&quot; /&gt; As illustrated in the figure on the left, $z^* - z_k$ is the ideal direction that we desire to move to, and $-g_k$ is the direction that we actually move to. To establish convergence, it suffices to verify that the direction of movement is positively correlated with the desired direction.&lt;/p&gt;
+
+&lt;p&gt;To get quantitative bounds on running time, we need to ensure that $V(z_k)$ not only decreases, but does so rapidly. The next condition formalizes this: intuitively speaking it says that $-g_k$ and $z^*-z_k$ make an angle strictly less than 90 degrees.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Correlation Condition&lt;/strong&gt;: The direction $g_k$ is $(\alpha,\beta,\epsilon_k)$-correlated with $ z^* $  if 
+&lt;script type=&quot;math/tex&quot;&gt;\langle g_k,z_k-z^* \rangle \ge \alpha \|z_k-z^*\|^2 + \beta \|g_k\|^2 -\epsilon_k&lt;/script&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This may look familiar to experts in convex optimization: as a special case if we make the update direction $g_k$ stand for the (negative) gradient, then the condition yields familiar notions such as strong convexity and smoothness. But the condition allows $g_k$ to not be the gradient, and in addition, allows  the error term $\epsilon_k$, which is necessary in some applications to accommodate non-convexity and/or statistical error.&lt;/p&gt;
+
+&lt;p&gt;If the algorithm can at each step find such update directions, then the familiar convergence proof of convex optimization can be modified to show rapid convergence here as well, except the convergence is &lt;em&gt;approximate&lt;/em&gt;, to some point in the neighborhood of $z^*$.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Theorem:&lt;/strong&gt; Suppose $g_k$ satisfies the Correlation Condition above for every $k$, then with learning rate $\eta \le 2\beta$, we have 
+&lt;script type=&quot;math/tex&quot;&gt;\| z_k-z^* \|^2 \le (1-\alpha\eta)^k\| z_0-z^* \|^2 + \max_k \epsilon_k/\alpha&lt;/script&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;comparison-with-related-conditions&quot;&gt;Comparison with related conditions&lt;/h3&gt;
+
+&lt;p&gt;As mentioned, the “wishful thinking” approach has been used to identify other 
+conditions under which specific nonconvex optimizations can be carried out to near-optimality: (&lt;a href=&quot;https://arxiv.org/abs/1212.0467&quot;&gt;JNS’13&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1312.0925&quot;&gt;Hardt’14&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1408.2156&quot;&gt;BWY’14&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1407.1065&quot;&gt;CLS’15&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1503.00778&quot;&gt;AGMM’15&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1411.8003&quot;&gt;SL’15&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1505.05114&quot;&gt;CC’15&lt;/a&gt;, &lt;a href=&quot;https://papers.nips.cc/paper/5733-a-nonconvex-optimization-framework-for-low-rank-matrix-estimation&quot;&gt;ZWL’15&lt;/a&gt;). All of these can be seen as some weakening of convexity (with the exception of the analysis for matrix completion in &lt;a href=&quot;http://arxiv.org/abs/1312.0925&quot;&gt;Hardt’14&lt;/a&gt; which views the updates as noisy power method).&lt;/p&gt;
+
+&lt;p&gt;Our condition appears to contain most if not all of these as special cases.&lt;/p&gt;
+
+&lt;p&gt;Often the update direction $g_k$ in these papers is related to the gradient. For example using the gradient instead of 
+$g_k$ in our correlation condition turns it into the “regularity condition” proposed by &lt;a href=&quot;http://arxiv.org/abs/1407.1065&quot;&gt;CLS’15&lt;/a&gt; for analyzing Wirtinger flow algorithm for phase retrieval. 
+The gradient stability condition in &lt;a href=&quot;http://arxiv.org/abs/1408.2156&quot;&gt;BWY’14&lt;/a&gt; is also a special case, where $g_k$ is required to be close enough to $\nabla h(z_k)$ for some convex $h$ such that $z^* $ is the optimum of $h$. Then since $\nabla h(z_k)$ has angle &amp;lt; 90 degrees with $z_k-z^*$ (which follows from convexity of $h$), it implies that $g_k$ also does.&lt;/p&gt;
+
+&lt;p&gt;The advantage of our framework is that it encourages one to think of algorithms where $g_k$ is not the gradient.  Thus applying the framework doesn’t require understanding the behavior of the gradient on the entire landscape of the objective function; instead, one needs to understand the update direction (which is  under the algorithm designer’s control) at the 
+sequence of points actually encountered while running the algorithm.&lt;/p&gt;
+
+&lt;p&gt;This slight change of perspective may be powerful.&lt;/p&gt;
+
+&lt;h2 id=&quot;application-to-sparse-coding&quot;&gt;Application to Sparse Coding&lt;/h2&gt;
+
+&lt;p&gt;A particularly useful situation for applying the framework above is where the objective function has two sets of arguments and it is feasible to optimize one set after fixing the other –leading to the familiar alternating minimization heuristic. Such algorithms are a good example of how one may try to do local-improvement without explicitly following the (full) gradient. 
+As mentioned, our framework was used to analyse
+such alternating minimization for &lt;a href=&quot;https://en.wikipedia.org/wiki/Neural_coding#Sparse_coding&quot;&gt;sparse coding&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In sparse coding, we are given a set of examples $Y = [y_1,\dots, y_N]\in \mathbb{R}^{d\times N}$, and are asked to find an over-complete basis $A = [a_1,\dots,a_m]$  (where “overcomplete” refers to the setting
+$m &amp;gt; d$) so that each example $y_j$ can be expressed as a sparse linear combination of $a_i$’s. Therefore, the natural optimization problem with squared loss is that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f(A,X) = \min_{A, \textrm{sparse } X} \|Y-AX\|^2&lt;/script&gt;
+
+&lt;p&gt;Here both the objective and the constraint set are not convex. 
+One could consider using $\ell_1$ regularization as a surrogate for sparsity, but the trouble will be that the regularization is neither smooth or strongly convex, and the standard techniques for dealing with $\ell_1$ penalty term in convex optimization cannot be easily applied due to  non-convexity.&lt;/p&gt;
+
+&lt;p&gt;The standard alternating minimization  algorithm (a close variant of the one proposed by &lt;a href=&quot;http://redwood.psych.cornell.edu/papers/olshausen_field_1997.pdf&quot;&gt;Olshausen and Field 1997&lt;/a&gt; as a neurally plausible explanation for V1, the human primary visual cortex) is as follows:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;X_{k+1} \longleftarrow \textrm{threshold}(A_k^{\top}Y)&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;A_{k+1} \longleftarrow A_{k} - \eta \underbrace{\frac{\partial }{\partial A} f(A_k,X_{k+1})}_{G_k}&lt;/script&gt;
+
+&lt;p&gt;Here update for $X$ is the projection pursuit algorithm in sparse recovery (see &lt;a href=&quot;http://www.springer.com/us/book/9781441970107&quot;&gt;Elad’10&lt;/a&gt; for background), which is supposed to give an approximation of the best fit for $X$ given the current $A$.&lt;/p&gt;
+
+&lt;p&gt;Sometimes alternating minimization algorithms need careful initialization, but in practice here it suffices to initialize $A_0$ using a random sample of datapoints $y_i$’s.&lt;/p&gt;
+
+&lt;p&gt;However, it remains an open problem to analyse convergence using such random initialization; our analysis uses a special starting point $A_0$ found using spectral methods.&lt;/p&gt;
+
+&lt;h3 id=&quot;applying-our-framework&quot;&gt;Applying our framework&lt;/h3&gt;
+
+&lt;p&gt;At first glance, the mysterious aspect of our framework was how the algorithm can find an update direction correlating with $z_k -z^* $,  without knowing $z^* $? In context of sparse coding, this comes about as follows:  if we assume a probabilistic generative model for the observed data (namely, it was generated using some ground-truth sparse coding) then the alternating minimization automatically comes up with such  update directions!&lt;/p&gt;
+
+&lt;p&gt;Specifically, we will assume that the data points $y_i$’s are generated using some ground truth dictionary $A^* $ 
+ using some ground truth $X^* $ whose columns are iid draws from some suitable distribution.
+ (One needs to assume some conditions on $A^* , X^* $, which  are not important in the sketch below.)  Note that the 
+ entries within each column of $X^* $  are &lt;em&gt;not&lt;/em&gt; mutually independent, otherwise the problem would be &lt;a href=&quot;https://en.wikipedia.org/wiki/Independent_component_analysis&quot;&gt;Independent Component Analysis&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In line with our framework, we consider the Lyapunov function $V(A) = |A-A^* |_F^2$. Here the Frobenius norm $|\cdot|_F$ is also the Euclidean norm of the vectorized version of the matrix. Then our framework implies that to show quick convergence it suffices to verify the following (for some $\alpha,\beta &amp;gt; 0$)	 for the update direction $G_k$:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\langle G_k, A_k-A^* \rangle \ge \alpha \|A_k - A^* \|_F^2 + \beta \|G_k\|_F^2 -\epsilon_k&lt;/script&gt;
+
+&lt;p&gt;In &lt;a href=&quot;http://arxiv.org/abs/1503.00778&quot;&gt;AGMM’15&lt;/a&gt; we showed that under certain assumption on the true dictionary $A^* $ and the true coefficient $X^* $, the above inequality is indeed true with small $\epsilon_k$ and some constant $\alpha,\beta &amp;gt; 0$. The proof is a bit technical but reasonable — the partial gradient $\frac{\partial f}{\partial A}$ has a simple form and therefore $G_k$ has a closed form in $A_k$ and $Y$. Therefore, it boils down to plugging in the form of $G_k$ into the equation above and simplifying it appropriately.  (One also needs the fact that
+the starting $A_0$ obtained using spectral methods is somewhat close to $A^* $.)&lt;/p&gt;
+
+&lt;p&gt;We hope others will use our framework to analyse other nonconvex problems!&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;(Aside: We hope that readers will leave comments if they know of other frameworks for proving convergence that are not subcases of the above framework.)&lt;/em&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 08 May 2016 02:00:00 -0700</pubDate>
+        <link>http://localhost:4000/2016/05/08/almostconvexitySATM/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/05/08/almostconvexitySATM/</guid>
+      </item>
+     
     
      
       <item>
-        <title>Tensor Methods in Machine Learning</title>
-        <description>&lt;p&gt;&lt;em&gt;Tensors&lt;/em&gt; are high dimensional generalizations of matrices. In recent years &lt;em&gt;tensor decompositions&lt;/em&gt; were used to design learning algorithms for estimating parameters of latent variable models like Hidden Markov Model, Mixture of Gaussians and Latent Dirichlet Allocation (many of these works were considered as examples of “spectral learning”, read on to find out why). In this post I will briefly describe why &lt;em&gt;tensors&lt;/em&gt; are useful in these settings.&lt;/p&gt;
+        <title>Markov Chains Through the Lens of Dynamical Systems&amp;#58; The Case of Evolution</title>
+        <description>&lt;p&gt;In this post, we will see the main technical ideas in the analysis of the mixing time of evolutionary Markov chains introduced in a previous &lt;a href=&quot;http://www.offconvex.org/2016/03/07/evolution-markov-chains/&quot;&gt;post&lt;/a&gt;.
+We start by introducing the notion of the &lt;em&gt;expected motion&lt;/em&gt; of a stochastic process or a Markov chain.
+In the case of a finite population evolutionary Markov chain, the expected motion turns out to be a dynamical system which corresponds to the infinite population evolutionary dynamics with the same parameters.
+Surprisingly, we show that the limit sets of this dynamical system govern the mixing time of the Markov chain.
+In particular, if the underlying dynamical system has a unique stable fixed point (as in asexual evolution), then the mixing is fast and in the case of multiple stable fixed points (as in sexual evolution), the mixing is slow.
+Our viewpoint connects evolutionary Markov chains, &lt;em&gt;nature’s algorithms&lt;/em&gt;, with stochastic descent methods, popular in machine learning and optimization, and the readers interested in the latter might benefit from our techniques.&lt;/p&gt;
 
-&lt;p&gt;Using &lt;a href=&quot;https://en.wikipedia.org/wiki/Singular_value_decomposition&quot;&gt;Singular Value Decomposition (SVD)&lt;/a&gt;, we can write a matrix $M \in \mathbb{R}^{n\times m}$ as the sum of many rank one matrices:&lt;/p&gt;
+&lt;h2 id=&quot;a-quick-recap&quot;&gt;A Quick Recap&lt;/h2&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;M = \sum_{i=1}^r \lambda_i \vec{u}_i \vec{v}_i^\top.&lt;/script&gt;
+&lt;p&gt;Let us recall the parameters of the finite population evolutionary Markov chain (denoted by $\mathcal{M}$) we saw last time. 
+At any time step, the state of the Markov chain consists of a population of size $N$ where each individual could be one of $m$ types. 
+The  mutation and the fitness matrices are denoted by $Q$ and $A$ respectively.
+$X^{(t)}$ captures, after normalization by $N,$ the composition of the population is at time $t$. 
+Thus,  $X^{(t)}$ is a point in the $m$-dimensional probability simplex $\Delta_m$.
+Since we assumed that $QA&amp;gt;0$, the Markov chain has a stationary distribution $\pi$ over its state space, denoted by $\Omega \subseteq \Delta_m$; the state space has cardinality roughly $N^m$.
+Thus, $X^{(t)}$ evolves in $\Delta_m$ and, with time, its distribution converges to $\pi$. 
+Our goal is to bound the time it takes for this distribution to stabilize, i.e., bound the mixing time of $\mathcal{M}$.&lt;/p&gt;
 
-&lt;p&gt;When the &lt;em&gt;rank&lt;/em&gt; $r$ is small, this gives a concise representation for the matrix $M$ (using $(m+n)r$ parameters instead of $mn$). Such decompositions are widely applied in machine learning.&lt;/p&gt;
+&lt;h2 id=&quot;the-expected-motion&quot;&gt;The Expected Motion&lt;/h2&gt;
 
-&lt;p&gt;&lt;em&gt;Tensor decomposition&lt;/em&gt; is a generalization of low rank matrix decomposition. Although &lt;a href=&quot;http://arxiv.org/abs/0911.1393&quot;&gt;most tensor problems are NP-hard&lt;/a&gt; in the worst case, several natural subcases of tensor decomposition can be solved in polynomial time. Later we will see that these subcases are still very powerful in learning latent variable models.&lt;/p&gt;
+&lt;p&gt;As a first step towards understanding the mixing time, let us compute the expectation of $X^{(t+1)}$ for a given $X^{(t)}$. 
+This function tells us where we expect to be after one time step given the current state; in &lt;a href=&quot;http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf&quot;&gt;this&lt;/a&gt; paper we refer to this as the  &lt;em&gt;expected motion&lt;/em&gt; of this Markov chain (and define it formally for all Markov chains towards the end of this post).
+An easy calculation shows that, for $\mathcal{M}$,&lt;/p&gt;
 
-&lt;h2 id=&quot;matrix-decompositions&quot;&gt;Matrix Decompositions&lt;/h2&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E} \left[  X^{(t+1)} \; \vert \; X^{(t)} \right] = \frac{QA X^{(t)}}{\|QAX^{(t)}\|_1}=: f(X^{(t)}).&lt;/script&gt;
 
-&lt;p&gt;Before talking about tensors, let us first see an example of how matrix factorization can be used to learn latent variable models. In 1904, psychologist Charles Spearman tried to understand whether human intelligence is a composite of different types of measureable intelligence.  Let’s describe a highly simplified version of his method, where the hypothesis is that there are exactly two kinds of intelligence: &lt;em&gt;quantitative&lt;/em&gt; and &lt;em&gt;verbal&lt;/em&gt;. Spearman’s method consisted of making his subjects take several different kinds of tests. 
-Let’s name these tests &lt;em&gt;Classics, Math, Music&lt;/em&gt;, etc. The subjects scores can be represented by a &lt;em&gt;matrix&lt;/em&gt; $M$, which has one row per student, and one column per test.&lt;/p&gt;
+&lt;p&gt;This $f$ is the same function that was introduced in the previous post for the &lt;em&gt;infinite&lt;/em&gt; population evolutionary dynamics with the same parameters!
+Thus, in each time step, the expected motion of the Markov chain is governed by $f$. 
+Surprisingly, something  stronger is true: we can prove (see Section 3.2 &lt;a href=&quot;http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf&quot;&gt;here&lt;/a&gt;) that, given some $X^{(t)},$ the point  $X^{(t+1)}$ can be equivalently obtained by taking $N$ i.i.d. samples from $f(X^{(t)})$. 
+In words,&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/matrix.png&quot; alt=&quot;matrix M&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The simplified version of Spearman’s hypothesis is that each student has different amounts of quantitative and verbal intelligence, say  $x_{quant}$ and $x_{verb}$ respectively. Each test measures a different mix of intelligences, so say it gives a &lt;em&gt;weighting&lt;/em&gt; $y_{quant}$ to quantitative and $y_{verb}$ to verbal. Intuitively, a student with higher strength on verbal intelligence should perform better on a test that has a high weight on verbal intelligence. Let’s describe this relationship as a simple &lt;em&gt;bilinear&lt;/em&gt; function:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;score = x_{quant} \times y_{quant} + x_{verb}\times y_{verb}.&lt;/script&gt;
-
-&lt;p&gt;Denoting by $\vec x_{verb}, \vec x_{quant}$ the vectors describing the strengths of the students, and letting $\vec y_{verb}, \vec y_{quant}$ be the vectors that describe the weighting of intelligences in the different tests, we can express matrix $M$ as the sum of two &lt;strong&gt;rank 1&lt;/strong&gt; matrices (in other words, $M$ has rank at most $2$):&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;M = \vec x_{quant} \vec y_{quant}^\top + \vec x_{verb} \vec y_{verb}^\top.&lt;/script&gt;
-
-&lt;p&gt;Thus verifying that $M$ has rank $2$ (or that it is very close to a rank $2$ matrix) should let us conclude that there are indeed two kinds of intelligence.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/decomposition1.png&quot; alt=&quot;Matrix Decomposition&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Note that this decomposition is not the &lt;em&gt;Singular Value Decomposition&lt;/em&gt; (SVD). SVD requires strong orthogonality constraints (which translates to “different intelligences are completely uncorrelated”) that are not plausible in this setting.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-ambiguity&quot;&gt;The Ambiguity&lt;/h2&gt;
-
-&lt;p&gt;But ideally one would like to take the above idea further: we would like to assign a definitive quantitative/verbal intelligence score to each student. This seems simple at first sight: just read off the score from the decomposition. For instance, it shows Alice is strongest in quantitative intelligence.&lt;/p&gt;
-
-&lt;p&gt;However, this is incorrect, because the decomposition is &lt;strong&gt;not&lt;/strong&gt; unique! The following is another valid decomposition&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/decomposition2.png&quot; alt=&quot;Matrix Decomposition&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;According to this decomposition, Bob is strongest in quantitative intelligence, not Alice. Both decompositions explain the data perfectly and we &lt;strong&gt;cannot&lt;/strong&gt; decide &lt;em&gt;a priori&lt;/em&gt; which is correct.&lt;/p&gt;
-
-&lt;p&gt;Sometimes we can hope to find the unique solution by imposing additional constraints on the decomposition, such as all matrix entries have to be nonnegative. However even after imposing many natural constraints, in general the issue of multiple decompositions will remain.&lt;/p&gt;
-
-&lt;h2 id=&quot;adding-the-3rd-dimension&quot;&gt;Adding the 3rd Dimension&lt;/h2&gt;
-
-&lt;p&gt;Since our current data has multiple explanatory decompositions, we need  more data to learn exactly which explanation is the truth. Assume the strength of the intelligence changes with time: we get better at quantitative tasks at night. Now we can let the (poor) students take the tests twice: once during the day and once at night. The results we get can be represented by two matrices $M_{day}$ and $M_{night}$. But we can also think of this as a three dimensional array of numbers -– a tensor $T$ in $\mathbb{R}^{\sharp students\times \sharp tests\times 2}$.
-Here the third axis stands for “day” or “night”. We say the two matrices $M_{day}$ and $M_{night}$ are &lt;em&gt;slices&lt;/em&gt; of the tensor $T$.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/bimatrix.png&quot; alt=&quot;Matrix Decomposition&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Let $z_{quant}$ and $z_{verb}$ be the relative strength of the two kinds of intelligence at a particular time (day or night), then the new score can be computed by a &lt;em&gt;trilinear&lt;/em&gt; function:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;score = x_{quant} \times y_{quant} \times z_{quant} + x_{verb}\times y_{verb} \times z_{verb}.&lt;/script&gt;
-
-&lt;p&gt;Keep in mind that this is the formula for &lt;strong&gt;one entry&lt;/strong&gt; in the tensor: the score of one student, in one test and at a specific time. Who the student is specifies $x_{quant}$ and $x_{verb}$; what the test is specifies weights $y_{quant}$ and $y_{verb}$; when the test takes place specifies $z_{quant}$ and $z_{verb}$.&lt;/p&gt;
-
-&lt;p&gt;Similar to matrices, we can view this as a &lt;strong&gt;rank 2&lt;/strong&gt; decomposition of the tensor $T$. In particular, if we use $\vec x_{quant}, \vec x_{verb}$ to denote the strengths of students, $\vec y_{quant},\vec y_{verb}$ to denote the weights of the tests and $\vec z_{quant}, \vec z_{verb}$ to denote the variations of strengths in time, then we can write the decomposition as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;T = \vec x_{quant}\otimes \vec y_{quant}\otimes \vec z_{quant} + \vec x_{verb}\otimes \vec y_{verb}\otimes \vec z_{verb}.&lt;/script&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/tensordecomposition.png&quot; alt=&quot;Matrix Decomposition&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Now we can check that the second matrix decomposition we had is no longer valid: there are no values of $z_{quant}$ and $z_{verb}$ at night that could generate the matrix $M_{night}$. This is not a coincidence. &lt;a href=&quot;http://www.sciencedirect.com/science/article/pii/0024379577900696&quot;&gt;Kruskal 1977&lt;/a&gt; gave sufficient conditions for such decompositions to be unique. When applied to our case it is very simple:&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f \; \; \mbox{guides} \; \;  \mathcal{M}.&lt;/script&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;&lt;strong&gt;Corollary&lt;/strong&gt;
-The decomposition of tensor $T$ is unique (up to scaling and permutation) if none of the vector pairs $(\vec x_{quant}, \vec x_{verb})$, $(\vec y_{quant},\vec y_{verb})$, $(\vec z_{quant},\vec z_{verb})$ are co-linear.&lt;/p&gt;
+  &lt;p&gt;In fact, a moment’s thought tells us that this phenomenon transcends any specific model of evolution. 
+We can fix &lt;strong&gt;any&lt;/strong&gt; dynamical system $g$ over the simplex and define a Markov chain guided by it as follows: If $X^{(t)}$ is the population vector at time $t$, then define $X^{(t+1)}$ as the population vector obtained by taking $N$ i.i.d. (or even correlated) copies from $g(X^{(t)})$. By design, $g$ is the expected motion of this Markov chain.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Note that of course the decomposition is not truly unique for two reasons. First, the two tensor factors are symmetric, and we need to decide which factor correspond to quantitative intelligence. Second, we can scale the three components $\vec x_{quant}$ ,$\vec y_{quant}$, $\vec z_{quant}$ simultaneously, as long as the product of the three scales is 1. Intuitively this is like using different units to measure the three components. Kruskal’s result showed that these are the only degrees of freedom in the decomposition, and there cannot be a truly distinct decomposition as in the matrix case.&lt;/p&gt;
+&lt;h2 id=&quot;evolution-on-finite-populations--noisy-evolution-on-infinite-populations&quot;&gt;Evolution on Finite Populations = Noisy Evolution on Infinite Populations&lt;/h2&gt;
 
-&lt;h2 id=&quot;finding-the-tensor&quot;&gt;Finding the Tensor&lt;/h2&gt;
+&lt;p&gt;The above observation allows us to view our evolutionary Markov chain as a noisy version of the deterministic, infinite population evolution. 
+A bit more formally, there are implicitly defined random variables $\zeta_{s}^{(t+1)}$ for $1 \leq s \leq N$ and all $t$,   such that&lt;/p&gt;
 
-&lt;p&gt;In the above example we get a low rank tensor $T$ by gathering more data. In many traditional applications the extra data may be unavailable or hard to get. Luckily, many exciting recent developments show that we can &lt;em&gt;uncover&lt;/em&gt; these special tensor structures even if the original data is not in a tensor form!&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;X^{(t+1)} = f(X^{(t)}) + \frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}.&lt;/script&gt;
 
-&lt;p&gt;The main idea is to use &lt;em&gt;method of moments&lt;/em&gt; (see a nice &lt;a href=&quot;http://blog.mrtz.org/2014/04/22/pearsons-polynomial.html&quot;&gt;post by Moritz&lt;/a&gt;): estimate lower order correlations of the variables, and hope these lower order correlations have a simple tensor form.&lt;/p&gt;
+&lt;p&gt;Here, $\zeta_s^{(t+1)}$ for $1\leq s \leq N$ is a  random vector  that corresponds to the  &lt;em&gt;error&lt;/em&gt; or &lt;em&gt;noise&lt;/em&gt; of  sample $s$ at the $t$-th time step.
+Formally, because $f$ is the expected motion of the Markov chain, 
+ each $\zeta_s^{(t+1)}$ has expectation $0$ conditioned on $X^{(t)}$. 
+ Further, the fact that $f$ guides $\mathcal{M}$  implies that for each $t$, when conditioned on $X^{(t)}$, the vectors $\zeta_{s}^{(t+1)}$  are i.i.d. for $1 \leq s \leq N$. 
+Without conditioning, we cannot say much about  the $\zeta_{s}^{(t)}$s.
+However, since we know that the state space of $\mathcal{M}$ lies in the simplex, we can deduce that $\Vert\zeta_s^{(t)}\Vert \leq 2$. 
+The facts that the expectation of the $\zeta_s^{(t)}$s are zero, they are independent and bounded imply that the variance of each coordinate of $\frac{1}{N} \sum_{s=1}^N \zeta_s^{(t+1)}$ 
+  (again conditioned on the past) is roughly $1/N$.&lt;/p&gt;
 
-&lt;p&gt;Consider &lt;em&gt;Hidden Markov Model&lt;/em&gt; as an example. Hidden Markov Models are widely used in analyzing sequential data like speech or text. Here for concreteness we consider a (simplified) model of natural language texts(which is a basic version of the &lt;a href=&quot;http://www.offconvex.org/2015/12/12/word-embeddings-1/&quot;&gt;&lt;em&gt;word embeddings&lt;/em&gt;&lt;/a&gt;).&lt;/p&gt;
+&lt;h2 id=&quot;connections-to-stochastic-gradient-descent&quot;&gt;Connections to Stochastic Gradient Descent&lt;/h2&gt;
 
-&lt;p&gt;In Hidden Markov Model, we observe a sequence of words (a sentence) that is generated by a walk of a &lt;em&gt;hidden&lt;/em&gt; Markov Chain: each word has a hidden topic $h$ (a discrete random variable that specifies whether the current word is talking about “sports” or “politics”); the topic for the next word only depends on the topic of the current word. Each topic specifies a distribution over words. Instead of the topic itself, we observe a random word $x$ drawn from this topic distribution (for example, if the topic is “sports”, we will more likely see words like “score”). The dependencies are usually illustrated by the following diagram:&lt;/p&gt;
+&lt;p&gt;Now we draw an analogy of the evolutionary Markov chain to an old idea in optimization, stochastic gradient descent or &lt;a href=&quot;https://en.wikipedia.org/wiki/Stochastic_gradient_descent&quot;&gt;SGD&lt;/a&gt;.
+However, we will see crucial differences that require the development of new tools.
+Recall that in the SGD setting, one is given a function $F$ and the goal is to find a local minimum of $F.$
+The gradient descent method moves from the current point $x^{(t)}$ to a new point $x^{(t+1)}=x^{(t)} - \eta \nabla F(x^{(t)})$ for some rate $\eta$ (which could depend on time $t$).&lt;br /&gt;
+Since the gradient may not be easy to compute,  SGD substitutes the gradient at the current point by an unbiased estimator  of the gradient. 
+Thus, the point at time $t$  becomes a random variable $X^{(t)}$. Since the estimate is unbiased, we may write it as&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/hmm.png&quot; alt=&quot;Hidden Markov Model&quot; /&gt;&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\nabla F(X^{(t)}) - \zeta^{(t+1)},&lt;/script&gt;
 
-&lt;p&gt;More concretely, to generate a sentence in Hidden Markov Model, we start with some initial &lt;em&gt;topic&lt;/em&gt; $h_1$. This topic will evolve as a Markov Chain to generate the topics for future words $h_2, h_3,…,h_t$. We observe &lt;em&gt;words&lt;/em&gt; $x_1,…,x_t$ from these topics. In particular, word $x_1$ is drawn according to topic $h_1$, word $x_2$ is drawn according to topic $h_2$ and so on.&lt;/p&gt;
+&lt;p&gt;where  the expectation of $\zeta^{(t+1)}$ conditioned on $X^{(t)}$ is zero.
+Thus, we can write one step of SGD as&lt;/p&gt;
 
-&lt;p&gt;Given many sentences that are &lt;em&gt;generated exactly&lt;/em&gt; according to this model, how can we construct a tensor? A natural idea is to compute &lt;em&gt;correlations&lt;/em&gt;: for every triple of words $(i,j,k)$, we count the number of times that these are the first three words of a sentence. Enumerating over $i,j,k$ gives us a three dimensional array (a &lt;em&gt;tensor&lt;/em&gt;) $T$. We can further normalize it by the total number of sentences. After normalization the $(i,j,k)$-th entry of the tensor will be an estimation of the &lt;em&gt;probability&lt;/em&gt; that the first three words are $(i,j,k)$. For simplicity assume we have enough samples and the estimation is accurate:&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;X^{(t+1)} = \left( X^{(t)} -\eta \nabla F(X^{(t)}) \right) +\eta \cdot  \zeta^{(t+1)}.&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;T_{i,j,k} = \mbox{Pr}[x_1 = i, x_2=j, x_3=k].&lt;/script&gt;
+&lt;p&gt;Comparing it to our evolutionary Markov chain, it can be shown that $f(x)=\frac{QA x}{\Vert QA x\Vert_1}$ is a gradient system (i.e., $f=\nabla G$ for some function $G$) and we  may think of the corresponding $\mathcal M$ as SGD with  step-size $\eta=1/N$.&lt;/p&gt;
 
-&lt;p&gt;Why does this tensor have the nice low rank property? The key observation is that if we “fix” (condition on) the topic of the second word $h_2$, it cuts the graph into three parts: one part containing $h_1,x_1$, one part containing $x_2$ and one part containing $h_3,x_3$. These three parts are &lt;strong&gt;independent&lt;/strong&gt; conditioned on $h_2$. In particular, the first three words $x_1,x_2,x_3$ are &lt;strong&gt;independent&lt;/strong&gt; conditioned on the topic of the &lt;strong&gt;second&lt;/strong&gt; word $h_2$. Using this observation we can compute each entry of the tensor as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;T_{i,j,k} = \sum_{l=1}^n \mbox{Pr}[h_2 = l] \mbox{Pr}[x_1 = i| h_2 = l]\times \mbox{Pr}[x_2 = j| h_2 = l]\times \mbox{Pr}[x_3 = k| h_2 = l].&lt;/script&gt;
-
-&lt;p&gt;Now if we let $\vec x_l$ be a vector whose $i$-th entry is the probability of the first word is $i$, given the topic of the &lt;em&gt;second&lt;/em&gt; word is $l$; let $\vec y_l$ and $\vec z_l$ be similar for the second and third word. We can then write the entire tensor as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;T = \sum_{l=1}^n \mbox{Pr}[h_2 = l] \vec x_l \otimes \vec y_l \otimes \vec z_l.&lt;/script&gt;
-
-&lt;p&gt;This is exactly the &lt;strong&gt;low rank&lt;/strong&gt; form we are looking for! Tensor decomposition allows us to &lt;em&gt;uniquely&lt;/em&gt; identify these components, and further infer the other probabilities we are interested in. For more details see the paper by &lt;a href=&quot;http://arxiv.org/abs/1210.7559&quot;&gt;Anandkumar et al. 2012&lt;/a&gt; (this paper uses the tensor notations, but the original idea appeared in the paper by &lt;a href=&quot;https://projecteuclid.org/euclid.aoap/1151592244&quot;&gt;Mossel and Roch 2006&lt;/a&gt;).&lt;/p&gt;
-
-&lt;h2 id=&quot;implementing-tensor-decomposition&quot;&gt;Implementing Tensor Decomposition&lt;/h2&gt;
-
-&lt;p&gt;Using method of moments, we can discover nice tensor structures from many problems. The uniqueness of tensor decomposition makes these tensors very useful in learning the parameters of the models. But how do we compute the tensor decompositions?&lt;/p&gt;
-
-&lt;p&gt;In the worst case we have bad news: &lt;a href=&quot;http://arxiv.org/abs/0911.1393&quot;&gt;most tensor problems are NP-hard&lt;/a&gt;. However, in most natural cases, as long as the tensor does &lt;em&gt;not&lt;/em&gt; have &lt;em&gt;too many&lt;/em&gt; components, and the components are &lt;em&gt;not adversarially&lt;/em&gt; chosen, tensor decomposition &lt;strong&gt;can&lt;/strong&gt; be computed in polynomial time! Here we describe the algorithm by Dr. Robert Jenrich (it first appeared in a 1970 working paper by &lt;a href=&quot;http://hbanaszak.mjr.uw.edu.pl/TempTxt/Harshman_1970_Foundations%20of%20PARAFAC%20Procedure%20MOdels%20and%20Conditions%20for%20an%20Expalanatory%20Multimodal%20Factor%20Analysis.pdf&quot;&gt;Harshman&lt;/a&gt;, the version we present here is a more general version by &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=173234&quot;&gt;Leurgans, Ross and Abel 1993&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;There is a vast literature understanding when SGD converges to the global optimum (for convex $F$) or a local optima (for &lt;em&gt;reasonable&lt;/em&gt; non-convex $F$). 
+Why can’t we use techniques developed for SGD  to analyze our evolutionary Markov chain? 
+ To start with, when the step size does not go to zero with time,  $X^{(t)}$ wanders around its domain $\Omega$ and will not converge to a point.
+In the case when the step size is fixed, typically, the time &lt;a href=&quot;http://arxiv.org/pdf/1306.2119.pdf&quot;&gt;average&lt;/a&gt; of $X^{(t)}$ is used in a hope that it will converge to a local minima of the function.
+The Ergodic Theorem of Markov chains tells us that the time average will  converge to the expectation of a sample drawn from $\pi$, the steady state distribution.
+This quantity is the same as the zero of $\nabla F$ &lt;em&gt;only when it is a linear function&lt;/em&gt; (equivalently $F$ is quadratic); &lt;em&gt;certainly not the case in  our setting&lt;/em&gt;.
+Further, the rate of convergence to this expectation is governed by the mixing time of the Markov chain.
+Thus, there is no getting around proving a bound on the mixing time. 
+Moreover, for biological applications (as described in our previous post),  we need to know more than the expectation: we need to obtain samples from the steady state distribution $\pi$. 
+Finally, in several other evolutionary Markov chains of interest, the guiding dynamical system is &lt;em&gt;not a gradient system&lt;/em&gt;. 
+Hence, the desired results in the setting of evolution seem  beyond the reach of current techniques.&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;Jenrich’s Algorithm &lt;br /&gt;
-Input: tensor $T = \sum_{i=1}^r \lambda_i \vec x_i \otimes \vec y_i \otimes \vec z_i$.&lt;/p&gt;
+  &lt;p&gt;The reason for taking this detour and making the connection to SGD is not only to show that completely different sounding problems and areas might be related, but also that the techniques we develop in analyzing evolutionary Markov chains find use in understanding SGD beyond the quadratic case.&lt;/p&gt;
+&lt;/blockquote&gt;
 
+&lt;h2 id=&quot;the-landscape-of-the-expected-motion-governs-the-mixing-time&quot;&gt;The Landscape of the Expected Motion Governs the Mixing Time&lt;/h2&gt;
+
+&lt;p&gt;Now we delve into our results and proof ideas. 
+We derive all of the information we need to bound the mixing time of $\mathcal M$ from the the limit sets of $f$ which guides it. Roughly, we show that when the limit set of  $f$ consists of a unique stable fixed point (which is akin to convexity) as in asexual evolution, then the mixing is fast and in the case of multiple stable fixed points (which is akin to non-convexity) as in sexual evolution, the mixing is slow.&lt;/p&gt;
+
+&lt;p&gt;We saw in our first  &lt;a href=&quot;http://www.offconvex.org/2015/12/21/dynamical-systems-1/&quot;&gt;post&lt;/a&gt; that the dynamical system $f(x)=\frac{QAx}{\Vert QAx\Vert_1}$ corresponding to the case of asexual evolution has exactly one fixed point in the simplex, say $ x^\star$, when $QA$ is positive. 
+In fact,  $x^\star$ is stable  and, no matter where we initiate the dynamical system, it ends up close to $x^\star$ in a small number of iterations (which does not depend on $N$).&lt;/p&gt;
+
+&lt;p&gt;Back to mixing time: a generic technique to bound the mixing time of a Markov chain employs a &lt;em&gt;coupling&lt;/em&gt; of two copies of the chain $X^{(t)}$ and $Y^{(t)}$.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A coupling of a Markov chain $\mathcal M$ is a function which takes as input $X^{(t)}$ and $Y^{(t)}$ and outputs $X^{(t+1)}$ and $Y^{(t+1)}$ such that each of  $X^{(t+1)}$ and $Y^{(t+1)}$, when considered on their own, is a correct instantiation of one step of $\mathcal M$ from the states $X^{(t)}$ and $Y^{(t)}$ respectively. However, $X^{(t+1)}$ and $Y^{(t+1)}$ are allowed to  be arbitrarily correlated.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For example, we could couple $X^{(t)}$ and $Y^{(t)}$ such that if $X^{(t)} = Y^{(t)}$ then $X^{(t+1)}=Y^{(t+1)}$. More generally, we can consider the &lt;em&gt;distance&lt;/em&gt; between $X^{(t)}$ and $Y^{(t)}$, and consider a coupling that contracts the distance between them. If this distance is contractive by, say, a factor of $\rho&amp;lt;1$ at every time step, then the number of iterations required to reduce distance  below $1/N$ is about $\log_{1/\rho} N$; this roughly  upper bounds the mixing time.&lt;/p&gt;
+
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;/assets/coupling.jpg&quot; alt=&quot;&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The key observation that connects the dynamical system $f$ and our Markov chain is that using the function $f$ we can construct a coupling $\mathcal{C}$ such that for all $x$,$y \in \Omega$,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E}_{\mathcal{C}}\left[\|{X}^{(t+1)}-{Y}^{(t+1)}\|_1 \; | \; {X}^{(t)}=x, {Y}^{(t)}=y \right]=\|f(x)-f(y)\|_1.&lt;/script&gt;
+
+&lt;p&gt;Thus, if $ \Vert f(x)-f(y)\Vert_1 &amp;lt; \rho \cdot \Vert x-y\Vert_1 &amp;lt;1$ for some $\rho&amp;lt;1$ and &lt;em&gt;all&lt;/em&gt; $x,y \in \Omega$, we would be done. 
+The bad news is that we can show that there are $x,y$ for which $\Vert f(x)-f(y)\Vert_1 &amp;gt; \Vert x-y \Vert_1$ implying that there is no contractive coupling for all $x$ and $y.$&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;What about when $x$ and $y$ are close to $x^\star$?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In this case, by a first order Taylor approximation of the dynamical system $f$, we can bound the contraction $(\rho)$ by  the $1 \rightarrow 1$ norm of the &lt;a href=&quot;https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant&quot;&gt;Jacobian&lt;/a&gt; of $f$ at $x^\star$. 
+However, this quantity is less than one &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=2722129.2722234&quot;&gt;only&lt;/a&gt; when $m=2$, see &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=2722129.2722234&quot;&gt;here&lt;/a&gt;.
+For larger $m$, we have to go back to  our intuition from dynamical systems and, using the fact that  all trajectories of $f$ converge to $x^\star$,  argue that the appropriate norm of the Jacobian of $f^k$ (i.e., $f$ applied $k$ times) is contractive.
+While there are a few technical challenges, we can use $f^k$ to construct a contractive coupling. We then use concentration to handle the case  when $x$,$y$ are not close to $x^\star$,
+see &lt;a href=&quot;http://theory.epfl.ch/vishnoi/Publications_files/PSVSODA16.pdf&quot;&gt;here&lt;/a&gt; for the details.
+As a consequence, we obtain a mixing time of $O(\log N)$ (suppressing other parameters). 
+Thus,  in the world of asexual evolution the steady state can be reached quickly!&lt;/p&gt;
+
+&lt;h2 id=&quot;markov-chains-guided-by-dynamical-systems---beyond-uniqueness&quot;&gt;Markov Chains Guided by Dynamical Systems - Beyond Uniqueness&lt;/h2&gt;
+
+&lt;p&gt;Interestingly, this proof does not use any  property of $f$ other than that it has a unique  fixed point which is stable. 
+However, in many cases, such as sexual evolution (see &lt;a href=&quot;http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf&quot;&gt;here&lt;/a&gt; for the model of sexual evolution or an equivalent model for how &lt;em&gt;children acquire grammar&lt;/em&gt;, see &lt;a href=&quot;http://science.sciencemag.org/content/291/5501/114&quot;&gt;here&lt;/a&gt;) and &lt;a href=&quot;http://www.sciencedirect.com/science/article/pii/S0022519303931997&quot;&gt;here&lt;/a&gt;, the expected motion has multiple fixed points - some stable and some unstable. 
+Such a dynamical system is inherently non-convex - trajectories starting at different points  could converge to different points. 
+Further, the presence of unstable fixed points can slow down trajectories and, hence, the mixing time.
+In &lt;a href=&quot;http://theory.epfl.ch/vishnoi/Publications_files/PV16.pdf&quot;&gt;this&lt;/a&gt; paper, we give a comprehensive treatment about how the landscape of the limit sets determines the mixing time of evolutionary Markov chains.
+In a nutshell, while the presence of unstable fixed points does not seem to affect the mixing time, the presence of two stable fixed points results in the mixing time being $\exp(N)$!&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This result allows us to prove a phase transition in the mixing time for an evolutionary Markov chain with sex where, changing the mutation  parameter  changes the geometry of the limit sets of the expected motion from multiple stable fixed points to unique stable fixed point.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;evolution-on-structured-populations&quot;&gt;Evolution on Structured Populations?&lt;/h2&gt;
+&lt;p&gt;A  challenging problem left open by our work  is to try to estimate the mixing time of evolutionary dynamics on &lt;em&gt;structured&lt;/em&gt; populations which arise in ecology.
+Roughly, this setting extends  the evolutionary models discussed thus far by introducing an
+additional input parameter, a graph on $N$ vertices.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The graph
+provides structure to the population by locating each individual at a
+vertex, and, at time $t+1$, a vertex determines its type by sampling with replacement from among its neighbors in the graph at time $t$; see &lt;a href=&quot;http://www.nature.com/nature/journal/v433/n7023/full/nature03204.html&quot;&gt;this&lt;/a&gt; paper for more details.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The model we discussed so far can be seen as a special case when the underlying graph is the complete graph on $N$ vertices. 
+ The difficulty is two fold: now it is no longer sufficient to keep track of the number of each type and also the variance of the noise is no longer $1/N$ - it could be large if a vertex has small degree.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-expected-motion-revisited&quot;&gt;The Expected Motion Revisited&lt;/h2&gt;
+
+&lt;p&gt;Now we formally define the expected motion of any Markov chain  with respect to a function $\phi$   from its state space $\Omega$ to  $\mathbb{R}^n$.
+If $X^{(t)}=x$ is the state of the Markov chain at time $t$ and $X^{(t+1)}$ its state at time $t+1,$ then the  expected motion of $\phi$  for the chain at $x$ is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E}\left[\phi(X^{(t+1)}) \;| \;X^{(t)} =x \right]&lt;/script&gt;
+
+&lt;p&gt;where the expectation is taken over one step of the chain.
+Often, and in the application we presented in this post, the state space $\Omega$ already has a geometric structure and is  a subset of $\mathbb{R}^n$. 
+In this case, there is a canonical expected motion which corresponds to  $\phi$ being just the identity map.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;What can the expected motion of a Markov chain tell us about the Markov chain itself?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Of course, without imposing additional structure on the Markov chain or $\phi$, the answer is unlikely to be very interesting. However, the results in this post suggest that thinking of a Markov chain in this way can be quite useful.&lt;/p&gt;
+
+&lt;h2 id=&quot;to-conclude-&quot;&gt;To Conclude …&lt;/h2&gt;
+&lt;p&gt;In this post, hopefully, you got a flavor of how techniques from dynamical systems can be used to derive interesting properties of Markov chains and stochastic processes. 
+We also saw that nature’s methods, in the context of evolution, seem quite close to the methods of choice of humans - &lt;em&gt;is this a coincidence&lt;/em&gt;?
+In a future post, we will show another &lt;a href=&quot;http://arxiv.org/abs/1601.02712&quot;&gt;example&lt;/a&gt; of this phenomena - the famous iteratively reweighted least squares (IRLS) in sparse recovery turns out to be identical to the dynamics of an organism found in nature - the slime mold.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 04 Apr 2016 14:00:00 -0700</pubDate>
+        <link>http://localhost:4000/2016/04/04/markov-chains-dynamical-systems/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/04/04/markov-chains-dynamical-systems/</guid>
+      </item>
+     
+    
+     
+      <item>
+        <title>Saddles Again</title>
+        <description>&lt;p&gt;Thanks to Rong for the &lt;a href=&quot;http://www.offconvex.org/2016/03/22/saddlepoints/&quot;&gt;very nice blog post&lt;/a&gt; describing critical points of nonconvex functions and how to avoid them. I’d like to follow up on his post to highlight a fact that is not widely appreciated in nonlinear optimization. Though we often teach the contrary in our intro courses, it is in fact super hard to converge to a saddle point. (Just look at those pictures in Rong’s post!  If you move ever so slightly you fall off the saddle).  Even simple algorithms like gradient descent with constant step sizes can’t converge to saddle points unless you try really hard.&lt;/p&gt;
+
+&lt;h2 id=&quot;its-hard-to-converge-to-a-saddle&quot;&gt;It’s hard to converge to a saddle.&lt;/h2&gt;
+
+&lt;p&gt;To illustrate why gradient descent would not converge to a non-minimizing saddle points, consider the case of a non-convex quadratic, $f(x)=\frac{1}{2} \sum_{i=1}^d a_i x_i^2$.  Assume that $a_i$ is nonnegative for the $k$ values and is strictly negative for the last $d-k$ values.  The unique stationary point of this problem is $x=0$.  The Hessian at $0$ is simply the diagonal matrix with $H_{ii} = a_i$ for $i=1,\ldots,d$.&lt;/p&gt;
+
+&lt;p&gt;Now what happens when we run gradient descent on this function from some initial point $x^{(0)}?$  The gradient method has iterates of the form&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;x^{(k+1)} = x^{(k)} - t \nabla f(x^{(k)})\,.&lt;/script&gt;
+
+&lt;p&gt;For our function, this takes the form&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;x^{(k+1)}_i = (1- t a_i) x_i^{(k)}&lt;/script&gt;
+
+&lt;p&gt;If one unrolls this recursive formula down to zero, we see that the $i$th coordinate of the $k$th iterate is given by the formula&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;x_{i}^{(k)} = (1-t a_i)^{k} x_i^{(0)}\,.&lt;/script&gt;
+
+&lt;p&gt;One can immediately see from this expression that if the step size $t$ is chosen such 
+that $t |a_i| &amp;lt; 1 $ 
+for all $i$, then when all of the $a_i$ 
+are nonnegative, the algorithm converges to a point where the gradient is equal to zero from any starting point.  But if there is &lt;em&gt;a single negative $a_i$&lt;/em&gt;, the function diverges to negative infinity exponentially quickly from any randomly chosen starting point.&lt;/p&gt;
+
+&lt;p&gt;The random initialization is key here.  If we initialized the problem such that $x^{(0)}_i=0$ whenever $a_i&amp;lt;0$, then the algorithm would actually converge.  However, under the smallest perturbation away from this initial condition, gradient descent diverges to negative infinity.&lt;/p&gt;
+
+&lt;p&gt;Most of the examples showing that algorithms converge to stationary points are fragile in a similar way.  You have to try very hard to make an algorithm converge to a saddle point.  As an example of this phenomena for a non-quadratic function, consider the following example from Nesterov’s revered &lt;a href=&quot;http://www.springer.com/us/book/9781402075537&quot;&gt;Introductory Lectures on Convex Optimization&lt;/a&gt;. Let $f(x,y) = \frac12 x^2 +\frac14 y^4-\frac12 y^2$.  The critical points of this function are $z^{(1)}= (0,0)$, $z^{(2)} = (0,-1)$ and $z^{(3)} = (0,1)$.  The points $z^{(2)}$ and $z^{(3)}$ are local minima, and $z^{(1)}$ is a saddle point.  Now observe that gradient descent initialized from any point of the form $(x,0)$ converges to the saddle point $z^{(1)}$. &lt;em&gt;From any other initial point,&lt;/em&gt; gradient descent converges to a local minimum.  If one chooses an initial point at random, then gradient descent does not converge to a saddle point &lt;em&gt;with probability one.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-stable-manifold-theorem-and-random-initialization&quot;&gt;The Stable Manifold Theorem and random initialization&lt;/h3&gt;
+
+&lt;p&gt;In recent work with &lt;a href=&quot;http://arxiv.org/abs/1602.04915&quot;&gt;Jason Lee, Max Simchowitz, and Mike Jordan&lt;/a&gt;, we made this result precise using the Stable Manifold Theorem from dynamical systems.  The Stable Manifold theorem is concerned with fixed point operations of the form $x^{(k+1)} = \Psi(x^{(k)})$.  It quantifies that the set of points that locally converge to a fixed point $x^{\star}$ of such an iteration have measure zero whenever the Jacobian of $\Psi$ at $x^{\star}$ has eigenvalues bigger than 1.&lt;/p&gt;
+
+&lt;p&gt;With a fairly straightforward argument, we were able to show that the gradient descent algorithm satisfied the assumptions of the Stable Manifold Theorem, and, moreover, that the set of points that converge to strict saddles &lt;em&gt;always&lt;/em&gt; has measure zero.  This formalizes the above argument.  If you pick a point at random and run gradient descent, you will never converge to a saddle point.  While this doesn’t give a precise rate on the number of iterations, we show that if all of the local minima satisfy the &lt;a href=&quot;https://regularize.wordpress.com/2013/09/25/the-kurdyka-lojasiewicz-inequality-and-gradient-descent-methods/&quot;&gt;Kurdyka-Lojasiewicz inequality&lt;/a&gt;, then one  can derive quantitative convegence rates.&lt;/p&gt;
+
+&lt;p&gt;In some sense, optimizers would not be particularly surprised by this theorem.  We are sure that some version of our result is already known for gradient descent, but we couldn’t find it in the literature.  If you can find an earlier reference proving this theorem we would be delighted if you’d let us know.&lt;/p&gt;
+
+&lt;h3 id=&quot;adding-noise&quot;&gt;Adding noise&lt;/h3&gt;
+
+&lt;p&gt;As Rong &lt;a href=&quot;http://www.offconvex.org/2016/03/22/saddlepoints/&quot;&gt;discussed&lt;/a&gt;, in his paper with Huang, Jin, and Yuan, adding gaussian noise to the gradient helps to avoid saddle points.  In particular, they introduce the notion &lt;em&gt;strict saddle&lt;/em&gt; functions to be those where all saddle points are either local minima or have Hessians with negative eigenvalues bounded away from 0.  As we saw above, if a saddle point has negative eigenvalues, the set of initial conditions that converge to that point has measure zero.  But when we add noise to the gradient, there are &lt;em&gt;no initial conditions&lt;/em&gt; that converge to saddles.  The noise immediately pushes you off this low-dimensional manifold.&lt;/p&gt;
+
+&lt;p&gt;Interestingly, a similar result also follows from the Stable Manifold Theorem. Indeed, Robin Pemantle &lt;a href=&quot;https://www.math.upenn.edu/~pemantle/papers/nonconvergence.pdf&quot;&gt;developed a more general result&lt;/a&gt; for stochastic processes.  Pemantle uses the Stable Manifold Theorem to show that general vector flows perturbed by noise cannot converge to unstable fixed points. As a special case, he proves that stochastic gradient descent cannot converge to a saddle point provided the gradient noise is sufficiently diverse.  In particular, this implies that additive gaussian noise is sufficient to prevent convergence to saddles.&lt;/p&gt;
+
+&lt;p&gt;Pemantle does not have to assume the strict saddle point condition to prove his theorem.  However, additional work would be required to extract the sort of quantitative convergence bounds that Rong and his coauthors derive from Pemantle’s argument.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-makes-nonconvex-optimization-difficult&quot;&gt;What makes nonconvex optimization difficult?&lt;/h2&gt;
+
+&lt;p&gt;If saddle points are easy to avoid, then the question remains as to what exactly makes nonconvex optimization difficult?  In my next post, I’ll explore why this question is so challenging, describing some apparently innocuous problems in optimization that are deviously difficult.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 24 Mar 2016 02:00:00 -0700</pubDate>
+        <link>http://localhost:4000/2016/03/24/saddles-again/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/03/24/saddles-again/</guid>
+      </item>
+     
+    
+     
+      <item>
+        <title>Escaping from Saddle Points</title>
+        <description>&lt;p&gt;Convex functions are simple — they usually have only one local minimum. Non-convex functions can be much more complicated. In this post we will discuss various types of &lt;em&gt;critical points&lt;/em&gt; that you might encounter when you go &lt;em&gt;off the convex path&lt;/em&gt;. In particular, we will see in many cases simple heuristics based on gradient descent can lead you to a &lt;em&gt;local minimum&lt;/em&gt; in polynomial time.&lt;/p&gt;
+
+&lt;h2 id=&quot;various-types-of-critical-points&quot;&gt;Various Types of Critical Points&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/saddle/minmaxsaddle.png&quot; alt=&quot;Local Minimum, Local Maximum and Saddle Point&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To minimize the function $f:\mathbb{R}^n\to \mathbb{R}$, the most popular approach is to follow the opposite direction of the gradient $\nabla f(x)$ (for simplicity, all functions we talk about are infinitely differentiable), that is,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;y = x - \eta \nabla f(x),&lt;/script&gt;
+
+&lt;p&gt;Here $\eta$ is a small step size. This is the &lt;em&gt;gradient descent&lt;/em&gt; algorithm.&lt;/p&gt;
+
+&lt;p&gt;Whenever the gradient $\nabla f(x)$ is nonzero, as long as we choose a small enough $\eta$, the algorithm is guaranteed to make &lt;em&gt;local&lt;/em&gt; progress. When the gradient $\nabla f(x)$ is equal to $\vec{0}$, the point is called a &lt;strong&gt;critical point&lt;/strong&gt;, and gradient descent algorithm will get stuck. For (strongly) convex functions, there is a unique &lt;em&gt;critical point&lt;/em&gt; that is also the &lt;em&gt;global minimum&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;However, for non-convex functions, just having the gradient to be $\vec{0}$ is not good enough. A simple example is the function&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;y = x_1^2 - x_2^2.&lt;/script&gt;
+
+&lt;p&gt;At $x = (0,0)$, the gradient is $\vec{0}$, but it is clearly not a local minimum as $x = (0, \epsilon)$ has smaller function value. The point $(0,0)$ is called a &lt;em&gt;saddle point&lt;/em&gt; of this function.&lt;/p&gt;
+
+&lt;p&gt;To distinguish these cases we need to consider the second order derivative $\nabla^2 f(x)$ — an $n\times n$ matrix (usually known as the &lt;em&gt;Hessian&lt;/em&gt;) whose $i,j$-th entry is equal to $\frac{\partial^2}{\partial x_i \partial x_j} f(x)$. When the Hessian is positive definite (which means $u^\top\nabla^2 f(x) u &amp;gt; 0$ for any $u\ne 0$), by second order Taylor’s expansion for any direction $u$
+&lt;script type=&quot;math/tex&quot;&gt;f(x + \eta u) \approx f(x) + \frac{\eta^2}{2} u^\top\nabla^2 f(x) u &gt; f(x),&lt;/script&gt;
+therefore $x$ must be a local minimum. Similarly, when the Hessian is negative definite, the point is a local maximum; when the Hessian has both positive and negative eigenvalues, the point is a &lt;em&gt;saddle point&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;It is believed that for many problems including &lt;a href=&quot;http://arxiv.org/abs/1412.0233&quot;&gt;learning deep nets&lt;/a&gt;, almost all local minimum have very similar function value to the global optimum, and hence  finding a local minimum is good enough. However, it is NP-hard to even find a local minimum (see Discussions in &lt;a href=&quot;http://arxiv.org/abs/1602.05908&quot;&gt;Anandkumar, Ge 2006&lt;/a&gt;). Many popular optimization techniques in practice are &lt;em&gt;first order&lt;/em&gt; optimization algorithms: they only look at the gradient information, and never explicitly compute the Hessian. Such algorithms may get &lt;em&gt;stuck&lt;/em&gt; at saddle points.&lt;/p&gt;
+
+&lt;p&gt;In the rest of the post, we will first see that getting stuck at saddle points is a very realistic possibility since most natural objective functions have &lt;em&gt;exponentially&lt;/em&gt; many saddle points. We will then discuss how optimization algorithms can try to escape from saddle points.&lt;/p&gt;
+
+&lt;h2 id=&quot;symmetry-and-saddle-points&quot;&gt;Symmetry and Saddle Points&lt;/h2&gt;
+
+&lt;p&gt;Many learning problems can be abstracted as searching for $k$ distinct &lt;em&gt;components&lt;/em&gt; (sometimes called &lt;em&gt;features&lt;/em&gt;, &lt;em&gt;centers&lt;/em&gt;,…). For example, in the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cluster_analysis&quot;&gt;clustering&lt;/a&gt; problem, there are $n$ points, and we are searching for $k$ components that minimizes the sum of distances of points to their nearest center. In a two-layer &lt;a href=&quot;https://en.wikipedia.org/wiki/Artificial_neural_network&quot;&gt;neural network&lt;/a&gt;, we try to find a network with $k$ distinct  &lt;em&gt;neurons&lt;/em&gt; at the middle layer. In my &lt;a href=&quot;http://www.offconvex.org/2015/12/17/tensor-decompositions/&quot;&gt;previous post&lt;/a&gt; I talked about &lt;em&gt;tensor decomposition&lt;/em&gt;, which also looks for $k$ distinct &lt;em&gt;rank-1 components&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;A popular way to solve these problems is to design an objective function: let $x_1, x_2, \ldots, x_k \in \mathbb{R}^n$ denote the desired centers and let objective function $f(x_1,…,x_k)$ measure the quality of the solution. The function is minimized when the vectors $x_1,x_2,…,x_k$ are the $k$ components that we are looking for.&lt;/p&gt;
+
+&lt;p&gt;A natural reason why any such problem is inherently non-convex is &lt;em&gt;permutation symmetry&lt;/em&gt;. For instance, if we swap the order of first and second component, the solutions are equivalent. Namely, 
+&lt;script type=&quot;math/tex&quot;&gt;f(x_1,x_2,...,x_k) = f(x_2, x_1,...,x_k).&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;However, if we take the average of this solution, we will end up with the solution $\frac{x_1+x_2}{2}, \frac{x_1+x_2}{2}, x_3,…,x_k$, which is &lt;em&gt;not equivalent&lt;/em&gt;! If the original solution is optimal this average is likely to be suboptimal. Therefore the objective function cannot be convex because for convex functions, average of optimal solutions is still optimal.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/saddle/equivalent.png&quot; alt=&quot;Symmetry&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are &lt;em&gt;exponentially&lt;/em&gt; many globally optimal solutions that are all permutations of the same solution. Saddle points arise naturally on the paths that connect these &lt;em&gt;isolated&lt;/em&gt; local minima. The figure below shows the function $y = x_1^4-2x_1^2 + x_2^2$: between two symmetric local min $(-1,0)$ and $(1,0)$, the point $(0,0)$ is a saddle point.&lt;/p&gt;
+
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;/assets/saddle/symmetrysmall.png&quot; alt=&quot;Symmetry and Saddle Points&quot; /&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&quot;escaping-from-saddle-points&quot;&gt;Escaping from Saddle Points&lt;/h2&gt;
+
+&lt;p&gt;In order to optimize these non-convex functions with many saddle points, optimization algorithms need to make progress even at (or near) saddle points. The simplest way to do this is by using the second order Taylor’s expansion:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+f(y) \approx f(x) + \left&lt;\nabla f(x), y-x\right&gt;+\frac{1}{2} (y-x)^\top \nabla^2 f(x) (y-x). %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;If the gradient $\nabla f(x)$ is $\vec{0}$, we can still hope to find a vector $u$ where $u^\top \nabla^2 f(x) u &amp;lt; 0$. This way if we let $y = x+\eta u$, the function value of $f(y)$ is likely to be smaller. Many optimization algorithms such as &lt;a href=&quot;http://link.springer.com/article/10.1007%2Fs10107-015-0893-2&quot;&gt;trust region algorithms&lt;/a&gt; and &lt;a href=&quot;http://link.springer.com/article/10.1007%2Fs10107-006-0706-8&quot;&gt;cubic regularization&lt;/a&gt; use this idea, and they can escape from saddle points in polynomial time for nice functions.&lt;/p&gt;
+
+&lt;h3 id=&quot;strict-saddle-functions&quot;&gt;Strict Saddle Functions&lt;/h3&gt;
+
+&lt;p&gt;As we discussed, in general it is NP-hard to find a local minimum and many algorithms may get stuck at a saddle point. How many steps do we need to escape from a saddle point? This is related to how &lt;em&gt;well-behaved&lt;/em&gt; the saddle points are. Intuitively, a saddle point $x$ is well-behaved, if there is a direction $u$ such that the second order term $u^\top \nabla^2 f(x) u$ is significantly smaller than 0 — geometrically this means there is a steep direction where the function value decreases. To quantify this, &lt;a href=&quot;http://arxiv.org/abs/1503.02101&quot;&gt;my paper with Furong Huang, Chi Jin and Yang Yuan&lt;/a&gt; introduced the notion of &lt;em&gt;strict saddle&lt;/em&gt; functions (also known as “ridable” function in &lt;a href=&quot;http://arxiv.org/abs/1510.06096&quot;&gt;Sun et al. 2015&lt;/a&gt;)&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A function $f(x)$ is &lt;em&gt;strict saddle&lt;/em&gt; if all points $x$ satisfy at least one of the following&lt;br /&gt;&lt;/p&gt;
   &lt;ol&gt;
-    &lt;li&gt;Pick two random vectors $\vec u, \vec v$.&lt;/li&gt;
-    &lt;li&gt;Compute $T_\vec u = \sum_{i=1}^n u_i T[:,:,i] = \sum_{i=1}^r \lambda_i (\vec u^\top \vec z_i) \vec x_i \vec y_i^\top$.&lt;/li&gt;
-    &lt;li&gt;Compute $T_\vec v = \sum_{i=1}^n v_i T[:,:,i] = \sum_{i=1}^r \lambda_i (\vec v^\top \vec z_i) \vec x_i \vec y_i^\top$.&lt;/li&gt;
-    &lt;li&gt;$\vec x_i$’s are eigenvectors of $T_\vec u (T_\vec v)^{+}$, $\vec y_i$’s are eigenvectors of $T_\vec v (T_\vec u)^{+}$.&lt;/li&gt;
+    &lt;li&gt;Gradient $\nabla f(x)$ is large. &lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;Hessian $\nabla^2 f(x)$ has a negative eigenvalue that is bounded away from 0.&lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;Point $x$ is near a local minimum.&lt;/li&gt;
   &lt;/ol&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;In the algorithm, “$^+$” denotes &lt;em&gt;pseudo-inverse&lt;/em&gt; of a matrix (think of it as inverse if this is not familiar).&lt;/p&gt;
+&lt;p&gt;Essentially, the local region of every point $x$ looks like one of the following pictures:&lt;/p&gt;
 
-&lt;p&gt;The algorithm looks at weighted &lt;em&gt;slices&lt;/em&gt; of the tensor: a weighted slice is a matrix that is the projection of the tensor along the $z$ direction (similarly if we take a &lt;em&gt;slice&lt;/em&gt; of a matrix $M$, it will be a vector that is equal to $M\vec u$). Because of the low rank structure, all the slices must share matrix decompositions with the &lt;strong&gt;same&lt;/strong&gt; components.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/saddle/strictsaddle.png&quot; alt=&quot;Symmetry&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;The main observation of the algorithm is that although a &lt;em&gt;single&lt;/em&gt; matrix can have infinitely many low rank decompositions, &lt;em&gt;two&lt;/em&gt; matrices can only have a &lt;strong&gt;unique&lt;/strong&gt; decomposition if we require them to have the same components. In fact, it is highly unlikely for two &lt;em&gt;arbitrary&lt;/em&gt; matrices to share decompositions with the same components. In the tensor case, because of the low rank structure we have&lt;/p&gt;
+&lt;p&gt;For such functions, &lt;a href=&quot;http://link.springer.com/article/10.1007%2Fs10107-015-0893-2&quot;&gt;trust region algorithms&lt;/a&gt; and &lt;a href=&quot;http://link.springer.com/article/10.1007%2Fs10107-006-0706-8&quot;&gt;cubic regularization&lt;/a&gt; can find a local minimum efficiently.&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;T_\vec u = XD_\vec u Y^\top; \quad T_\vec v = XD_\vec v Y^\top,&lt;/script&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Theorem(Informal)&lt;/strong&gt; There are polynomial time algorithms that can find a local minimum of strict saddle functions.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;where $D_\vec u,D_\vec v$ are diagonal matrices. This is called a &lt;em&gt;simultaneous diagonalization&lt;/em&gt; for $T_\vec u$ and $T_\vec v$. With this structure it is easy to show that $\vec x_i$’s are eigenvectors of $T_\vec u (T_\vec v)^{+} = X D_\vec u D_\vec v^{-1} X^+$. So we can actually compute &lt;em&gt;tensor decompositions&lt;/em&gt; using &lt;em&gt;spectral decompositions&lt;/em&gt; for matrices.&lt;/p&gt;
+&lt;p&gt;What functions are strict saddle? &lt;a href=&quot;http://arxiv.org/abs/1503.02101&quot;&gt;Ge et al. 2015&lt;/a&gt; showed a &lt;a href=&quot;http://www.offconvex.org/2015/12/17/tensor-decompositions/&quot;&gt;tensor decomposition&lt;/a&gt; problem is strict saddle. &lt;a href=&quot;http://arxiv.org/abs/1510.06096&quot;&gt;Sun et al. 2015&lt;/a&gt; observed that problems like complete &lt;a href=&quot;https://en.wikipedia.org/wiki/Machine_learning#Sparse_dictionary_learning&quot;&gt;dictionary learning&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Phase_retrieval&quot;&gt;phase retrieval&lt;/a&gt; are also strict saddle.&lt;/p&gt;
 
-&lt;p&gt;Many of the earlier works (including &lt;a href=&quot;https://projecteuclid.org/euclid.aoap/1151592244&quot;&gt;Mossel and Roch 2006&lt;/a&gt;) that apply tensor decompositions to learning problems have actually independently &lt;em&gt;rediscovered&lt;/em&gt; this algorithm, and the word “tensor” never appeared in the papers. In fact,  tensor decomposition techniques are traditionally called “spectral learning” since they are seen as derived from SVD.  But now we have other methods to do tensor decompositions that have better theoretical guarantees and practical performances. See the survey by &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=1655230&quot;&gt;Kolda and Bader 2009&lt;/a&gt; for more discussions.&lt;/p&gt;
+&lt;h3 id=&quot;first-order-method-to-escape-from-saddle-points&quot;&gt;First Order Method to Escape from Saddle Points&lt;/h3&gt;
 
-&lt;h3 id=&quot;related-links&quot;&gt;Related Links&lt;/h3&gt;
+&lt;p&gt;Trust region algorithms are very powerful. However they need to compute the second order derivative of the objective function, which is often too expensive in practice. If the algorithm can only access the gradient of the function, is it still possible to escape from saddle points?&lt;/p&gt;
 
-&lt;p&gt;For more examples of using &lt;em&gt;tensor decompositions&lt;/em&gt; to learn latent variable models, see the paper by &lt;a href=&quot;http://arxiv.org/abs/1210.7559&quot;&gt;Anandkumar et al. 2012&lt;/a&gt;. This paper shows that several prior algorithms for learning models such as Hidden Markov Model, Latent Dirichlet Allocation, Mixture of Gaussians and Independent Component Analysis can be interpreted as doing tensor decompositions. The paper also gives a proof that &lt;em&gt;tensor power method&lt;/em&gt; is efficient and robust to noise.&lt;/p&gt;
+&lt;p&gt;This might seem hard as the gradient at a saddle point is $\vec{0}$ and does not give us any information. However, the key observation here is saddle points are very &lt;em&gt;unstable&lt;/em&gt;: if we put a ball on a saddle point, then slightly perturb it, the ball is likely to fall! Of course we need to make this intuition formal in higher dimensions, as naively to find the direction to fall it seems to require computing the smallest eigenvector of the Hessian matrix.&lt;/p&gt;
 
-&lt;p&gt;Recent research focuses on two problems: how to formulate other learning problems as tensor decompositions, and how to compute tensor decompositions under weaker assumptions. Using tensor decompositions, we can learn more models that include &lt;a href=&quot;http://arxiv.org/abs/1302.2684&quot;&gt;community models&lt;/a&gt;, &lt;a href=&quot;http://www.cs.columbia.edu/~mcollins/papers/uai2014-long.pdf&quot;&gt;probabilistic Context-Free-Grammars&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1503.00424&quot;&gt;mixture of general Gaussians&lt;/a&gt; and &lt;a href=&quot;http://newport.eecs.uci.edu/anandkumar/pubs/NN_GeneralizationBound.pdf&quot;&gt;two-layer neural networks&lt;/a&gt;. We can also efficiently compute tensor decompositions when the &lt;em&gt;rank&lt;/em&gt; of the tensor is much larger than the dimension (see for example the papers by &lt;a href=&quot;http://arxiv.org/abs/1311.3651&quot;&gt;Bhaskara et al. 2014&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1306.5825&quot;&gt;Goyal et al. 2014&lt;/a&gt;, &lt;a href=&quot;http://arxiv.org/abs/1504.05287&quot;&gt;Ge and Ma 2015&lt;/a&gt;). There are many other interesting works and open problems, and the list here is by no means complete.&lt;/p&gt;
+&lt;p&gt;To formalize this intuition we will try use a &lt;em&gt;noisy gradient descent&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;$y = x - \eta \nabla f(x) + \epsilon.$&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Here $\epsilon$ is a noise vector that has mean $0$. This additional noise is going to deliver the initial &lt;em&gt;nudge&lt;/em&gt; that makes the ball fall along the slope.&lt;/p&gt;
+
+&lt;p&gt;In fact, often it is much cheaper to compute a noisy gradient than the true gradient — this is the key idea in &lt;a href=&quot;https://en.wikipedia.org/wiki/Stochastic_gradient_descent&quot;&gt;stochastic gradient&lt;/a&gt; , and a large body of work shows that the noise does not interfere with convergence for convex optimization. For non-convex optimization, intuitively people believed the inherent noise &lt;em&gt;helps&lt;/em&gt; in convergence because it pushes the current point away from &lt;em&gt;saddle points&lt;/em&gt;. It’s not a bug, it’s a feature!&lt;/p&gt;
+
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;/assets/saddle/escapesmall.png&quot; alt=&quot;Escaping from saddle points&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Previously, there were no good upper bound known  on the number of iterations  needed to escape saddle points and arrive at a local minimum. In &lt;a href=&quot;http://arxiv.org/abs/1503.02101&quot;&gt;Ge et al. 2015&lt;/a&gt;, we show&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Theorem(Informal)&lt;/strong&gt; Noisy gradient descent can find a local minimum of strict saddle functions in polynomial time.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The polynomial dependency on the dimension $n$ and the smallest eigenvalue of the Hessian are fairly high and not very practical. It is an open problem to find the optimal convergence rate for strict saddle problems.&lt;/p&gt;
+
+&lt;p&gt;A recent subsequent paper by &lt;a href=&quot;http://arxiv.org/abs/1602.04915&quot;&gt;Lee et al.&lt;/a&gt; showed even without adding noise, gradient descent will not converge to any strict saddle point if the initial point is chosen randomly. However their result relies on the &lt;a href=&quot;https://en.wikipedia.org/wiki/Stable_manifold_theorem&quot;&gt;Stable Manifold Theorem&lt;/a&gt; from dynamical systems theory, which inherently does not provide any upperbound on the number of steps.&lt;/p&gt;
+
+&lt;h2 id=&quot;beyond-simple-saddle-points&quot;&gt;Beyond Simple Saddle Points&lt;/h2&gt;
+
+&lt;p&gt;We have seen algorithms that can handle (simple) saddle points. However, non-convex problems can have much more complicated landscapes that involve &lt;em&gt;degenerate&lt;/em&gt; saddle points — points whose Hessian is positive semidefinite and have 0 eigenvalues. Such degenerate structure often indicates a complicated saddle point (such as a &lt;a href=&quot;https://en.wikipedia.org/wiki/Monkey_saddle&quot;&gt;monkey saddle&lt;/a&gt;, Figure (a)) or a set of connected saddle points (Figures (b)(c)). In &lt;a href=&quot;http://arxiv.org/abs/1602.05908&quot;&gt;Anandkumar, Ge 2016&lt;/a&gt; we gave an algorithm that can deal with some of these &lt;em&gt;degenerate&lt;/em&gt; saddle points.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/saddle/highorder.png&quot; alt=&quot;Higher order saddle points&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The landscapes of non-convex functions can be very complicated, and there are still many open problems. What other functions are &lt;em&gt;strict saddle&lt;/em&gt;? How do we make optimization algorithms that work even when there are degenerate saddle points or even &lt;em&gt;spurious&lt;/em&gt; local minima? We hope more researchers will be interested in these problems!&lt;/p&gt;
 </description>
-        <pubDate>Thu, 17 Dec 2015 07:00:00 -0800</pubDate>
-        <link>http://offconvex.github.io/2015/12/17/tensor-decompositions/</link>
-        <guid isPermaLink="true">http://offconvex.github.io/2015/12/17/tensor-decompositions/</guid>
+        <pubDate>Tue, 22 Mar 2016 02:00:00 -0700</pubDate>
+        <link>http://localhost:4000/2016/03/22/saddlepoints/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/03/22/saddlepoints/</guid>
       </item>
      
     
      
       <item>
-        <title>Semantic Word Embeddings</title>
-        <description>&lt;p&gt;This post can be seen as an introduction to how nonconvex problems arise
-naturally in practice, and also the relative ease with which they are often
-solved.&lt;/p&gt;
+        <title>Stability as a foundation of machine learning</title>
+        <description>&lt;p&gt;Central to machine learning is our ability to relate how a learning algorithm fares on a sample to its performance on unseen instances. This is called &lt;em&gt;generalization&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;I will talk about &lt;em&gt;word embeddings&lt;/em&gt;, a geometric way to capture
-the “meaning” of a word via a low-dimensional vector. They are useful in
-many tasks in Information Retrieval (IR) and Natural Language Processing
-(NLP), such as answering search queries or translating from one
-language to another.&lt;/p&gt;
+&lt;p&gt;In this post, I will describe a purely algorithmic approach to generalization. The property that makes this possible is &lt;em&gt;stability&lt;/em&gt;. An algorithm is &lt;em&gt;stable&lt;/em&gt;, intuitively speaking, if its output doesn’t change much if we perturb the input sample in a single point. We will see that this property by itself is necessary and sufficient for generalization.&lt;/p&gt;
 
-&lt;p&gt;You may wonder: how can a 300-dimensional vector capture the many
-nuances of word meaning? And what the heck does it mean to “capture meaning?”&lt;/p&gt;
+&lt;h2 id=&quot;example-stability-of-the-perceptron-algorithm&quot;&gt;Example: Stability of the Perceptron algorithm&lt;/h2&gt;
 
-&lt;h2 id=&quot;properties-of-word-embeddings&quot;&gt;Properties of Word Embeddings&lt;/h2&gt;
-&lt;p&gt;A simple property of embeddings obtained by all the methods I’ll
-describe is &lt;em&gt;cosine similarity&lt;/em&gt;: the  &lt;em&gt;similarity&lt;/em&gt; between two words 
-(as rated by humans on a $[-1,1]$ scale) correlates with the &lt;em&gt;cosine&lt;/em&gt;
-of the angle between their vectors. To 
-give an example, the cosine for &lt;em&gt;milk&lt;/em&gt; and
-&lt;em&gt;cow&lt;/em&gt; may be $0.6$, whereas for &lt;em&gt;milk&lt;/em&gt; and
-&lt;em&gt;stone&lt;/em&gt; it may be $0.2$, which is roughly the similarity
-human subjects assign to them.&lt;/p&gt;
+&lt;p&gt;Before we jump into the formal details, let’s consider a simple example of a stable algorithm: The &lt;a href=&quot;https://en.wikipedia.org/wiki/Perceptron&quot;&gt;Perceptron&lt;/a&gt;, aka stochastic gradient descent for learning linear separators! The algorithm aims to separate two classes of points (here circles and triangles) with a linear separator. The algorithm starts with an arbitrary hyperplane. It then repeatedly selects a single example from its input set and updates its hyperplane using the gradient of a certain loss function on the chosen example. How bad might the algorithm screw up if we move around a single example? Let’s find out.&lt;/p&gt;
 
-&lt;p&gt;A more interesting property of recent embeddings is that they can solve
-&lt;em&gt;analogy&lt;/em&gt; relationships via linear algebra.
-For example, the word analogy question
+&lt;p&gt;&lt;!-- begin animation --&gt;&lt;/p&gt;
+&lt;div style=&quot;text-align:center;&quot;&gt;
+   &lt;img id=&quot;imganim&quot; src=&quot;/assets/sgd/00.png&quot; onclick=&quot;forward_image()&quot; /&gt;
+   &lt;p style=&quot;text-align:center;&quot;&gt;&lt;em&gt;Step &lt;span style=&quot;font-family:monospace;&quot;&gt;&lt;span id=&quot;counter&quot;&gt;1&lt;/span&gt;/30&lt;/span&gt;. Click to advance.&lt;br /&gt; The animation shows two runs of the Perceptron algorithm for learning a linear separator on two data sets that differ in the one point marked green in one data set and purple in the other. The perturbation is indicated by an arrow. The shaded green region shows the difference in the resulting two hyperplanes after some number of steps. &lt;/em&gt;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;//&lt;![CDATA[
+  var images = [
+  &quot;/assets/sgd/00.png&quot;,
+  &quot;/assets/sgd/01.png&quot;,
+  &quot;/assets/sgd/02.png&quot;,
+  &quot;/assets/sgd/03.png&quot;,
+  &quot;/assets/sgd/04.png&quot;,
+  &quot;/assets/sgd/05.png&quot;,
+  &quot;/assets/sgd/06.png&quot;,
+  &quot;/assets/sgd/07.png&quot;,
+  &quot;/assets/sgd/08.png&quot;,
+  &quot;/assets/sgd/09.png&quot;,
+  &quot;/assets/sgd/10.png&quot;,
+  &quot;/assets/sgd/11.png&quot;,
+  &quot;/assets/sgd/12.png&quot;,
+  &quot;/assets/sgd/13.png&quot;,
+  &quot;/assets/sgd/14.png&quot;,
+  &quot;/assets/sgd/15.png&quot;,
+  &quot;/assets/sgd/16.png&quot;,
+  &quot;/assets/sgd/17.png&quot;,
+  &quot;/assets/sgd/18.png&quot;,
+  &quot;/assets/sgd/19.png&quot;,
+  &quot;/assets/sgd/20.png&quot;, 
+  &quot;/assets/sgd/21.png&quot;,
+  &quot;/assets/sgd/22.png&quot;,
+  &quot;/assets/sgd/23.png&quot;,
+  &quot;/assets/sgd/24.png&quot;,
+  &quot;/assets/sgd/25.png&quot;,
+  &quot;/assets/sgd/26.png&quot;,
+  &quot;/assets/sgd/27.png&quot;,
+  &quot;/assets/sgd/28.png&quot;,
+  &quot;/assets/sgd/29.png&quot; ]
+  var i = 0
+  function forward_image(){
+   i = i + 1;
+   document.getElementById('imganim').src = images[i%30];
+   document.getElementById('counter').textContent = (i%30) + 1;
+  }
+  //]]&gt; 
+  &lt;/script&gt;
+
+&lt;p&gt;&lt;!-- end animation --&gt;&lt;/p&gt;
+
+&lt;p&gt;As we can see by clicking impatiently through the example, the algorithm seems pretty stable. Even if we substantially move the first example it encounters, the hyperplane computed by the algorithm changes only slightly. Neat. (You can check out the code &lt;a href=&quot;https://gist.github.com/mrtzh/266c37d3a274376134a6&quot;&gt;here&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;h2 id=&quot;empirical-risk-jargon&quot;&gt;Empirical risk jargon&lt;/h2&gt;
+
+&lt;p&gt;Let’s introduce some terminology to relate the behavior of an algorithm on a sample to its behavior on unseen instances. Imagine we have a sample $S=(z_1,\dots,z_n)$ drawn i.i.d. from some unknown distribution $D$. There’s a learning algorithm $A(S)$ that takes $S$ and produces some model (e.g., the hyperplane in the above picture). To quantify the quality of the model we crank out a &lt;em&gt;loss function&lt;/em&gt; $\ell$ with the idea that $\ell(A(S), z)$ describes the &lt;em&gt;loss&lt;/em&gt; of the model $A(S)$ on one instance $z$. The &lt;em&gt;empirical risk&lt;/em&gt; or &lt;em&gt;training error&lt;/em&gt; of the algorithm is defined as:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_S = \frac1n \sum_{i=1}^n \ell(A(S), z_i)&lt;/script&gt;
+
+&lt;p&gt;This captures the average loss of the algorithm on the sample on which it was trained. To quantify &lt;em&gt;out-of-sample&lt;/em&gt; performance, we define the &lt;em&gt;risk&lt;/em&gt; of the algorithm as:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R = \mathop{\mathbb{E}}_{z\sim D}\left[ \ell(A(S), z) \right]&lt;/script&gt;
+
+&lt;p&gt;The difference between risk and empirical risk $R - R_S$ is called &lt;em&gt;generalization error&lt;/em&gt;. You will sometimes encounter that term as a synonym for risk, but I find that confusing. We already have a perfectly short and good name for the risk $R$. Always keep in mind the following tautology&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R = R_S + (R-R_S).&lt;/script&gt;
+
+&lt;p&gt;Operationally, it states that if we manage to minimize empirical risk all that matters is generalization error.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-fundamental-theorem-of-machine-learning&quot;&gt;A fundamental theorem of machine learning&lt;/h2&gt;
+
+&lt;p&gt;I probably shouldn’t propose fundamental theorems for anything really. But if I had to, this would be the one I’d suggest for machine learning:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In expectation, generalization equals stability.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Somewhat more formally, we will encounter a natural measure of stability, denoted $\Delta$ such that the difference between risk and empirical risk in expectation equals $\Delta.$ Formally,&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;$\mathbb{E}[R - R_S] = \Delta$&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Deferring the exact definition of $\Delta$ to the proof, let’s think about this for a second.
+What I find so remarkable about this theorem is that it turns a statistical problem into a purely algorithmic one: All we need for generalization is an algorithmic notion of robustness. Our algorithm’s output shouldn’t change much if perturb one of the data points. It’s almost like a sanity check. Had you coded up an algorithm and this wasn’t the case, you’d probably go look for a bug.&lt;/p&gt;
+
+&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
+
+&lt;p&gt;Consider two data sets of size $n$ drawn independently of each other:
+[
+S = (z_1,\dots,z_n), \qquad S’=(z_1’,\dots,z_n’)
+]
+The idea of taking such a &lt;em&gt;ghost sample&lt;/em&gt; $S’$ is quite old and already arises in the context of &lt;em&gt;symmetrization&lt;/em&gt; in empirical process theory.
+We’re going to couple these two samples in one point by defining
+[
+S^i = (z_1,\dots,z_{i-1},z_i’,z_{i+1},\dots,z_n),\qquad i = 1,\dots, n.
+]
+It’s certainly no coincidence that $S$ and $S^i$ differ in exactly one element. We’re going to use this in just a moment.&lt;/p&gt;
+
+&lt;p&gt;By definition, the &lt;em&gt;expected empirical risk&lt;/em&gt; equals&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E}[R_S] = \mathbb{E}\left[ \frac1n \sum_{i=1}^n \ell(A(S), z_i) \right].&lt;/script&gt;
+
+&lt;p&gt;Contrasting this to how the algorithm fares on unseen examples, we can rewrite the &lt;em&gt;expected risk&lt;/em&gt; using our ghost sample as:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E}[R] = \mathbb{E}\left[ \frac1n \sum_{i=1}^n \ell(A(S), \color{red}{z_i'}) \right]&lt;/script&gt;
+
+&lt;p&gt;All expectations we encounter are over both $S$ and $S’$. By linearity of expectation, the difference between expected risk and expected empirical risk equals&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E}[R - R_S] 
+= \frac1n \sum_{i=1}^n 
+\mathbb{E}\left[\ell(A(S), \color{red}{z_i'})-\ell(A(S), z_i)\right].&lt;/script&gt;
+
+&lt;p&gt;It is tempting now to relate the two terms inside the expectation to the stability of the algorithm. We’re going to do exactly that using mathematics’ most trusted proof strategy: &lt;em&gt;pattern matching&lt;/em&gt;. Indeed, since $z_i$ and $z_i’$ are exchangeable, we have&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E}[\ell(A(S), z_i)] 
+= \mathbb{E}[\ell(A(S^i), z_i')]
+= \mathbb{E}[\ell(A(S), z_i')] - \delta_i,&lt;/script&gt;
+
+&lt;p&gt;where $\delta_i$ is defined to make the second equality true:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\delta_i = \mathbb{E}[\ell(A(\color{red}S), z_i')- \ell(A(\color{red}{S^i}), z_i')]&lt;/script&gt;
+
+&lt;p&gt;Summing up $\Delta = (1/n)\sum_i \delta_i$, we have&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathbb{E}[ R - R_S ] = \Delta.&lt;/script&gt;
+
+&lt;p&gt;The only thing left to do is to interpret the right hand side in terms of stability. Convince yourself that $\delta_i$ measures how differently the algorithm behaves on two data sets $S$ and $S’$ that differ in only one element.&lt;/p&gt;
+
+&lt;h3 id=&quot;uniform-stability&quot;&gt;Uniform stability&lt;/h3&gt;
+
+&lt;p&gt;It can be difficult to analyze the expectation in the definition of $\Delta$ precisely. Fortunately, it is often enough to resolve the expectation by upper bounding it with suprema:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;|\Delta| \le \sup_{S,S'} \sup_{z} \left|\ell(A(S),z)-\ell(A(S'),z)\right|.&lt;/script&gt;
+
+&lt;p&gt;The supremum runs over all valid data sets differing in only one element and all valid sample points $z$. This stronger notion of stability called &lt;em&gt;uniform stability&lt;/em&gt; 
+goes back to a seminal paper by Bousquett and Elisseeff.&lt;/p&gt;
+
+&lt;p&gt;I should say that you can find the above proof in the essssential stability paper by Shalev-Shwartz, Shamir, Srebro and Sridharan &lt;a href=&quot;http://jmlr.csail.mit.edu/papers/volume11/shalev-shwartz10a/shalev-shwartz10a.pdf&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;concentration-from-stability&quot;&gt;Concentration from stability&lt;/h3&gt;
+
+&lt;p&gt;The theorem we saw shows that &lt;em&gt;expected&lt;/em&gt; empirical risk equals risk up to a correction that involves the stability of the algorithm. Can we also show that empirical risk is close to its expectation with high probability? Interestingly, we can by appealing to stability once again. I won’t spell out the details, but we can use the &lt;a href=&quot;https://en.wikipedia.org/wiki/Doob_martingale#McDiarmid.27s_inequality&quot;&gt;method of bounded differences&lt;/a&gt; to obtain strong concentration bounds. To apply the method we need a &lt;em&gt;bounded difference&lt;/em&gt; condition which is just another word for &lt;em&gt;stability&lt;/em&gt;. So, we’re really killing two birds with one stone by using stability not only to show that the first moment of the empirical risk is correct but also that it concentrates. The only wrinkle is that, as far as I know, the weak stability notion expressed by $\Delta$ is not enough to get concentration, but uniform stability (for sufficiently small difference) will do.&lt;/p&gt;
+
+&lt;h2 id=&quot;applications-of-stability&quot;&gt;Applications of stability&lt;/h2&gt;
+
+&lt;p&gt;There is much more that stability can do for us. We’ve only scratched on the surface. Here are some of the many applications of stability.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.jmlr.org/papers/volume2/bousquet02a/bousquet02a.pdf&quot;&gt;Regularization implies stability&lt;/a&gt;. Specifically, the minimizer of the empirical risk subject to an $\ell_2$-penalty is uniformly stable.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://arxiv.org/abs/1509.01240&quot;&gt;Stochastic gradient descent is stable&lt;/a&gt; provided that we don’t make too many steps.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Differential privacy is nothing but a strong stability guarantee. Any result ever proved about differential privacy is fundamentally about stability.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Differential privacy in turn has applications to preventing overfitting in &lt;a href=&quot;http://blog.mrtz.org/2015/12/14/adaptive-data-analysis.html&quot;&gt;adaptive data analysis&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Stability also has many beautiful applications and connections in statistics. I strongly encourage you to read Bin Yu’s beautiful &lt;a href=&quot;https://www.stat.berkeley.edu/~binyu/ps/papers2013/Yu13.pdf&quot;&gt;overview paper&lt;/a&gt; on the topic.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Looking ahead, I’ve got at least two more posts planned on this.&lt;/p&gt;
+
+&lt;p&gt;In my next post I will go into the stability of stochastic gradient descent in detail. We will see a simple argument to show that stochastic gradient descent is uniformly stable. I will then work towards applying these ideas to the area of deep learning. We will see that stability can help us explain why even huge models sometimes generalize well and how we can make them generalize even better.&lt;/p&gt;
+
+&lt;p&gt;In a second post I will reflect on stability as a paradigm for reliable machine learning. The focus will be on how ideas from stability can help avoid overfitting and false discovery.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 14 Mar 2016 01:00:00 -0700</pubDate>
+        <link>http://localhost:4000/2016/03/14/stability/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/03/14/stability/</guid>
+      </item>
+     
+    
+     
+      <item>
+        <title>Evolution, Dynamical Systems and Markov Chains</title>
+        <description>&lt;p&gt;In this post we present a high level introduction to evolution and to how we can use mathematical tools such as dynamical systems and Markov chains to model it. 
+Questions about evolution then translate to questions about dynamical systems and Markov chains – some are easy to answer while others point to gaping holes in current techniques in algorithms and optimization. 
+In particular, in this post, we present a setting which captures the evolution of viruses and formulate the question &lt;em&gt;How quickly could evolution happen?&lt;/em&gt; This question is not only relevant for the feasibility of drug-design strategies to counter viruses, it also leads to  non-trivial questions in computer science.&lt;/p&gt;
+
+&lt;h2 id=&quot;just-4-billion-years&quot;&gt;Just 4 Billion Years…&lt;/h2&gt;
+&lt;p&gt;Starting with the pioneering work of Darwin and Wallace, over the last two centuries there has been tremendous scientific and mathematical advances in our understanding of evolution and how it has shaped diverse and complex life – &lt;em&gt;in a matter of just four billion years&lt;/em&gt;.
+However, unlike physics where the laws seem to be consistent across the universe, evolution is quite complex and its governing dynamics can depend on the  context – if we look closely enough, the evolution of life forms such as viruses is quite different from that of humans.
+Thus, the theory of evolution is not a succinct one, there is vagueness for those who seek mathematical clarity, and, for sure, you should not expect one post to explain all of its various aspects! 
+Instead, we will introduce the basic apparatus of evolution, focus on a concrete setting which has been used to model the evolution of viruses, and ask questions concerning the efficiency of such an evolution.&lt;/p&gt;
+
+&lt;h2 id=&quot;evolution-in-a-nutshell&quot;&gt;Evolution in a Nutshell&lt;/h2&gt;
+
+&lt;p&gt;Abstractly, we can view evolution as  nothing but a  mechanism (or a &lt;em&gt;meta-algorithm&lt;/em&gt;), that takes a population (which is capable of &lt;em&gt;reproducing&lt;/em&gt;) as an input and outputs the next generation. 
+At any given time, the population is composed of individuals of different &lt;em&gt;types&lt;/em&gt;. As this is all happening in an environment in which resources are limited, who is &lt;em&gt;selected&lt;/em&gt; to be a part of the next generation and who is not is determined by the &lt;em&gt;fitness&lt;/em&gt; of a type in the environment.
+The reproduction could be &lt;em&gt;asexual&lt;/em&gt; – a simple act of cloning,  or &lt;em&gt;sexual&lt;/em&gt; – involving the combination of two (or more) individuals to produce offspring.
+Moreover, during reproduction there could be &lt;em&gt;mutations&lt;/em&gt; that transform one type into another.
+Each of the reproduction, selection or mutation steps could be deterministic or stochastic making evolution either a deterministic or randomized function of the input population.&lt;/p&gt;
+
+&lt;p&gt;The size of the population, the number of types, the fitness of each type in the environment, the probabilities of mutation and the starting state are the parameters of the model. 
+Typically, one fixes these parameters  and studies how the population evolves over time – whether it reaches a limiting or a steady state and, if so, how this limiting state varies with the parameters of the model and how  quickly the limiting state is reached.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;After all, evolution without a notion of efficiency is an incomplete theory.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;An important and different take on this question is Leslie Valiant’s &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=1462156&quot;&gt;work&lt;/a&gt; on using computational learning theory to understand evolution quantitatively.
+Finally, as you might have guessed by now, in such generality, evolution encompasses processes which have a priori nothing to do with biology; indeed, evolutionary models have been used to understand many social, economical and cultural phenomena, as described in &lt;a href=&quot;http://www.hup.harvard.edu/catalog.php?isbn=9780674023383&quot;&gt;this&lt;/a&gt; book by Nowak.&lt;/p&gt;
+
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;/assets/evolution.jpg&quot; alt=&quot;&quot; /&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&quot;populations-infinite--dynamical-system-finite--markov-chain&quot;&gt;Populations: Infinite = Dynamical System, Finite = Markov Chain&lt;/h2&gt;
+
+&lt;p&gt;Given an evolutionary model (which could include stochastic steps), as a first step to understand it we typically assume that the population is  &lt;em&gt;infinite&lt;/em&gt; and hence all steps are effectively deterministic; we will see an example soon. 
+This allows the evolution of the fraction of each type in the population to be modeled as a deterministic &lt;em&gt;dynamical system&lt;/em&gt; from a probability simplex (denoted by $\Delta_m$)  to itself; here $m$ is the number of types.
+However, real populations are  finite and often lend themselves to substantial stochastic effects such as random &lt;a href=&quot;https://en.wikipedia.org/wiki/Genetic_drift&quot;&gt;genetic drift&lt;/a&gt;. In order to understand  their limiting behavior as a function of the population size, 
+ we can neither  assume that the population is infinite nor  ignore stochasticity in the steps in evolution. 
+ Hence, Markov chains are appealed to in order to study finite populations.
+To be concrete, we move on to describing a deterministic and stochastic model for  error-prone evolution of an asexual  population.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-deterministic-infinite-population-model&quot;&gt;A Deterministic, Infinite Population Model&lt;/h2&gt;
+
+&lt;p&gt;Consider an infinite population composed of individuals each of who could be one of $m$ types. 
+An individual of type $i$ has a fitness which is specified by a
+positive integer $a_i,$ and we use a 
+$m \times m$ diagonal matrix $A$ whose $(i,i)$th entry is $a_i$ to capture it. 
+The
+reproduction is error-prone and this is captured by an $m\times m$
+stochastic matrix $Q$ whose $(i,j)$th entry captures the probability
+that the $j$th type will mutate to the $i$th type during
+reproduction. In the reproduction stage each type $i$  in the current population produces $a_i$ copies of itself. 
+During reproduction, mutations might occur and in our deterministic model, we assume that one unit  of $j$ gives rise to $Q_{i,j}$ fraction of population of $i.$ 
+Since the total mass could become more than one due to reproduction, in the &lt;em&gt;selection&lt;/em&gt; stage we normalize the mass so that it is again of unit size.&lt;/p&gt;
+
+&lt;p&gt;Thus, the fitness of a type influences its representation in the selected population.
+Mathematically, we can then track the fraction of each type at step $t$ of the evolution by a
+vector ${x}^{(t)}\in \Delta_m$ whose evolution is then governed by the dynamical system 
+$ {x}^{(t+1)} = \frac{QA {x}^{(t)}}{\Vert QA {x}^{(t)}\Vert_1}.$
+(This is one of the dynamical systems we considered in a previous &lt;a href=&quot;http://www.offconvex.org/2015/12/21/dynamical-systems-1/&quot;&gt;post&lt;/a&gt;.) 
+Thus, the eventual fate of the evolutionary process is not a single type, rather  an &lt;em&gt;invariant distribution&lt;/em&gt; over types. 
+We saw that when $QA&amp;gt;0$,  there is a &lt;em&gt;unique&lt;/em&gt; fixed point of this dynamical system; the largest right eigenvalue of $QA.$
+Thus, no matter where one starts, this dynamical system converges to this fixed point.
+Biologically, the  corresponding eigenvalue can be shown to be the &lt;em&gt;average fitness&lt;/em&gt; of the population which is, in effect, what  is being maximized.&lt;/p&gt;
+
+&lt;p&gt;How quickly? Well, elementary linear algebra tells us that the rate of convergence of this process is governed by the ratio of the second largest to the largest eigenvalue of $QA.$ 
+Finally, we note that the dynamical system corresponding to a sexually reproducing population is not hard to describe and has been studied &lt;a href=&quot;http://www.pnas.org/content/111/29/10620.abstract&quot;&gt;recently&lt;/a&gt; from an optimization point of view.&lt;/p&gt;
+
+&lt;h2 id=&quot;a-stochastic-finite-population-model&quot;&gt;A Stochastic, Finite Population Model&lt;/h2&gt;
+
+&lt;p&gt;Consider now a stochastic, finite population version of the evolutionary dynamics described above. 
+Here, the population is again assumed to be asexual  but now it has a fixed finite size $N.$
+After normalization, the composition of the population is again captured by a  point in $\Delta_m$ say
+$ {X}^{(t)}$ at time $t.$ 
+How does one generate ${X^{(t+1)}}$
+in this model when the parameters are described by the matrices
+$Q$ and $A$ as in the infinite population setting?  In the reproduction stage, one first replaces an individual of type $i$ in
+the current population by $a_i$ individuals of type $i$: the total
+number of individuals of type $i$ in the intermediate population is
+therefore $a_iN {X_i}^{(t)}$. 
+In the mutation stage, 
+each individual in this intermediate population mutates independently and
+stochastically according to the matrix $Q.$ 
+Finally, in the selection stage, the
+population is culled back to size $N$ by sampling 
+$N$ individuals from this intermediate population.&lt;/p&gt;
+
+&lt;p&gt;Each of these steps  is depicted in Figure 2. 
+Note that stochasticity necessarily means that, even if we initialize the system in the same way,  different runs of the chain could produce very different outcomes.
+The vector
+$X^{(t+1)}$ then is the normalized frequency vector of the
+resulting population. 
+The state space  of the Markov chain described above has size ${N+m-1}\choose{m-1}.$
+When $QA&amp;gt;0,$ this Markov chain is &lt;a href=&quot;https://en.wikipedia.org/wiki/Markov_chain#Ergodicity&quot;&gt;ergodic&lt;/a&gt;
+  and, hence, has a unique steady state. 
+However, unlike the deterministic case, this steady state is not apriori easy to compute.
+Certainly, it has no closed form expression except in the most trivial cases.
+How do we compute it?&lt;/p&gt;
+
+&lt;h2 id=&quot;the-mixing-time&quot;&gt;The Mixing Time&lt;/h2&gt;
+
+&lt;p&gt;The number of states grows roughly like $N^m$ (when $m$ is small compared to $N$) and,    even for a small 
+constant $m=40$ and a population of size $10,000$, the number of
+states is more than $2^{300}$ – more than the number of atoms in the universe!
+Thus, at best, we can hope to have an  algorithm that samples from close to the steady state.
+In fact, noting that each step of the Markov chain can be implemented efficiently, evolution already provides  an algorithm.
+Its efficiency, however, depends on the time it takes to reach close to steady state – its &lt;a href=&quot;https://en.wikipedia.org/wiki/Markov_chain_mixing_time&quot;&gt;mixing time&lt;/a&gt;.
+However, in general, there is no way to proclaim that a Markov chain has reached close to its steady state other than &lt;em&gt;providing a bound (along with a proof) on the mixing time&lt;/em&gt;. 
+Proving bounds on mixing times of Markov chains is an important area in computer science which interfaces with a variety of other disciplines such as statistics, statistical physics and machine learning; see &lt;a href=&quot;https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo&quot;&gt;here&lt;/a&gt;.
+In evolution, however, the mixing time is important beyond computing statistics of samples from the steady state: it  tells us how quickly a steady state could be reached. 
+This has biological significance as we will momentarily see in applications of this model to viral evolution.&lt;/p&gt;
+
+&lt;h2 id=&quot;viral-evolution-and-drug-design-the-importance-of-mixing-time&quot;&gt;Viral Evolution and Drug Design: The importance of mixing time&lt;/h2&gt;
+&lt;p&gt;The Markov chain described above 
+has recently found use in modeling RNA viral populations which reproduce asexually and that show strong stochastic behavior (e.g., HIV-1, see &lt;a href=&quot;http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002684&quot;&gt;here&lt;/a&gt;), which in turn has guided drug and
+vaccine design strategies.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;For example,  the effective population size of HIV-1 in an infected individual is &lt;a href=&quot;http://www.sciencedirect.com/science/article/pii/S0966842X06002332&quot;&gt;approximately&lt;/a&gt; $10^3-10^6$  not big enough for us to use infinite population models.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Let us see, again at a high-level, how.
+RNA viruses, due to their primitive copying mechanisms,   often undergo mutations during reproduction.
+Mutations introduce genetic variation and the population at any time is composed of different types – some of them being highly effective (in capturing the host cell) and some not so much.
+A typical situation to keep in mind is when the number of effective types is a relatively small fraction of $m.$ 
+For the sake of simplicity, let us assume that we are in the setting where each strain mutates to another type with probability $\tau$ during reproduction and remains itself with probability $1-\tau (m-1).$ 
+Thus, as $\tau$ goes from $0$ to $1/m,$ intuitively, in the steady state, the composition of the viral population goes from being concentrated on the effective types to uniformly distributed over all types. 
+The population as a whole is effective if most of its mass in the steady state is concentrated around the effective types and we can declare it dead if it is the latter.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Manfred_Eigen&quot;&gt;Eigen&lt;/a&gt;,
+ in a pioneering work, observed that in fact there is a critical mutation rate called the &lt;a href=&quot;https://en.wikipedia.org/wiki/Error_threshold_(evolution)&quot;&gt;error threshold&lt;/a&gt;
+  around which there is a &lt;em&gt;phase transition&lt;/em&gt; – i.e.,  the virus population changes suddenly from being highly effective to dead.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(This observation was proven formally &lt;a href=&quot;http://theory.epfl.ch/vishnoi/Publications_files/VError.pdf&quot;&gt;here&lt;/a&gt;).
+This suggests a strategy to counter viruses: drive their mutation rate past their error threshold!
+Intriguingly, this strategy is already employed by the body which can produce antibodies that increase the mutation rate. 
+Artificially, this effect can also be accomplished by mutagenic drugs such as ribavirin, see &lt;a href=&quot;http://www.pnas.org/content/98/12/6895&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0015135&quot;&gt;here&lt;/a&gt;
+In this setting,  knowing the error threshold with high precision is critical: inducing the body with excess mutagenic drugs could have undesired ramifications that lead to complications such as  cancer, whereas increasing the rate while keeping it below the threshold can increase the fitness of the virus by allowing it to adapt more effectively, making it more lethal. 
+Computing the error threshold requires the knowledge of the steady state and, thus, is one place where a bound on the mixing time is required.
+Further, when modeling the effect of a mutagenic
+drug, the convergence rate determines the minimum required duration of treatment.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If the virus population does not reach its steady state in the lifetime of the infected patient, then what good is that?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;to-conclude&quot;&gt;To Conclude…&lt;/h2&gt;
+&lt;p&gt;We hope that through this example we have convinced you that efficiency is an important consideration in evolution. 
+Specifically, in the setting we presented, the knowledge of the mixing time of evolutionary Markov chains is a crucial question. 
+Despite its importance,  there has been a lack of rigorous mixing time bounds for the full range of parameters, even in the simplest of evolutionary models considered here. 
+Prior work has  either ignored mutation, assumed that the model is &lt;em&gt;neutral&lt;/em&gt; (i.e., types have the same fitness), 
+  or moved to the diffusion limit which requires both mutation and selection pressure to be weak. 
+These bounds apply in some special subcases of evolution and we would like to know  mixing time bounds that work for all parameters.
+In a sequence of results available &lt;a href=&quot;http://arxiv.org/abs/1203.1287&quot;&gt;here&lt;/a&gt;, &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=2722129.2722234&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;http://epubs.siam.org/doi/10.1137/1.9781611974331.ch36&quot;&gt;here&lt;/a&gt;,
+ we have shown that a wide class of evolutionary Markov chains (which includes the one described in this post) can mix quickly for all parameter settings as long as the population is large enough! 
+Further, trying to analyze them  has led to &lt;em&gt;new techniques to analyze mixing time of Markov chains and stochastic processes which might be important beyond evolution&lt;/em&gt;. 
+We will explain some of these techniques in a subsequent post and continue our discussion, more generally, on evolution viewed from the lens of efficiency.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 07 Mar 2016 06:30:00 -0800</pubDate>
+        <link>http://localhost:4000/2016/03/07/evolution-markov-chains/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/03/07/evolution-markov-chains/</guid>
+      </item>
+     
+    
+     
+      <item>
+        <title>Word Embeddings&amp;#58; Explaining their properties</title>
+        <description>&lt;p&gt;This is a followup to an &lt;a href=&quot;http://www.offconvex.org/2015/12/12/word-embeddings-1/&quot;&gt;earlier post&lt;/a&gt; about word embeddings, which capture the meaning of a word using a low-dimensional vector, and are ubiquitous in natural language processing. I will talk about &lt;a href=&quot;http://arxiv.org/abs/1502.03520&quot;&gt;my joint work with Li, Liang, Ma, Risteski&lt;/a&gt;, which tries to mathematically explain their fascinating properties.&lt;/p&gt;
+
+&lt;p&gt;We focus on a few questions. (a) What properties of natural languages cause these low-dimensional embeddings to exist?   (b) Why do low-dimensional embeddings work better at analogy solving than high dimensional embeddings?&lt;/p&gt;
+
+&lt;p&gt;In a future blog post I will address another question answered by &lt;a href=&quot;http://arxiv.org/abs/1601.03764&quot;&gt;our subsequent work&lt;/a&gt;: How should  a word embedding be interpreted when a word has multiple meanings?&lt;/p&gt;
+
+&lt;h2 id=&quot;why-do-low-dimensional-embeddings-capture-huge-statistical-information&quot;&gt;Why do low-dimensional embeddings capture huge statistical information?&lt;/h2&gt;
+
+&lt;p&gt;Recall that all embedding methods try to leverage word co-occurence statistics. &lt;a href=&quot;http://lsa.colorado.edu/papers/JASIS.lsi.90.pdf&quot;&gt;Latent Semantic Indexing&lt;/a&gt; does a low-rank approximation to word-word cooccurence probabilities. In the simplest version, if the dictionary has $N$ words (usually $N$ is about $10^5$) then find $v_1, v_2, \ldots, v_N \in \mathbb{R}^{300}$ that minimize the following expression, where $p(w, w’)$ is the empirical probability that words $w, w’$ occur within $5$ words of each other in a text corpus like wikipedia. (Here “$5$” and “$300$” are somewhat arbitrary.)&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{ij} (p(w,w') - v_{w} \cdot v_{w'})^2 \qquad (1).&lt;/script&gt;
+
+&lt;p&gt;Of course, one can compute a rank$-300$ SVD for any matrix; the surprise here is that the rank $300$ matrix is actually a reasonable approximation to the $100,000$-dimensional matrix of cooccurences. (Since then,  &lt;a href=&quot;https://en.wikipedia.org/wiki/Topic_model&quot;&gt;&lt;em&gt;topic models&lt;/em&gt;&lt;/a&gt; have been developed which imply that  the matrix is indeed low rank.) This success motivated many extensions of the above basic idea; see the survey on &lt;a href=&quot;https://www.jair.org/media/2934/live-2934-4846-jair.pdf&quot;&gt;Vector space models&lt;/a&gt;.  We’re interested today in methods that perform &lt;em&gt;nonlinear&lt;/em&gt; operations on word cooccurence probabilities. The simplest uses the old and popular &lt;a href=&quot;http://www.aclweb.org/anthology/J90-1003&quot;&gt;PMI measure of Church and Hanks&lt;/a&gt;, where the probability $p(w,w’)$ in expression (1) is replaced by the following (nonlinear) measure of correlation. (And still the $10^5 \times 10^5$ matrix turns out to have a good low-rank approximation.)&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;PMI(w, w') = \log (\frac{p(w, w')}{p(w) p(w')})  \qquad \mbox{(Pointwise mutual information (PMI))}&lt;/script&gt;
+
+&lt;p&gt;Of course, researchers in applied machine learning take the existence of such low-dimensional approximations for granted, but there appears to be no theory to explain their existence. 
+ Theoretical explanations are also lacking for other recent methods such as Google’s &lt;a href=&quot;https://code.google.com/archive/p/word2vec/&quot;&gt;&lt;strong&gt;word2vec.&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Our paper gives an explanation using a new generative model for text, which also gives a clearer insight into the causative relationship between word meanings and the cooccurence probabilities.  We think of corpus generation as a dynamic process, where the $t$-th word is produced at step $t$. The model says that the process is driven by the random walk of a &lt;em&gt;discourse&lt;/em&gt; vector $c_t \in \Re^d$. It is a unit vector whose direction in space represents &lt;em&gt;what is being talked about.&lt;/em&gt;
+Each word has a  (time-invariant) latent vector $v_w \in \Re^d$ that captures its correlations with the discourse vector. We model this bias with a loglinear word production model:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Pr[w~\mbox{emitted at time $t$}~|~c_t] \propto \exp(c_t\cdot v_w). \qquad (2)&lt;/script&gt;
+
+&lt;p&gt;The discourse vector does a slow geometric random walk over the unit sphere in $\Re^d$. Thus $c_{t+1}$ is obtained by a small random displacement from $c_t$. Since expression (2) places much higher probability on words that are clustered around $c_t$, and  $c_t$ moves slowly, the model predicts that words occuring at successive time steps will also tend to have vectors that
+are close together. But this correlation weakens after say, $100$ steps. This model is basically the &lt;a href=&quot;http://machinelearning.wustl.edu/mlpapers/paper_files/icml2007_MnihH07.pdf&quot;&gt;loglinear topic model of Mnih and Hinton&lt;/a&gt;, but with an added dynamic element in the form of a random walk. The model is also related to many existing notions like &lt;em&gt;Kalman filters&lt;/em&gt; and &lt;em&gt;linear chain CRFs.&lt;/em&gt; Also, as is usual in topic models, it ignores grammatical structure, and treats text in small windows as a &lt;a href=&quot;https://en.wikipedia.org/wiki/Bag-of-words_model&quot;&gt;&lt;em&gt;bag of words.&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Our main contribution is to use the model assumptions to derive &lt;em&gt;closed form expressions&lt;/em&gt; for the word-word cooccurence probabilities in terms of the latent variables (i.e., the word vectors). This involves integrating out the random walk $c_t$.  For this we need to make a theoretical assumption, which says intuitively that
+the bulk behavior of the set of all word vectors is similar to what it would be if they were randomly strewn around the conceptual space (this is counterintuitive to my linguistics colleagues because they are used to the existence of fine-grained structure in word meanings).&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Isotropy assumption about word vectors&lt;/strong&gt;: 
+In the bulk, the word vectors behave like random vectors, for example, like $s \cdot u$ where $u$ is a standard Gaussian vector and $s$ is a scalar random variable. In particular, the &lt;em&gt;partition function&lt;/em&gt;  $Z_c = \sum_w \exp(v_w \cdot c)$ is approximately $Z \pm \epsilon$ for most unit vectors $c$.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;We find that in practice the partition function is well-concentrated. 
+  After writing our paper we discovered that this phenomenon had been been discovered already in empirical work on
+&lt;a href=&quot;http://nlp.cs.berkeley.edu/pubs/Andreas-Klein_2015_SelfNormalizing_paper.pdf&quot;&gt;&lt;em&gt;self-normalizing language models&lt;/em&gt;&lt;/a&gt;.
+(Basic message: Treat the partition function as constant; it doesn’t hurt too much!)&lt;/p&gt;
+
+&lt;p&gt;The tight concentration of partition function allows us to compute a multidimensional 
+integral to obtain expressions for word probabilities.&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\log p(w,w')   =  \frac{\|v_w + v_{w'}\|_2^2 }{2d}- 2\log Z  \pm \epsilon.&lt;/script&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\log p(w) = \frac{\|v_w\|_2^2}{2d} - \log Z \pm \epsilon.&lt;/script&gt;
+&lt;script type=&quot;math/tex&quot;&gt;PMI(w, w') = \frac{v_w \cdot v_{w'}}{d} \pm 2\epsilon.&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Thus the model predicts that the PMI matrix introduced earlier is indeed low-dimensional.
+Furthermore, unlike previous models, low dimension plays a key role in the story: isotropy requires the dimension $d$  to be much smaller than $N$.&lt;/p&gt;
+
+&lt;p&gt;A theoretical “explanation” also follows for some other nonlinear models.  For instance if we try to do a max-likelihood fit (MLE) to the above expressions, something interesting happens in the calculation: different word pairs need to be weighted differently. Suppose you see that $w, w’$ cooccur $X(w, w’)$ times in the corpus. Then it turns out that your trust in this  count as an estimate of the true value of $p(w, w’)$  scales linearly with $X(w, w’)$ itself. In other words the MLE fit to the model is&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\min_{\{v_{w}\}, C} \quad \sum_{w,w'} X(w,w') \left( \log(X(w,w') - \|v_{w} + v_{w'}\|_2^2 - C \right)^2&lt;/script&gt;
+This is very similar to the expression in the &lt;a href=&quot;http://nlp.stanford.edu/projects/glove/&quot;&gt;GloVE model,&lt;/a&gt; but provides some explanation for their 
+mysterious bias and reweighting terms.  Empirically we find that this model fits the data quite well: the weighted termwise error (without the square)  is about $5$ percent. (The weighted termwise error for the PMI model is much worse, around $17\%$.)&lt;/p&gt;
+
+&lt;p&gt;A theoretical explanation can also be given for  Google’s word2vec model. Suppose we assume the random walk of the discourse vector is slow enough that $c_t$ is essentially unchanged while producing consecutive strings of $10$ words or more. Then  the average of the word vectors for any consecutive $5$ words is a &lt;em&gt;Max a Posteriori (MAP)&lt;/em&gt; estimate of the discourse vector $c_t$ that produced them. This leads to the &lt;strong&gt;word2vec(CBOW)&lt;/strong&gt; model, which had hitherto seemed mysterious:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Pr[w|w_1, w_2, \ldots, w_5] \propto \exp(v_w \cdot (\frac{1}{5} \sum_i v_{w_i})),\qquad (2)&lt;/script&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;why-do-low-dimensional-embeddings-work-better-than-high-dimensional-ones&quot;&gt;Why do low dimensional embeddings work better than high-dimensional ones?&lt;/h2&gt;
+
+&lt;p&gt;A striking finding in empirical work on word embeddings is that there is a sweet spot 
+for the dimensionality of word vectors: neither too small, nor too large. This graph below from the &lt;a href=&quot;http://lsa.colorado.edu/papers/plato/plato.annote.html&quot;&gt;Latent Semantic Analysis paper (1997)&lt;/a&gt; shows the performance on word similarity tasks versus dimension, but a similar phenomenon also occurs for analogy solving.&lt;/p&gt;
+
+&lt;p style=&quot;text-align:center;&quot;&gt;
+&lt;img src=&quot;http://www.cs.princeton.edu/~arora/pubs/LSAgraph.jpg&quot; alt=&quot;Performance of word embeddings vs Dimension&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Such a performance curve with a bump at the “sweet spot” is very familiar in empirical work in machine learning and usually explained as follows: too few parameters make the model incapable of 
+fitting to the signal; too many parameters, and it starts &lt;a href=&quot;https://en.wikipedia.org/wiki/Overfitting&quot;&gt;&lt;em&gt;overfitting&lt;/em&gt;&lt;/a&gt; (e.g., fitting to noise instead of the signal).  Thus the dimension constraint act as a &lt;em&gt;regularizer&lt;/em&gt; for the optimization.&lt;/p&gt;
+
+&lt;p&gt;Surprisingly, I have not heard of a good theoretical explanation to back up this  intuition. Here are some attempted explanations I heard from colleagues in connection with word embeddings.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Suggestion 1:&lt;/strong&gt;  &lt;a href=&quot;https://en.wikipedia.org/wiki/Johnson-Lindenstrauss_lemma&quot;&gt;&lt;em&gt;Johnson-Lindenstrauss Lemma&lt;/em&gt;&lt;/a&gt; &lt;em&gt;implies some dimension reduction for every set of vectors.&lt;/em&gt;  This explanation doesn’t cut it because: (a) it only implies dimension $\frac{1}{\epsilon^2}\log N$, which is too high for even moderate $\epsilon$. (b) It predicts that quality of the embedding goes &lt;em&gt;up&lt;/em&gt; monotonically as we increase dimension, whereas in practice overfitting is observed.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Suggestion 2:&lt;/strong&gt; &lt;em&gt;Standard generalization theory&lt;/em&gt; (e.g., &lt;a href=&quot;https://en.wikipedia.org/wiki/Vapnik%E2%80%93Chervonenkis_theory&quot;&gt;VC-dimension&lt;/a&gt;)  &lt;em&gt;predicts overfitting.&lt;/em&gt; I don’t see why this  applies either, since we are dealing with &lt;em&gt;unsupervised learning&lt;/em&gt; (or &lt;em&gt;transfer learning&lt;/em&gt;): the training objective doesn’t have anything to do &lt;em&gt;a priori&lt;/em&gt; with analogy solving. So there is no reason a model with fewer parameters will do better on analogy solving, just as there’s no reason it does better for some other unrelated task like predicting the weather.&lt;/p&gt;
+
+&lt;p&gt;We give some idea  why a low-dimensional model may solve analogies better. This is also related 
+to the following phenomenon.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-do-semantic-relations-correspond-to-directions&quot;&gt;Why do Semantic Relations correspond to Directions?&lt;/h2&gt;
+
+&lt;p&gt;Remember the striking discovery in the word2vec paper: word analogy tasks can be solved by 
+simple linear algebra. For example, the word analogy question
 &lt;em&gt;man : woman ::king : ??&lt;/em&gt; can be solved by looking for the
 word $w$ such that $v_{king} - v_w$ is most similar to
 $v_{man} - v_{woman}$; in other words, minimizes&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;||v_w - v_{king} + v_{man} - v_{woman}||^2.&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;||v_w - v_{king} + v_{man} - v_{woman}||^2 \qquad (3)&lt;/script&gt;
 
-&lt;p&gt;This simple idea can solve $75\%$ of analogy questions on some standard testbed. Note that the method is completely unsupervised: it constructs the embeddings using a big (unannotated) text corpus; and receives &lt;em&gt;no training&lt;/em&gt; specific to analogy solving). 
-Here is a rendering of this linear algebraic relationship between &lt;em&gt;masculine-feminine&lt;/em&gt; pairs.&lt;/p&gt;
+&lt;p&gt;This strongly suggests that semantic relations —in the above example, the relation is &lt;em&gt;masculine-feminine&lt;/em&gt;—correspond to directions in space. However, this interpretation is challenged 
+by &lt;a href=&quot;http://www.cs.bgu.ac.il/~yoavg/publications/conll2014analogies.pdf&quot;&gt;Levy and Goldberg&lt;/a&gt; who argue there is no linear algebra magic here, and the expression can be explained simply in terms of
+traditional connection between word similarity and vector inner product (cosine similarity).
+See also this &lt;a href=&quot;https://quomodocumque.wordpress.com/2016/01/15/messing-around-with-word2vec/&quot;&gt;related blog post&lt;/a&gt;.&lt;/p&gt;
 
-&lt;div style=&quot;text-align:center;&quot;&gt;
-&lt;img src=&quot;/assets/analogy-small.jpg&quot; style=&quot;width:400px;&quot; /&gt;
-&lt;/div&gt;
+&lt;p&gt;We find on the other hand that the RELATIONS = DIRECTIONS phenomenon is demonstrable empirically, and is particularly clear for &lt;em&gt;semantic&lt;/em&gt; analogies in the testbed.  For each relation $R$ we can find a direction $\mu_R$ such if a word pair $a, b$ satisfy $R$,  then&lt;/p&gt;
 
-&lt;p&gt;Good embeddings have other properties that will be covered in a future
-post. (Also, I can’t resist mentioning  that fMRI-imaging of the brain suggests that word embeddings are related to how the human brain
-encodes meaning; see the &lt;a href=&quot;http://www.cs.cmu.edu/~tom/pubs/science2008.pdf&quot;&gt;well-known paper of Mitchell et al.&lt;/a&gt;.)&lt;/p&gt;
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;v_a - v_b  = \alpha_{a, b}\cdot  \mu_R + \eta,&lt;/script&gt;
+where $\alpha_{a, b}$ is a scalar that’s  roughly about $0.6$ times the norm of $v_a - v_b$  and $\eta$ is a noise vector.   Empirically, the residuals $\eta$ do look mathematically like random
+vectors according to various tests.&lt;/p&gt;
 
-&lt;h2 id=&quot;computing-word-embeddings-via-firths-hypothesis&quot;&gt;Computing Word embeddings (via Firth’s Hypothesis)&lt;/h2&gt;
+&lt;p&gt;In particular, this phenomenon allows the analogy solver to be made &lt;em&gt;completely&lt;/em&gt; linear algebraic if you have a few examples (say 20) of the same relation. You compute the top singular vector of the matrix of all $v_a -v_b$’s to recover $\mu_R$, and from then on can solve analogies $a: b:: c:??$ by looking for a word $d$
+such that $v_c - v_d$ has the highest possible projection on $\mu_R$ (thus ignoring 
+$v_a -v_b$ altogether). In fact, this gives a  “cheating” method to solve the analogy test bed with somewhat higher success rates than state of the art. (Message to future designers of analogy testbeds: Don’t include too many examples of the same relationship, otherwise this cheating method can exploit it.) By the way, Lisa Lee  did a &lt;a href=&quot;https://stanford.edu/~lisaslee/ml/lilee_thesis.pdf&quot;&gt;senior thesis&lt;/a&gt; under my supervision that showed empirically that this phenomenon can be used to extend knowledge-bases of facts, e.g., predict new music composers in the corpus given a list of known composers.&lt;/p&gt;
 
-&lt;p&gt;In all methods, the word vector is a succinct representation of the &lt;em&gt;distribution&lt;/em&gt; of other words around this word. That this suffices to capture meaning is asserted by &lt;a href=&quot;https://en.wikipedia.org/wiki/Distributional_semantics&quot;&gt;&lt;em&gt;Firth’s hypothesis&lt;/em&gt;&lt;/a&gt;
-from 1957, “&lt;em&gt;You shall know a word by the company it keeps.&lt;/em&gt;”  To give an example, if I
-ask you to think of a word that tends to co-occur with &lt;em&gt;cow,
-drink, babies, calcium&lt;/em&gt;, you would immediately answer:
-&lt;em&gt;milk&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Our theoretical results can  be used to explain the 
+emergence of RELATIONS=DIRECTIONS phenomenon in the embeddings. Earlier attempts (eg in the &lt;a href=&quot;http://nlp.stanford.edu/projects/glove/&quot;&gt;GloVE paper&lt;/a&gt;) to explain the success of (3) for analogy solving had failed to account for the fact that all models are only  approximate fits to the data. For example, the PMI model fits $v_w \cdot v_{w’}$ to $PMI(w, w’)$) but the termwise error for our corpus is $17\%$, and expression (3) contains $6$ inner products! So even though expression (3)  is presumably a linear algebraic proxy for some statistical 
+property of the word distributions, the noise/error is large. By contrast, the difference in the value of (3) between the best and second-best solution is small, say $10-15\%$.&lt;/p&gt;
 
-&lt;p&gt;Note that we don’t believe Firth’s hypothesis fully accounts
-for all aspects of semantics —understanding new metaphors or jokes, for example,
-seems to require other modes of experiencing the real world than simply reading text.&lt;/p&gt;
+&lt;p&gt;So the question is: &lt;em&gt;Why does error in the approximate fit not kill the analogy solving?&lt;/em&gt; Our explanation of RELATIONS = DIRECTIONS phenomenon provides an explanation: the low dimension of the vectors has a “purifying” effect that reduces the effect of this fitting error.
+(See Section 4 in the paper.)The key ingredient of this explanation is, again, the random-like behavior of word embeddings —quantified in terms of singular values— as well as  the standard theory of linear regression.  I’ll describe the math in a future post.&lt;/p&gt;
 
-&lt;p&gt;But Firth’s hypothesis does imply a very simple 
-word embedding, albeit a very high-dimensional one.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;em&gt;Embedding 1&lt;/em&gt;: Suppose the dictionary has $N$ distinct words (in practice, $N =100,000$). Take a very large text corpus (e.g., Wikipedia) and let $Count_5(w_1, w_2)$ be the number of times $w_1$ and $w_2$ occur within a distance $5$ of each other in the corpus. Then the word embedding for a word $w$ is a vector of dimension $N$, with one coordinate for each dictionary word. The coordinate corresponding to word $w_2$ is $Count_5(w, w_2)$. (Variants of this method involve considering cooccurence of $w$ with various phrases or $n$-tuples.)&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The obvious problem with Embedding 1 is that it uses
-extremely high-dimensional vectors. How can we compress them?&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;em&gt;Embedding 2&lt;/em&gt;: Do dimension reduction by taking the rank-300
-singular value decomposition (SVD) of the above vectors.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Recall that for an $N \times N$ matrix $M$ this means finding vectors
-$v_1, v_2, \ldots, v_N \in \mathbb{R}^{300}$ that minimize&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{ij} (M_{ij} - v_i \cdot v_j)^2 \qquad (1).&lt;/script&gt;
-
-&lt;p&gt;Using SVD to do dimension reduction seems an obvious idea these days but it
-actually is not. After all,  it is unclear &lt;em&gt;a priori&lt;/em&gt; why the
-above $N \times N$ matrix of cooccurance counts should be close to a
-rank-300 matrix. That this is the case was empirically discovered in the paper on
-&lt;a href=&quot;http://lsa.colorado.edu/papers/JASIS.lsi.90.pdf&quot;&gt;&lt;em&gt;Latent Semantic Indexing&lt;/em&gt; or LSI&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Empirically, the method can be improved by replacing the counts by their logarithm, as in &lt;a href=&quot;http://lsa.colorado.edu/papers/plato/plato.annote.html&quot;&gt;Latent Semantic Analysis or LSA&lt;/a&gt;. Other authors claim  square root
-is even better than logarithm.  Another interesting empirical fact in the LSA paper is that dimension reduction via SVD not only compresses the embedding but &lt;em&gt;improves&lt;/em&gt; its quality. (Improvement via compression is a familiar phenomenon in machine learning.) In fact they can use word vectors to solve word similarity tasks as well as the average American high schooler.&lt;/p&gt;
-
-&lt;p&gt;A research area called &lt;em&gt;Vector Space Models&lt;/em&gt; (see &lt;a href=&quot;https://www.jair.org/media/2934/live-2934-4846-jair.pdf&quot;&gt;survey by Turney and Pantel&lt;/a&gt;) studies various modifications of the above idea. Embeddings are also known to improve if we reweight the various terms in the above expression (2): popular reweightings include TF-IDF, PMI, Logarithm, etc.&lt;/p&gt;
-
-&lt;p&gt;Let me point out that reweighting the
-$(i, j)$ term in expression (1) leads to a &lt;em&gt;weighted&lt;/em&gt;
-version of SVD, which is NP-hard. (I always emphasize to my students
-that a polynomial-time algorithm to compute rank-k  SVD is a miracle, since 
-modifying the problem
-statement in small ways makes it NP-hard.) But in practice, weighted SVD can be
-solved on a laptop in less than a day —remember, $N$ is rather large, about $10^5$!—
-by simple gradient descent on the objective (1), possibly also using
-a regularizer. (Of course,  &lt;a href=&quot;http://blog.mrtz.org/2013/09/07/the-zen-of-gradient-descent.html&quot;&gt;a lot has been proven about such gradient descent methods in context of convex optimization&lt;/a&gt;; the surprise is that they work also in such nonconvex settings.) Weighted SVD is a subcase of &lt;em&gt;Matrix Factorization&lt;/em&gt; approaches in machine learning, which we will also encounter again in upcoming posts.&lt;/p&gt;
-
-&lt;p&gt;But returning to word embeddings, the following question had not been
-raised or debated, to the best of my knowledge: &lt;em&gt;What property of human language explains the
-fact that these very high-dimensional matrices derived (in a nonlinear way) from word cooccurences
-are close to low-rank matrices?&lt;/em&gt; (In a future blog
-post I will describe our new &lt;a href=&quot;http://arxiv.org/abs/1502.03520&quot;&gt;theoretical explanation&lt;/a&gt;.)&lt;/p&gt;
-
-&lt;p&gt;The third embedding method I wish to describe uses 
-&lt;em&gt;energy-based models&lt;/em&gt;, for instance the
-&lt;a href=&quot;https://code.google.com/p/word2vec/&quot;&gt;&lt;strong&gt;Word2Vec&lt;/strong&gt; family of methods&lt;/a&gt; from 2013 by the Google team of Mikolov et al., which also created a buzz due to the above-mentioned linear algebraic method to solve word analogy tasks.
-The &lt;strong&gt;word2vec&lt;/strong&gt; models are inspired by pre-existing neural net models for language
-(basically, the word embedding corresponds to the neural net’s internal representation of the word; see &lt;a href=&quot;http://colah.github.io/posts/2014-07-NLP-RNNs-Representations/&quot;&gt;this blog&lt;/a&gt;.).  Let me
-describe the simplest variant, which assumes that the word
-vectors are related to word probabilities as follows:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;em&gt;Embedding 3&lt;/em&gt; (&lt;strong&gt;Word2Vec(CBOW)&lt;/strong&gt;):&lt;/p&gt;
-
-  &lt;script type=&quot;math/tex; mode=display&quot;&gt;\textstyle\Pr[w|w_1, w_2, \ldots, w_5] \propto \exp(v_w \cdot (\frac{1}{5} \sum_i v_{w_i})),\qquad (2)&lt;/script&gt;
-
-  &lt;p&gt;where the left hand side gives the empirical probability that word $w$ occurs in the text
-conditional on the last five words being $w_1$ through $w_5$.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Assume we can estimate the left hand side using a large text corpus. Then expression (2) for the word vectors—together with  a constraint capping the dimension of the
-vectors to, say, 300 — implicitly defines a nonconvex optimization problem which is solved in practice as follows. Let $S$ be the set of all the $6$-tuples of words that occur in the text. Let $N$ be a set of random $6$-tuples; this set is called the 
-&lt;em&gt;negative sample&lt;/em&gt; since presumably these tuples are gibberish. The method consists of finding word embeddings that give high probability to 
-tuples in $S$ and low probability to tuples in $N$. Roughly speaking, they maximise the &lt;em&gt;difference&lt;/em&gt; between the following two quantities: (i) sum of $\exp(v_w \cdot (\frac{1}{5} \sum_i v_{w_i}))$ (suitably scaled) over all $6$-tuples in $S$, and
-(ii) the corresponding sum over tuples in $N$.  The &lt;strong&gt;word2vec&lt;/strong&gt; team introduced some other tweaks that allowed them to solve this optimization for very large corpora containing 10 billion words.&lt;/p&gt;
-
-&lt;p&gt;The &lt;strong&gt;word2vec&lt;/strong&gt; papers are a bit mysterious, and have motivated much
-followup work. A paper by Levy and Goldberg (See &lt;a href=&quot;https://levyomer.wordpress.com/&quot;&gt;Omer Levy’s Blog&lt;/a&gt;) explains that the &lt;strong&gt;word2vec&lt;/strong&gt;
-methods are actually modern versions of older vector space methods.
-After all, if you take logs of both sides of expression (2), you see
-that the &lt;em&gt;logarithm&lt;/em&gt; of some cooccurence probability is
-being expressed in terms of inner products of some word vectors, which
-is very much in the spirit of the older work. (Levy and Goldberg have more to say about this, backed up by interesting experiments comparing the vectors obtained by various approaches.)&lt;/p&gt;
-
-&lt;p&gt;Another paper by Pennington et al. at Stanford suggests a &lt;a href=&quot;http://nlp.stanford.edu/projects/glove/&quot;&gt;model called GLOVE&lt;/a&gt;
-that uses an explicit weighted-SVD strategy for finding word embeddings.
-They also give an intuitive explanation of why these embeddings solve 
-word analogy tasks, though the explanation isn’t quite rigorous.&lt;/p&gt;
-
-&lt;p&gt;In a future post I will talk more about our &lt;a href=&quot;http://arxiv.org/abs/1502.03520&quot;&gt;subsequent theoretical work&lt;/a&gt; that tries to unify these different approaches, and also explains some  cool linear algebraic properties of word
-embeddings. I note that linear structure  also arises in &lt;a href=&quot;http://web.eecs.umich.edu/~honglak/nips2015-analogy.pdf&quot;&gt;representations of images learnt
-via deep learning.&lt;/a&gt;, and it is tantalising to wonder if similar theory applies to that setting.&lt;/p&gt;
 </description>
-        <pubDate>Sat, 12 Dec 2015 01:00:00 -0800</pubDate>
-        <link>http://offconvex.github.io/2015/12/12/word-embeddings-1/</link>
-        <guid isPermaLink="true">http://offconvex.github.io/2015/12/12/word-embeddings-1/</guid>
+        <pubDate>Sun, 14 Feb 2016 00:00:42 -0800</pubDate>
+        <link>http://localhost:4000/2016/02/14/word-embeddings-2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/02/14/word-embeddings-2/</guid>
       </item>
      
     
      
       <item>
-        <title>Why go off the convex path?</title>
-        <description>&lt;p&gt;The notion of convexity underlies a lot of beautiful mathematics. When combined with computation, it gives rise to the area of convex optimization that has had a huge impact on understanding and improving the world we live in. However, convexity does not provide all the answers. Many procedures in statistics, machine learning and nature at large—Bayesian inference, deep learning, protein folding—successfully solve non-convex problems that are NP-hard, i.e., intractable on worst-case instances. Moreover, often nature or humans choose methods that are inefficient in the worst case to solve problems in &lt;a href=&quot;https://en.wikipedia.org/wiki/P_(complexity)&quot;&gt;P&lt;/a&gt;.&lt;/p&gt;
+        <title>NIPS 2015 workshop on non-convex optimization</title>
+        <description>&lt;p&gt;While convex analysis has received much attention by the machine learning community, theoretical analysis of non-convex optimization  is still nascent. This blog as well as the recent &lt;a href=&quot;https://sites.google.com/site/nips2015nonconvexoptimization/home&quot;&gt;NIPS 2015 workshop on non-convex optimization&lt;/a&gt; aim to  accelerate research in this area. Along with &lt;a href=&quot;http://cseweb.ucsd.edu/~kamalika/&quot;&gt;Kamalika Chaudhuri&lt;/a&gt;,  &lt;a href=&quot;http://cs.stanford.edu/~pliang/&quot;&gt;Percy Liang&lt;/a&gt;,  &lt;a href=&quot;http://www.ics.uci.edu/~numanare/&quot;&gt;Niranjan U Naresh&lt;/a&gt;, and &lt;a href=&quot;http://web.engr.illinois.edu/~swoh/&quot;&gt;Sewoong Oh&lt;/a&gt;, &lt;a href=&quot;http://newport.eecs.uci.edu/anandkumar/&quot;&gt;I&lt;/a&gt; was one of the organizers of this  NIPS workshop.&lt;/p&gt;
 
-&lt;p&gt;Can we develop a theory to resolve this mismatch between reality and the predictions of worst-case analysis?  Such a theory could identify structure in natural inputs that helps sidestep worst-case complexity.&lt;/p&gt;
+&lt;p&gt;The workshop started with &lt;a href=&quot;https://docs.google.com/viewer?a=v&amp;amp;pid=sites&amp;amp;srcid=ZGVmYXVsdGRvbWFpbnxuaXBzMjAxNW5vbmNvbnZleG9wdGltaXphdGlvbnxneDo0OGYxMDE2ZjFhNjlkNGRi&quot;&gt;my talk&lt;/a&gt; on recent progress and challenges. Many interesting machine learning tasks are non-convex, e.g. maximum likelihood estimation of  latent variable models or training  multi-layer neural networks. As the input dimension grows, the  number of &lt;a href=&quot;https://en.wikipedia.org/wiki/Critical_point_(mathematics)&quot;&gt;critical points&lt;/a&gt; can grow exponentially, making an analysis difficult. In contrast, strictly convex optimization has a unique critical point corresponding to the globally optimal solution.&lt;/p&gt;
 
-&lt;p&gt;This blog is dedicated to the idea that optimization methods—whether created by humans or nature, whether convex or nonconvex—are exciting objects of study and, often lead to useful algorithms and insights into nature. This study can be seen as an extension of classical mathematical fields such as dynamical systems and differential equations among others, but with the important addition of the notion of computational efficiency.&lt;/p&gt;
+&lt;h2 id=&quot;spectral-and-tensor-methods&quot;&gt;Spectral and tensor methods&lt;/h2&gt;
 
-&lt;p&gt;We will report on interesting research directions and open problems, and highlight progress that has been made. We will write articles ourselves as well as encourage others to contribute. In doing so, we hope to generate an active dialog between theorists, scientists and practitioners and to motivate a generation of young researchers to work on these important problems.&lt;/p&gt;
+&lt;p&gt;I gave an overview of instances where we can provide guarantees for nonconvex optimization. Examples include finding spectral decompositions of matrices and tensors, under a set of conditions. For more details on spectral methods, see &lt;a href=&quot;http://www.offconvex.org/2015/12/17/tensor-decompositions/&quot;&gt;Rong Ge’s post&lt;/a&gt; on this blog. &lt;a href=&quot;https://genfaculty.rutgers.edu/kcchen/home&quot;&gt;Kevin Chen&lt;/a&gt; gave a compelling talk on the superiority of spectral methods in genomics for training hidden Markov models (HMM)  compared to traditional approaches such as &lt;a href=&quot;https://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm&quot;&gt;expectation maximization&lt;/a&gt;. In particular, spectral methods provided better biological interpretation, were more robust to class imbalance, and were orders of magnitude faster compared to EM.&lt;/p&gt;
+
+&lt;h2 id=&quot;avoiding-saddle-points&quot;&gt;Avoiding saddle points&lt;/h2&gt;
+
+&lt;p&gt;Moving on to more general non-convex optimization, in my &lt;a href=&quot;https://docs.google.com/viewer?a=v&amp;amp;pid=sites&amp;amp;srcid=ZGVmYXVsdGRvbWFpbnxuaXBzMjAxNW5vbmNvbnZleG9wdGltaXphdGlvbnxneDo0OGYxMDE2ZjFhNjlkNGRi&quot;&gt;talk&lt;/a&gt;, I pointed out the difficulty in even converging to a local optimum due to the existence of &lt;em&gt;saddle points&lt;/em&gt;. Saddle points are critical points which are not local minima, meaning there exist directions where the objective value decreases (for minimization problems). Saddle points can slow down gradient descent arbitrarily. Alternatively, if  Newton’s method is run, it converges to an arbitrary critical point, and does not  distinguish between a local minimum and a saddle point.&lt;/p&gt;
+
+&lt;p&gt;One solution to escape saddle points is to  use the second order &lt;a href=&quot;https://en.wikipedia.org/wiki/Hessian_matrix&quot;&gt;Hessian&lt;/a&gt; information to find the direction of escape when the gradient value is small: the  Hessian eigenvectors with negative eigenvalues provide such directions of escape. See works  &lt;a href=&quot;https://www.computer.org/csdl/proceedings/focs/1996/7594/00/75940359.pdf&quot;&gt;here&lt;/a&gt;,  &lt;a href=&quot;http://arxiv.org/abs/1405.4604&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;http://link.springer.com/article/10.1007%2Fs10107-006-0706-8&quot;&gt;here&lt;/a&gt;.  A recent  &lt;a href=&quot;http://arxiv.org/abs/1503.02101&quot;&gt;work&lt;/a&gt; surprisingly shows that it is possible to escape saddle points using &lt;em&gt;only&lt;/em&gt; first order information based on noisy stochastic gradient descent (SGD). In many applications, this is far cheaper than (approximate) computation of the Hessian eigenvectors.  However, one unresolved issue is handling &lt;em&gt;degenerate&lt;/em&gt; saddle points, where there are only positive and zero eigenvalues in the Hessian matrix. For such points, even distinguishing saddle points from local optima is hard. It is also an open problem to establish the presence or absence of  such degenerate saddle points for particular non-convex problems, e.g. in deep learning.&lt;/p&gt;
+
+&lt;h2 id=&quot;optimization-landscape-for-deep-learning&quot;&gt;Optimization landscape for deep learning&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://yann.lecun.com/&quot;&gt;Yann LeCun&lt;/a&gt; talked about how the success of deep learning has shown that non-convexity should not be treated as an obstacle. See slides &lt;a href=&quot;https://docs.google.com/viewer?a=v&amp;amp;pid=sites&amp;amp;srcid=ZGVmYXVsdGRvbWFpbnxuaXBzMjAxNW5vbmNvbnZleG9wdGltaXphdGlvbnxneDo0YmNiNjM0OGU0NTlmMDll&quot;&gt;here&lt;/a&gt;. An open problem is to understand the optimization landscape for deep learning. While classical &lt;a href=&quot;http://www.dsi.unifi.it/~paolo/ps/pinn.pdf&quot;&gt;works&lt;/a&gt; have shown the presence of bad local optima even in simple low-dimensional problems, a recent &lt;a href=&quot;http://arxiv.org/abs/1412.0233&quot;&gt;work&lt;/a&gt; argues that the picture is quite different in high dimensions, suggesting that the loss function for training deep neural networks can be approximated as random Gaussian polynomials under a set of (strong) assumptions. A beautiful math &lt;a href=&quot;https://projecteuclid.org/euclid.aop/1384957786&quot;&gt;paper&lt;/a&gt; by Auffinger and Ben Arous characterizes the critical points of such random Gaussian  polynomials, proving that the objective values of all local minima concentrate in a “narrow” band, and  differ significantly from the values attained at saddle points. However, to add a word of caution, this does &lt;em&gt;not&lt;/em&gt; imply that a random Gaussian polynomial  is computationally easy to optimize. Current theory does not give a good characterization of the basins of attraction for the local optima, and requires exponential number of initializations to guarantee successful convergence. Moreover, degenerate saddle points can be present, and they are hard to escape from, as I discussed earlier.&lt;/p&gt;
+
+&lt;h2 id=&quot;everything-old-is-new-again&quot;&gt;Everything old is new again&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.stat.yale.edu/~arb4/&quot;&gt;Andrew Barron&lt;/a&gt; took us back in time, and described how he got interested in neural networks when he discovered that they were training 6-8 layer neural networks back in the 1960’s in his dad’s company. Andrew provided a glimpse of the &lt;a href=&quot;http://link.springer.com/article/10.1023%2FA%3A1022650905902&quot;&gt;classical results&lt;/a&gt;, which bound both the approximation and estimation errors for a shallow neural network (with one hidden layer). The approximation error is related to the  Fourier spectrum of the target function: intuitively, a smoother signal has a lower amount of high frequency content, and has a better approximation error under the class of   networks of a fixed size. The estimation bound gives the risk achieved under a finite amount of training data, but  achieving this  bound is   computationally hard. Andrew then talked about &lt;a href=&quot;https://drive.google.com/file/d/0Bxz8_SW7cMO-Z2Nob1htbTNyUG8/view?usp=sharing&quot;&gt;his recent efforts&lt;/a&gt; to develop computationally efficient algorithms for training neural networks based on the use of generative models of the input. This builds on my  &lt;a href=&quot;http://newport.eecs.uci.edu/anandkumar/pubs/NN_GeneralizationBound.pdf&quot;&gt;recent work&lt;/a&gt; 
+ on training neural networks using tensor methods.&lt;/p&gt;
+
+&lt;h2 id=&quot;do-not-accept-the-given-non-convex-problem-as-is&quot;&gt;Do not accept the given non-convex problem as is&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.cs.princeton.edu/~arora/&quot;&gt;Sanjeev Arora&lt;/a&gt; argued that unlike traditional computer science theory which has focused on characterizing worst-case problem instances, machine learning offers a much more flexible framework. In fact, even the objective function can be changed!  He focused on the problem of non-negative matrix factorization (NMF), where the original objective function of quadratic loss minimization is hard. On the other hand,  under a so-called  separability assumption, the objective  can  be changed as &lt;em&gt;finding a simplex with non-negative vertices that contains the observations&lt;/em&gt;, which can be solved efficiently. A similar philosophy holds for spectral methods, where the original objective function is abandoned, and instead spectral decompositions are employed to solve the learning task at hand. Sanjeev also made the excellent point that the assumptions needed for success are often something we can control as data collectors. For instance, separability holds for the NMF problem when more features are collected, e.g. for learning &lt;a href=&quot;http://homepages.inf.ed.ac.uk/scohen/acl14pivot+supp.pdf&quot;&gt;latent variable PCFGs via NMF techniques&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In a similar spirit,  &lt;a href=&quot;http://cs.stanford.edu/people/chrismre/&quot;&gt;Chris Re&lt;/a&gt;  showed how we can strengthen the current theory to remove some of the pessimism behind the hardness of many problems that have good solutions  in practice. He described the notion of combinatorial width or fractional hypertree width, a notion from logic, that can provide a better analysis of Gibbs sampling and belief propagation.  &lt;a href=&quot;http://theory.stanford.edu/~valiant/&quot;&gt;Gregory Valiant&lt;/a&gt; showed that by assuming more structure on the class of probability distributions we can do much better compared to the unstructured setting. This includes topic models, hidden Markov models, and word embeddings.&lt;/p&gt;
+
+&lt;h2 id=&quot;convex-envelopes-and-gaussian-smoothing&quot;&gt;Convex envelopes and Gaussian smoothing&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://people.csail.mit.edu/hmobahi/index2.html&quot;&gt;Hossein Mobahi&lt;/a&gt; talked about smoothing approaches for convexification. The &lt;a href=&quot;http://www.tandfonline.com/doi/abs/10.1080/03605309908821476?journalCode=lpde20#.VnH1dEorK00&quot;&gt;convex envelope&lt;/a&gt; of a function  is  the convex function that provides the tightest lower bound. Any global minimizer of the original objective function is also a global minimizer of the convex envelope. While we are mostly familiar with the characterization of convex envelopes through duality (i.e. dual of the dual is the convex envelope), its characterization through partial differential equation (PDE) has been mostly unknown to the machine learning community. Hossein introduced the PDE form for convex envelope, and gave a nice interpretation in terms of carrying out diffusion along  non-convex regions of the objective function to obtain the convex envelope.  However, the convergence time for this PDE can be in general  exponential in the input dimension, and therefore is not tractable. Hossein showed that instead we can perform Gaussian smoothing efficiently for many functions such as polynomials. He gave a novel characterization of Gaussian smoothing as linearization of the convex envelope.  He proved it by analyzing the PDE of the convex envelope, and then showing that its linearization results in the &lt;a href=&quot;http://people.csail.mit.edu/hmobahi/pubs/gaussian_convenv_2015.pdf&quot;&gt;heat equation&lt;/a&gt;, which corresponds to Gaussian smoothing. Hossein also provided bounds for the continuation method, where the extent of smoothing is progressively decreased, and related it to the complexity of the objective function. For more details, refer to his &lt;a href=&quot;http://people.csail.mit.edu/hmobahi/pubs/aaai_2015.pdf&quot;&gt;paper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;NP-hardness should not deter us from analyzing non-convex optimization in the context of machine learning. We should be creative in making new assumptions, we should try to change the problem structure and the objective function, collect relevant data to make the learning problem easier, and so on.&lt;/p&gt;
+
+&lt;p&gt;As I conclude this blog post, I am reminded of my discussion with &lt;a href=&quot;http://leon.bottou.org/&quot;&gt;Leon Bottou&lt;/a&gt;. He said that there are three levels of thinking, with increasingly more sophistication. At the first level, we merely aim to prove statements that are already formulated. Unfortunately, almost all formal education focuses on this type of skill. At the second level, we try to draw implications, given a fixed set of assumptions. On the other hand, at the third level, we need to simultaneously come up with reasonable assumptions as well as their implications, and this level requires the highest level of creativity. In the area of machine learning, there is tremendous opportunity for such creativity, and I am hoping that the workshop managed to foster more of it.&lt;/p&gt;
+
 </description>
-        <pubDate>Fri, 11 Dec 2015 03:34:00 -0800</pubDate>
-        <link>http://offconvex.github.io/2015/12/11/mission-statement/</link>
-        <guid isPermaLink="true">http://offconvex.github.io/2015/12/11/mission-statement/</guid>
+        <pubDate>Mon, 25 Jan 2016 02:00:00 -0800</pubDate>
+        <link>http://localhost:4000/2016/01/25/non-convex-workshop/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/01/25/non-convex-workshop/</guid>
       </item>
-     
-    
      
     
   </channel>

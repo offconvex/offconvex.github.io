@@ -6,13 +6,13 @@ author:     Moritz Hardt and Tengyu Ma
 visible:    false
 ---
 
-From text translation to video captioning, learning to map one sequence to another is an increasingly active research area in machine learning. Fueled by the success of recurrent neural networks in its many variants, the field has seen rapid advances over the last view years. Recurrent neural networks are typically trained using some form of stochastic gradient descent combined with backpropagation for computing derivatives. The fact that gradient descent finds a useful set of parameters is by no means obvious. The training objective is typically non-convex. The fact that the model is allowed to maintain state is an additional obstacle that makes training of recurrent neural networks challenging. 
+From text translation to video captioning, learning to map one sequence to another is an increasingly active research area in machine learning. Fueled by the success of recurrent neural networks in its many variants, the field has seen rapid advances over the last few years. Recurrent neural networks are typically trained using some form of stochastic gradient descent combined with backpropagation for computing derivatives. The fact that gradient descent finds a useful set of parameters is by no means obvious. The training objective is typically non-convex. The fact that the model is allowed to maintain state is an additional obstacle that makes training of recurrent neural networks challenging. 
 
-In this post, we take a step back to reflect on the mathematics of recurrent neural networks. Interpreting recurrent neural networks as dynamical systems, we will show that stochastic gradient descent successfully learns the parameters of an unknown linear dynamical system even though the training objective is non-convex. Along the way, we'll discuss several useful concepts from control theory, a field that has studied linear dynamical systems for decades. Investigating stochastic gradient descent for learning linear dyanmical systems not only bears out interesting connections between machine learning and control theory, it might also provide a useful stepping stone for a deeper undestanding of recurrent neural networks more broadly.
+In this post, we take a step back to reflect on the mathematics of recurrent neural networks. Interpreting recurrent neural networks as dynamical systems, we will show that stochastic gradient descent successfully learns the parameters of an unknown *linear* dynamical system even though the training objective is non-convex. Along the way, we'll discuss several useful concepts from control theory, a field that has studied linear dynamical systems for decades. Investigating stochastic gradient descent for learning linear dyanmical systems not only bears out interesting connections between machine learning and control theory, it might also provide a useful stepping stone for a deeper undestanding of recurrent neural networks more broadly.
 
 ## Linear dynamical systems
 
-We focus on time-invariant the single-input single-output system. For an input sequence of real numbers $x_1,\dots, x_T\in \mathbb{R}$,  the system maintains a sequence of hidden states $h_1,\dots, h_T\in \mathbb{R}^n$, and prodcues a sequence of outputs $y_1,\dots, y_T\in \mathbb{R}$ according to the following rules: 
+We focus on time-invariant single-input single-output system. For an input sequence of real numbers $x_1,\dots, x_T\in \mathbb{R}$,  the system maintains a sequence of hidden states $h_1,\dots, h_T\in \mathbb{R}^n$, and produces a sequence of outputs $y_1,\dots, y_T\in \mathbb{R}$ according to the following rules: 
 
 $$ h_{t+1} = Ah_t + Bx_t~~~~~~~~~~~~~~~~~~~~~    $$
 
@@ -38,14 +38,11 @@ Before we go into the math, let's illustrate the algorithm with a pressing examp
    <img style="width:800px;" src="/assets/sysid/dryer/dryer-0.svg" />
   </div>
 
-You can see that the output temperature is related to the inputs. If you set the temperature to high for long enough, you'll eventually get a high output temperature. But the system has state. Briefly lowering the temperature has little effect on the outputs. Intuition suggests that these kind of effects should be captured by a system with two or three hidden states. So, let's see how SGD would go about finding the parameters of the system. We'll initialize the system such that before training its predictions are just the inputs of the system. We then run SGD on the same sequence for 400 steps.
+You can see that the output temperature is related to the inputs. If you set the temperature to high for long enough, you'll eventually get a high output temperature. But the system has state. Briefly lowering the temperature has little effect on the outputs. Intuition suggests that these kind of effects should be captured by a system with two or three hidden states. So, let's see how SGD would go about finding the parameters of the system. We'll initialize a system with three hidden states such that before training its predictions are just the inputs of the system. We then run SGD with a fixed learning rate on the same sequence for 400 steps.
 
   <!-- begin animation -->
   <div style="text-align:center;">
    <img style="width:800px;" id="imganim" src="/assets/sysid/dryer/dryer-1.svg" onClick="forward_image()" />
-   <p style="text-align:center;"><em>Step <span
-style="font-family:monospace;"><span id="counter">0</span>/400</span>. Click to advance.<br /> 
-</em></p>
   </div>
   <script type='text/javascript'>//<![CDATA[
   var images = [
@@ -68,6 +65,10 @@ style="font-family:monospace;"><span id="counter">0</span>/400</span>. Click to 
   </script>
   <!-- end animation -->
 
+*The blue line shows the predictions of SGD after <span
+style="font-family:monospace;"><span id="counter">0</span>/400</span> gradient updates. Click to advance.*
+
+
 Evidently, gradient descent converges just fine on this example. Let's look at the hair dryer objective function along the line segment between two random points in the domain.
 
 <div style="text-align:center;"> 
@@ -88,7 +89,7 @@ The key challenge for us is to understand under what conditions we can prove tha
 
 ## Control theory, polynomial roots, and Pac-Man
 
-A linear dynamical system $(A,B,C,D)$ is equivalent to the system $(TAT^{-1}, TB, CT^{-1}, D)$ for any invertible matrix $T$ in terms of the behavior of the outputs. Consequently, in its unrestricted parameterization, the objective function cannot have a unique optimum. A common way of removing this redundancy is to impose a canonical form. Almost all non-degenerate system admit the *controllable canonical form*, defined as
+A linear dynamical system $(A,B,C,D)$ is equivalent to the system $(TAT^{-1}, TB, CT^{-1}, D)$ for any invertible matrix $T$ in terms of the behavior of the outputs. A little thought shows therefore that in its unrestricted parameterization the objective function cannot have a unique optimum. A common way of removing this redundancy is to impose a canonical form. Almost all non-degenerate system admit the *controllable canonical form*, defined as
 
 $$A\; = \;
     \left[ \begin{array}{ccccc} 0 & 1 & 0 & \cdots & 0 \newline 0 & 0 & 1 & \cdots & 0 \newline
@@ -104,22 +105,25 @@ $$C\;~= \;
 D =~~ \left[ \begin{array}{c} d\end{array} \right]
  $$
 
-We will also parametrize our training model using these forms. One of its nice properties is that the coefficients of the characteristic polynomial of transition matrix $A$ can be read off from the last row of $A$. That is, 
+We will also parametrize our training model using these forms. One of its nice properties is that the coefficients of the characteristic polynomial of the *state transition matrix* $A$ can be read off from the last row of $A$. That is, 
 $$det(zI-A) = p_a(z) := z^n+a_1z^{n-1}+\dots + a_n.$$
 
-Even in controllable canonical form, it still seems rather difficult to learn arbitrary linear dynamical systems. For one, to guarantee the stability of the system we would also need that the eigenvalues of $A$ are all bounded by $1.$ Equivalently, the roots of the characteristic polynomial should all be contained in the complex unit disc. But the set of all stable systems forms a non-convex domain. It seems daunting to guarantee that stochastic gradient descent would converge from an arbtirary starting point in this domain without ever leaving the domain. 
+Even in controllable canonical form, it still seems rather difficult to learn arbitrary linear dynamical systems. A natural restriction would be *stability*, that is, to require that the eigenvalues of $A$ are all bounded by $1.$ Equivalently, the roots of the characteristic polynomial should all be contained in the complex unit disc. Without stability, the state of the system could blow up exponentially making robust learning difficult. But the set of all stable systems forms a non-convex domain. It seems daunting to guarantee that stochastic gradient descent would converge from an arbtirary starting point in this domain without ever leaving the domain. 
 
-We will therefore impose a stronger restriction on the roots of the characteristic polynomial. We call this the Pac-Man condition.
+We will therefore impose a stronger restriction on the roots of the characteristic polynomial. We call this the Pac-Man condition. You can think of it as a strengthening of stability.
 
-> **Pac-Man condition**: We assume that the true linear dynamical system satisfies that 
-$$|Re(q_a(z))| > |Im(q_a(z))|, \forall z\in \mathbb{C}, |z| = 1$$ where $q_a(z) = p(z)/z^n = 1+a_1z^{-1}+\dots + a_nz^{-n}$. 
+> **Pac-Man condition**: A linear dynamical system in controllable canonical form satisfies the Pac-Man condition if the coefficient vector $a$ defining the state transition matrix satisfies
+$$|Re(q_a(z))| > |Im(q_a(z))|$$ for all complex numbers $z$ of modulus $|z| = 1$, where $q_a(z) = p_a(z)/z^n = 1+a_1z^{-1}+\dots + a_nz^{-n}$. 
 
 <div style="text-align:center;">
  <img style="width:350px;margin-bottom:50px;" src="/assets/sysid/pacman.png" />
  <img style="width:400px;" src="/assets/sysid/trace-degree4.png" />
 </div>
 
-Above, we illustrate this condition in the figure on the right for a degree 4 system. Here we plot the value of $q_a(z)$ on complex plane for all $z$ on the unit circle. 
+*Above, we illustrate this condition for a degree 4 system plotting the value of $q_a(z)$ on complex plane for all complex numbers $z$ on the unit circle.*
+
+ 
+
 We note that Pac-Man condition is satisfied by vectors $a$ with $\|a\|_1\le \sqrt{2}/2$. Moreover, if $a$ is a random Gaussian vector with expected $\ell_2$ norm bounded by $o(1/\sqrt{\log n})$, then it will satisfy Pac-Man condition with probability $1-o(1)$. Roughly speaking, the assumption requires the roots of the characteristic polynomial $p_a(z)$ are relatively dispersed inside the unit circle. 
 
 The Pac-Man condition has three important implications: 
@@ -164,8 +168,6 @@ Mapping out $G_\lambda$ and $\widehat G_\lambda$ for all $\lambda\in [0, 2\pi]$ 
   <div style="text-align:center;">
    <img style="width:400px;" src="/assets/sysid/transfer/approx-10.png" onClick="forward_transfer_image()" />
    <img style="width:400px;" id="transfer-img" src="/assets/sysid/transfer/approx-00.png" onClick="forward_transfer_image()" />
-
-Left: Target transfer function $G$. Right: Approximation $\widehat G$ at step <span id="transfer-counter">0</span>/10.<br /> Click to advance.
  </div>
 
   <script type='text/javascript'>//<![CDATA[
@@ -190,6 +192,9 @@ Left: Target transfer function $G$. Right: Approximation $\widehat G$ at step <s
   }
   //]]> 
   </script>
+
+*Left: Target transfer function $G$. Right: Approximation $\widehat G$ at step <span style="font-family:monospace" id="transfer-counter">0</span>/10. Click to advance.*
+
 
 Given this pretty representation of the idealized risk objective, we can finally prove our main lemma.
 

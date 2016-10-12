@@ -8,9 +8,9 @@
     <meta name="description" content="Algorithms off the convex path.">
     <meta name="author" content="Moritz Hardt">
     
-    <link rel="canonical" href="http://offconvex.github.io/">
+    <link rel="canonical" href="http://localhost:4000/">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Off the convex path" href="/feed.xml" />
-    <link rel="stylesheet" href="/css/pixyll.css?201512211009" type="text/css">
+    <link rel="stylesheet" href="/css/pixyll.css?201610121325" type="text/css">
 
     <!-- Fonts -->
     <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic' rel='stylesheet' type='text/css'>
@@ -25,7 +25,7 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="Off the convex path">
     <meta property="og:description" content="Algorithms off the convex path.">
-    <meta property="og:url" content="http://offconvex.github.io/">
+    <meta property="og:url" content="http://localhost:4000/">
     <meta property="og:site_name" content="Off the convex path">
 
     <script type="text/x-mathjax-config">
@@ -54,13 +54,13 @@
     <header class="site-header px2 px-responsive">
   <div class="mt2 wrap">
     <div class="measure">
-      <a href="http://offconvex.github.io" class="site-title">
+      <a href="http://localhost:4000" class="site-title">
       <img style="width:500px;" src="/assets/logo.jpg" />
       </a>
       <nav class="site-nav" style="padding-top:200px;">
         <a href="/about/">About</a>
 <a href="/contact/">Contact</a>
-<a href="/feed.xml">Subscribe</a>
+<a href="/subscribe/">Subscribe</a>
 
       </nav>
       <div class="clearfix"></div>
@@ -77,33 +77,18 @@
   <div class="posts">
     
      
-      <div class="post">
-        
-    <h3 class="h2 post-title">
-      <a href="/2015/12/20/dynamical-systems-1/" class="post-link">
-        Nature, Dynamical Systems and Optimization
-      </a>
-    </h3>
-        <p class="post-summary">
-        <span class="post-meta">Dec 20, 2015.&nbsp;&nbsp;</span>
-The language of dynamical systems is the preferred choice of scientists to model a wide variety of phenomena in nature. The reason is that, often, it is easy to locally observe or understand what happens... <a href="/2015/12/20/dynamical-systems-1/">Continue</a>
-        </p>
-      </div>
-     
-    
-     
     
      
       <div class="post">
         
     <h3 class="h2 post-title">
-      <a href="/2015/12/17/tensor-decompositions/" class="post-link">
-        Tensor Methods in Machine Learning
+      <a href="/2016/07/10/embeddingspolysemy/" class="post-link">
+        Linear algebraic structure of word meanings
       </a>
     </h3>
         <p class="post-summary">
-        <span class="post-meta">Dec 17, 2015.&nbsp;&nbsp;</span>
-Tensors are high dimensional generalizations of matrices. In recent years tensor decompositions were used to design learning algorithms for estimating parameters of latent variable models like Hidden Markov Model, Mixture of Gaussians and Latent Dirichlet... <a href="/2015/12/17/tensor-decompositions/">Continue</a>
+        <span class="post-meta">Jul 10, 2016.&nbsp;&nbsp;</span>
+Word embeddings capture the meaning of a word using a low-dimensional vector and are ubiquitous in natural language processing (NLP). (See my earlier post 1 and post2.) It has always been unclear how to interpret... <a href="/2016/07/10/embeddingspolysemy/">Continue</a>
         </p>
       </div>
      
@@ -112,13 +97,13 @@ Tensors are high dimensional generalizations of matrices. In recent years tensor
       <div class="post">
         
     <h3 class="h2 post-title">
-      <a href="/2015/12/12/word-embeddings-1/" class="post-link">
-        Semantic Word Embeddings
+      <a href="/2016/05/08/almostconvexitySATM/" class="post-link">
+        A Framework for analysing Non-Convex Optimization
       </a>
     </h3>
         <p class="post-summary">
-        <span class="post-meta">Dec 12, 2015.&nbsp;&nbsp;</span>
-This post can be seen as an introduction to how nonconvex problems arise naturally in practice, and also the relative ease with which they are often solved. I will talk about word embeddings, a geometric... <a href="/2015/12/12/word-embeddings-1/">Continue</a>
+        <span class="post-meta">May 8, 2016.&nbsp;&nbsp;</span>
+Previously Rong’s post and Ben’s post show that (noisy) gradient descent can converge to local minimum of a non-convex function, and in (large) polynomial time (Ge et al.’15). This post describes a simple framework that... <a href="/2016/05/08/almostconvexitySATM/">Continue</a>
         </p>
       </div>
      
@@ -127,17 +112,105 @@ This post can be seen as an introduction to how nonconvex problems arise natural
       <div class="post">
         
     <h3 class="h2 post-title">
-      <a href="/2015/12/11/mission-statement/" class="post-link">
-        Why go off the convex path?
+      <a href="/2016/04/04/markov-chains-dynamical-systems/" class="post-link">
+        Markov Chains Through the Lens of Dynamical Systems&#58; The Case of Evolution
       </a>
     </h3>
         <p class="post-summary">
-        <span class="post-meta">Dec 11, 2015.&nbsp;&nbsp;</span>
-The notion of convexity underlies a lot of beautiful mathematics. When combined with computation, it gives rise to the area of convex optimization that has had a huge impact on understanding and improving the world... <a href="/2015/12/11/mission-statement/">Continue</a>
+        <span class="post-meta">Apr 4, 2016.&nbsp;&nbsp;</span>
+In this post, we will see the main technical ideas in the analysis of the mixing time of evolutionary Markov chains introduced in a previous post. We start by introducing the notion of the expected... <a href="/2016/04/04/markov-chains-dynamical-systems/">Continue</a>
         </p>
       </div>
      
     
+     
+      <div class="post">
+        
+    <h3 class="h2 post-title">
+      <a href="/2016/03/24/saddles-again/" class="post-link">
+        Saddles Again
+      </a>
+    </h3>
+        <p class="post-summary">
+        <span class="post-meta">Mar 24, 2016.&nbsp;&nbsp;</span>
+Thanks to Rong for the very nice blog post describing critical points of nonconvex functions and how to avoid them. I’d like to follow up on his post to highlight a fact that is not... <a href="/2016/03/24/saddles-again/">Continue</a>
+        </p>
+      </div>
+     
+    
+     
+      <div class="post">
+        
+    <h3 class="h2 post-title">
+      <a href="/2016/03/22/saddlepoints/" class="post-link">
+        Escaping from Saddle Points
+      </a>
+    </h3>
+        <p class="post-summary">
+        <span class="post-meta">Mar 22, 2016.&nbsp;&nbsp;</span>
+Convex functions are simple — they usually have only one local minimum. Non-convex functions can be much more complicated. In this post we will discuss various types of critical points that you might encounter when... <a href="/2016/03/22/saddlepoints/">Continue</a>
+        </p>
+      </div>
+     
+    
+     
+      <div class="post">
+        
+    <h3 class="h2 post-title">
+      <a href="/2016/03/14/stability/" class="post-link">
+        Stability as a foundation of machine learning
+      </a>
+    </h3>
+        <p class="post-summary">
+        <span class="post-meta">Mar 14, 2016.&nbsp;&nbsp;</span>
+Central to machine learning is our ability to relate how a learning algorithm fares on a sample to its performance on unseen instances. This is called generalization. In this post, I will describe a purely... <a href="/2016/03/14/stability/">Continue</a>
+        </p>
+      </div>
+     
+    
+     
+      <div class="post">
+        
+    <h3 class="h2 post-title">
+      <a href="/2016/03/07/evolution-markov-chains/" class="post-link">
+        Evolution, Dynamical Systems and Markov Chains
+      </a>
+    </h3>
+        <p class="post-summary">
+        <span class="post-meta">Mar 7, 2016.&nbsp;&nbsp;</span>
+In this post we present a high level introduction to evolution and to how we can use mathematical tools such as dynamical systems and Markov chains to model it. Questions about evolution then translate to... <a href="/2016/03/07/evolution-markov-chains/">Continue</a>
+        </p>
+      </div>
+     
+    
+     
+      <div class="post">
+        
+    <h3 class="h2 post-title">
+      <a href="/2016/02/14/word-embeddings-2/" class="post-link">
+        Word Embeddings&#58; Explaining their properties
+      </a>
+    </h3>
+        <p class="post-summary">
+        <span class="post-meta">Feb 14, 2016.&nbsp;&nbsp;</span>
+This is a followup to an earlier post about word embeddings, which capture the meaning of a word using a low-dimensional vector, and are ubiquitous in natural language processing. I will talk about my joint... <a href="/2016/02/14/word-embeddings-2/">Continue</a>
+        </p>
+      </div>
+     
+    
+     
+      <div class="post">
+        
+    <h3 class="h2 post-title">
+      <a href="/2016/01/25/non-convex-workshop/" class="post-link">
+        NIPS 2015 workshop on non-convex optimization
+      </a>
+    </h3>
+        <p class="post-summary">
+        <span class="post-meta">Jan 25, 2016.&nbsp;&nbsp;</span>
+While convex analysis has received much attention by the machine learning community, theoretical analysis of non-convex optimization is still nascent. This blog as well as the recent NIPS 2015 workshop on non-convex optimization aim to... <a href="/2016/01/25/non-convex-workshop/">Continue</a>
+        </p>
+      </div>
      
     
   </div>
@@ -150,7 +223,7 @@ The notion of convexity underlies a lot of beautiful mathematics. When combined 
   </div>
   <div class="right">
     
-      <span class="pagination-item disabled">Older</span>
+      <a class="pagination-item" href="/page2/">Older</a>
     
   </div>
 </div>
