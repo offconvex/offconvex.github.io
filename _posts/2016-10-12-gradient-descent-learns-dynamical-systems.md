@@ -31,7 +31,7 @@ Stochastic gradients of the population risk can be computed linearly in $Tn$ via
 
 ## Hair dryers and quasi-convex functions
 
-Before we go into the math, let's illustrate the algorithm with a pressing example that we all run into every morning: hair drying. Imagine you have a hair dryer with a *low* temperature setting and a *high* temperature setting. Neither setting is ideal. So every morning you switch between the settings frantically in an attempt to modulate to the ideal temperature. Measuring, the resulting temperature (red line below) as a function of the input setting (green dots below), the picture you'll see is something like [this](https://www.mathworks.com/help/ident/examples/estimating-simple-models-from-real-laboratory-process-data.html?prodcode=ML):
+Before we go into the math, let's illustrate the algorithm with a pressing example that we all run into every morning: hair drying. Imagine you have a hair dryer with a *low* temperature setting and a *high* temperature setting. Neither setting is ideal. So every morning you switch between the settings frantically in an attempt to modulate to the ideal temperature. Measuring the resulting temperature (red line below) as a function of the input setting (green dots below), the picture you'll see is something like [this](https://www.mathworks.com/help/ident/examples/estimating-simple-models-from-real-laboratory-process-data.html?prodcode=ML):
 
 
   <div style="text-align:center;">
