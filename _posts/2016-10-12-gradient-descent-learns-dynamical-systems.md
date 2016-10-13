@@ -149,7 +149,7 @@ To establish quasi-convexity under the Pac-Man condition, we will first develop 
 
 A simple algebraic manipulation simplifies the population risk with infinite sequence length to 
 
-$$\lim_{T \rightarrow 0} f(\widehat{\Theta}) = (\hat{D}-D)^2 + \sum_{k=0}^{\infty} (\hat{C}\hat{A}^kB-CA^k B)^2. $$
+$$\lim_{T \rightarrow \infty} f(\widehat{\Theta}) = (\hat{D}-D)^2 + \sum_{k=0}^{\infty} (\hat{C}\hat{A}^kB-CA^k B)^2. $$
 
 The first term, $(\hat D - D)^2$ is convex and appears nowhere else. We can safely ignore it and focus on the remaining expression instead, which we call the *idealized risk*:
 
@@ -204,10 +204,9 @@ as a function of $\hat{A},\hat{C}$ is quasi-convex in the Pac-Man region.
 
 The lemma reduces to the following simple claim. 
 
-> **Claim:** The function $h(\hat{u},\hat{v}) = (\hat{u}/\hat{v} - u/v)^2$ is quasi-convex in the region where $Re(\hat{v}/v) > 0$.
+> **Claim:** The function $h(\hat{u},\hat{v}) = \|\hat{u}/\hat{v} - u/v\|^2$ is quasi-convex in the region where $Re(\hat{v}/v) > 0$.
 
-The proof simply involves computing the gradients and checking the conditions for quasi-convexity by elementary algebra. We omit the formal proof but presents a proof by plots:
-Here below on the left we plot the surface of the function $h(\hat{u}, \hat{v}) = (\hat{u}/\hat{v}- 1)^2$ for $\hat{v} > 0$ from different perspectives.
+The proof simply involves computing the gradients and checking the conditions for quasi-convexity by elementary algebra. We omit a formal proof, but intead show a plot of the function $h(\hat{u}, \hat{v}) = (\hat{u}/\hat{v}- 1)^2$ over the reals:
 
   <!-- begin animation -->
   <div style="text-align:center;">
@@ -228,20 +227,27 @@ Here below on the left we plot the surface of the function $h(\hat{u}, \hat{v}) 
   "/assets/sysid/3dplot/3dplot-90.jpg",
   ]
   var iB = 3
+  var inc_sign = 1
   function forward_3dplot_image(){
-   iB = iB + 1;
-   document.getElementById('3dplot-img').src = plot3d_images[iB%10];
+   iB = iB + inc_sign;
+   if (iB == 9) {
+     inc_sign = -1;
+   }
+   if (iB == 0) {
+     inc_sign = 1;
+   }
+   document.getElementById('3dplot-img').src = plot3d_images[iB];
   }
   //]]> 
   </script>
   <!-- end animation -->
 
-To see how the lemma follows from the previous claim we note that quasi-convexity is preserved under composition with any linear transformation. Specifically, $h(z)$ is quasi-convex, then $h(\langle r, x\rangle)$ is also quasi-convex for any linear function $r$. So, consider the linear function:
+To see how the lemma follows from the previous claim we note that quasi-convexity is preserved under composition with any linear transformation. Specifically, $h(z)$ is quasi-convex, then $h(R x)$ is also quasi-convex for any linear map $R$. So, consider the linear map:
 
 $$(\hat{a},\hat{c})\mapsto (\hat u, \hat v) = (\hat{c}_1e^{(n-1)\lambda}+\dots+ \hat{c}_n, e^{n\lambda} 
 +\hat{a}_1e^{(n-1)\lambda}+\dots+\hat{a}_n)$$
 
-With this linear transformation, our claim shows that $(G_{\lambda}-\widehat{G}_{\lambda})^2$ is quasi-convex when $Re(\hat{v}/v) \ge 0$. In particular, when $\hat{a}$ and $a$ both satisfy the Pac-Man condition,  then $\hat{v}$ and $v$ both reside in the 90 degree wedge. Therefore they have an angle smaller than 90 degree. This implies that $Re(\hat{v}/v) > 0$. 
+With this linear transformation, our simple claim about a bivariate function extends to show that $(G_{\lambda}-\widehat{G}_{\lambda})^2$ is quasi-convex when $Re(\hat{v}/v) \ge 0$. In particular, when $\hat{a}$ and $a$ both satisfy the Pac-Man condition,  then $\hat{v}$ and $v$ both reside in the 90 degree wedge. Therefore they have an angle smaller than 90 degree. This implies that $Re(\hat{v}/v) > 0$. 
 
 ## Conclusion
 
