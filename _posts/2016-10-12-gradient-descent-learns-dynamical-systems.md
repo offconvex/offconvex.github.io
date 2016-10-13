@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      Gradient Descent Learns Linear Dynamical Systems
-date:       2016-10-13 8:00:00
+date:       2016-10-13 10:00:00
 author:     Moritz Hardt and Tengyu Ma
-visible:    false
+visible:    true
 ---
 
 From text translation to video captioning, learning to map one sequence to another is an increasingly active research area in machine learning. Fueled by the success of recurrent neural networks in its many variants, the field has seen rapid advances over the last few years. Recurrent neural networks are typically trained using some form of stochastic gradient descent combined with backpropagation for computing derivatives. The fact that gradient descent finds a useful set of parameters is by no means obvious. The training objective is typically non-convex. The fact that the model is allowed to maintain state is an additional obstacle that makes training of recurrent neural networks challenging. 
