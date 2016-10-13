@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Gradient Descent Learns Linear Dynamical Systems
-date:       2016-10-12 8:00:00
+date:       2016-10-13 8:00:00
 author:     Moritz Hardt and Tengyu Ma
 visible:    false
 ---
