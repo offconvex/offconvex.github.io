@@ -27,7 +27,7 @@ $$ f(\widehat{\Theta}, (x,y)) = \frac{1}{T}\sum_{t=1}^{T}\left\|y_t-\hat{y}_t\ri
 
 $$ f(\widehat{\Theta}) =  \mathbb{E}_{(x,y)} \left[f(\widehat{\Theta}, (x,y))\right]$$
 
-Stochastic gradients of the population risk can be computed linearly in $Tn$ via back-propagation given random samples. We can therefore directly minimize population risk using stochastic gradient descent. The question is just whether the algorithm actually converges. Even though the state transformations are linear, the objective function we defined is not convex. Luckily, we will see that the objective is still *close enough* to convex for stochastic gradient to make steady progress towards the global minimum.
+Stochastic gradients of the population risk can be computed in time $O(Tn)$ via back-propagation given random samples. We can therefore directly minimize population risk using stochastic gradient descent. The question is just whether the algorithm actually converges. Even though the state transformations are linear, the objective function we defined is not convex. Luckily, we will see that the objective is still *close enough* to convex for stochastic gradient to make steady progress towards the global minimum.
 
 ## Hair dryers and quasi-convex functions
 
