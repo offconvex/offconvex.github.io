@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Generative Adversarial Nets (GANs): Some open questions
-date:  2017-03-13 17:00:00
-author: Sanjeev Arora 
-visible: False
+title: Generative Adversarial Networks (GANs): Some Open Questions
+date:  2017-03-15 13:00:00
+author: Sanjeev Arora
+visible: True
 ---
 
 Since ability to generate “realistic-looking” data may be a step towards understanding its structure and exploiting it, generative models are an important component of unsupervised learning, which has been a frequent theme on this blog.  Today’s post is about Generative Adversarial Networks (GANs), introduced in 2014 by [Goodfellow et al.](https://arxiv.org/abs/1406.2661), which have quickly become very popular way to train generative models for complicated real-life data. It involves a game-theoretic tussle between a generator player and a discriminator player, which is very attractive and may be useful in other settings.
