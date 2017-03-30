@@ -1,0 +1,112 @@
+---
+layout: post
+title: Generalization and Equilibrium in Generative Adversarial Networks (GANs)
+date:  2017-03-20 13:00:00
+author: Sanjeev Arora
+visible: False
+---
+
+The [previous post](http://www.offconvex.org/2017/03/15/GANs/) described Generative Adversarial Networks (GANs), a technique for training generative models for image distributions (and other complicated distributions) via a 2-party game between a generator deep net and a discriminator deep net.  This post describes [my new paper](https://arxiv.org/abs/1703.00573) with Rong Ge, Yingyu Liang, Tengyu Ma, and Yi Zhang. We address some fundamental issues about generalization in GANs that have been debated since the beginning; e.g., what is the sense in which the learnt distribution close to the target distribution, and also what kind of equilibrium exists between generator and discriminator. 
+
+ The usual analysis of GANs,  sketched in the previous post,  assumes "sufficiently large number of samples and sufficiently large discriminator nets" to conclude that at the end of training the learnt distribution should be close to the target distribution. Our new analysis, which accounts for the finite capacity of the discriminator net, calls this into question. 
+
+Readers looking for new implementation ideas can skip ahead to the section below on our  *Mix + GAN* protocol. It takes other GANs codes as black box and (by adding extra capacity and corresponding training time) often improves the learnt distribution in qualitative and quantitative measures. Our  testing suggests that it works well out of the box. 
+
+**Notation** Assume images are represented as vectors in $\Re^d$. Typically $d$ would be  $1000$ or much higher. The *capacity* of the discriminator, namely, the number of trainable parameters, is denoted $n$. The distribution on all real-life images is denoted $P_{real}$. We assume that the number of distinct images in 
+$P_{real}$ ---regardless of how one defines "distinct"---is enormous compared to all these parameters. 
+
+Recall that the discriminator $D$ is trained to distinguish between samples from $P_{real}$ and samples from the generator's distribution
+$P_{synth}$. This can be formalized using different measures (leading to different GANs objectives) and for simplicity our exposition here uses the *distinguishing probability* which is used in [Wasserstein GAN](https://arxiv.org/abs/1701.07875) objective:
+
+$$|~E_{x \in P_{real}}[D(x)] - E_{x \in P_{synth}}[D(x)]|\qquad (1).$$
+
+(Readers with a background in theoretical CS and cryptography will be reminded of similar definitions in theory of pseudorandom generators.) 
+
+## Finite Discriminators have limited power
+
+
+The following simple fact shows why ignoring the discriminator's capacity constraint can lead to grossly incorrect intuition. 
+(The constant $C$ is fairly small and explained in the paper.)
+
+>**Theorem 1**  Suppose the discriminator has capacity  $n$.  Then expression (1) is less than $\epsilon$ when  $P_{synth}$ is the following:  uniform distribution on a random sample of $C n/\epsilon^2 \log n$ images from $P_{real}$.  
+
+ Note that this theorem is not a formalization of the usual failure mode discussed in GANs literature, whereby the generator simply memorizes the training images.  The theorem still applies if we allow the discriminator to use a large set of held out images from $P_{real}$, which are completely different than images in $P_{synth}$. Or, if the training set of images is much larger than  $C n/\epsilon^2 \log n$  images. Furthermore, common measures of diversity/novelty used in research papers (e.g., pick a random image from $P_{synth}$ and check the "distance" to the nearest neighbor among the training set) are not guaranteed to get around the problem raised by Theorem 1. 
+
+Since $Cn/\epsilon^2\log n$ is rather small, this theorem says that a finite-capacity discriminator is unable to even enforce that $P_{synth}$ has  large *diversity*, let alone enforce that $P_{synth}\approx P_{real}$.   The theorem does not imply that existing GANs do not *in practice* generate diverse distributions; merely that the current analyses gives no reason to believe that they do so.
+
+The proof of the Theorem is a standard sampling argument from learning theory: take an $\epsilon$-net in the continuum of all deep nets of capacity $n$ and a fixed architecture, and do a union bound. Please see the paper for details. (Aside: the "$\epsilon^2$" term in Theorem 1 arises from this argument, and is ubiquitous in ML theory.)
+
+Motivated by this theorem, we argue in the paper  that the correct way to think about generalization for GANs is not the usual distance functions between distributions such as Jensen-Shannon or Wasserstein, but a new distance we define called *Neural net distance*. The neural net distance measures the ability of finite-capacity deep nets to distinguish the distributions. It can be small even when the other distances are large (as illustrated in the above theorem). 
+
+### Corollary: Larger training sets have limited utility 
+
+In fact theorem 1 has the following rephrasing. Suppose we have a very large training set of images. If the discriminator has capacity $n$, then it suffices to take a subsample of size $C n/\epsilon^2 \log n$  from this training set, and we are guaranteed that GANs training using this subsample is capable of achieving a training objective that is within $\epsilon$ of the best achieved with the full training set. ( Any more samples can only improve the training objective by at most $\epsilon$. )
+
+
+
+## Existence of Equilibrium 
+
+Let's recall the objective used in GAN   (for simplicity, we again stick with the  Wasserstein GAN):
+
+$$\min_{G} \max_{D}~~E_{x\sim P_{real}}[D(x)] - E_{h}[D(G(h))] \qquad (1)$$
+where $G$ is the generator net, and $P_{synth}$ is the distribution of $G(h)$ where $h$ is a random seed. Researchers have noted that this is implicitly a $2$-person game and it may not have an equilibrium; e.g., see the discussion around Figure 22 in [Goodfellow's survey](https://arxiv.org/pdf/1701.00160.pdf). An *equilibrium* corresponds to a $G$ and a $D$ such that the pair are still a solution if we switch the order of min and max in (1). (That is, $G$ doesn't have incentive to switch in response to $D$, and vice versa.) Lack of equilibrium may be a cause of oscillatory behavior observed in training. 
+
+But ideally we wish to show something stronger than mere *existence* of equilibrium: we wish to exhibit an equilibrium where the generator *wins*, with the objective above at zero or close to zero (in other words, discriminator is unable to distinguish between the two distributions). 
+
+We will prove existence of an $\epsilon$-*approximate equilibrium*, whereby switching the order of $G, D$ affects the expression by at most $\epsilon$. (That is, $G$ has only limited incentive to switch in respnse to $D$ and vice versa.) Naively one would imagine that proving such a result involves some insight into the distribution $P_{real}$ but surprisingly none is needed.
+
+>**Theorem 2** If a generator net of capacity $T$ is able to generate a Gaussian distribution in $\Re^d$, then there exists an $\epsilon$-approximate equilibrium in the game where the generator has capacity $O(n T\log n/\epsilon^2 )$.
+
+*Proof sketch:* A classical result in nonparametric statistics states that $P_{real}$ can be well-approximated by an *infinite* mixture of standard Gaussians. Now take a sample of size $O(n\log n/\epsilon^2)$ from this infinite mixture, and let $G$ be a uniform mixture on this finite sample of Gaussians. By an argument similar to Theorem 1, the distribution output by $G$ will be indistinguishable from $P_{real}$ by every deep net of capacity $n$. Finally, fold in this mixture of $O(n\log n/\epsilon^2)$ Gaussians into a single generator by using a small "selector" circuit that selects between these with the correct probability. 
+
+This theorem only shows *existence* of a particular  equilibrium. What a GAN may actually find in practice using backpropagation is not addressed. 
+
+Finally, if we are interested in objectives other than Wasserstein GAN, then a similar proof can show the existence of an
+$\epsilon$-approximate *mixed* equilibrium, namely, where the discriminator and generator are themselves  small mixtures of 
+deep nets. 
+
+*Aside:* The sampling idea in this proof goes back to  [Lipton and Young 1994](http://dl.acm.org/citation.cfm?id=195447).
+Similar ideas have also appeared in study of pseudorandomness (see [Trevisan et al 2009](http://ieeexplore.ieee.org/document/5231258/citations)) and model criticism (see [Gretton et al 2012](http://www.jmlr.org/papers/volume13/gretton12a/gretton12a.pdf).)
+
+## MIX + GAN protocol
+
+Our theory  shows that using a mixture of (not too many) generators and discriminators guarantees existence of approximate equilibrium. This suggests that GANs training may be better and more stable we replace the simple generator and discriminator with mixtures of generators. 
+
+Of course, it is impractical to use very large mixtures, so we propose  **MIX + GAN**: use a mixture of $k$ components, where $k$ is as large as allowed by size of GPU memory. Namely, train a mixture of $k$ generators $\{G_{u_i}, i\in [k]\}$ and $k$ discriminators $\{D_{v_i}, i\in [k]\}$). All components of the mixture share the same network architecture but have their own trainable parameters.  Maintaining a mixture means of course maintaining a  weight $w_{u_i}$ for the generator $G_{u_i}$ which corresponds to the probability of selecting the output of $G_{u_i}$. These weights are also updated via backpropagation.  This heuristic can be combined with existing
+methods like DC-GAN, W-GAN etc., giving us new training methods MIX + DC-GAN, MIX + W-GAN etc.
+
+Some other experimental details: store the mixture probabilities using logarithm and use [exponentiated gradient](https://users.soe.ucsc.edu/~manfred/pubs/J36.pdf) to update. Use an entropy regularizer to prevent collapse of the mixture to single component. All of these are theoretically justified if $k$ were very large, and are only heuristic when $k$ is as small as $5$.
+
+We show that MIX+GAN can improve performance qualitatively (i.e., the images look better) and also quantitatively using popular measures such as Inception score.
+
+<div style="text-align:center;">
+<img style="width:375px;" src="http://www.cs.princeton.edu/~arora/img/celeA_dcgan.png" /> $\quad$ <img style="width:375px;" src="http://www.cs.princeton.edu/~arora/img/celeA_mixgan.png" />
+</div>
+
+
+Note that using a mixture increases the capacity of the model by a factor $k$, so it may not be entirely fair to compare the performance of MIX + X with X. On the other hand, in general it is not easy to get substantial performance benefit from increasing deep net capacity (in fact obvious ways of adding capacity that we tried actually reduced performance)   whereas here the benefit happens out of the box. 
+
+
+Note that a mixture of generators or discriminators has been used in several recent works (cited in our paper), but we are not aware of any attempts to use a trainable mixture as above.
+
+## Take-Away Lessons
+
+Complete understanding of GANs is challenging since we cannot even fully analyse simple backpropagation, let alone backpropagation combined with  game-theoretic complications.
+
+We therefore set aside issues of algorithmic convergence and focused on generalization and equilibrium, which focus on the maximum value of the objective. Our analysis suggests the following:
+
+(a) Current GANs training uses a finite capacity deep net to distinguish between synthetic and real distributions. This training criterion by itself seems insufficient to ensure even good *diversity* in the synthetic distribution, let alone that it is actually very closes to $P_{real}$. (Theorem 1) A first step to fix this would be to focus on ways to ensure higher diversity, which is a necessary step towards ensuring $P_{synth} \approx P_{real}$. 
+
+(b) Our results seem to pose a conundrum about the GANs idea which I personally have not been able to resolve. Usually, we believe that adding capacity to the generator  allows it gain representation power to model more fine-grained facts about the world and thus produce more realistic and diverse distributions. The downside to adding capacity is *overfitting*, which can be mitigated using more training images. Thus one imagines that the ideal configuration is:
+
+> Number of training images >  Generator capacity > Discriminator capacity.
+
+Theorem 1 suggests that if discriminator has capacity $n$ then it seems to derive very little benefit (at least in terms of the training objective) from a training set of more than $C (n\log n)/\epsilon^2$ images. Furthermore, there exist equilibria where the generator's distribution is not too diverse. 
+
+So  how can we change GANs training so that it ensures  $P_{synth}$ having high diversity? Some possibilities are 
+(a) cap the generator capacity to be much below discriminator capacity. This might work but I don't see a mathematical reason why. It certainly flies against the usual intuition that ---so long as training dataset is large enough---more capacity allows generators to produce more realistic images. (b) high diversity results from some as-yet unknown property of back propagation algorithm (c) Change GANs setup in some other way.
+ 
+
+At the very least our paper suggests that an explanation for good performance in  GANs must draw upon some delicate interplay of the power of generator vs discriminator and the backpropagation algorithm. This fact was overlooked in previous analyses which assumed discriminators of infinite capacity.
+
+
