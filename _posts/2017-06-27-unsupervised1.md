@@ -87,7 +87,7 @@ This observation explains why solving Task A in practice does not automatically 
 
 ## The  link between Tasks A and C: variational methods 
 
- As noted, distribution learning (Task A) via cross-entropy/maximum-likelihood fitting, and representation learning  (Task C) via sampling the posterior are fairly distinct. Why do students often conflate the two. Because in practice the most frequent way to solve Task A does  implicitly compute posteriors and thus also seems to solve Task C. (Although as noted above, the accuracy may not insufficient.) 
+ As noted, distribution learning (Task A) goes via cross-entropy/maximum-likelihood fitting which seems like an information coding task. Representation learning  (Task C) via sampling the posterior seems fairly distinct. Why do students often conflate the two? Because in practice the most frequent way to solve Task A does  implicitly compute posteriors and thus also seems to solve Task C. (Although as noted above, the accuracy may not insufficient.) 
 
 The generic way to learn latent variable models involves variational methods, which can be viewed as a generalization of the famous EM algorithm  ([Dempster et al. 1977](http://web.mit.edu/6.435/www/Dempster77.pdf)). 
 
