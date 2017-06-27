@@ -6,15 +6,6 @@ author: Sanjeev Arora and Andrej Risteski
 visible: True
 ---
 
-$$\newcommand{\E}{\mathbb{E}}$$
-
-$$\newcommand{\mX}{{\mathcal X}}$$
-
-$$\newcommand{\mH}{{\mathcal H}}$$
-
-$$\newcommand{\mC}{{\mathcal C}}$$
-
-$$\newcommand{\from}{\colon}$$
 
 *Unsupervised learning*, as the name suggests, is the science of learning from unlabeled data. A look at the [wikipedia page](https://en.wikipedia.org/wiki/Unsupervised_learning) shows that this term has many interpretations: 
 
@@ -45,7 +36,7 @@ The search for a descriptive language for talking about the possible relationshi
 
 ## A Bayesian view 
 
-Bayesian approaches  capture the relationship between the "high level"  representation $h$ and the datapoint $x$ by postulating a *joint distribution*  $p_{\theta}(x, h)$ of the data $x$ and representation $h$, such that $p_{\theta}(h)$ and $p_{\theta}(x|h)$ have a simple form as a function of the parameters $\theta $. These are also called *latent variable* probabilistic models, since $h$ is a latent (hidden) variable.
+Bayesian approaches  capture the relationship between the "high level"  representation $h$ and the datapoint $x$ by postulating a *joint distribution*  $p_{\theta}(x, h)$ of the data $x$ and representation $h$, such that $p_{\theta}(h)$ and $p_{\theta}(x| h)$ have a simple form as a function of the parameters $\theta$. These are also called *latent variable* probabilistic models, since $h$ is a latent (hidden) variable.
 
 The standard goal in distribution learning is to find the $\theta$ that "best explains" the data (what we called Task (A)) above). This is formalized using maximum-likelihood estimation going back to Fisher (~1910-1920): find the $\theta$ that maximizes the *log probability* of the training data. Mathematically, indexing the samples with $t$, we can write this as
 \begin{equation}  \max_{\theta} \sum_{t} \log p_{\theta}(x_t)  \qquad (1) \end{equation}
@@ -101,15 +92,15 @@ This observation explains why solving Task A in practice does not automatically 
 The generic way to learn latent variable models involves variational methods, which can be viewed as a generalization of the famous EM algorithm  ([Dempster et al. 1977](http://web.mit.edu/6.435/www/Dempster77.pdf)). 
 
 Variational methods maintain at all times a *proposed distribution* $q(h | x)$ (called *variational distribution*). The methods rely on the observation  that for every such $q(h |x)$ the following lower bound holds
-\begin{equation} \log p(x) \geq \E_{q(h|x)} \log p(x,h) + H(q(h|x))  \qquad (2). \end{equation}
+\begin{equation} \log p(x) \geq E_{q(h|x)} \log p(x,h) + H(q(h|x))  \qquad (2). \end{equation}
 where $H$ denotes Shannon entropy (or differential entropy, depending on whether $x$ is discrete or continuous). The RHS above is often called the *ELBO bound* (ELBO = evidence-based lower bound). This inequality follows from a bit of algebra using non-negativity of KL divergence, applied to distributions $q(h|x)$ and $p(h|x)$. More concretely, the chain of inequalities is as follows, 
-$$ KL(q(h|x) || p(h |x)) \geq 0 \Leftrightarrow \E_{q(h|x)} \log \frac{q(h|x)}{p(h|x)} \geq 0 $$
-$$ \Leftrightarrow  \E_{q(h|x)} \log \frac{q(h|x)}{p(x,h)} + \log p(x) \geq 0 $$ 
-$$ \Leftrightarrow \log p(x) \geq  \E_{q(h|x)} p(x,h) + H(q(h|x)) $$ 
+$$ KL(q(h|x) || p(h |x)) \geq 0 \Leftrightarrow E_{q(h|x)} \log \frac{q(h|x)}{p(h|x)} \geq 0 $$
+$$ \Leftrightarrow  E_{q(h|x)} \log \frac{q(h|x)}{p(x,h)} + \log p(x) \geq 0 $$ 
+$$ \Leftrightarrow \log p(x) \geq  E_{q(h|x)} p(x,h) + H(q(h|x)) $$ 
 Furthermore, *equality* is achieved if $q(h|x) = p(h|x)$. (This can be viewed as some kind of "duality" theorem for distributions, and dates all the way back to Gibbs. )
 
 Algorithmically observation (2) is used by foregoing solving the maximum-likelihood optimization (1), and solving instead
-$$\max_{\theta, q(h_t|x_t)} \sum_{t} \E_{q(h_t|x_t)} p(x_t,h_t) + H(q(h_t|x_t)) $$ 
+$$\max_{\theta, q(h_t|x_t)} \sum_{t} E_{q(h_t|x_t)} p(x_t,h_t) + H(q(h_t|x_t)) $$ 
 Since the variables are naturally divided into two blocks: the model parameters $\theta$, and the variational distributions $q(h_t|x_t)$, a natural way to optimize the above is to *alternate* optimizing over each group, while keeping the other fixed. (This meta-algorithm is often called variational EM for obvious reasons.) 
 
 Of course, optimizing over all possible distributions $q$ is an ill-defined problem, so typically one constrains $q$ to lie in some parametric family (e.g., " standard Gaussian transformed by depth $4$ neural nets of certain size and architecture") such that the maximizing the ELBO for $q$ is a tractable problem in practice. Clearly if the parametric family of distributions  is expressive enough, and the (non-convex) optimization problem doesn't get stuck in bad local minima, then variational EM algorithm will give us not only values of the parameters $\theta$ which are close to the ground-truth ones, but also variational distributions $q(h|x)$ which accurately track $p(h|x)$. But as we saw above, this accuracy would need to be very high to get meaningful representations.
