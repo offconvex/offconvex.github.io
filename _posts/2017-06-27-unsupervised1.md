@@ -51,9 +51,9 @@ $E_{x}[\log p_{\theta}(x)]$ of the distribution $p_{\theta}$, where $x$ is distr
 
 ### Toward task C: Representations arise from the posterior distribution
 
-Simply learning the distribution $p_{\theta}(x, h)$ does not yield a representation *per se.* To get a distribution of $x$, we need access to the posterior distribution of $h$ given $x$: then a sample from this posterior can be used as a "representation" of a data-point $x$. (Aside: Sometimes, in settings where the posterior has a simple description, one can view the description of the full distribution $p_{\theta}(h | x)$ as the representation of $x$.)
+Simply learning the distribution $p_{\theta}(x, h)$ does not yield a representation *per se.* To get a distribution of $x$, we need access to the posterior distribution of $h$ given $x$: then a sample from this posterior can be used as a "representation" of a data-point $x$. (Aside: Sometimes, in settings where the posterior has a simple description, one can view the description of the posterior distribution as the representation of $x$.)
  
-Thus to get a representation, we need a way to learn the distribution parameters $\theta$  *and* figure out how to efficiently sample from the posterior distribution $p_{\theta}(h | x)$. 
+Thus to get a representation, we need a way to learn the distribution parameters $\theta$  *and* figure out how to efficiently sample from the posterior distribution. 
 
 Note that the sampling problems for the posterior can be \#-P hard for very simple families. The reason is that by Bayes law, $p_{\theta}(h | x) = \frac{p_{\theta}(h) p_{\theta}(x | h)}{p_{\theta}(x)}$. Even if the numerator is  easy to calculate, as is the case for simple families, the   $p_{\theta}(x)$ involves a big summation (or integral) and is often hard to calculate. 
 
