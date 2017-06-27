@@ -5,7 +5,13 @@ date:  2017-06-27 04:00:00
 author: Sanjeev Arora and Andrej Risteski
 visible: True
 ---
-
+---
+layout: post
+title: Unsupervised learning, one notion or many?
+date:  2017-03-20 13:00:00
+author: Sanjeev Arora
+visible: False
+---
 
 *Unsupervised learning*, as the name suggests, is the science of learning from unlabeled data. A look at the [wikipedia page](https://en.wikipedia.org/wiki/Unsupervised_learning) shows that this term has many interpretations: 
 
@@ -53,11 +59,11 @@ $E_{x}[\log p_{\theta}(x)]$ of the distribution $p_{\theta}$, where $x$ is distr
 
 ### Toward task C: Representations arise from the posterior distribution
 
-Simply learning the distribution $p_{\theta}(x, h)$ does not yield a representation *per se.* To get a distribution of $x$, we need access to the posterior distribution of $h$ given $x$: then a sample from this posterior can be used as a "representation" of a data-point $x$. (Aside: Sometimes, in settings where the posterior has a simple description, one can view the description of the posterior distribution as the representation of $x$.)
+Simply learning the distribution $p_{\theta}(x, h)$ does not yield a representation *per se.* To get a distribution of $x$, we need access to the posterior $p_{\theta}(h \mid x)$: then a sample from this posterior can be used as a "representation" of a data-point $x$. (Aside: Sometimes, in settings when $p_{\theta}(h \mid x)$ has a simple description, this description can be viewed as the representation of $x$.)
  
-Thus to get a representation, we need a way to learn the distribution parameters $\theta$  *and* figure out how to efficiently sample from the posterior distribution. 
+Thus solving Task C requires learning distribution parameters $\theta$  *and* figuring out how to efficiently sample from the posterior distribution. 
 
-Note that the sampling problems for the posterior can be \#-P hard for very simple families. The reason is that by Bayes law, $p_{\theta}(h | x) = \frac{p_{\theta}(h) p_{\theta}(x | h)}{p_{\theta}(x)}$. Even if the numerator is  easy to calculate, as is the case for simple families, the   $p_{\theta}(x)$ involves a big summation (or integral) and is often hard to calculate. 
+Note that the sampling problems for the posterior can be \#-P hard for very simple families. The reason is that by Bayes law, $p_{\theta}(h \mid x) = \frac{p_{\theta}(h) p_{\theta}(x \mid h)}{p_{\theta}(x)}$. Even if the numerator is  easy to calculate, as is the case for simple families, the   $p_{\theta}(x)$ involves a big summation (or integral) and is often hard to calculate. 
 
 Note that the  max-likelihood parameter estimation (Task A) and approximating the posterior distributions $p(h|x)$ (Task C) can have radically different complexities: Sometimes A is easy but C is NP-hard (like topic modeling with "nice" topic-word matrices, but short documents, see also [Bresler 2015](https://arxiv.org/abs/1411.6156)); or vice versa (like topic modeling with long documents, but worst-case chosen topic matrices [Arora et al. 2011](https://arxiv.org/abs/1111.0952)) 
 
@@ -66,7 +72,7 @@ Of course, one may hope (as usual) that computational complexity is a worst-case
 ## Main Issue: Accuracy (why the above reasoning is fragile)
 
 The above description assumes that the parametric model $p_{\theta}(x, h)$ for the data was *exact* whereas one imagines it is only *approximate* (i.e., suffers from modeling error). Furthermore, computational difficulties may restrict us to use approximately correct inference  even if the model were exact. So in practice, we may only have an *approximation* $q(h|x)$ to 
-the posterior distribution  $p_{\theta}(h | x)$. (Below we describe a popular methods to compute such approximations.) 
+the posterior distribution  $p_{\theta}(h \mid x)$. (Below we describe a popular methods to compute such approximations.) 
 
 >  *How good of an approximation* to the true posterior do we need?
 
@@ -75,15 +81,16 @@ Recall, we are trying to answer this question through the lens of Task C, solvin
 > For $t=1, 2,\ldots,$ nature picked some $(h_t, x_t)$ from the joint distribution  and presented us $x_t$. The true label $y_t$ of $x_t$ is $\mathcal{C}(h_t)$ where  $\mathcal{C}$ is an unknown classifier. Our goal is classify according to these labels.
 
  To simplify notation, assume the output of $\mathcal{C}$ is binary. If we wish to use 
- $q(h|x)$ as a surrogate for the true posterior $p_{\theta}(h | x)$, we need to have $$\Pr_{x_t, h_t \sim q(\cdot|x_t)} [\mathcal{C}(h_t) \neq y_t] \mbox{  is small as well.} $$ 
+ $q(h \mid x)$ as a surrogate for the true posterior $p_{\theta}(h \mid x)$, we need to have 
+ $$\Pr_{x_t, h_t \sim q(\cdot \mid x_t)} [\mathcal{C}(h_t) \neq y_t] \mbox{  is small as well.} $$ 
 
-How close must $q(h|x)$ and $p(h|x)$ be to let us conclude this? We will use KL divergence as "distance" between the distributions, for reasons that will become apparent in the following section. We claim the following: 
+How close must $q(h \mid x)$ and $p(h \mid x)$ be to let us conclude this? We will use KL divergence as "distance" between the distributions, for reasons that will become apparent in the following section. We claim the following: 
 
-> The classification error on representations obtained using $q(h_t|x_t)$ is less than $\epsilon$ if $KL(q(h_t|x_t) || p(h_t|x_t)) \leq 2\epsilon^2.$
+> The classification error on representations obtained using $q(h_t \mid x_t)$ is less than $\epsilon$ if $KL(q(h_t \mid x_t) || p(h_t \mid x_t)) \leq 2\epsilon^2.$
 
-Here's a proof sketch.   The natural distance these two distributions $q(h|x)$ and $p(h|x)$ with respect to accuracy of classification tasks is *total variation (TV)* distance. Indeed, if the TV distance between $q(h|x)$ and $p(h|x)$ is bounded by $\epsilon$, this implies that for any event $\Omega$, $$\left|\Pr_{h_t \sim p(\cdot|x_t)}[\Omega] - \Pr_{h_t \sim q(\cdot|x_t)}[\Omega]\right| \leq \epsilon .$$ Instantiating this inequality with the event $\Omega = $ { $\mathcal{C}(h_t) \neq y_t$ }, we get $$\left|\Pr_{h_t \sim p(\cdot|x_t)}[\mathcal{C}(h_t) \neq y_t] - \Pr_{h_t \sim q(\cdot|x_t)}[\mathcal{C}(h_t) \neq y_t]\right| \leq \epsilon.$$
+Here's a proof sketch.   The natural distance these two distributions $q(h \mid x)$ and $p(h \mid x)$ with respect to accuracy of classification tasks is *total variation (TV)* distance. Indeed, if the TV distance between $q(h\mid x)$ and $p(h \mid x)$ is bounded by $\epsilon$, this implies that for any event $\Omega$, $$\left|\Pr_{h_t \sim p(\cdot|x_t)}[\Omega] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\Omega]\right| \leq \epsilon .$$ Instantiating this inequality with the event $\Omega = $ { $\mathcal{C}(h_t) \neq y_t$ }, we get $$\left|\Pr_{h_t \sim p(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t]\right| \leq \epsilon.$$
 
-To relate TV distance to KL divergence, we use [Pinsker's inequality](https://en.wikipedia.org/wiki/Pinsker%27s_inequality), which gives $\mbox{TV}(q(h_t|x_t),p(h_t|x_t)) \leq  \sqrt{\frac{1}{2} KL(q(h_t|x_t) || p(h_t|x_t))}$. $~~QED.$
+To relate TV distance to KL divergence, we use [Pinsker's inequality](https://en.wikipedia.org/wiki/Pinsker%27s_inequality), which gives $\mbox{TV}(q(h_t \mid x_t),p(h_t \mid x_t)) \leq  \sqrt{\frac{1}{2} KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t))}$. $~~QED.$
 
 This observation explains why solving Task A in practice does not automatically lead to  useful representations for classification tasks (Task C): the posterior distribution was not learnt as accurately as was needed (either due to model mismatch or computational complexity).
 
@@ -94,19 +101,19 @@ This observation explains why solving Task A in practice does not automatically 
 
 The generic way to learn latent variable models involves variational methods, which can be viewed as a generalization of the famous EM algorithm  ([Dempster et al. 1977](http://web.mit.edu/6.435/www/Dempster77.pdf)). 
 
-Variational methods maintain at all times a *proposed distribution* $q(h | x)$ (called *variational distribution*). The methods rely on the observation  that for every such $q(h |x)$ the following lower bound holds
-\begin{equation} \log p(x) \geq E_{q(h|x)} \log p(x,h) + H(q(h|x))  \qquad (2). \end{equation}
-where $H$ denotes Shannon entropy (or differential entropy, depending on whether $x$ is discrete or continuous). The RHS above is often called the *ELBO bound* (ELBO = evidence-based lower bound). This inequality follows from a bit of algebra using non-negativity of KL divergence, applied to distributions $q(h|x)$ and $p(h|x)$. More concretely, the chain of inequalities is as follows, 
-$$ KL(q(h|x) || p(h |x)) \geq 0 \Leftrightarrow E_{q(h|x)} \log \frac{q(h|x)}{p(h|x)} \geq 0 $$
+Variational methods maintain at all times a *proposed distribution* $q(h | x)$ (called *variational distribution*). The methods rely on the observation  that for every such $q(h \mid x)$ the following lower bound holds
+\begin{equation} \log p(x) \geq E_{q(\mid x)} \log p(x,h) + H(q(h\mid x))  \qquad (2). \end{equation}
+where $H$ denotes Shannon entropy (or differential entropy, depending on whether $x$ is discrete or continuous). The RHS above is often called the *ELBO bound* (ELBO = evidence-based lower bound). This inequality follows from a bit of algebra using non-negativity of KL divergence, applied to distributions $q(h \mid x)$ and $p(h\mid x)$. More concretely, the chain of inequalities is as follows, 
+$$ KL(q(h\mid x) \parallel p(h \mid x)) \geq 0 \Leftrightarrow E_{q(h|x)} \log \frac{q(h|x)}{p(h|x)} \geq 0 $$
 $$ \Leftrightarrow  E_{q(h|x)} \log \frac{q(h|x)}{p(x,h)} + \log p(x) \geq 0 $$ 
-$$ \Leftrightarrow \log p(x) \geq  E_{q(h|x)} p(x,h) + H(q(h|x)) $$ 
-Furthermore, *equality* is achieved if $q(h|x) = p(h|x)$. (This can be viewed as some kind of "duality" theorem for distributions, and dates all the way back to Gibbs. )
+$$ \Leftrightarrow \log p(x) \geq  E_{q(h|x)} p(x,h) + H(q(h\mid x)) $$ 
+Furthermore, *equality* is achieved if $q(h\mid x) = p(h\mid x)$. (This can be viewed as some kind of "duality" theorem for distributions, and dates all the way back to Gibbs. )
 
 Algorithmically observation (2) is used by foregoing solving the maximum-likelihood optimization (1), and solving instead
-$$\max_{\theta, q(h_t|x_t)} \sum_{t} E_{q(h_t|x_t)} p(x_t,h_t) + H(q(h_t|x_t)) $$ 
-Since the variables are naturally divided into two blocks: the model parameters $\theta$, and the variational distributions $q(h_t|x_t)$, a natural way to optimize the above is to *alternate* optimizing over each group, while keeping the other fixed. (This meta-algorithm is often called variational EM for obvious reasons.) 
+$$\max_{\theta, q(h_t|x_t)} \sum_{t} E_{q(h_t\mid x_t)} p(x_t,h_t) + H(q(h_t\mid x_t)) $$ 
+Since the variables are naturally divided into two blocks: the model parameters $\theta$, and the variational distributions $q(h_t\mid x_t)$, a natural way to optimize the above is to *alternate* optimizing over each group, while keeping the other fixed. (This meta-algorithm is often called variational EM for obvious reasons.) 
 
-Of course, optimizing over all possible distributions $q$ is an ill-defined problem, so typically one constrains $q$ to lie in some parametric family (e.g., " standard Gaussian transformed by depth $4$ neural nets of certain size and architecture") such that the maximizing the ELBO for $q$ is a tractable problem in practice. Clearly if the parametric family of distributions  is expressive enough, and the (non-convex) optimization problem doesn't get stuck in bad local minima, then variational EM algorithm will give us not only values of the parameters $\theta$ which are close to the ground-truth ones, but also variational distributions $q(h|x)$ which accurately track $p(h|x)$. But as we saw above, this accuracy would need to be very high to get meaningful representations.
+Of course, optimizing over all possible distributions $q$ is an ill-defined problem, so typically one constrains $q$ to lie in some parametric family (e.g., " standard Gaussian transformed by depth $4$ neural nets of certain size and architecture") such that the maximizing the ELBO for $q$ is a tractable problem in practice. Clearly if the parametric family of distributions  is expressive enough, and the (non-convex) optimization problem doesn't get stuck in bad local minima, then variational EM algorithm will give us not only values of the parameters $\theta$ which are close to the ground-truth ones, but also variational distributions $q(h\mid x)$ which accurately track $p(h\mid x)$. But as we saw above, this accuracy would need to be very high to get meaningful representations.
 
 ## Next Post
 
