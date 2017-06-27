@@ -5,14 +5,6 @@ date:  2017-06-27 04:00:00
 author: Sanjeev Arora and Andrej Risteski
 visible: True
 ---
----
-layout: post
-title: Unsupervised learning, one notion or many?
-date:  2017-03-20 13:00:00
-author: Sanjeev Arora
-visible: False
----
-
 *Unsupervised learning*, as the name suggests, is the science of learning from unlabeled data. A look at the [wikipedia page](https://en.wikipedia.org/wiki/Unsupervised_learning) shows that this term has many interpretations: 
 
 **(Task A)**  *Learning a distribution from samples.* (Examples: gaussian mixtures, topic models, variational autoencoders,..)
@@ -65,7 +57,7 @@ Thus solving Task C requires learning distribution parameters $\theta$  *and* fi
 
 Note that the sampling problems for the posterior can be \#-P hard for very simple families. The reason is that by Bayes law, $p_{\theta}(h \mid x) = \frac{p_{\theta}(h) p_{\theta}(x \mid h)}{p_{\theta}(x)}$. Even if the numerator is  easy to calculate, as is the case for simple families, the   $p_{\theta}(x)$ involves a big summation (or integral) and is often hard to calculate. 
 
-Note that the  max-likelihood parameter estimation (Task A) and approximating the posterior distributions $p(h|x)$ (Task C) can have radically different complexities: Sometimes A is easy but C is NP-hard (like topic modeling with "nice" topic-word matrices, but short documents, see also [Bresler 2015](https://arxiv.org/abs/1411.6156)); or vice versa (like topic modeling with long documents, but worst-case chosen topic matrices [Arora et al. 2011](https://arxiv.org/abs/1111.0952)) 
+Note that the  max-likelihood parameter estimation (Task A) and approximating the posterior distributions $p(h \mid x)$ (Task C) can have radically different complexities: Sometimes A is easy but C is NP-hard (example: topic modeling with "nice" topic-word matrices, but short documents, see also [Bresler 2015](https://arxiv.org/abs/1411.6156)); or vice versa (example: topic modeling with long documents, but worst-case chosen topic matrices [Arora et al. 2011](https://arxiv.org/abs/1111.0952)) 
 
 Of course, one may hope (as usual) that computational complexity is a worst-case notion and may not apply in practice. But there is a bigger issue with this setup, having to do with accuracy.
 
