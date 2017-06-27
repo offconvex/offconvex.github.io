@@ -76,7 +76,7 @@ Recall, we are trying to answer this question through the lens of Task C, solvin
 
 How close must $q(h \mid x)$ and $p(h \mid x)$ be to let us conclude this? We will use KL divergence as "distance" between the distributions, for reasons that will become apparent in the following section. We claim the following: 
 
-> CLAIM: The classification error on representations obtained using $q(h_t \mid x_t)$ is less than $\epsilon$ if $KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t)) \leq 2\epsilon^2.$
+> CLAIM: The probability of obtaining different answers on classification tasks done using the ground truth $h$ versus the representations obtained using $q(h_t \mid x_t)$ is less than $\epsilon$ if $KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t)) \leq 2\epsilon^2.$
 
 Here's a proof sketch.   The natural distance these two distributions $q(h \mid x)$ and $p(h \mid x)$ with respect to accuracy of classification tasks is *total variation (TV)* distance. Indeed, if the TV distance between $q(h\mid x)$ and $p(h \mid x)$ is bounded by $\epsilon$, this implies that for any event $\Omega$, 
 $$\left|\Pr_{h_t : p(\cdot \mid x_t)}[\Omega] - \Pr_{h_t : q(\cdot \mid x_t)}[\Omega]\right| \leq \epsilon .$$ 
