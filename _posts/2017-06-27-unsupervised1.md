@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Unsupervised learning, one notion or many?
-date:  2017-03-20 13:00:00
+date:  2017-06-27 05:00:00
 author: Sanjeev Arora
-visible: False
+visible: True
 ---
 $$\newcommand{\E}{\mathbb{E}}$$
 $$\newcommand{\mX}{{\mathcal X}}$$
