@@ -61,7 +61,7 @@ Note that the  max-likelihood parameter estimation (Task A) and approximating th
 
 Of course, one may hope (as usual) that computational complexity is a worst-case notion and may not apply in practice. But there is a bigger issue with this setup, having to do with accuracy.
 
-## Main Issue: Accuracy (why the above reasoning is fragile)
+## Why the above reasoning is fragile: Need for high accuracy
 
 The above description assumes that the parametric model $p_{\theta}(x, h)$ for the data was *exact* whereas one imagines it is only *approximate* (i.e., suffers from modeling error). Furthermore, computational difficulties may restrict us to use approximately correct inference  even if the model were exact. So in practice, we may only have an *approximation* $q(h|x)$ to 
 the posterior distribution  $p_{\theta}(h \mid x)$. (Below we describe a popular methods to compute such approximations.) 
@@ -78,9 +78,9 @@ Recall, we are trying to answer this question through the lens of Task C, solvin
 
 How close must $q(h \mid x)$ and $p(h \mid x)$ be to let us conclude this? We will use KL divergence as "distance" between the distributions, for reasons that will become apparent in the following section. We claim the following: 
 
-> The classification error on representations obtained using $q(h_t \mid x_t)$ is less than $\epsilon$ if $KL(q(h_t \mid x_t) || p(h_t \mid x_t)) \leq 2\epsilon^2.$
+> The classification error on representations obtained using $q(h_t \mid x_t)$ is less than $\epsilon$ if $KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t)) \leq 2\epsilon^2.$
 
-Here's a proof sketch.   The natural distance these two distributions $q(h \mid x)$ and $p(h \mid x)$ with respect to accuracy of classification tasks is *total variation (TV)* distance. Indeed, if the TV distance between $q(h\mid x)$ and $p(h \mid x)$ is bounded by $\epsilon$, this implies that for any event $\Omega$, $$\left|\Pr_{h_t \sim p(\cdot|x_t)}[\Omega] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\Omega]\right| \leq \epsilon .$$ Instantiating this inequality with the event $\Omega = $ { $\mathcal{C}(h_t) \neq y_t$ }, we get $$\left|\Pr_{h_t \sim p(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t]\right| \leq \epsilon.$$
+Here's a proof sketch.   The natural distance these two distributions $q(h \mid x)$ and $p(h \mid x)$ with respect to accuracy of classification tasks is *total variation (TV)* distance. Indeed, if the TV distance between $q(h\mid x)$ and $p(h \mid x)$ is bounded by $\epsilon$, this implies that for any event $\Omega$, $$\left|\Pr_{h_t \sim p(\cdot \mid x_t)}[\Omega] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\Omega]\right| \leq \epsilon .$$ Instantiating this inequality with the event $\Omega = $ { $\mathcal{C}(h_t) \neq y_t$ }, we get $$\left|\Pr_{h_t \sim p(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t]\right| \leq \epsilon.$$
 
 To relate TV distance to KL divergence, we use [Pinsker's inequality](https://en.wikipedia.org/wiki/Pinsker%27s_inequality), which gives $\mbox{TV}(q(h_t \mid x_t),p(h_t \mid x_t)) \leq  \sqrt{\frac{1}{2} KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t))}$. $~~QED.$
 
