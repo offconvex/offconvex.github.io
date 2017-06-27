@@ -17,6 +17,8 @@ visible: True
 
 Task B is often a subcase of Task C, as structure in data is found by humans pouring over the representation of data to see if some intuitive property is satisfied, which can be often phrased as a classification task. 
 
+$$p(h \mid x)$$
+
 This post explains the relationship between  Tasks A and C, and why they get mixed up in students' mind. We hope  there is also some food for thought here for experts, namely, our discussion about the fragility of the usual "perplexity" definition of unsupervised learning. It explains why Task A doesn't in practice lead to good enough solution for Task C. 
 
 
