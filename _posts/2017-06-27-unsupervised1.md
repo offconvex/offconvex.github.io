@@ -80,7 +80,9 @@ How close must $q(h \mid x)$ and $p(h \mid x)$ be to let us conclude this? We wi
 
 > The classification error on representations obtained using $q(h_t \mid x_t)$ is less than $\epsilon$ if $KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t)) \leq 2\epsilon^2.$
 
-Here's a proof sketch.   The natural distance these two distributions $q(h \mid x)$ and $p(h \mid x)$ with respect to accuracy of classification tasks is *total variation (TV)* distance. Indeed, if the TV distance between $q(h\mid x)$ and $p(h \mid x)$ is bounded by $\epsilon$, this implies that for any event $\Omega$, $$\left|\Pr_{h_t \sim p(\cdot \mid x_t)}[\Omega] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\Omega]\right| \leq \epsilon .$$ Instantiating this inequality with the event $\Omega = $ { $\mathcal{C}(h_t) \neq y_t$ }, we get $$\left|\Pr_{h_t \sim p(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t]\right| \leq \epsilon.$$
+Here's a proof sketch.   The natural distance these two distributions $q(h \mid x)$ and $p(h \mid x)$ with respect to accuracy of classification tasks is *total variation (TV)* distance. Indeed, if the TV distance between $q(h\mid x)$ and $p(h \mid x)$ is bounded by $\epsilon$, this implies that for any event $\Omega$, 
+$$\left|\Pr_{h_t : p(\cdot \mid x_t)}[\Omega] - \Pr_{h_t : q(\cdot \mid x_t)}[\Omega]\right| \leq \epsilon .$$ 
+Instantiating this inequality with the event $\Omega = $ { $\mathcal{C}(h_t) \neq y_t$ }, we get $$\left|\Pr_{h_t : p(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t] - \Pr_{h_t \sim q(\cdot \mid x_t)}[\mathcal{C}(h_t) \neq y_t]\right| \leq \epsilon.$$
 
 To relate TV distance to KL divergence, we use [Pinsker's inequality](https://en.wikipedia.org/wiki/Pinsker%27s_inequality), which gives $\mbox{TV}(q(h_t \mid x_t),p(h_t \mid x_t)) \leq  \sqrt{\frac{1}{2} KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t))}$. $~~QED.$
 
