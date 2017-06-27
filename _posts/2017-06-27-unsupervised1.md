@@ -3,7 +3,7 @@ layout: post
 title: Unsupervised learning, one notion or many?
 date:  2017-06-27 04:00:00
 author: Sanjeev Arora and Andrej Risteski
-visible: False
+visible: True
 ---
 $$\newcommand{\E}{\mathbb{E}}$$
 $$\newcommand{\mX}{{\mathcal X}}$$
@@ -40,7 +40,7 @@ The search for a descriptive language for talking about the possible relationshi
 
 ## A Bayesian view 
 
-Bayesian approaches  capture the relationship between the "high level"  representation $h$ and the datapoint $x$ by postulating a *joint distribution*  $p_{\theta}(x, h)$ of the data $x$ and representation $h$, such that $p_{\theta}(h)$ and $p_{\theta}(x|h)$ have a simple form as a function of the parameters $\theta$. These are also called *latent variable* probabilistic models, since $h$ is a latent (hidden) variable.
+Bayesian approaches  capture the relationship between the "high level"  representation $h$ and the datapoint $x$ by postulating a *joint distribution*  $p_{\theta}(x, h)$ of the data $x$ and representation $h$, such that $p_{\theta}(h)$ and $p_{\theta}(x|h)$ have a simple form as a function of the parameters $\theta $. These are also called *latent variable* probabilistic models, since $h$ is a latent (hidden) variable.
 
 The standard goal in distribution learning is to find the $\theta$ that "best explains" the data (what we called Task (A)) above). This is formalized using maximum-likelihood estimation going back to Fisher (~1910-1920): find the $\theta$ that maximizes the *log probability* of the training data. Mathematically, indexing the samples with $t$, we can write this as
 \begin{equation}  \max_{\theta} \sum_{t} \log p_{\theta}(x_t)  \qquad (1) \end{equation}
