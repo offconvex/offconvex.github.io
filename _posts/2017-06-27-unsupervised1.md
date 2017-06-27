@@ -49,9 +49,9 @@ $E_{x}[\log p_{\theta}(x)]$ of the distribution $p_{\theta}$, where $x$ is distr
 
  In the limit of $t \to ∞$, this estimator is *consistent* (converges in probability to the ground-truth value) and *efficient* (has lowest asymptotic mean-square-error among all consistent estimators). See the [Wikipedia page](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation). (Aside: maximum likelihood estimation is often NP-hard, which is one of the reasons for the renaissance of the method-of-moments and tensor decomposition algorithms in learning latent variable models, which [Rong  wrote about some time ago](http://www.offconvex.org/2015/12/17/tensor-decompositions/).)  
 
-### Towards task C: Representations arise from the posterior distribution
+### Toward task C: Representations arise from the posterior distribution
 
-Simply learning the distribution $p_{\theta}(x, h)$ does not yield a representation per se. To get a distribution of $x$, we need access to the posterior distribution $p_{\theta}(h | x)$: then a sample from this posterior can be used as a "representation" of a data-point $x$. (Aside: Sometimes, in settings where the posterior has a simple description, one can view the description of the full distribution $p_{\theta}(h | x)$ as the representation of $x$.)
+Simply learning the distribution $p_{\theta}(x, h)$ does not yield a representation *per se.* To get a distribution of $x$, we need access to the posterior distribution of $h$ given $x$: then a sample from this posterior can be used as a "representation" of a data-point $x$. (Aside: Sometimes, in settings where the posterior has a simple description, one can view the description of the full distribution $p_{\theta}(h | x)$ as the representation of $x$.)
  
 Thus to get a representation, we need a way to learn the distribution parameters $\theta$  *and* figure out how to efficiently sample from the posterior distribution $p_{\theta}(h | x)$. 
 
