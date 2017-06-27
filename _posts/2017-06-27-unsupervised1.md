@@ -36,13 +36,13 @@ The search for a descriptive language for talking about the possible relationshi
 
 ## A Bayesian view 
 
-Bayesian approaches  capture the relationship between the "high level"  representation $h$ and the datapoint $x$ by postulating a *joint distribution*  $p_{\theta}(x, h)$ of the data $x$ and representation $h$, such that $p_{\theta}(h)$ and the posterior of $x$ given $h$ have a simple form as a function of the parameters $\theta$. These are also called *latent variable* probabilistic models, since $h$ is a latent (hidden) variable.
+Bayesian approaches  capture the relationship between the "high level"  representation $h$ and the datapoint $x$ by postulating a *joint distribution*  $p_{\theta}(x, h)$ of the data $x$ and representation $h$, such that $p_{\theta}(h)$ and the posterior distribution of $x$ given $h$ have a simple form as a function of the parameters $\theta$. These are also called *latent variable* probabilistic models, since $h$ is a latent (hidden) variable.
 
 The standard goal in distribution learning is to find the $\theta$ that "best explains" the data (what we called Task (A)) above). This is formalized using maximum-likelihood estimation going back to Fisher (~1910-1920): find the $\theta$ that maximizes the *log probability* of the training data. Mathematically, indexing the samples with $t$, we can write this as
-\begin{equation}  \max_{\theta} \sum_{t} \log p_{\theta}(x_t)  \qquad (1) \end{equation}
+$$  \max_{\theta} \sum_{t} \log p_{\theta}(x_t)  \qquad (1) $$
 
 where
-\begin{equation} p_{\theta}(x_t) = \sum_{h_t}p_{\theta}(x_t, h_t). \end{equation}
+$$p_{\theta}(x_t) = \sum_{h_t}p_{\theta}(x_t, h_t). $$
 
 (Note that $\sum_{t} \log p_{\theta}(x_t)$ is also the empirical estimate of the *cross-entropy* $E_{x \sim p*(\cdot)}[\log p_{\theta}(x)]$ of the distribution $p_{\theta}$, where $p^*$ is the true distribution of the data. Thus the above method looks for the distribution with best cross-entropy on the empirical data, which is also log of the [*perplexity*](https://en.wikipedia.org/wiki/Perplexity) of $p_{\theta}$.) 
 
