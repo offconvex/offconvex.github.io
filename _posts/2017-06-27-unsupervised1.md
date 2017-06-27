@@ -13,11 +13,9 @@ visible: True
 
 **(Task C)** *Feature Learning.* Learn a mapping from *datapoint* $\rightarrow$ *feature vector* such that classification tasks are easier to carry out on feature vectors rather than datapoints. For example, unsupervised feature learning could help lower the amount of *labeled* samples needed for learning a classifier, or  be useful for [*domain adaptation*](https://en.wikipedia.org/wiki/Domain_adaptation).
 
-Task B is often a subcase of Task C, as structure in data is found by humans pouring over the representation of data to see if some intuitive property is satisfied, which can be often phrased as a classification task. 
+Task B is often a subcase of Task C, as the intended user of "structure found in data" are humans (scientists) who  pour over the representation of data to gain some intuition about its properties, and these "properties" can be often phrased as a classification task. 
 
-
-
-This post explains the relationship between  Tasks A and C, and why they get mixed up in students' mind. We hope  there is also some food for thought here for experts, namely, our discussion about the fragility of the usual "perplexity" definition of unsupervised learning. It explains why Task A doesn't in practice lead to good enough solution for Task C. 
+This post explains the relationship between  Tasks A and C, and why they get mixed up in students' mind. We hope  there is also some food for thought here for experts, namely, our discussion about the fragility of the usual "perplexity" definition of unsupervised learning. It explains why Task A doesn't in practice lead to good enough solution for Task C. For example, it has been believed for many years that unsupervised pretraining should help us improve training of deep nets, but this has been hard to show in practice.
 
 
 ## The common theme: high level representations. 	
@@ -34,7 +32,7 @@ Clearly, such a simple clustering-based representation has rather limited  expre
 
 The search for a descriptive language for talking about the possible relationships of representations and data leads us naturally to Bayesian models. (Note that these are viewed with some skepticism in  machine learning theory -- compared to assumptionless models like PAC learning, online learning, etc. -- but we do not know of another suitable vocabulary in this setting.) 
 
-## A Bayesian view 
+## A Bayesian view (Distribution learning)
 
 Bayesian approaches  capture the relationship between the "high level"  representation $h$ and the datapoint $x$ by postulating a *joint distribution*  $p_{\theta}(x, h)$ of the data $x$ and representation $h$, such that $p_{\theta}(h)$ and the posterior $p_{\theta}(x \mid h)$ have a simple form as a function of the parameters $\theta$. These are also called *latent variable* probabilistic models, since $h$ is a latent (hidden) variable.
 
@@ -49,19 +47,19 @@ $E_{x}[\log p_{\theta}(x)]$ of the distribution $p_{\theta}$, where $x$ is distr
 
  In the limit of $t \to ∞$, this estimator is *consistent* (converges in probability to the ground-truth value) and *efficient* (has lowest asymptotic mean-square-error among all consistent estimators). See the [Wikipedia page](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation). (Aside: maximum likelihood estimation is often NP-hard, which is one of the reasons for the renaissance of the method-of-moments and tensor decomposition algorithms in learning latent variable models, which [Rong  wrote about some time ago](http://www.offconvex.org/2015/12/17/tensor-decompositions/).)  
 
-### Toward task C: Representations arise from the posterior distribution
+## Toward task C: Representations arise from the posterior distribution
 
 Simply learning the distribution $p_{\theta}(x, h)$ does not yield a representation *per se.* To get a distribution of $x$, we need access to the posterior $p_{\theta}(h \mid x)$: then a sample from this posterior can be used as a "representation" of a data-point $x$. (Aside: Sometimes, in settings when $p_{\theta}(h \mid x)$ has a simple description, this description can be viewed as the representation of $x$.)
  
 Thus solving Task C requires learning distribution parameters $\theta$  *and* figuring out how to efficiently sample from the posterior distribution. 
 
-Note that the sampling problems for the posterior can be \#-P hard for very simple families. The reason is that by Bayes law, $p_{\theta}(h \mid x) = \frac{p_{\theta}(h) p_{\theta}(x \mid h)}{p_{\theta}(x)}$. Even if the numerator is  easy to calculate, as is the case for simple families, the   $p_{\theta}(x)$ involves a big summation (or integral) and is often hard to calculate. 
+Note that the sampling problems for the posterior can be \#-P hard for very simple families. The reason is that by Bayes' law, $p_{\theta}(h \mid x) = \frac{p_{\theta}(h) p_{\theta}(x \mid h)}{p_{\theta}(x)}$. Even if the numerator is  easy to calculate, as is the case for simple families, the   $p_{\theta}(x)$ involves a big summation (or integral) and is often hard to calculate. 
 
 Note that the  max-likelihood parameter estimation (Task A) and approximating the posterior distributions $p(h \mid x)$ (Task C) can have radically different complexities: Sometimes A is easy but C is NP-hard (example: topic modeling with "nice" topic-word matrices, but short documents, see also [Bresler 2015](https://arxiv.org/abs/1411.6156)); or vice versa (example: topic modeling with long documents, but worst-case chosen topic matrices [Arora et al. 2011](https://arxiv.org/abs/1111.0952)) 
 
 Of course, one may hope (as usual) that computational complexity is a worst-case notion and may not apply in practice. But there is a bigger issue with this setup, having to do with accuracy.
 
-## Why the above reasoning is fragile: Need for high accuracy
+### Why the above reasoning is fragile: Need for high accuracy
 
 The above description assumes that the parametric model $p_{\theta}(x, h)$ for the data was *exact* whereas one imagines it is only *approximate* (i.e., suffers from modeling error). Furthermore, computational difficulties may restrict us to use approximately correct inference  even if the model were exact. So in practice, we may only have an *approximation* $q(h|x)$ to 
 the posterior distribution  $p_{\theta}(h \mid x)$. (Below we describe a popular methods to compute such approximations.) 
@@ -84,12 +82,12 @@ Here's a proof sketch.   The natural distance these two distributions $q(h \mid 
 $$\left|\Pr_{h_t : p(\cdot \mid x_t)}[\Omega] - \Pr_{h_t : q(\cdot \mid x_t)}[\Omega]\right| \leq \epsilon .$$ 
 The CLAIM now follows by instantiating this with the event $\Omega = $  "Classifier $\mathcal{C}$ output something different than $y_t$ given representation $h_t$ for input $x_t$", and then  relating TV distance to KL divergence using [Pinsker's inequality](https://en.wikipedia.org/wiki/Pinsker%27s_inequality), which gives $\mbox{TV}(q(h_t \mid x_t),p(h_t \mid x_t)) \leq  \sqrt{\frac{1}{2} KL(q(h_t \mid x_t) \parallel p(h_t \mid x_t))}$. *QED*
 
-This observation explains why solving Task A in practice does not automatically lead to  very useful representations for classification tasks (Task C): the posterior distribution has to be leartn extremely accurately, which probably didn't happen (either due to model mismatch or computational complexity).
+This observation explains why solving Task A in practice does not automatically lead to  very useful representations for classification tasks (Task C): the posterior distribution has to be learnt extremely accurately, which probably didn't happen (either due to model mismatch or computational complexity).
 
 
 ## The  link between Tasks A and C: variational methods 
 
- As noted, distribution learning (Task A) via cross-entropy/maximum-likelihood fitting, and representation learning  (Task C) via sampling the posterior are fairly distinct. Why do students often conflate the two?  Because in practice the most frequent way to solve Task A does  implicitly compute posteriors and thus also solves Task C. 
+ As noted, distribution learning (Task A) via cross-entropy/maximum-likelihood fitting, and representation learning  (Task C) via sampling the posterior are fairly distinct. Why do students often conflate the two. Because in practice the most frequent way to solve Task A does  implicitly compute posteriors and thus also seems to solve Task C. (Although as noted above, the accuracy may not insufficient.) 
 
 The generic way to learn latent variable models involves variational methods, which can be viewed as a generalization of the famous EM algorithm  ([Dempster et al. 1977](http://web.mit.edu/6.435/www/Dempster77.pdf)). 
 
