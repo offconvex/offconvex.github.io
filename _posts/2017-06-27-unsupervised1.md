@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Unsupervised learning, one notion or many?
-date:  2017-06-27 05:00:00
-author: Sanjeev Arora
+date:  2017-06-27 04:00:00
+author: Sanjeev Arora and Andrej Risteski
 visible: True
 ---
 $$\newcommand{\E}{\mathbb{E}}$$
