@@ -44,7 +44,7 @@ where
 $$p_{\theta}(x_t) = \sum_{h_t}p_{\theta}(x_t, h_t). $$
 
 (Note that $\sum_{t} \log p_{\theta}(x_t)$ is also the empirical estimate of the *cross-entropy* 
-$E_{x \sim p*}[\log p_{\theta}(x)]$ of the distribution $p_{\theta}$, where $x$ is distributed according to $p^*$, the true distribution of the data. Thus the above method looks for the distribution with best cross-entropy on the empirical data, which is also log of the [*perplexity*](https://en.wikipedia.org/wiki/Perplexity) of $p_{\theta}$.) 
+$E_{x}[\log p_{\theta}(x)]$ of the distribution $p_{\theta}$, where $x$ is distributed according to $p^*$, the true distribution of the data. Thus the above method looks for the distribution with best cross-entropy on the empirical data, which is also log of the [*perplexity*](https://en.wikipedia.org/wiki/Perplexity) of $p_{\theta}$.) 
 
  In the limit of $t \to ∞$, this estimator is *consistent* (converges in probability to the ground-truth value) and *efficient* (has lowest asymptotic mean-square-error among all consistent estimators). See the [Wikipedia page](https://en.wikipedia.org/wiki/Maximum_likelihood_estimation). (Aside: maximum likelihood estimation is often NP-hard, which is one of the reasons for the renaissance of the method-of-moments and tensor decomposition algorithms in learning latent variable models, which [Rong  wrote about some time ago](http://www.offconvex.org/2015/12/17/tensor-decompositions/).)  
 
