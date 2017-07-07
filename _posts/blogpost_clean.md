@@ -1,0 +1,90 @@
+
+This post is about our new paper, which presents empirical evidence that current GANs (Generative Adversarial Nets) are quite far from learning the target distribution. Previous posts had [introduced GANs](http://www.offconvex.org/2017/03/15/GANs/) and described [new theoretical analysis of GANs](http://www.offconvex.org/2017/03/30/GANs2/) from [our ICML17 paper](https://arxiv.org/abs/1703.00573). On notable implication of our theoretical analysis was that when the discriminator size is bounded, then  GANs  training could appear to succeed (i.e., training objective reaches its optimum value) even if the generated distribution is discrete and has very low support —-in other words, the training objective is unable to prevent even extreme *mode collapse*. 
+
+That paper led us (especially Sanjeev) into spirited discussions with colleagues, who wondered if this is *just* a theoretical result about potential misbehavior rather than a prediction about  real-life training.  After all, we've all seen the great pictures that GANs produce, right? (Note that the theoretical result only describes one possible near-equilibrium that can arise with a certain mix of hyperparameters, and conceivably real-life training avoids that by suitable tuning of hyperparameters.) 
+
+Our new empirical paper [Do GANs actually learn the distribution? An empirical study](https://arxiv.org/abs/1706.08224v1) puts the issue to the test. We present empirical evidence that well-known GANs approaches do end up learning distributions of fairly low support, and thus presumably are not learning the target distribution. 
+
+Let's start by imagining how large the support must be for the target distribution. For example, if the distribution is the set of all possible images of human faces (real or imagined), then these must involve all combinations of hair color/style, facial features, complexion, expression, pose, lighting, race, etc., and thus the possible set of images of faces that *humans will consider to be distinct* approaches infinity. (After all, there are billions of distinct people living on earth right now.)
+GANs are trying to learn this full distribution using a finite sample of images, say [CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) which has $200,000$ images of celebrity faces.
+
+Thus a simple sanity check for whether a GAN has truly come close to learning this distribution is to estimate how many "distinct" images it can produce. At first glance, such an estimation seems very difficult. After all, automated/heuristic measures of image similarity can be easily fooled, and we humans surely don't have enough time to go through millions or billions of images, right? 
+
+Luckily, a crude estimate is possible using the simple birthday paradox, a staple of undergrad discrete math.
+
+## Birthday paradox test for size of the support
+
+Imagine for argument's sake that the human race were limited to a genetic diversity of a million ---nature's laws only allow this many distinct humans. How would this hard limit manifest itself in our day to day life? The birthday paradox says that if we take a random sample of a thousand people ---note that most of us get to know this many people easily in our lifetimes---we'd see many [doppelgangers](https://en.wikipedia.org/wiki/Doppelg%C3%A4nger_). Of course, in practice the only doppelgangers we encounter happen to be identical twins. 
+
+Formally, the birthday paradox says that if a discrete distribution has support $N$, then  a random sample of size about
+$\sqrt{N}$ would be quite likely to contain a duplicate.   (The name comes from its implication that if you put $23 \approx \sqrt{365}$ random people in a room, the chance that two of them have the same birthday is about $1/2$.) 
+
+In the GAN setting, the distribution is continuous, not discrete. Thus our proposed birthday paradox test for GANs is as follows.
+
+(a) Pick a sample of size $s$ from the generated distribution. (b) Use an automated measure of image similarity to flag the $20$ (say) most similar pairs in the sample. (c) Visually inspect the flagged pairs and check for images that a human would consider near-duplicates. (d) Repeat.
+
+If this test reveals that samples of size $s$ have duplicate images with good probability,  then suspect that the distribution has support size about $s^2$.
+
+Note that the test is not definitive, because the distribution could assign say a probability $10\%$ to a single image, and be uniform on a huge number of other images. Then the test would be quite likely to find a duplicate even with $20$ samples, even though the true support size is huge. But such nonuniformity (a lot of probability being assigned to a few images) is the only failure mode of the birthday paradox test calculation, and such nonuniformity would itself be considered a failure mode of GANs training. The CIFAR-10 samples below show that such nonuniformality can be severe in practice, where the generator tends to generate a fixed image of automobile very likely. On CIFAR-10, this failure mode is also observed in classes of frogs and cats.
+
+## Experimental results.
+
+ Our test was done using two datasets, CelebA (faces) and CIFAR-10. 
+
+For faces,  we found Euclidean distance in pixel space works well as a heuristic similarity measure, probably because the samples are centered and aligned. For CIFAR-10, we pre-train a discriminative Convolutional Neural Net for the full classification problem, and use the top layer representation as an embedding of the image. Heuristic similarity is then measured as the Euclidean distance in the embedding space. Possibly these similarity measures are crude, but note that improving them can only *lower* our estimate of the support size of the distribution, since  a better similarity measure can only increase the number of duplicates found. Thus our estimates below should be considered as upper bounds on the support size of the distribution.
+
+## Results  on CelebA dataset
+We tested the following methods, doing the birthday paradox test  with Euclidean distance in pixel space as the heuristic similarity measure.
+ 
+* DCGAN ---unconditional as described in [Goodfellow et al. 2014](https://arxiv.org/abs/1406.2661) and [Radford et al. 2015](https://arxiv.org/abs/1511.06434) 
+* MIX+GAN  protocol introduced in [Arora et al.](https://arxiv.org/abs/1703.00573), specifically, MIX+DCGAN with $3$ mixture components.
+* [Adversarily Learned Inference (ALI)](https://arxiv.org/abs/1606.00704) (or equivalently [BiGANs](https://arxiv.org/abs/1605.09782)). (ALI is probabilistic version of BiGANs, but their architectures are equivalent. So we only tested ALI in our experiments.) 
+   
+We find that with probability $\geq50\%$, a batch of about $400$ samples contains at least one pair of duplicates for both DCGAN and MIX+DCGAN. The figure below give examples duplicates and their nearest neighbors samples (that we could fine) in training set. These results suggest that the support size of the distribution is less than $400^2\approx160000$, which is actually lower than the diversity of the training set, but this distribution is not just memorizing the training set.
+
+ALI (or BiGANs) appear to be somewhat more diverse, in that collisions appear with $50\%$ probability only with a batch size of $1000$, implying a support size of a million. This is $5$x the training set, but still much smaller than the diversity one would expect among human faces (After all most of us know several thousand people, but the only doppelgangers among our acquaintances are twins.) For fair comparison, we set the discriminator of ALI (or BiGANs) to be roughly the same in size as that of the DCGAN model, since the results below suggests that the discriminator size has a strong effect on diversity of the learnt distribution.) Nevertheless, these tests do support the suggestion that the bidirectional structure prevents some of the mode collapses observed in usual GANs.
+ 
+![similar_face_pairs](https://www.dropbox.com/s/7v2qbs4i82cczsy/similar_face_pairs.png?dl=1)
+
+## Diversity vs Discriminator Size
+
+The analysis of [Arora et al.](https://arxiv.org/abs/1703.00573) suggested that the support size could be as low as near-linear in the capacity of the discriminator; in other words, there is a near-equilibrium in which a distribution of such a small support could suffice to fool the best discriminator. So it is worth investigating whether training in real life allows generator nets to exploit this "loophole" in the training that we now know is in principle available to them.
+
+We built DCGANs with increasingly larger discriminators while fixing the other hyper-parameters. The discriminator used here is a 5-layer Convolutional Neural Network such that the number of output channels of each layer is $1\times,2\times,4\times,8\times\textit{dim}$ where $dim$ is chosen to be $16,32,48,64,80,96,112,128$. Thus the discriminator size  should be proportional to $dim^2$. The figure below suggests that in this simple setup the diversity of the learnt distribution does indeed grow near-linearly with the discriminator size. (Note the diversity is seen to plateau, possibly because one needs to change other parameters like depth to meaningfully add more capacity to the discriminator.) 
+
+![diversity_vs_size](https://www.dropbox.com/s/zmhprwu2w2rddep/diversity_vs_size.png?dl=1)
+
+
+## Results for CIFAR-10
+
+On CIFAR-10, as mentioned earlier, we use a heuristic image similarity computed with convolutional neural net with 3 convolutional layers, 2 fully-connected layer and a 10-class soft-max output pretrained with a multi-class classification objective. Specifically, the  top layer features are viewed as embeddings for similarity test using Euclidean distance. 
+We found that this heuristic similarity test quickly becomes useless if the samples display noise artifacts, and thus was effective only on the very best GANs that generate the most real-looking images. For CIFAR-10
+this led us to [Stacked GAN](https://arxiv.org/abs/1612.04357), currently believed to be the best generative model on CIFAR-10 (Inception Score $8.59$). Since this model is trained by conditioning on class label, we measure its diversity within each class separately.
+
+The training set for each class has $10k$ images, but since the generator is allowed to learn from all classes, presumably it can mix and match (especially background, lighting, landscape etc.) between classes and learn a fairly rich set of images. 
+
+Now we list the batch sizes needed for duplicates to appear.
+
+![cifar_diversity_table](https://www.dropbox.com/s/bumdhzlcrk1z97b/cifar_diversity_table.png?dl=1)
+
+As before, we show duplicate samples as well as the nearest neighbor to the samples in training set (identified by using heuristic similarity measure to flag possibilities and confirming visually). 
+
+![similar_cifar_samples](https://www.dropbox.com/s/8itrpjngrc13eam/selected_similar_cifar_samples.png?dl=1)
+
+ We find that the closest image is quite different from the duplicate detected, which suggests the issue with GANs is indeed lack of diversity (low support size) instead of memorizing training set. (See [the paper](https://arxiv.org/abs/1706.08224v1) for more examples.)
+ 
+ Note that by and large the diversity of the learnt distribution is higher than that of the training set, but still not as high as one would expect in terms of all possible combinations.
+
+# Birthday paradox test for VAEs
+
+![vae_collisions](https://www.dropbox.com/s/p1qlgr66rnufnal/vae_collisions.png?dl=1)
+
+Given these findings, it is natural to wonder about the diversity of distributions learned using earlier methods such as [Variational Auto-Encoders](https://arxiv.org/abs/1312.6114) (VAEs). Instead of using feedback from the discriminator, these methods train the generator net using feedback from an approximate perplexity calculation. Thus the analysis of [Arora et al.](https://arxiv.org/abs/1703.00573) does not apply as is to such methods and it is conceivable they exhibit higher diversity. However, we found the birthday paradox test difficult to run since samples from a VAE trained on CelebA were not realistic or sharp enough for a human to definitively conclude whether or not two images were almost the same. The figure above shows examples of collision candidates found in batches of 400 samples; clearly some indicative parts (hair, eyes, mouth, etc.) are quite blurry in VAE samples.
+
+## Conclusions
+
+Our new birthday paradox test seems to suggest that some well-regarded GANs are currently learning distributions that with rather low support (i.e., suffer mode collapse). The possibility of such a scenario was anticipated in the theoretical analysis of ([Arora et al.](https://arxiv.org/abs/1703.00573)) reported in an earlier post.
+ 
+This combination of theory and empirics raises the open problem of how to change the GANs training to avoid such mode collapse. Possibly  ALI/BiGANs point to the right direction, since they exhibit somewhat better diversity  in our experiments. One should also try tuning of hyperparameter/architecture in current methods  now that the birthday paradox test gives a concrete way to quantify mode collapse.  
+ 
+Finally, we should consider the possibility that the best use of GANs and related techniques could be feature learning or some other goal, as opposed to distribution learning. This needs further theoretical and empirical exploration.
