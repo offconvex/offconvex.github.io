@@ -25,7 +25,7 @@ Clearly GD will never move away from a stationary point if started there (even a
 
 2. **Random Initialization**: [Lee et al. 2016](http://arxiv.org/abs/1602.04915) showed that with only random initialization, GD provably avoids saddle points asymptotically (i.e., as the number of steps goes to infinity). (see also [Ben Recht's post](http://www.offconvex.org/2016/03/24/saddles-again/))
 
-Asymptotic --- and even polynomial time ---results are important for the general theory, but they stop short of explaining the success of gradient-based algorithms in practical nonconvex problems.  And they fail to provide reassurance that at least some of time, GD will not succeed --- that the learning curve may flatten out for an indefinite amount of time, and the user will not know that the asymptotics have not kicked in. Lastly, they fail to provide reassurance that GD has the kind of favorable properties in high dimensions that it is known to have for convex problems.
+Asymptotic --- and even polynomial time ---results are important for the general theory, but they stop short of explaining the success of gradient-based algorithms in practical nonconvex problems.  And they fail to provide reassurance that runs of GD can be trusted --- that we won't find ourselves in a situation in which the learning curve flattens out for an indefinite amount of time, with the user having no way of knowing that the asymptotics have not yet kicked in. Lastly, they fail to provide reassurance that GD has the kind of favorable properties in high dimensions that it is known to have for convex problems.
 
 One reasonable approach to this issue is to consider second-order (Hessian-based) algorithms.  Although these algorithms are generally (far) more expensive per iteration than GD, and can be more complicated to implement, they do provide the kind of geometric information around saddle points that allows for efficient escape. Accordingly, a reasonable understanding of Hessian-based algorithms has emerged in the literature, and positive efficiency results have been obtained. 
 
@@ -62,7 +62,7 @@ We further call the saddle points in the last category, where $\lambda_{\min}(\n
 <img src="/assets/saddle_eff/strictsaddle.png" width="85%" alt="Strict and Non-strict Saddle Point" />
 </p>
 
-While non-strict saddle points can be flat in the valley, strict saddle points requires there *at least one direction* where the curvature is strictly negative. The presence of such a direction allows the possibility of a gradient-based algorithm to escape the saddle point.  In general, distinguishing local minima and non-strict saddle points is *NP-hard*; therefore, we --- and previous authors --- focus on escaping *strict* saddle points. 
+While non-strict saddle points can be flat in the valley, strict saddle points require that there is *at least one direction* along which the curvature is strictly negative. The presence of such a direction gives a gradient-based algorithm the possibility of escaping the saddle point.  In general, distinguishing local minima and non-strict saddle points is *NP-hard*; therefore, we --- and previous authors --- focus on escaping *strict* saddle points. 
 
 Formally, we make the following two standard assumptions regarding smoothness.
 
@@ -74,7 +74,7 @@ $\quad\quad\quad\quad \forall x_1, x_2$, $\|\nabla^2 f(x_1) - \nabla^2 f(x_2)\| 
 
 Similarly to classical theory, which studies convergence to a first-order stationary point, $\nabla f(x) = 0$, by bounding the number of iterations to find a **$\epsilon$-first-order stationary point**,  $\|\nabla f(x)\| \le \epsilon$, we formulate the speed of escape of strict saddle points and the ensuing convergence to a second-order stationary point, $\nabla f(x) = 0, \lambda_{\min}(\nabla^2 f(x)) \ge 0$, with an $\epsilon$-version of the definition:
 
-> **Definition**: A point $x$ is **$\epsilon$-second-order stationary point** if:\\
+> **Definition**: A point $x$ is an **$\epsilon$-second-order stationary point** if:\\
 $\quad\quad\quad\quad \|f(x)\|\le \epsilon$, and $\lambda_{\min}(\nabla^2 f(x)) \ge -\sqrt{\rho \epsilon}$. 
 
 In this definition, $\rho$ is the Hessian Lipschitz constant introduced above. This scaling follows the convention of [Nesterov and Polyak 2006](http://rd.springer.com/article/10.1007%2Fs10107-006-0706-8).
@@ -89,7 +89,7 @@ In a wide range of practical nonconvex problems it has been proved that **all sa
 <!-- matrix factorization,  -->
 [matrix sensing](http://arxiv.org/abs/1605.07221), 
 [matrix completion](http://arxiv.org/abs/1605.07272), 
-and [other nonconvex low rank problems](http://arxiv.org/abs/1704.00708).
+and [other nonconvex low-rank problems](http://arxiv.org/abs/1704.00708).
 
 Furthermore, in all of these nonconvex problems, it also turns out that **all local minima are global minima**. Thus, in these cases, any general efficient algorithm for finding $\epsilon$-second-order stationary points immediately becomes an efficient algorithm for solving those nonconvex problem with global guarantees.
 
@@ -97,7 +97,7 @@ Furthermore, in all of these nonconvex problems, it also turns out that **all lo
 ## Escaping Saddle Point with Negligible Overhead
 In the classical case of first-order stationary points, GD is known to have very favorable theoretical properties:
 
-> **Theorem ([Nesterov 1998](http://rd.springer.com/book/10.1007%2F978-1-4419-8853-9))**: If Assumption 1 holds, then GD with $\eta = 1/\ell$ finds an $\epsilon$-**first**-order stationary point in $2\ell (f(x_0) - f^\star)/\epsilon^2$ iterations.
+> **Theorem ([Nesterov 1998](http://rd.springer.com/book/10.1007%2F978-1-4419-8853-9))**: If Assumption 1 holds, then GD, with $\eta = 1/\ell$, finds an $\epsilon$-**first**-order stationary point in $2\ell (f(x_0) - f^\star)/\epsilon^2$ iterations.
 
 In this theorem, $x_0$ is the initial point and $f^\star$ is the function value of the global minimum. The theorem says for that any gradient-Lipschitz function, a stationary point can be found by GD in $O(1/\epsilon^2)$ steps, with no explicit dependence on $d$. This is called "dimension-free optimization" in the literature; of course the cost of a gradient computation is $O(d)$, and thus the overall runtime of GD scales as $O(d)$. The linear scaling in $d$ is especially important for modern high-dimensional nonconvex problems such as deep learning. 
 
@@ -109,7 +109,7 @@ What is the best we can hope for? Can we also achieve
 
 Rather surprisingly, the answer is *Yes* to all three questions (up to small log factors). 
 
-> **Main Theorem**: If Assumptions 1 and 2 hold, then PGD, with $\eta = O(1/\ell)$ finds an $\epsilon$-**second**-order stationary point in $\tilde{O}(\ell (f(x_0) - f^\star)/\epsilon^2)$ iterations with high probability.
+> **Main Theorem**: If Assumptions 1 and 2 hold, then PGD, with $\eta = O(1/\ell)$, finds an $\epsilon$-**second**-order stationary point in $\tilde{O}(\ell (f(x_0) - f^\star)/\epsilon^2)$ iterations with high probability.
 
 Here $\tilde{O}(\cdot)$ hides only logarithmic factors; indeed, the dimension dependence in our result is only $\log^4(d)$. The theorem thus asserts that a perturbed form of GD, under an additional Hessian-Lipschitz condition, ***converges to a second-order-stationary point in almost the same time required for GD to converge to a first-order-stationary point.*** In this sense, we claim that PGD can escape strict saddle points almost for free.
 
@@ -171,5 +171,4 @@ When GD travels in the vicinity of a sequence of saddle points, it can get close
 In this post, we have shown that a perturbed form of gradient descent can converge to a second-order-stationary point at almost the same rate as standard gradient descent converges to a first-order-stationary point. This implies that Hessian information is not necessary for to escape saddle points efficiently, and helps to explain why basic gradient-based algorithms such as GD (and SGD) work surprisingly well in the nonconvex setting. This new line of sharp convergence results can be directly applied to nonconvex problem such as matrix sensing/completion to establish efficient global convergence rates.
 
 There are of course still many open problems in general nonconvex optimization. To name a few: will adding momentum improve the convergence rate to a second-order stationary point? What type of local minima are tractable and are there useful structural assumptions that we can impose on local minima so as to avoid local minima efficiently? We are making slow but steady progress on nonconvex optimization, and there is the hope that at some point we will transition from "black art" to "science".
-
 
