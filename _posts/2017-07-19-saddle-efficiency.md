@@ -75,7 +75,7 @@ $\quad\quad\quad\quad \forall x_1, x_2$, $\|\nabla^2 f(x_1) - \nabla^2 f(x_2)\| 
 Similarly to classical theory, which studies convergence to a first-order stationary point, $\nabla f(x) = 0$, by bounding the number of iterations to find a **$\epsilon$-first-order stationary point**,  $\|\nabla f(x)\| \le \epsilon$, we formulate the speed of escape of strict saddle points and the ensuing convergence to a second-order stationary point, $\nabla f(x) = 0, \lambda_{\min}(\nabla^2 f(x)) \ge 0$, with an $\epsilon$-version of the definition:
 
 > **Definition**: A point $x$ is an **$\epsilon$-second-order stationary point** if:\\
-$\quad\quad\quad\quad \|f(x)\|\le \epsilon$, and $\lambda_{\min}(\nabla^2 f(x)) \ge -\sqrt{\rho \epsilon}$. 
+$\quad\quad\quad\quad \|\nabla f(x)\|\le \epsilon$, and $\lambda_{\min}(\nabla^2 f(x)) \ge -\sqrt{\rho \epsilon}$. 
 
 In this definition, $\rho$ is the Hessian Lipschitz constant introduced above. This scaling follows the convention of [Nesterov and Polyak 2006](http://rd.springer.com/article/10.1007%2Fs10107-006-0706-8).
 
@@ -171,4 +171,3 @@ When GD travels in the vicinity of a sequence of saddle points, it can get close
 In this post, we have shown that a perturbed form of gradient descent can converge to a second-order-stationary point at almost the same rate as standard gradient descent converges to a first-order-stationary point. This implies that Hessian information is not necessary for to escape saddle points efficiently, and helps to explain why basic gradient-based algorithms such as GD (and SGD) work surprisingly well in the nonconvex setting. This new line of sharp convergence results can be directly applied to nonconvex problem such as matrix sensing/completion to establish efficient global convergence rates.
 
 There are of course still many open problems in general nonconvex optimization. To name a few: will adding momentum improve the convergence rate to a second-order stationary point? What type of local minima are tractable and are there useful structural assumptions that we can impose on local minima so as to avoid local minima efficiently? We are making slow but steady progress on nonconvex optimization, and there is the hope that at some point we will transition from "black art" to "science".
-
