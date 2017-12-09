@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Generalization Theory and Deep Nets: An introduction
+title: Generalization Theory and Deep Nets, An introduction
 date:  2017-12-08 18:00:00
 author: Sanjeev Arora
 visible: True
