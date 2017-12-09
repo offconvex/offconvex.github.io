@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Generalization Theory and Deep Nets: An introduction
-date:  2017-11-15 13:00:00
+date:  2017-12-08 18:00:00
 author: Sanjeev Arora
-visible: False
+visible: True
 ---
 
 Deep learning holds many mysteries for theory, as we have discussed on this blog. Lately many ML theorists have become interested in the generalization mystery: why do trained deep nets perform well on previously unseen data, even though they have way more free parameters than the number of datapoints (the classic "overfitting" regime)? Zhang et al.'s  paper  [Understanding Deep Learning requires Rethinking Generalization](https://arxiv.org/abs/1611.03530) played some role in bringing attention to this challenge. Their  main experimental finding is that if you take a classic convnet architecture, say [Alexnet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf), and train it on  images with random labels, then you can still achieve very high accuracy on the training data. (Furthermore, usual regularization strategies, which are believed to promote better generalization, do not help much.) Needless to say, the trained net is subsequently unable to predict the (random) labels of still-unseen images, which means it doesn't generalize. The paper notes that the ability to fit a classifier to data with random labels is also a traditional measure in machine learning called Rademacher complexity (which we will discuss shortly) and thus Rademacher complexity gives no meaningful bounds on sample complexity.  I found this paper entertainingly written and recommend reading it, despite having given away the punchline. Congratulations to the authors for winning best paper at ICLR 2017. 
