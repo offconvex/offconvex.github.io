@@ -71,7 +71,7 @@ One can similarly show that PAC-Bayes bounds are also descriptive, as you can se
 
 Answer: Probably because  standard presentation in lecture notes and textbooks seems to pretend that we are computationally-omnipotent beings who can *compute* VC dimension and Rademacher complexity and thus arrive at meaningful bounds on sample sizes needed for training to generalize. While this may have been possible in the old days with simple classifiers, today we have
 complicated classifiers with millions of variables, which furthermore are products of  nonconvex optimization techniques like backpropagation. 
- The only way to actually lowerbound Rademacher complexity of complicated learning architectures is to try training a classifier, and detect lack of generalization via a held-out set. Every practitioner in the world already does this, and  kudos to Zhang et al. for highlighting that theory currently offers nothing better. 
+ The only way to actually lowerbound Rademacher complexity of such complicated learning architectures is to try training a classifier, and detect lack of generalization via a held-out set. Every practitioner in the world already does this (without realizing it), and  kudos to Zhang et al. for highlighting that theory currently offers nothing better. 
 
 ## Toward a prescriptive generalization theory: the new papers
 
