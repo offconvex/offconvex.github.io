@@ -65,7 +65,7 @@ The **VC dimension** bound is similarly descriptive.  VC dimension is defined to
 
 Thus again, the doctor only has to hear "Generalization didn't happen with sample size $m$" to pipe up with: "VC dimension is higher than $\Omega(m/log m)$."  
 
-One can similarly show that PAC-Bayes bounds are also descriptive, as I do in my lecture notes. 
+One can similarly show that PAC-Bayes bounds are also descriptive, as you can see in [scribe notes from my lecture](http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/generalize.pdf). 
 
 > Why do students get confused and think that such tools of generalization theory gives some powerful technique to guide design of machine learning algorithms? 
 
