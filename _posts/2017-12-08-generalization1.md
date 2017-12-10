@@ -63,7 +63,7 @@ The **VC dimension** bound is similarly descriptive.  VC dimension is defined to
  If generalization does not happen as in (2) or (3) then this turns out to imply that VC dimension is at least around $\epsilon m$ for some $\epsilon >0$. The reason is that the $2m$ data points were split randomly into $S, S_2$, and there are $2^{2m}$ such splittings. When the generalization error is $\Omega(1)$ this can be shown to imply that we can achieve  $2^{\Omega(m)}$ labelings of the $2m$ datapoints using all possible classifiers. Now the classic Sauer's lemma (see any lecture notes on this topic, such as [Schapire's](https://www.cs.princeton.edu/courses/archive/spring14/cos511/scribe_notes/0220.pdf)) can be used to show that
  VC dimension is at least $\epsilon m/\log m$ for some constant $\epsilon>0$.
 
-Thus again, the doctor only has to hear "Generalization didn't happen with sample size $m$" to pipe up with: "VC dimension is higher than $\Omega(m)$."  
+Thus again, the doctor only has to hear "Generalization didn't happen with sample size $m$" to pipe up with: "VC dimension is higher than $\Omega(m/log m)$."  
 
 One can similarly show that PAC-Bayes bounds are also descriptive, as I do in my lecture notes. 
 
