@@ -45,13 +45,12 @@ Training  *generalizes* if the hypothesis $h$ that minimises $\Delta_S(h)$ for a
 
 $$\Delta_S(h) - \Delta_{S_2}(h) \ll 0 \qquad (2).$$
 
-###Generalization Theory: Descriptive Parts 
+### Generalization Theory: Descriptive Parts 
 
 Let's discuss **Rademacher complexity,** which I will simplify a bit for this discussion. (See also  [scribe notes of my lecture](http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/generalize.pdf).) For convenience assume in this discussion that labels and loss are $0,1$, and 
  assume that the badly generalizing $h$ predicts perfectly on the training sample $S$ and is completely wrong on the heldout set $S_2$, meaning 
  
-$\Delta_S(h) - \Delta_{S_2}(h) \approx - 1 \qquad (3)$$
-
+$\Delta_S(h) - \Delta_{S_2}(h) \approx - 1 \qquad (3)$
 
 Rademacher complexity concerns the following thought experiment. Take a single sample of size $2m$   from $\mathcal{D}$, split it into two and call the first half $S$ and the second $S_2$. *Flip* the labels of points in $S_2$. Now try to find a classifier $C$ that best describes this new sample, meaning one that minimizes $\Delta_S(h)  + 1- \Delta_{S_2}(h)$. This expression follows since flipping the label of a point turns good classification into bad and vice versa, and thus the loss function for $S_2$ is $1$ minus the old loss. We say the class of classifiers has high Rademacher complexity if with high probability this quantity is small, say close to $0$.  
 
