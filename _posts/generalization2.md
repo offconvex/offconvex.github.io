@@ -44,7 +44,7 @@ We formalize "flat minimum" using a stronger form of noise stability. Roughly sp
 
 <div style="text-align:center;">
  <img style="width:600px;" src="/assets/saddle_eff/aattenuate.pdf" alt ="How gaussian noise gets rejected as it travels up the net"/>
-</di
+</div>
 
 It is clear that the computation of the trained net is highly resistant to noise. 
 Note that the training involved no explicit injection of noise (eg dropout). Of course, stochastic gradient descent *implicitly* adds noise to the gradient, and it would be nice to investigate more rigorously if the noise stability arises from this or from some other source. 
