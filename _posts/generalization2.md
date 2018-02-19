@@ -42,8 +42,8 @@ PAC-Bayes approaches try to formalize the above intuition by defining a flat min
 We formalize "flat minimum" using a stronger form of noise stability. Roughly speaking, it says that if we inject appropriately scaled gaussian noise at the output of some layer, then this noise gets attenuated as it propagates up to higher layers. (Here "top" direction refers to the output of the net.)  The following figure illustrates how noise injected at a certain layer of VGG19 (trained on CIFAR10) affects the higher layer, in percentage terms. 
 
 <div style="text-align:center;">
- <img style="width:600px;" src="http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/blogfig//noiseattenuate.pdf" />
-</div>
+ <img style="width:600px;" src="http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/blogfig/attenuate.pdf" />
+</di
 
 It is clear that the computation of the trained net is highly resistant to noise. 
 Note that the training involved no explicit injection of noise (eg dropout). Of course, stochastic gradient descent *implicitly* adds noise to the gradient, and it would be nice to investigate more rigorously if the noise stability arises from this or from some other source. 
@@ -56,7 +56,7 @@ To understand why noise-stable nets are compressible, let's first understand noi
 This is just a matrix $M$. 
 
 <div style="text-align:center;">
- <img style="width:600px;" src="http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/blogfig//linear.pdf" />
+ <img style="width:600px;" src="http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/blogfig/linear.pdf" />
 </div>
 
 
@@ -89,7 +89,7 @@ Details can be found in the paper. All noise stability properties formalized the
 As mentioned, the compression framework also gives elementary (say, 1-page) proofs of the previous generalization bounds from the past year. For example, the paper of [Neyshabur et al.](https://openreview.net/forum?id=Skz_WfbCZ) shows the following is an upper bound on the effective number of parameters of a deep net. Here $A_i$ is the matrix describing the $i$th layer.  
 
 <div style="text-align:center;">
- <img style="width:600px;" src="http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/blogfig//expression1.pdf" />
+ <img style="width:600px;" src="http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/blogfig/expression1.pdf" />
 </div>
 
 
