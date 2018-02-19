@@ -41,7 +41,7 @@ Here's the intuition why a flat minimum should generalize better. Crudely speaki
 
 PAC-Bayes approaches try to formalize the above intuition by defining a flat minimum as follows: it is a net $C$ such that adding appropriately-scaled gaussian noise to all its trainable parameters does not greatly affect the training error. This allows quantifying the "volume" idea above in terms of probability/measure (see [my lecture notes](http://www.) or [Dziugaite-Roy](https://arxiv.org/abs/1703.11008)) and yields some explicit estimates on sample complexity.  However, it has proved difficult to obtain good quantitative estimates from this calculation, especially for convolutional nets. 
 
-We formalize "flat minimum" using a stronger form of noise stability. Roughly speaking, it says that if we inject appropriately scaled gaussian noise at the output of some layer, then this noise gets attenuated as it propagates up to higher layers. (Here "top" direction refers to the output of the net.)  The following figure illustrates how noise injected at a certain layer of VGG19 (trained on CIFAR10) affects the higher layer, in percentage terms. 
+We formalize "flat minimum" using noise stability of a slightly different form. Roughly speaking, it says that if we inject appropriately scaled gaussian noise at the output of some layer, then this noise gets attenuated as it propagates up to higher layers. (Here "top" direction refers to the output of the net.)  This is obviously related to notions like dropout, though it arises also in nets that are not trained with dropout. The following figure illustrates how noise injected at a certain layer of VGG19 (trained on CIFAR10) affects the higher layer, in percentage terms. 
 
 
 <p style="text-align:center;">
@@ -83,7 +83,7 @@ which implies that the matrix has an uneven distribution of singular values. (Fo
 The above analysis of noise stability in terms of singular values cannot hold across layers of a deep net, because  
 the mapping described by a sequence of layers is nonlinear. Noise stability is therefore formalized using the [Jacobian](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant) of this transformation,  is the matrix describing how the output reacts to tiny perturbations of the input. Noise stability says that this nonlinear operator passes signal (i.e., the vector from previous layers) much more strongly than it does a noise vector.
 
-The actual compression is just a randomized transformation applied to each layer (aside: this uses randomness, and thus fits in our "compressing with fixed string" framework) that uses the low stable rank condition at each layer. This compression introduces error in the layer's output, but the vector describing this error is "gaussian-like" due to the use of randomness in the compression. Thus this error gets attenuated by higher layers. 
+The actual compression is just a randomized transformation applied to each layer (aside: this uses randomness, and thus fits in our "compressing with fixed string" framework) that uses the low stable rank condition at each layer. This compression introduces error in the layer's output, but the vector describing this error is "gaussian-like" due to the use of randomness in the compression. Thus this error gets attenuated by higher layers.  
 
 
 Details can be found in the paper. All noise stability properties formalized there are later checked in the experiments section. 
@@ -103,6 +103,8 @@ The reason is that if an input $x$ is presented at the bottom of the net, then e
 the top singular value, and the ReLU nonlinearity can only decrease norm since its only action is to zero out some entries. 
 
 Having decoded the above expression, it is clear how to interpret it as an analysis of a (deterministic) compression of the net. Compress each layer by truncating singular values less than some threshold $t$, which we hope turns it into a low rank matrix. (Recall that a matrix with rank $r$ can be expressed using $2nr$ parameters.)   A simple computation shows that the number of such singular values is at most the stable rank divided by $t^2$.  How do we set $t$? The truncation introduces error in the layer's computation, which gets propagated through the higher layers and magnified at most by the Lipschitz constant. We want to make this propagated error small, which can be done by making $t$ inversely proportional to the Lipschitz constant.  This leads to the above bound on the number of effective parameters. 
+
+This proof sketch also clarifies how our work improves upon the older works: they are also (implicitly) compressing the deep net, but their analysis of how much compression is possible is much more pessimistic because they assume the network transmits noise at peak efficiency given by the Lipschitz constant. 
 
 ## Extending the ideas to convolutional nets 
 
