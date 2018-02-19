@@ -13,9 +13,9 @@ Recall that generalization bounds say that if the deep net training was performe
 $\sqrt{N/m}$. Here  $N$ is the number of *effective parameters* (or *complexity measure*) of the net; it is at most the actual number of trainable parameters but could be much less. (For exposition ease this post will ignore nuisance factors like $\log N$ etc. which also appear in the these calculations.) The mystery is that networks with millions of parameters have low generalization error even when $m =50K$ (as in CIFAR10 dataset), which suggests that the number of true parameters is actually much less than $50K$. The NIPS'17 papers by [Bartlett et al.](https://arxiv.org/abs/1706.08498) and [Neyshabur et al.](https://openreview.net/forum?id=Skz_WfbCZ)
 try to quantify the complexity measure using very interesting ideas (which influenced our paper). But ultimately the quantitative estimates are fairly vacuous  ---orders of magnitude more than the number of *actual parameters.* Part of the problem was that their ideas were tailor-made for fully connected nets. By contrast our new bounds apply to convolutional nets ---as modern deep nets usually are---and our estimates are several orders of magnitude better, and on the verge of being interesting. The following bar graph illustrates this on a log scale.
 
-<div style="text-align:center;">
- <img style="width:600px;" src="/assets/saddle_eff/acompare.pdf" alt=""comparison of bounds from various recent papers" />
-</div>
+<p style="text-align:center;">
+<img src="/assets/saddle_eff/acompare.png" width="85%" alt="comparison of bounds from various recent papers" />
+</p>
 
 
 ## The Compression Approach
