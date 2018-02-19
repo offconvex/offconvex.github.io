@@ -57,7 +57,7 @@ This is just a matrix $M$.
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/alinear.png" width="65%" alt="matrix M describing a single layer" />
+<img src="/assets/saddle_eff/alinear.png" width="40%" alt="matrix M describing a single layer" />
 </p>
 
 
