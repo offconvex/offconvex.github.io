@@ -32,9 +32,10 @@ Of course, in practice  deep nets are well known to be compressible. Using a var
 
 Before explaining the new paper, let's recall the classical suggestion of  [Hochreiter and Schmidhuber 1995]()) that deep nets generalize better if they are found in a region that is a *flat minimum* of the training loss landscape. Recently [Keskar et al 2016](https://arxiv.org/abs/1609.04836) have empirically tested this suggestion  for modern deep architectures and found that flat minima do generalize better. 
 
-<div style="text-align:center;">
- <img style="width:600px;" src="/assets/saddle_eff/aflatminima.pdf" alt= "Flat and sharp minima" />
-</div>
+<p style="text-align:center;">
+<img src="/assets/saddle_eff/aflatminima.png" width="85%" alt="Flat vs sharp minima" />
+</p>
+
 
 Here's the intuition why a flat minimum should generalize better. Crudely speaking, suppose a flat minimum is one that occupies volume $\tau$ in the landscape. Then the number of *distinct* flat minima in the landscape is at most $S =\text{total volume}/\tau$. Thus one can number the flat minima from $1$ to $S$, implying that a flat minimum can be represented using $\log S$ bits.  The standard sampling estimate mentioned above implies that flat minima generalize if the number of training samples $m$ exceeds $\log S$. 
 
@@ -42,10 +43,10 @@ PAC-Bayes approaches try to formalize the above intuition by defining a flat min
 
 We formalize "flat minimum" using a stronger form of noise stability. Roughly speaking, it says that if we inject appropriately scaled gaussian noise at the output of some layer, then this noise gets attenuated as it propagates up to higher layers. (Here "top" direction refers to the output of the net.)  The following figure illustrates how noise injected at a certain layer of VGG19 (trained on CIFAR10) affects the higher layer, in percentage terms. 
 
-<div style="text-align:center;">
- <img style="width:600px;" src="/assets/saddle_eff/aattenuate.pdf" alt ="How gaussian noise gets rejected as it travels up the net"/>
-</div>
 
+<p style="text-align:center;">
+<img src="/assets/saddle_eff/aattenuate.png" width="85%" alt="How noises attenuates as it travels up the layers of VGG." />
+</p>
 It is clear that the computation of the trained net is highly resistant to noise. 
 Note that the training involved no explicit injection of noise (eg dropout). Of course, stochastic gradient descent *implicitly* adds noise to the gradient, and it would be nice to investigate more rigorously if the noise stability arises from this or from some other source. 
 
@@ -54,10 +55,10 @@ Note that the training involved no explicit injection of noise (eg dropout). Of 
  To understand why noise-stable nets are compressible, let's first understand noise stability for a single layer with no nonlinearity.
 This is just a matrix $M$. 
 
-<div style="text-align:center;">
- <img style="width:600px;" src="/assets/saddle_eff/alinear.pdf" alt ="matrix M describing a single layer"/>
-</div>
 
+<p style="text-align:center;">
+<img src="/assets/saddle_eff/alinear.png" width="85%" alt="matrix M describing a single layer" />
+</p>
 
 
 What does it mean that this matrix's output is noise stable? Suppose the vector at the previous layer is a unit vector $x$, then the output is $Mx$. If we inject a noise vector $\eta$ of unit norm at the previous layer then the output must become $M(x +\eta)$. Noise stability means the output is shifted very little, which implies the norm of $Mx$ is much higher than that of $M \eta$. 
@@ -70,9 +71,12 @@ $$\sigma_{max}(M) \gg \frac{1}{h} \sum_i (\sigma_i(M)^2)^{1/2},$$
 
 which implies that the matrix has an uneven distribution of singular values. (Formally, the ratio of left side and right side is  related to the [*stable rank*](https://nickhar.wordpress.com/2012/02/29/lecture-15-low-rank-approximation-of-matrices/). Indeed, the higher layers of deep nets---where most of the net's parameters reside---exhibit a highly uneven distribution of singular values, as revealed by the figure below describing layer 10 in VGG19 trained on CIFAR10.
 
-<div style="text-align:center;">
- <img style="width:600px;" src="/assets/saddle_eff/aspectrumlayer10.pdf" alt ="distribution of singular values of matrix at layer 10 of VGG19"/>
-</div>
+
+
+<p style="text-align:center;">
+<img src="/assets/saddle_eff/aspectrumlayer10.png" width="85%" alt="distribution of singular values of matrix at layer 10 of VGG19" />
+</p>
+
 
 ## Compressing multilayer net 
 
@@ -89,10 +93,10 @@ Details can be found in the paper. All noise stability properties formalized the
 
 As mentioned, the compression framework also gives elementary (say, 1-page) proofs of the previous generalization bounds from the past year. For example, the paper of [Neyshabur et al.](https://openreview.net/forum?id=Skz_WfbCZ) shows the following is an upper bound on the effective number of parameters of a deep net. Here $A_i$ is the matrix describing the $i$th layer.  
 
-<div style="text-align:center;">
- <img style="width:600px;" src="/assets/saddle_eff/aexpression1.pdf" alt="expression in Neyshabur et al" />
-</div>
 
+<p style="text-align:center;">
+<img src="/assets/saddle_eff/aexpression1.png" width="85%" alt="Expression for effective number of parameters in Neyshabur et al" />
+</p>
 
 The second part of the expression is the sum of stable ranks of the layer matrices, and is a natural measure of complexity. The first term is an upper bound on the Lipschitz constant of the entire network. Recall that the Lipschitz constant of a mapping $f$ is a constant $L$ such that $f(x) \leq L c\dot |x|$. It is at most the product of spectral norms (= top singular value) of the layer matrices. 
 The reason is that if an input $x$ is presented at the bottom of the net, then each successive layer can multiply its norm by at most 
