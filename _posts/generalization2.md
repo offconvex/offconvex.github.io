@@ -74,7 +74,7 @@ which implies that the matrix has an uneven distribution of singular values. (Fo
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/aspectrumlayer10.png" width="65%" alt="distribution of singular values of matrix at layer 10 of VGG19" />
+<img src="/assets/saddle_eff/aspectrumlayer10.png" width="45%" alt="distribution of singular values of matrix at layer 10 of VGG19" />
 </p>
 
 
@@ -95,7 +95,7 @@ As mentioned, the compression framework also gives elementary (say, 1-page) proo
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/aexpression1.png" width="65%" alt="Expression for effective number of parameters in Neyshabur et al" />
+<img src="/assets/saddle_eff/aexpression1.png" width="50%" alt="Expression for effective number of parameters in Neyshabur et al" />
 </p>
 
 The second part of the expression is the sum of stable ranks of the layer matrices, and is a natural measure of complexity. The first term is an upper bound on the Lipschitz constant of the entire network. Recall that the Lipschitz constant of a mapping $f$ is a constant $L$ such that $f(x) \leq L c\dot |x|$. It is at most the product of spectral norms (= top singular value) of the layer matrices. 
