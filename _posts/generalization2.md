@@ -69,7 +69,7 @@ We conclude that the matrix computes a noise-stable transformation if
 
 $$\sigma_{max}(M) \gg \frac{1}{h} \sum_i (\sigma_i(M)^2)^{1/2},$$
 
-which implies that the matrix has an uneven distribution of singular values. (Formally, the ratio of left side and right side is  related to the [*stable rank*](https://nickhar.wordpress.com/2012/02/29/lecture-15-low-rank-approximation-of-matrices/). Indeed, the higher layers of deep nets---where most of the net's parameters reside---exhibit a highly uneven distribution of singular values, as revealed by the figure below describing layer 10 in VGG19 trained on CIFAR10.
+which implies that the matrix has an uneven distribution of singular values. (Formally, the ratio of left side and right side is  related to the [*stable rank*](https://nickhar.wordpress.com/2012/02/29/lecture-15-low-rank-approximation-of-matrices/) and when it is low, the matrix is highly compressible.)  Indeed, the higher layers of deep nets---where most of the net's parameters reside---exhibit a highly uneven distribution of singular values, as revealed by the figure below describing layer 10 in VGG19 trained on CIFAR10.
 
 
 
