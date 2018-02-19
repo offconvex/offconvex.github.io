@@ -14,7 +14,7 @@ $\sqrt{N/m}$. Here  $N$ is the number of *effective parameters* (or *complexity 
 try to quantify the complexity measure using very interesting ideas (which influenced our paper). But ultimately the quantitative estimates are fairly vacuous  ---orders of magnitude more than the number of *actual parameters.* Part of the problem was that their ideas were tailor-made for fully connected nets. By contrast our new bounds apply to convolutional nets ---as modern deep nets usually are---and our estimates are several orders of magnitude better, and on the verge of being interesting. The following bar graph illustrates this on a log scale.
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/acompare.png" width="85%" alt="comparison of bounds from various recent papers" />
+<img src="/assets/saddle_eff/acompare.png" width="75%"  alt="comparison of bounds from various recent papers" />
 </p>
 
 
@@ -33,7 +33,7 @@ Of course, in practice  deep nets are well known to be compressible. Using a var
 Before explaining the new paper, let's recall the classical suggestion of  [Hochreiter and Schmidhuber 1995]()) that deep nets generalize better if they are found in a region that is a *flat minimum* of the training loss landscape. Recently [Keskar et al 2016](https://arxiv.org/abs/1609.04836) have empirically tested this suggestion  for modern deep architectures and found that flat minima do generalize better. 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/aflatminima.png" width="85%" alt="Flat vs sharp minima" />
+<img src="/assets/saddle_eff/aflatminima.png" width="65%" alt="Flat vs sharp minima" />
 </p>
 
 
@@ -45,7 +45,7 @@ We formalize "flat minimum" using a stronger form of noise stability. Roughly sp
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/aattenuate.png" width="85%" alt="How noises attenuates as it travels up the layers of VGG." />
+<img src="/assets/saddle_eff/aattenuate.png" width="65%" alt="How noises attenuates as it travels up the layers of VGG." />
 </p>
 It is clear that the computation of the trained net is highly resistant to noise. 
 Note that the training involved no explicit injection of noise (eg dropout). Of course, stochastic gradient descent *implicitly* adds noise to the gradient, and it would be nice to investigate more rigorously if the noise stability arises from this or from some other source. 
@@ -57,7 +57,7 @@ This is just a matrix $M$.
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/alinear.png" width="85%" alt="matrix M describing a single layer" />
+<img src="/assets/saddle_eff/alinear.png" width="65%" alt="matrix M describing a single layer" />
 </p>
 
 
@@ -74,7 +74,7 @@ which implies that the matrix has an uneven distribution of singular values. (Fo
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/aspectrumlayer10.png" width="85%" alt="distribution of singular values of matrix at layer 10 of VGG19" />
+<img src="/assets/saddle_eff/aspectrumlayer10.png" width="65%" alt="distribution of singular values of matrix at layer 10 of VGG19" />
 </p>
 
 
@@ -95,7 +95,7 @@ As mentioned, the compression framework also gives elementary (say, 1-page) proo
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/aexpression1.png" width="85%" alt="Expression for effective number of parameters in Neyshabur et al" />
+<img src="/assets/saddle_eff/aexpression1.png" width="65%" alt="Expression for effective number of parameters in Neyshabur et al" />
 </p>
 
 The second part of the expression is the sum of stable ranks of the layer matrices, and is a natural measure of complexity. The first term is an upper bound on the Lipschitz constant of the entire network. Recall that the Lipschitz constant of a mapping $f$ is a constant $L$ such that $f(x) \leq L c\dot |x|$. It is at most the product of spectral norms (= top singular value) of the layer matrices. 
