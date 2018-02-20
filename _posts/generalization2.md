@@ -62,7 +62,7 @@ Note that the training involved no explicit injection of noise (eg dropout). Of 
 
 
 What does it mean that this matrix's output is stable to noise? Suppose the vector at the previous layer is a unit vector $x$. This is the output of the lower layers on an actual sample, so $x$ can be thought of as the "signal" for the current layer.  The matrix converts $x$ into $Mx$. If we inject a noise vector $\eta$ of unit norm at $x$ then the output must become $M(x +\eta)$. We say $M$ is noise stable for input $x$ if such noising affects the output very little, which implies the norm of $Mx$ is much higher than that of $M \eta$. 
-The former hand is at most $\sigma_{max}(M)$, the largest singular value of $M$. The latter is approximately 
+The former is at most $\sigma_{max}(M)$, the largest singular value of $M$. The latter is approximately 
 $\sum_i (\sigma_i(M)^2)^{1/2}/\sqrt{h}$ where $\sigma_i(M)$ is the $i$th singular value of $M$ and $h$ is dimension of $Mx$. The reason is that gaussian noise divides itself evenly across all directions, with variance in each direction $1/h$. 
 We conclude that:
 $$(\sigma_{max}(M))^2 \gg \frac{1}{h} \sum_i (\sigma_i(M)^2),$$
