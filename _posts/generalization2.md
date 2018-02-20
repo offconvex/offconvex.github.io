@@ -30,7 +30,7 @@ Of course, in practice  deep nets are well-known to be compressible using a slew
 
 ## Flat minima and Noise Stability
 
-Before explaining the new paper, let's recall the classical suggestion of  [Hochreiter and Schmidhuber 1995](http://www.bioinf.jku.at/publications/older/3304.pdf) that a deep net generalizes better if it corresponds to a *flat minimum* of the training loss landscape. Recent empirical work of [Keskar et al 2016](https://arxiv.org/abs/1609.04836) on modern deep architectures finds that flatness does correlate with better generalization. 
+Modern generalization results can be seen as proceeding via some formalization of a *flat minimum* of the loss landscape, suggested in 1990s as the source of good generalization [Hochreiter and Schmidhuber 1995](http://www.bioinf.jku.at/publications/older/3304.pdf). Recent empirical work of [Keskar et al 2016](https://arxiv.org/abs/1609.04836) on modern deep architectures finds that flatness does correlate with better generalization (though the issue is complicated, as discussed in an upcoming post by Behnam Neyshabur). 
 
 <p style="text-align:center;">
 <img src="/assets/saddle_eff/aflatminima.png" width="65%" alt="Flat vs sharp minima" />
@@ -46,7 +46,7 @@ We formalize "flat minimum" using noise stability of a slightly different form. 
 
 
 <p style="text-align:center;">
-<img src="/assets/saddle_eff/aattenuate.png" width="65%" alt="How noises attenuates as it travels up the layers of VGG." />
+<img src="/assets/saddle_eff/attenuate.jpg" width="65%" alt="How noises attenuates as it travels up the layers of VGG." />
 </p>
 Clearly, computation of the trained net is highly resistant to noise. (This has obvious implications for biological neural nets...) 
 Note that the training involved no explicit injection of noise (eg dropout). Of course, stochastic gradient descent *implicitly* adds noise to the gradient, and it would be nice to investigate more rigorously if the noise stability arises from this or from some other source. 
