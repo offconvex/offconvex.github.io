@@ -37,18 +37,18 @@ Before explaining the new paper, let's recall the classical suggestion of  [Hoch
 </p>
 
 
-Here's the intuition why a flat minimum should generalize better. Crudely speaking, suppose a flat minimum is one that occupies "volume" $\tau$ in the landscape. (The flatter the minimum, the higher $\tau$ is.)  Then the number of *distinct* flat minima in the landscape is at most $S =\text{total volume}/\tau$. Thus one can number the flat minima from $1$ to $S$, implying that a flat minimum can be represented using $\log S$ bits.  The above-mentioned basic theorem implies that flat minima generalize if the number of training samples $m$ exceeds $\log S$. 
+Here's the intuition why a flat minimum should generalize better. Crudely speaking, suppose a flat minimum is one that occupies "volume" $\tau$ in the landscape. (The flatter the minimum, the higher $\tau$ is.)  Then the number of *distinct* flat minima in the landscape is at most $S =\text{total volume}/\tau$. Thus one can number the flat minima from $1$ to $S$, implying that a flat minimum can be represented using $\log S$ bits.  The above-mentioned *basic theorem* implies that flat minima generalize if the number of training samples $m$ exceeds $\log S$. 
 
 PAC-Bayes approaches try to formalize the above intuition by defining a flat minimum as follows: it is a net $C$ such that adding appropriately-scaled gaussian noise to all its trainable parameters does not greatly affect the training error. This allows quantifying the "volume" above in terms of probability/measure (see 
 [my lecture notes](http://www.cs.princeton.edu/courses/archive/fall17/cos597A/lecnotes/generalize.pdf) or [Dziugaite-Roy](https://arxiv.org/abs/1703.11008)) and yields some explicit estimates on sample complexity.  However, obtaining good quantitative estimates from this calculation has proved difficut, as seen in the bar graph earlier. 
 
-We formalize "flat minimum" using noise stability of a slightly different form. Roughly speaking, it says that if we inject appropriately scaled gaussian noise at the output of some layer, then this noise gets attenuated as it propagates up to higher layers. (Here "top" direction refers to the output of the net.)  This is obviously related to notions like dropout, though it arises also in nets that are not trained with dropout. The following figure illustrates how noise injected at a certain layer of VGG19 (trained on CIFAR10) affects the higher layer. The y-axis denote the magnitude of the noise ($\ell_2$ norm) as a multiple of the vector being computed at the layer. Thus for example a noise vector *twice* the magnitude of the vector at layer 5 quickly gets attenuated down to a quarter to eighth of its value as it goes up the layers.
+We formalize "flat minimum" using noise stability of a slightly different form. Roughly speaking, it says that if we inject appropriately scaled gaussian noise at the output of some layer, then this noise gets attenuated as it propagates up to higher layers. (Here "top" direction refers to the output of the net.)  This is obviously related to notions like dropout, though it arises also in nets that are not trained with dropout. The following figure illustrates how noise injected at a certain layer of VGG19 (trained on CIFAR10) affects the higher layer. The y-axis denote the magnitude of the noise ($\ell_2$ norm) as a multiple of the vector being computed at the layer. Thus for example a noise vector *twice* the magnitude of the vector at layer 5 quickly gets attenuated down to a quarter to eighth of its value as it propagates up the layers.
 
 
 <p style="text-align:center;">
 <img src="/assets/saddle_eff/aattenuate.png" width="65%" alt="How noises attenuates as it travels up the layers of VGG." />
 </p>
-It is clear that the computation of the trained net is highly resistant to noise. 
+Clearly, computation of the trained net is highly resistant to noise. (This has obvious implications for biological neural nets...) 
 Note that the training involved no explicit injection of noise (eg dropout). Of course, stochastic gradient descent *implicitly* adds noise to the gradient, and it would be nice to investigate more rigorously if the noise stability arises from this or from some other source. 
 
 ## Noise stability and compressibility of single layer
@@ -91,14 +91,14 @@ Details can be found in the paper. All noise stability properties formalized the
 
 ## Simpler proofs of existing generalization bounds
 
-In the paper we also use our compression framework to give elementary (say, 1-page) proofs of the previous generalization bounds from the past year. For example, the paper of [Neyshabur et al.](https://openreview.net/forum?id=Skz_WfbCZ) shows the following is an upper bound on the effective number of parameters of a deep net. Here $A_i$ is the matrix describing the $i$th layer.  
+In the paper we also use our compression framework to give elementary (say, 1-page) proofs of the previous generalization bounds from the past year. For example, the paper of [Neyshabur et al.](https://openreview.net/forum?id=Skz_WfbCZ) shows the following is an upper bound on the generalization error where $A_i$ is the matrix describing the $i$th layer.  
 
 
 <p style="text-align:center;">
 <img src="/assets/saddle_eff/aexpression1.png" width="50%" alt="Expression for effective number of parameters in Neyshabur et al" />
 </p>
 
-The second part of the expression is the sum of stable ranks of the layer matrices, and is a natural measure of complexity. The first part is product of spectral norms (= top singular value) of the layer matrices, which happens to be an upper bound on the Lipschitz constant of the entire network. (Lipschitz constant of a mapping $f$ in this context is a constant $L$ such that $f(x) \leq L c\dot |x|$.) 
+Comparing to the *basic theorem*, we realize the numerator corresponds to the number of effective parameters. The second part of the expression is the sum of stable ranks of the layer matrices, and is a natural measure of complexity. The first part is product of spectral norms (= top singular value) of the layer matrices, which happens to be an upper bound on the Lipschitz constant of the entire network. (Lipschitz constant of a mapping $f$ in this context is a constant $L$ such that $f(x) \leq L c\dot |x|$.) 
 The reason this is the Lipschitz constant is that if an input $x$ is presented at the bottom of the net, then each successive layer can multiply its norm by at most the top singular value, and the ReLU nonlinearity can only decrease norm since its only action is to zero out some entries. 
 
 Having decoded the above expression, it is clear how to interpret it as an analysis of a (deterministic) compression of the net. Compress each layer by truncating singular values less than some threshold $t\|A\|$, which we hope turns it into a low rank matrix. (Recall that a matrix with rank $r$ can be expressed using $2nr$ parameters.)   A simple computation shows that the number of such singular values is at most the stable rank divided by $t^2$.  How do we set $t$? The truncation introduces error in the layer's computation, which gets propagated through the higher layers and magnified at most by the Lipschitz constant. We want to make this propagated error small, which can be done by making $t$ inversely proportional to the Lipschitz constant.  This leads to the above bound on the number of effective parameters. 
