@@ -111,7 +111,7 @@ Convolutional nets could not be dealt with cleanly in the earlier papers. I must
 
 Let's discuss the two naive ideas. The first is to compress the filter independently in different patches. This unfortunately is not a compression at all, since  each  copy of the filter then comes with its own parameters. The second idea is to do a single compression of the filter and use the compressed copy in each patch. This messes up the error analysis because the errors introduced due to compression in the different copies are now correlated, whereas the analysis requires them to be more like gaussian. 
 
-The idea we end up using is to compress the filters using $k$-wise independence (an idea from [theory of hashing schemes](https://en.wikipedia.org/wiki/K-independent_hashing), where $k$ is roughly logarithmic in the number of training samples. 
+The idea we end up using is to compress the filters using $k$-wise independence (an idea from [theory of hashing schemes](https://en.wikipedia.org/wiki/K-independent_hashing)), where $k$ is roughly logarithmic in the number of training samples. 
 
 ## Concluding thoughts
 
