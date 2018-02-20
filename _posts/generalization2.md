@@ -69,7 +69,7 @@ $$(\sigma_{max}(M))^2 \gg \frac{1}{h} \sum_i (\sigma_i(M)^2),$$
 
 which implies that the matrix has an uneven distribution of singular values. Ratio of left side and right side is called the [*stable rank*](https://nickhar.wordpress.com/2012/02/29/lecture-15-low-rank-approximation-of-matrices/) and is at most the linear algebraic rank. Furthermore, the above analysis suggests that the "signal" $x$ is *correlated* with the singular directions corresponding to the higher singular values, which is at the root of the noise stability. 
 
-Our experiments on VGG and GoogleNet reveal that the higher layers of deep nets---where most of the net's parameters reside---do indeed exhibit a highly uneven distribution of singular values. The figure below describes layer 10 in VGG19 trained on CIFAR10.
+Our experiments on VGG and GoogleNet reveal that the higher layers of deep nets---where most of the net's parameters reside---do indeed exhibit a highly uneven distribution of singular values, and that the signal aligns more with the higher singular directions. The figure below describes layer 10 in VGG19 trained on CIFAR10.
 
 
 
@@ -80,8 +80,8 @@ Our experiments on VGG and GoogleNet reveal that the higher layers of deep nets-
 
 ## Compressing multilayer net 
 
-The above analysis of noise stability in terms of singular values cannot hold across layers of a deep net, because  
-the mapping described by a sequence of layers is nonlinear. Noise stability is therefore formalized using the [Jacobian](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant) of this mapping, which is the matrix describing how the output reacts to tiny perturbations of the input. Noise stability says that this nonlinear mapping passes signal (i.e., the vector from previous layers) much more strongly than it does a noise vector.
+The above analysis of noise stability in terms of singular values cannot hold across multiple layers of a deep net, because  
+the mapping becomes nonlinear, which lacks a notion of singular values.  Noise stability is therefore formalized using the [Jacobian](https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant) of this mapping, which is the matrix describing how the output reacts to tiny perturbations of the input. Noise stability says that this nonlinear mapping passes signal (i.e., the vector from previous layers) much more strongly than it does a noise vector.
 
 Our compression algorithm applies a randomized transformation to the matrix of each layer (aside: note the use of randomness, which fits in our "compressing with fixed string" framework) that relies on the low stable rank condition at each layer. This compression introduces error in the layer's output, but the vector describing this error is "gaussian-like" due to the use of randomness in the compression. Thus this error gets attenuated by higher layers.  
 
