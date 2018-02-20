@@ -30,7 +30,7 @@ Of course, in practice  deep nets are well-known to be compressible using a slew
 
 ## Flat minima and Noise Stability
 
-Modern generalization results can be seen as proceeding via some formalization of a *flat minimum* of the loss landscape, suggested in 1990s as the source of good generalization [Hochreiter and Schmidhuber 1995](http://www.bioinf.jku.at/publications/older/3304.pdf). Recent empirical work of [Keskar et al 2016](https://arxiv.org/abs/1609.04836) on modern deep architectures finds that flatness does correlate with better generalization (though the issue is complicated, as discussed in an upcoming post by Behnam Neyshabur). 
+Modern generalization results can be seen as proceeding via some formalization of a *flat minimum* of the loss landscape. This was suggested in 1990s as the source of good generalization [Hochreiter and Schmidhuber 1995](http://www.bioinf.jku.at/publications/older/3304.pdf). Recent empirical work of [Keskar et al 2016](https://arxiv.org/abs/1609.04836) on modern deep architectures finds that flatness does correlate with better generalization, though the issue is complicated, as discussed in an upcoming post by Behnam Neyshabur. 
 
 <p style="text-align:center;">
 <img src="/assets/saddle_eff/aflatminima.png" width="65%" alt="Flat vs sharp minima" />
