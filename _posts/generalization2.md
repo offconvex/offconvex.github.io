@@ -112,3 +112,9 @@ Convolutional nets could not be dealt with cleanly in the earlier papers. I must
 Let's discuss the two naive ideas. The first is to compress the filter independently in different patches. This unfortunately is not a compression at all, since  each  copy of the filter then comes with its own parameters. The second idea is to do a single compression of the filter and use the compressed copy in each patch. This messes up the error analysis because the errors introduced due to compression in the different copies are now correlated, whereas the analysis requires them to be more like gaussian. 
 
 The idea we end up using is to compress the filters using $k$-wise independence (an idea from [theory of hashing schemes](https://en.wikipedia.org/wiki/K-independent_hashing), where $k$ is roughly logarithmic in the number of training samples. 
+
+## Concluding thoughts
+
+While generalization theory can seem merely academic at times ---since in practice held-out data establishes generalizaton--- I hope you see from the above account that understanding generalization can give some interesting insights into what is going on in deep net training. The noise stability insights introduced above have obvious interest in study of biological neural nets. 
+
+At the same time, I suspect that compressibility is only one part of the generalization mystery, and that we are still missing some big idea. I don't see how to use the above ideas to demonstrate that the effective number of parameters in VGG19 is as low as $50k$, as seems to be the case. I suspect doing so will force us to understand the structure of the data (in this case, real-life images) which the above analysis mostly ignores. The only property of data used is that the deep net aligns itself better with data than with noise.  
