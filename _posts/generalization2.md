@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Proving generalization of deep nets via compression
-date:  2018-2-17 13:00:00
+date:  2018-2-17 16:00:00
 author: Sanjeev Arora
-visible: False
+visible: True
 ---
 
 This post is about [my new paper with Rong Ge, Behnam Neyshabur, and Yi Zhang](https://arxiv.org/abs/1802.05296) which offers some new perspective into the generalization mystery for deep nets discussed in 
