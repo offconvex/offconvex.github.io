@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Can increasing depth serve to accelerate optimization?
-date: 2018-3-2 16:00:00
+date: 2018-3-2 13:00:00
 author: Nadav Cohen
-visible: False
+visible: True
 ---
 
 
