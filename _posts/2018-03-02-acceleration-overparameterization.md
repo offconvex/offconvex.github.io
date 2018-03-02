@@ -13,11 +13,11 @@ Our work can also be seen as one more piece of evidence for a nascent belief tha
 
 ## $\ell_p$ Regression
 
-Let's begin by considering a very simple learning problem - scalar linear regression with $\ell_p$ loss:
+Let's begin by considering a very simple learning problem - scalar linear regression with $\ell_p$ loss (our theory and experiments will apply to $p >2$):
 
 $$\min_{\mathbf{w}}~L(\mathbf{w}):=\frac{1}{p}\sum_{(\mathbf{x},y)\in{S}}(\mathbf{x}^\top\mathbf{w}-y)^p$$
 
-$S$ here stands for a training set, consisting of pairs $(\mathbf{x},y)$ where $\mathbf{x}$ is a vector representing an instance and $y$ is a (numeric) scalar standing for its label; $\mathbf{w}$ is the parameter vector we wish to learn. Our theory and experiments will apply to $p >2$. Let's convert the linear model to an extremely simple "depth-2 network", by replacing the vector $\mathbf{w}$ with a vector $\mathbf{w_1}$ times a scalar $\omega_2$. Clearly, this is an overparameterization that does not change expressiveness, but yields the (non-convex) objective:
+$S$ here stands for a training set, consisting of pairs $(\mathbf{x},y)$ where $\mathbf{x}$ is a vector representing an instance and $y$ is a (numeric) scalar standing for its label; $\mathbf{w}$ is the parameter vector we wish to learn.  Let's convert the linear model to an extremely simple "depth-2 network", by replacing the vector $\mathbf{w}$ with a vector $\mathbf{w_1}$ times a scalar $\omega_2$. Clearly, this is an overparameterization that does not change expressiveness, but yields the (non-convex) objective:
 
 $$\min_{\mathbf{w_1},\omega_2}~L(\mathbf{w_1},\omega_2):=\frac{1}{p}\sum_{(\mathbf{x},y)\in{S}}(\mathbf{x}^\top\mathbf{w_1}\omega_2-y)^p$$
 
