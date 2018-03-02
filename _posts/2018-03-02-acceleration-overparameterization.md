@@ -1,24 +1,17 @@
 ---
 layout: post
-title: Benefits of Depth for Optimization
+title: Can increasing depth serve to accelerate optimization?
 date: 2018-3-2 16:00:00
-author: Sanjeev Arora and Nadav Cohen
+author: Nadav Cohen
 visible: False
 ---
 
 
-Among the most fundamental questions in the theory of deep learning is the role of depth.
-Conventional wisdom, backed by multiple theoretical studies (e.g. [Eldan & Shamir 2016](http://proceedings.mlr.press/v49/eldan16.pdf); [Raghu et al. 2017](http://proceedings.mlr.press/v70/raghu17a/raghu17a.pdf); [Lee et al. 2017](http://proceedings.mlr.press/v65/lee17a/lee17a.pdf); [Cohen et al. 2016](http://proceedings.mlr.press/v49/cohen16.pdf); [Daniely 2017](http://proceedings.mlr.press/v65/daniely17a/daniely17a.pdf)), states that adding layers to a network boosts its expressive power.
-On the other hand, it is generally believed that this expressive gain comes at a price - optimization (training) of deeper networks is more difficult.
-This belief is somewhat hardcoded into the "landscape characterization" approach for analyzing deep network optimization.
-Papers following this approach (e.g. [Kawaguchi 2016](https://papers.nips.cc/paper/6112-deep-learning-without-poor-local-minima.pdf); [Hardt & Ma 2017](https://openreview.net/pdf?id=ryxB0Rtxx); [Choromanska et al. 2015](http://proceedings.mlr.press/v38/choromanska15.pdf); [Haeffele & Vidal 2017](http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeffele_Global_Optimality_in_CVPR_2017_paper.pdf); [Soudry & Carmon 2016](https://arxiv.org/pdf/1605.08361.pdf); [Safran & Shamir 2017](https://arxiv.org/pdf/1712.08968.pdf)) typically study local minima and/or saddle points in the objective of a deep network, while implicitly assuming that the ideal landscape is convex (single global minimum, no other critical point).
-In a [new paper (joint work with Elad Hazan)](https://arxiv.org/pdf/1802.06509.pdf) we take a different tack, and reach the counterintuitive conclusion that sometimes, increasing depth can *accelerate* optimization.
+"What role does depth play?" is a fundamental question in theory of deep learning. Conventional wisdom, backed by multiple theoretical studies (e.g. [Eldan & Shamir 2016](http://proceedings.mlr.press/v49/eldan16.pdf); [Raghu et al. 2017](http://proceedings.mlr.press/v70/raghu17a/raghu17a.pdf); [Lee et al. 2017](http://proceedings.mlr.press/v65/lee17a/lee17a.pdf); [Cohen et al. 2016](http://proceedings.mlr.press/v49/cohen16.pdf); [Daniely 2017](http://proceedings.mlr.press/v65/daniely17a/daniely17a.pdf)), holds more layers increase expressive power.
+Conventional wisdom also holds though that this expressive gain comes at a price - optimization (training) of deeper networks is more difficult (viz., [vanishing/exploding gradients](https://en.wikipedia.org/wiki/Vanishing_gradient_problem)). Recent works on "landscape characterization" implicitly adopt this worldview (e.g. [Kawaguchi 2016](https://papers.nips.cc/paper/6112-deep-learning-without-poor-local-minima.pdf); [Hardt & Ma 2017](https://openreview.net/pdf?id=ryxB0Rtxx); [Choromanska et al. 2015](http://proceedings.mlr.press/v38/choromanska15.pdf); [Haeffele & Vidal 2017](http://openaccess.thecvf.com/content_cvpr_2017/papers/Haeffele_Global_Optimality_in_CVPR_2017_paper.pdf); [Soudry & Carmon 2016](https://arxiv.org/pdf/1605.08361.pdf); [Safran & Shamir 2017](https://arxiv.org/pdf/1712.08968.pdf)). They prove theorems about local minima and/or saddle points in the objective of a deep network, which implicitly assumes that the ideal landscape is convex (single global minimum, no other critical point). My [new paper](https://arxiv.org/pdf/1802.06509.pdf)  with Sanjeev Arora and Elad Hazan makes the counterintuitive suggests that sometimes, increasing depth can *accelerate* optimization.
 
-Our work can be seen as casting new light on the notion of *overparameterization*. 
-In classical statistics, training a model with more parameters than necessary is [often associated with overfitting](https://www.rasch.org/rmt/rmt222b.htm). 
-Modern deep learning however suggests that overparameterization of various forms can in fact be beneficial.
-One may view our analysis and results as a particular exemplar of this general proposition.
-
+Our work can also be seen as supporting evidence for recent suggestions that *overparameterization* of deep nets is a good thing, 
+even though in classical statistics, training a model with more parameters than necessary is [often associated with overfitting](https://www.rasch.org/rmt/rmt222b.htm). 
 
 ## $\ell_p$ Regression
 
