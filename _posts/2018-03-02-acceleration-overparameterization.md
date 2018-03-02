@@ -18,11 +18,7 @@ Let's begin by considering a very simple learning problem - scalar linear regres
 
 $$\min_{\mathbf{w}}~L(\mathbf{w}):=\frac{1}{p}\sum_{(\mathbf{x},y)\in{S}}(\mathbf{x}^\top\mathbf{w}-y)^p$$
 
-$S$ here stands for a training set, consisting of pairs $(\mathbf{x},y)$ where $\mathbf{x}$ is a vector representing an instance and $y$ is a (numeric) scalar standing for its label; $\mathbf{w}$ is the parameter vector we wish to learn.
-Our analysis and experiments reveal that when $p>2$, optimization of $L(\mathbf{w})$ can accelerate from depth, even when the latter does not entail any gain in expressiveness, and despite the fact that it turns the objective non-convex.
-
-As an example, suppose we convert the linear model to an extremely simple "depth-2 network", by replacing the vector $\mathbf{w}$ with a vector $\mathbf{w_1}$ times a scalar $\omega_2$.
-Clearly, this has no effect on expressiveness - it is simply an overparameterization, that yields the (non-convex) objective:
+$S$ here stands for a training set, consisting of pairs $(\mathbf{x},y)$ where $\mathbf{x}$ is a vector representing an instance and $y$ is a (numeric) scalar standing for its label; $\mathbf{w}$ is the parameter vector we wish to learn. Our theory and experiments will apply to $p >2$. Let's convert the linear model to an extremely simple "depth-2 network", by replacing the vector $\mathbf{w}$ with a vector $\mathbf{w_1}$ times a scalar $\omega_2$. Clearly, this is an overparameterization that does not change expressiveness, but yields the (non-convex) objective:
 
 $$\min_{\mathbf{w_1},\omega_2}~L(\mathbf{w_1},\omega_2):=\frac{1}{p}\sum_{(\mathbf{x},y)\in{S}}(\mathbf{x}^\top\mathbf{w_1}\omega_2-y)^p$$
 
