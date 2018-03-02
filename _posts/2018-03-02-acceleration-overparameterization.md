@@ -115,3 +115,5 @@ Our work provides insight into benefits of depth in the form of overparameteriza
 Many open questions and problems remain.
 For example, is it possible to rigorously analyze the acceleration effect of the end-to-end update rule (analogously to, say, [Nesterov 1983](http://www.cis.pku.edu.cn/faculty/vision/zlin/1983-A%20Method%20of%20Solving%20a%20Convex%20Programming%20Problem%20with%20Convergence%20Rate%20O(k%5E(-2))_Nesterov.pdf) or [Duchi et al. 2011](http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf))?
 Treatment of non-linear deep networks is of course also of interest, as well as more extensive empirical evaluation.
+
+[Nadav Cohen](http://www.cohennadav.com/)
