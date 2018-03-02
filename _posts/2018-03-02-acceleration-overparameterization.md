@@ -33,10 +33,9 @@ Thus the seemingly benign addition of a single multiplicative scalar thus turned
 <img src="/assets/acc_oprm_L4_exp.png" width="40%" alt="L4 regression experiment" />
 </p>
 
-Not only did the overparameterization accelerate gradient descent, but it has done so more than two well-known, explicitly designed acceleration methods - [AdaGrad](http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf) and [AdaDelta](https://arxiv.org/pdf/1212.5701.pdf) (the former did not really provide a speedup in this experiment).
+Not only did the overparameterization accelerate gradient descent, but it has done so more than two well-known, explicitly designed acceleration methods -- [AdaGrad](http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf) and [AdaDelta](https://arxiv.org/pdf/1212.5701.pdf) (the former did not really provide a speedup in this experiment). We observed similar speedups in other settings as well. 
 
-What is happening here?
-Can non-convex objectives corresponding to deep networks be easier to optimize than convex ones?
+What is happening here? Can non-convex objectives corresponding to deep networks be easier to optimize than convex ones?
 Is this phenomenon common or is it limited to toy problems as above?
 We take a first crack at addressing these questions...
 
