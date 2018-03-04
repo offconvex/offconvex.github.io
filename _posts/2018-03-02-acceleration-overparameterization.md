@@ -26,7 +26,7 @@ We show in the paper, that if one applies gradient descent over $\mathbf{w_1}$ a
 $$\mathbf{w}^{(t+1)}\leftarrow\mathbf{w}^{(t)}-\rho^{(t)}\nabla{L}(\mathbf{w}^{(t)})-\sum_{\tau=1}^{t-1}\mu^{(t,\tau)}\nabla{L}(\mathbf{w}^{(\tau)})$$
 
 where $\rho^{(t)}$ and $\mu^{(t,\tau)}$ are appropriately defined (time-dependent) coefficients.
-Thus the seemingly benign addition of a single multiplicative scalar turned plain gradient descent into a scheme that somehow has a memory of past gradients ---the key feature of [momentum](https://distill.pub/2017/momentum/) methods--- as well as a time-varying learning rate. While the precise benefit of momentum methods is never easy, a simple experiment with $p=4$, on [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/index.php)’s [“Gas Sensor Array Drift at Different Concentrations” dataset](https://archive.ics.uci.edu/ml/datasets/gas+sensor+array+drift+dataset), shows the following effect:
+Thus the seemingly benign addition of a single multiplicative scalar turned plain gradient descent into a scheme that somehow has a memory of past gradients ---the key feature of [momentum](https://distill.pub/2017/momentum/) methods--- as well as a time-varying learning rate. While theoretical analysis of the precise benefit of momentum methods is never easy, a simple experiment with $p=4$, on [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/index.php)’s [“Gas Sensor Array Drift at Different Concentrations” dataset](https://archive.ics.uci.edu/ml/datasets/gas+sensor+array+drift+dataset), shows the following effect:
 
 <p style="text-align:center;">
 <img src="/assets/acc_oprm_L4_exp.png" width="40%" alt="L4 regression experiment" />
