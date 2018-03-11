@@ -65,15 +65,16 @@ This is ensured by a simple idea. We will assume the image distribution is mildl
 
 The theorem above uses the trivial encoder $E$ that, given the noised image $x \odot \eta$, outputs $\eta$. Clearly, such an encoder does not in any sense capture "meaning" in the code. It is also implementable by a tiny single-layer net, as required by the theorem.
 
+
+
+### Construction of generator 
+
 The generator $G(z)$ will have a "pool" of $m := p \log^2(pL)/ \epsilon^2$ unnoised images $\tilde{x}_1, \tilde{x}_2, \dots, \tilde{x}_m$, and will partition the noise space (for $z$) into $m$ equal-measured blocks. Then, when presented with an input $z$, the generator will output the image $\tilde{x}_i \odot z$, where $i$ is the block $z$ belongs to. (See the Figure below.) 
 
 <p style="text-align:center;">
 <img src="/assets/BIGAN_construction.jpg" width="70%" alt="The bad generator construction" />
 </p>
 
-## Few words about the proof 
-
-Since we already explicitly specified the encoder $E$, our job is to only prove a good generator $G$ exists. 
 
 The idea is to construct a distribution over generators $G$ that works "in expectation", and use concentration bounds that this implies there must be at least one generator that does the job. To motivate the distribution, notice that the distribution of the pair $(x, E(x))$ is very easy to describe: it's simply $(\tilde{x} \odot z,z)$, where $\tilde{x}$ and $z$ are independent samples from the unnoised image distribution and noise distribution respectively. 
 
