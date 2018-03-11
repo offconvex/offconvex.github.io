@@ -63,7 +63,7 @@ It is important here that the encoder's capacity is much less than $N$, and thus
 
 This is ensured by a simple idea. We will assume the image distribution is mildly "noised": say, every 100th pixel is replaced by Gaussian noise. To a human, such an image would of course be indistinguishable from a real image. (NB: Our proof could be carried out via some other assumptions to the effect that images have an innate stochastic/noise component that is efficiently extractable by a small neural network. But let's keep things clean.) When noise $\eta$ is thus added to an image $x$, we denote the resulting image as $x \odot \eta$. 
 
-The theorem above uses the trivial encoder $E$ that, given the noised image $x \odot \eta$, outputs $\eta$. Clearly, such an encoder does not in any sense capture "meaning" in the code. It is also implementable by a tiny single-layer net, as required by the theorem.
+Now the encoder will be rather trivial: given the noised image $x \odot \eta$, output $\eta$. Clearly, such an encoder does not in any sense capture "meaning" in the image. It is also implementable by a tiny single-layer net, as required by the theorem.
 
 
 
