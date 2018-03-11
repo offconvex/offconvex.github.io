@@ -55,15 +55,11 @@ Say a generator/encoder pair $(G,E)$ $\epsilon$-*fools* a decoder $D$ if
 
 $$|E_{x} D(x, E(x)) - E_{z} D(G(z), z)| \leq \epsilon$$
   
-(In other words, $D$ has roughly similar output in Settings 1 and 2.)
+In other words, $D$ has roughly similar output in Settings 1 and 2. The next theorem applies when the distribution consists of realistic images, as explained later. 
 
 > (Informal theorem) If discriminator $D$ has capacity (i.e., number of parameters)  at most $N$, then there is an encoder $E$ of capacity $\ll N$ and  generator $G$ of slightly larger capacity than $N$ such that $(G, E)$ can $\epsilon$-fool every $D$. Furthermore, the generator is very far from having learnt a meaningful representation of the distribution because its distribution is essentially supported on a bit more than $N$ images, and the encoder $E$ just outputs white noise (i.e. does not extract any "meaningful" features) given an image. 
 
-
-
-Let's describe what the generator/encoder in the above theorem look like. 
-
-Let's consider the encoder first: one of the reasons that encoder-decoder GANs seem very powerful is that the discriminator ought to be able to learn to simulate $E$ if it needs to, and thus acquire the ability to apply $E$ to the output of $G$.  This suggests that training should enforce $E$ to be a much smaller deep net than the discriminator. This was one conceptual hurdle for us: how to exhibit bad solutions where $E$ is a smaller net than the discriminator?  
+It is important here that the encoder's capacity is much less than $N$, and thus the theorem allows a discriminator that is able to simulate $E$ if it needed, and in particular verify for a random seed $z$ that $E(G(z)) \approx z$. The theorem says that even such a verification cannot force the  encoder to produce meaningful codes. This is the really counterintuitive aspect of the result, and for several weeks we were stumped by how to prove the existence of such a $(G, E)$ pair. 
 
 We ensure this with a simple trick: we will assume the image distribution is mildly "noised": say, every 100th pixel is replaced by Gaussian noise. To a human, such an image would of course be indistinguishable from a real image. (The proof could be carried out via some other assumptions to the effect that images have an innate stochastic/noise component that is efficiently extractable by a small neural network. But let's keep things clean.) When noise $\eta$ is thus added to an image $x$, we denote the resulting image as $x \odot \eta$. 
 
