@@ -26,7 +26,12 @@ With the above two points in mind, an *encoder* maps the image to its code, and 
 <img src="/assets/BIGAN_manifold2.jpg" width="80%"  alt="Manifold structure" />
 </p>
 
-Encoder-decoder GANs were introduced by [Dumoulin et al.(ALI)](https://arxiv.org/abs/1606.00704) and [Donahue et al.(BiGAN)](https://arxiv.org/abs/1605.09782). They involve two competitors: Player 1 involves a discriminator net $D$ that is given an input of the form (image, code) and it outputs a number in the interval $[0,1]$, which denotes its "satisfaction level" with this input. Player 2 trains a decoder net $G$ (also called *generator* in the GANs setting) and an encoder net $E$.  Player 1 is trying to train its net to distinguish between the following two settings, and Player 2 is trying to make sure the two settings look indistinguishable to Player 1's net. 
+Encoder-decoder GANs were introduced by [Dumoulin et al.(ALI)](https://arxiv.org/abs/1606.00704) and [Donahue et al.(BiGAN)](https://arxiv.org/abs/1605.09782). They involve two competitors: Player 1 involves a discriminator net $D$ that is given an input of the form (image, code) and it outputs a number in the interval $[0,1]$, which denotes its "satisfaction level" with this input. Player 2 trains a decoder net $G$ (also called *generator* in the GANs setting) and an encoder net $E$.  
+<p style="text-align:center;">
+<img src="/assets/BIGAN_2player.jpg" width="80%"  alt="Encoder-Decoder Gans, the two players" />
+</p>
+
+Player 1 is trying to train its net to distinguish between the following two settings, and Player 2 is trying to make sure the two settings look indistinguishable to Player 1's net. 
 
 $$ \mbox{Setting 1: presented with}~(x, E(x))~\mbox{where $x$ is random real image}.$$
 $$ \mbox{Setting 2: presented with}~(G(z), z)~\mbox{where $z$ is random code}.$$
