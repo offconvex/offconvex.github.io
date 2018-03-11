@@ -69,7 +69,7 @@ Now the encoder will be rather trivial: given the noised image $x \odot \eta$, o
 
 ### Construction of generator 
 
-The generator $G(z)$ will have a "pool" of $m := p \log^2(pL)/ \epsilon^2$ unnoised images $\tilde{x}_1, \tilde{x}_2, \dots, \tilde{x}_m$, and will partition the noise space (for $z$) into $m$ equal-measured blocks. Then, when presented with an input $z$, the generator will output the image $\tilde{x}_i \odot z$, where $i$ is the block $z$ belongs to. (See the Figure below.) 
+The generator $G(z)$ memorizes a hash function that partitions the  set of all seeds/codes $z$ into $m$ roughly equal-sized blocks. It also memorizes a "pool" of $m := p \log^2(pL)/ \epsilon^2$ unnoised images $\tilde{x}_1, \tilde{x}_2, \dots, \tilde{x}_m$. When presented with a random seed $z$, the generator computes the block of the partition that $z$ lies in, and then produces the image $\tilde{x}_i \odot z$, where $i$ is the block $z$ belongs to. (See the Figure below.) 
 
 <p style="text-align:center;">
 <img src="/assets/BIGAN_construction_2.jpg" width="50%" alt="The bad generator construction" />
