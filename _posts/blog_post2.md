@@ -51,7 +51,7 @@ Both of the above papers prove that when the encoder/decoder have infinite capac
 
 ## Finite-capacity discriminators are weak
 
-We show there is a Player 1 (i.e., generator/encoder pair) that fools all Players 2 that have bounded capacity (i.e. number of parameters), yet they are poor in the appropriate sense: namely, the encoder just outputs white noise (i.e. does not extract meaningful features) and the generator outputs a uniformly random image from a small pool of images (i.e. is not diverse). 
+We show if  Player 1 (i.e., discriminator net) is restricted to have capacity (i.e., number of parameters)  at most $N$ then there is a  Players 2  (i.e., generator/encoder pair) of slightly larger capacity that fools every Player 1, and yet Player 2 is very far from having learnt a meaningful representation of the distribution. Specifically, its encoder just outputs white noise (i.e. does not extract any "meaningful" features) and the generator outputs a uniformly random image from a small pool of images (i.e. suffers mode collapse). 
 
 To state the result a bit formally, we say a generator/encoder pair $(G,E)$ $\epsilon$-fools a decoder $D$ if 
 
