@@ -5,14 +5,13 @@ date:  2018-2-24 16:00:00
 author: Sanjeev Arora and Andrej Risteski
 visible: False
 ---
+This is yet another new post about [Generative Adversarial Nets (GANs)](http://www.offconvex.org/2017/03/15/GANs/), and based upon our new ICLR'18 paper.  A quick recap of the story so far. GANs are an unsupervised method in deep learning to learn interesting distributions (e.g., images of human faces), and also have a plethora of uses for image-to-image mappings in computer vision. Standard GANs training is motivated using this task of distribution learning, and is designed with the idea that given large enough deep nets and enough training examples, as well as accurate optimization, GANs will learn the full distribution. 
 
-This is another post about [Generative Adversarial Nets (GANs)](http://www.offconvex.org/2017/03/15/GANs/).  In [a previous post](http://www.offconvex.org/2017/03/30/GANs2/) Sanjeev talked about a result from [his co-authored ICML'17 paper](https://arxiv.org/abs/1703.00573) proving that when generator and discriminator have finite capacity, the training
-objective always has bad (near) equilibria where the discriminator is fooled but the generator's distributions has very small support, i.e. shows *mode collapse.* 
-This raised the question of whether such bad equilibria occur in real-life training, and the last post showed empirical evidence that they do, using the [birthday-paradox test](http://www.offconvex.org/2017/07/07/GANs3/). 
+ [Sanjeev's previous post](http://www.offconvex.org/2017/03/30/GANs2/) concerned [his co-authored ICML'17 paper](https://arxiv.org/abs/1703.00573) which called this intuition into question when the deep nets have finite capacity. It shows that the training objective has near-equilibria where the discriminator is fooled ---i.e., training objective is good---but the generator's distributions has very small support, i.e. shows *mode collapse.*  This is a failure of the model, and th question thus arose whether such bad equilibria occur in real-life training. A second post showed empirical evidence that they do, using the [birthday-paradox test](http://www.offconvex.org/2017/07/07/GANs3/). 
 
-The current post concerns our [new result](https://arxiv.org/abs/1711.02651) (part of our upcoming [ICLR paper](https://openreview.net/forum?id=BJehNfW0-)) which shows that bad equilibria exist also in more recent GAN architectures based on simultaneously learning an *encoder* and *decoder.* 
+The current post concerns our [new result](https://arxiv.org/abs/1711.02651) (part of our upcoming [ICLR paper](https://openreview.net/forum?id=BJehNfW0-)) which shows that bad equilibria exist also in more recent GAN architectures based on simultaneously learning an *encoder* and *decoder*. This should be surprising because many researchers believe that encoder-decoder architectures fix many issues with GANs, including mode collapse.
 
-At first glance, encoder-decoder GANs seem very powerful, and difficult to "break". In particular, the proof of the previously mentioned [negative result](http://www.offconvex.org/2017/03/30/GANs2/) does not apply to this architecture. But, we then discovered a cute argument that shows encoder-decoder GANs can have poor solutions, featuring not only mode collapse but also encoders that map images to nonsense (more precisely Gaussian noise). This is the worst possible failure of the model one could imagine.
+As we will see, encoder-decoder GANs indeed seem very powerful. In particular, the proof of the previously mentioned [negative result](http://www.offconvex.org/2017/03/30/GANs2/) does not apply to this architecture. But, we then discovered a cute argument that shows encoder-decoder GANs can have poor solutions, featuring not only mode collapse but also encoders that map images to nonsense (more precisely Gaussian noise). This is the worst possible failure of the model one could imagine.
 
 ##Encoder-decoder architectures
 
@@ -24,7 +23,7 @@ With the above two points in mind, an *encoder* maps the image to its code, and 
 
 
 <p style="text-align:center;">
-<img src="/assets/BIGAN_manifold.jpg" width="80%"  alt="Manifold structure" />
+<img src="/assets/BIGAN_manifold2.jpg" width="80%"  alt="Manifold structure" />
 </p>
 
 Encoder-decoder GANs were introduced by [Dumoulin et al.(ALI)](https://arxiv.org/abs/1606.00704) and [Donahue et al.(BiGAN)](https://arxiv.org/abs/1605.09782). They involve two competitors: Player 1 involves a discriminator net $D$ that is given an input of the form (image, code) and it outputs a number in the interval $[0,1]$, which denotes its "satisfaction level" with this input. Player 2 trains a decoder net $G$ (also called *generator* in the GANs setting) and an encoder net $E$.  Player 1 is trying to train its net to distinguish between the following two settings, and Player 2 is trying to make sure the two settings look indistinguishable to Player 1's net. 
