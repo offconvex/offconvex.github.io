@@ -47,11 +47,11 @@ Indeed, [Dumoulin et al.(ALI)](https://arxiv.org/abs/1606.00704) provide some sm
 
 
 
-Both of the above papers prove that when the encoder/decoder have infinite capacity, the equilibrium is indeed the desired one. However, in our paper, we show that the finite capacity case is very different. (Paralleling the state of affairs in the vanilla GAN setup.) 
+Both of the above papers prove that when the encoder/decoder have infinite capacity, the equilibrium is indeed the desired one. However, as mentioned, our paper shows that the finite capacity case is very different, paralleling the state of affairs in the vanilla GAN setup. 
 
 ## Finite-capacity discriminators are weak
 
-As indicated above, we prove that there is a Player 1 (so a generator/encoder pair) that fools all Players 2 that have bounded capacity (i.e. number of parameters), yet they are poor in the appropriate sense: namely, the encoder just outputs white noise (i.e. does not extract meaningful features) and the generator outputs a uniformly random image from a small pool of images (i.e. is not diverse). 
+We show there is a Player 1 (i.e., generator/encoder pair) that fools all Players 2 that have bounded capacity (i.e. number of parameters), yet they are poor in the appropriate sense: namely, the encoder just outputs white noise (i.e. does not extract meaningful features) and the generator outputs a uniformly random image from a small pool of images (i.e. is not diverse). 
 
 To state the result a bit formally, we say a generator/encoder pair $(G,E)$ $\epsilon$-fools a decoder $D$ if 
 
