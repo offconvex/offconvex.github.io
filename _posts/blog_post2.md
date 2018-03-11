@@ -51,19 +51,15 @@ Both of the above papers prove that when the encoder/decoder have infinite capac
 
 ## Finite-capacity discriminators are weak
 
-We show if  Player 1 (i.e., discriminator net) is restricted to have capacity (i.e., number of parameters)  at most $N$ then there is a  Players 2  (i.e., generator/encoder pair) of slightly larger capacity that fools every Player 1, and yet Player 2 is very far from having learnt a meaningful representation of the distribution. Specifically, its encoder just outputs white noise (i.e. does not extract any "meaningful" features) and the generator outputs a uniformly random image from a small pool of images (i.e. suffers mode collapse). 
-
-To state the result a bit formally, we say a generator/encoder pair $(G,E)$ $\epsilon$-fools a decoder $D$ if 
+Say a generator/encoder pair $(G,E)$ $\epsilon$-*fools* a decoder $D$ if 
 
 $$|E_{x} D(x, E(x)) - E_{z} D(G(z), z)| \leq \epsilon$$
   
-(In other words, the output of $D$ in Setting 1 and Setting 2 is nearly the same.)
+(In other words, $D$ has roughly similar output in Settings 1 and 2.)
 
-We show: 
+> (Informal theorem) If discriminator $D$ has capacity (i.e., number of parameters)  at most $N$, then there is an encoder $E$ of capacity $\ll N$ and  generator $G$ of slightly larger capacity than $N$ such that $(G, E)$ can $\epsilon$-fool every $D$. Furthermore, the generator is very far from having learnt a meaningful representation of the distribution because its distribution is essentially supported on a bit more than $N$ images, and the encoder $E$ just outputs white noise (i.e. does not extract any "meaningful" features) given an image. 
 
->**Theorem**: There exists a Player 1 $(G,E)$ that $\epsilon$-fools all $L$-Lipschitz discriminators $D$ with at most $p$ parameters, such that:      
->**(1)** The generator $G$ outputs a uniformly random image from a pool of $O(p \log^2(pL)/ \epsilon^2)$ images. (In particular, it is theoretically no more diverse than it would be in the vanilla GAN setting.)    
->**(2)** The encoder $E$ merely "extracts noise" from the images. Thus, it does not produce any "meaningful" representation of the image.        
+
 
 Let's describe what the generator/encoder in the above theorem look like. 
 
