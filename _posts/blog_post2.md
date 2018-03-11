@@ -75,11 +75,12 @@ The generator $G(z)$ memorizes a hash function that partitions the  set of all s
 <img src="/assets/BIGAN_construction_2.jpg" width="50%" alt="The bad generator construction" />
 </p>
 
+Now we have to prove that such a memorizing generator exists that $\epsilon$-fools all discriminators of capacity $p$. This is shown by the [probabilistic method](https://en.wikipedia.org/wiki/Probabilistic_method): we describe a distribution over generators $G$ that works "in expectation", from which it follows that at least one generator exists that does the job. 
 
-The idea is to construct a distribution over generators $G$ that works "in expectation", and use concentration bounds that this implies there must be at least one generator that does the job. To motivate the distribution, notice that the distribution of the pair $(x, E(x))$ is very easy to describe: it's simply $(\tilde{x} \odot z,z)$, where $\tilde{x}$ and $z$ are independent samples from the unnoised image distribution and noise distribution respectively. 
 
-Thus, a natural choice for the distribution on $G$ would be to take the pool of samples 
-$\tilde{x}_1, \tilde{x}_2, .., \tilde{x}_m$ for $G$ to be uniformly randomly chosen from the (unnoised) image distribution. 
+
+The distribution on $G$'s is straightforward:  take a random pool of (unnoised) images 
+$\tilde{x}_1, \tilde{x}_2, .., \tilde{x}_m$, and a random partition of the $z$-space via a random hash function. 
 Why is this distribution for $G$ good? Notice the following simple fact: 
 
 $$E_{G} E_{z} D(G(z), z) =  E_{\tilde{x}, z} D(\tilde{x} \odot z, z) = E_{x} D(x, E(x)) \hspace{2cm} (3)$$ 
