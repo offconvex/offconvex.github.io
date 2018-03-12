@@ -57,9 +57,11 @@ $$|E_{x} D(x, E(x)) - E_{z} D(G(z), z)| \leq \epsilon$$
   
 In other words, $D$ has roughly similar output in Settings 1 and 2. The next theorem applies when the distribution consists of realistic images, as explained later. 
 
-> (Informal theorem) If discriminator $D$ has capacity (i.e., number of parameters)  at most $N$, then there is an encoder $E$ of capacity $\ll N$ and  generator $G$ of slightly larger capacity than $N$ such that $(G, E)$ can $\epsilon$-fool every $D$. Furthermore, the generator is very far from having learnt a meaningful representation of the distribution because its distribution is essentially supported on a bit more than $N$ images, and the encoder $E$ just outputs white noise (i.e. does not extract any "meaningful" features) given an image. 
+> (Informal theorem) If discriminator $D$ has capacity (i.e., number of parameters)  at most $p$, then there is an encoder $E$ of capacity $\ll p$ and  generator $G$ of slightly larger capacity than $p$ such that $(G, E)$ can $\epsilon$-fool every $D$. Furthermore, the generator is very far from having learnt a meaningful representation of the distribution because its distribution is essentially supported on a bit more than $N$ images, and the encoder $E$ just outputs white noise (i.e. does not extract any "meaningful" features) given an image. 
 
-It is important here that the encoder's capacity is much less than $N$, and thus the theorem allows a discriminator that is able to simulate $E$ if it needed, and in particular verify for a random seed $z$ that $E(G(z)) \approx z$. The theorem says that even such a verification cannot force the  encoder to produce meaningful codes. This is the really counterintuitive aspect of the result, and for several weeks we were stumped by how to prove the existence of such a $(G, E)$ pair where $E$ is a small net. 
+(Note that such a $(G, E)$ represents an $\epsilon$-approximate equilibrium, in the sense that player 1 cannot gain more than $\epsilon$ in the distinguishing probability by switching its discriminator. ) 
+
+It is important that the encoder's capacity is much less than $p$, and thus the theorem allows a discriminator that is able to simulate $E$ if it needed, and in particular verify for a random seed $z$ that $E(G(z)) \approx z$. The theorem says that even the ability to conduct such a verification cannot give it power to force encoder to produce meaningful codes. This is the really counterintuitive aspect of the result. The main difficulty in the proof (which stumped us for a while) was how to exhibit such an equilibrium where $E$ is a small net. 
 
 This is ensured by a simple assumption. We assume the image distribution is mildly "noised": say, every 100th pixel is replaced by Gaussian noise. To a human, such an image would of course be indistinguishable from a real image. (NB: Our proof could be carried out via some other assumptions to the effect that images have an innate stochastic/noise component that is efficiently extractable by a small neural network. But let's keep things clean.) When noise $\eta$ is thus added to an image $x$, we denote the resulting image as $x \odot \eta$. 
 
@@ -69,7 +71,9 @@ Now the encoder will be rather trivial: given the noised image $x \odot \eta$, o
 
 ### Construction of generator 
 
-The generator $G(z)$ memorizes a hash function that partitions the  set of all seeds/codes $z$ into $m$ roughly equal-sized blocks. It also memorizes a "pool" of $m := p \log^2(pL)/ \epsilon^2$ unnoised images $\tilde{x}_1, \tilde{x}_2, \dots, \tilde{x}_m$. When presented with a random seed $z$, the generator computes the block of the partition that $z$ lies in, and then produces the image $\tilde{x}_i \odot z$, where $i$ is the block $z$ belongs to. (See the Figure below.) 
+The proof requires knowing an upper bound $L$ on  the [Lipschitz constant](https://www.encyclopediaofmath.org/index.php/Lipschitz_constant) of the discriminator. This can be a loose upperbound too, since only $\log L$ enters the proof.
+
+The generator $G(z)$ memorizes a hash function that partitions the  set of all seeds/codes $z$ into $m$ roughly equal-sized blocks.  the generator also memorizes a "pool" of $m := p \log^2(pL)/ \epsilon^2$ unnoised images $\tilde{x}_1, \tilde{x}_2, \dots, \tilde{x}_m$. When presented with a random seed $z$, the generator computes the block of the partition that $z$ lies in, and then produces the image $\tilde{x}_i \odot z$, where $i$ is the block $z$ belongs to. (See the Figure below.) 
 
 <p style="text-align:center;">
 <img src="/assets/BIGAN_construction_2.jpg" width="50%" alt="The bad generator construction" />
@@ -80,13 +84,13 @@ Now we have to prove that such a memorizing generator exists that $\epsilon$-foo
 
 
 The distribution on $G$'s is straightforward:  take a random pool of (unnoised) images 
-$\tilde{x}_1, \tilde{x}_2, .., \tilde{x}_m$, and a random partition of the $z$-space via a random hash function. 
+$\tilde{x}_1, \tilde{x}_2, .., \tilde{x}_m$, and a partition of the $z$-space via a suitable hash function. 
 Why is this distribution for $G$ good? Notice the following simple fact: 
 
 $$E_{G} E_{z} D(G(z), z) =  E_{\tilde{x}, z} D(\tilde{x} \odot z, z) = E_{x} D(x, E(x)) \hspace{2cm} (3)$$ 
 
 In other words, the "expected" encoder correctly matches the expectation of $D(x, E(x))$, so that the discriminator is fooled.
-This of course is not enough: we need some kind of concentration argument to show a particular $G$ works, which will ultimately use the fact that the discriminator $D$ has a small capacity. 
+This of course is not enough: we need some kind of concentration argument to show a particular $G$ works against {\em all possible discriminators}, which will ultimately use the fact that the discriminator $D$ has a small capacity and small Lipschitz constant. (This is the standard covering number argument of learning theory.)  
 
  
 Towards that, another useful observation: if $q$ is the uniform distribution over sets $T= \{z_1, z_2,\dots, z_m\}$, s.t. each $z_i$ is independently sampled from the conditional distribution inside the $i$-th block of the partition of the noise space, by the law of total expectation one can see that 
@@ -97,7 +101,7 @@ To finish the argument off, we use the fact that due to Lipschitzness and the bo
 
 ## Some conclusions 
 
-While the number of new GAN architectures grows by the day, the issue of diversity/mode collapse seems to be quite difficult to overcome -- both theoretically and in practice. Of course, the main questions about GANs still remain: can they be engineered to be truly distribution learners, and if not, what are they best suited for? 
+While the number of new GAN architectures grows by the day, the issue of diversity/mode collapse seems to be quite difficult to overcome --- both theoretically and in practice. Of course, the main questions about GANs still remain: can they be engineered to be truly distribution learners, and if not, what are they best suited for? We think the theoretical foundations of GANs need further work. 
 
  
  
