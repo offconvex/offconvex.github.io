@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Limitations of Encoder-Decoder GAN architectures
-date:  2018-2-24 16:00:00
+date:  2018-3-12 10:00:00
 author: Sanjeev Arora and Andrej Risteski
-visible: False
+visible: True
 ---
 This is yet another post about [Generative Adversarial Nets (GANs)](http://www.offconvex.org/2017/03/15/GANs/), and based upon our new [ICLR'18 paper](https://openreview.net/forum?id=BJehNfW0-) with Yi Zhang.  A quick recap of the story so far. GANs are an unsupervised method in deep learning to learn interesting distributions (e.g., images of human faces), and also have a plethora of uses for image-to-image mappings in computer vision. Standard GANs training is motivated using this task of distribution learning, and is designed with the idea that given large enough deep nets and enough training examples, as well as accurate optimization, GANs will learn the full distribution. 
 
