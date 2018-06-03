@@ -12,7 +12,7 @@ Sentence Textual Similarity (STS) datasets (see the [wiki page](http://ixa2.si.e
 
 
 <p style="text-align:center;">
-<img src="/assets/textembeddingvectorslide.jpg" width="80%" height ="1in" alt="What are text embeddings." />
+<img src="/assets/textembeddingvectorslide.jpg" width="60%"  alt="What are text embeddings." />
 </p>
 
 More generally, one could ask for a text embedding that can be used as a proxy for downstream classification tasks. The idea is that the method for producing sentence embeddings could leverage a large *unlabeled* text corpus (similar to word embeddings) and this allows doing well on downstream classification tasks with few *labeled* examples. Thus the overall pipeline could look like this:
