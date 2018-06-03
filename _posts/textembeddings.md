@@ -12,12 +12,14 @@ Sentence Textual Similarity (STS) datasets (see the [wiki page](http://ixa2.si.e
 
 
 <p style="text-align:center;">
-<img src="/assets/BIGAN_manifold2.jpg" width="80%"  alt="Manifold structure" />
+<img src="/assets/textembeddingvectorslide.jpg" width="80%"  alt="What are text embeddings." />
 </p>
 
 More generally, one could ask for a text embedding that can be used as a proxy for downstream classification tasks. The idea is that the method for producing sentence embeddings could leverage a large *unlabeled* text corpus (similar to word embeddings) and this allows doing well on downstream classification tasks with few *labeled* examples. Thus the overall pipeline could look like this:
 
-(Picture of pipeline: sentence -> embedding model -> vector embedding -> downstream task  )
+<p style="text-align:center;">
+<img src="/assets/textembeddingpipeline.jpg" width="80%"  alt="How are text embeddings used in downstream classification task." />
+</p>
 
 Computing such representations is a form of [representation learning as well as unsupervised learning](http://www.offconvex.org/2017/06/26/unsupervised1/). This post will be an introduction to **extremely simple** ways of computing sentence embeddings, which on many standard tasks, beat many state-of-the-art  deep learning methods. This post is based upon [my ICLR'17 paper]((https://openreview.net/pdf?id=SyK00v5xx) with Yingyu Liang and Tengyu Ma. 
 
