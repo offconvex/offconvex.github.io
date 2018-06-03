@@ -96,7 +96,10 @@ Conventional wisdom in information retrieval holds that "frequent words carry le
 
 The performance of this embedding scheme appears in the figure below. 
 
-(figure)
+<p style="text-align:center;">
+<img src="/assets/textembeddingexperiments.jpg" width="80%"  alt="How are text embeddings used in downstream classification task." />
+</p>
+
  
 
 ## Next post
