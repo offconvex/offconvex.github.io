@@ -94,7 +94,7 @@ Conventional wisdom in information retrieval holds that "frequent words carry le
   
 ## Empirical performance 
 
-The performance of this embedding scheme appears in the figure below. 
+The performance of this embedding scheme appears in the figure below. Note that Wieting et al. had already shown that their method (which is semi-supervised, relying upon a large unannotated corpus and a small annotated corpus) beats many LSTM-based methods. So this table only compares to their work; see the papers for comparison with more past work.
 
 <p style="text-align:center;">
 <img src="/assets/textembedexperiments.jpg" width="80%"  alt="Performance of our embedding on downstream classification tasks" />
