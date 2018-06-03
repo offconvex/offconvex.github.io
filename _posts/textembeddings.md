@@ -11,7 +11,9 @@ Word embeddings (see my old [post1](http://www.offconvex.org/2015/12/12/word-emb
 Sentence Textual Similarity (STS) datasets (see the [wiki page](http://ixa2.si.ehu.es/stswiki/index.php/Main_Page)), which contain sentence pairs humanly-labeled with similarity ratings. 
 
 
-(Picture of sentence embedding examples here...)
+<p style="text-align:center;">
+<img src="/assets/BIGAN_manifold2.jpg" width="80%"  alt="Manifold structure" />
+</p>
 
 More generally, one could ask for a text embedding that can be used as a proxy for downstream classification tasks. The idea is that the method for producing sentence embeddings could leverage a large *unlabeled* text corpus (similar to word embeddings) and this allows doing well on downstream classification tasks with few *labeled* examples. Thus the overall pipeline could look like this:
 
