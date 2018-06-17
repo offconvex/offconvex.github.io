@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Text and Sentence Embeddings: a tough task for deep learning? 
-date:  2018-6-1 13:00:00
+title: Deep-learning free Text and Sentence Embeddings
+date:  2018-6-17 10:00:00
 author: Sanjeev Arora
-visible: False
+visible: True
 ---
 
 Word embeddings (see my old [post1](http://www.offconvex.org/2015/12/12/word-embeddings-1/)  and 
