@@ -7,8 +7,7 @@ visible: False
 ---
 
 Word embeddings (see my old [post1](http://www.offconvex.org/2015/12/12/word-embeddings-1/)  and 
-[post2](http://www.offconvex.org/2016/02/14/word-embeddings-2/)) capture the idea that one can express "meaning" of words using a vector, so that the cosine of the angle between the vectors captures semantic similarity. ("Cosine similarity" property.) Sentence embeddings and text embeddings try to achieve  something similar: use a fixed-dimensional vector to represent a small piece of text, say a sentence or a small paragraph. The performance of such embeddings can be tested via the  
-Sentence Textual Similarity (STS) datasets (see the [wiki page](http://ixa2.si.ehu.es/stswiki/index.php/Main_Page)), which contain sentence pairs humanly-labeled with similarity ratings. 
+[post2](http://www.offconvex.org/2016/02/14/word-embeddings-2/)) capture the idea that one can express "meaning" of words using a vector, so that the cosine of the angle between the vectors captures semantic similarity. ("Cosine similarity" property.) Sentence embeddings and text embeddings try to achieve  something similar: use a fixed-dimensional vector to represent a small piece of text, say a sentence or a small paragraph. The performance of such embeddings can be tested via the Sentence Textual Similarity (STS) datasets (see the [wiki page](http://ixa2.si.ehu.es/stswiki/index.php/Main_Page)), which contain sentence pairs humanly-labeled with similarity ratings. 
 
 
 <p style="text-align:center;">
@@ -21,15 +20,13 @@ More generally, one could ask for a text embedding that can be used as a proxy f
 <img src="/assets/textembeddingpipeline.jpg" width="80%"  alt="How are text embeddings used in downstream classification task." />
 </p>
 
-Computing such representations is a form of [representation learning as well as unsupervised learning](http://www.offconvex.org/2017/06/26/unsupervised1/). This post will be an introduction to **extremely simple** ways of computing sentence embeddings, which on many standard tasks, beat many state-of-the-art  deep learning methods. This post is based upon [my ICLR'17 paper]((https://openreview.net/pdf?id=SyK00v5xx) with Yingyu Liang and Tengyu Ma. 
+Computing such representations is a form of [representation learning as well as unsupervised learning](http://www.offconvex.org/2017/06/26/unsupervised1/). This post will be an introduction to **extremely simple** ways of computing sentence embeddings, which on many standard tasks, beat many state-of-the-art  deep learning methods. This post is based upon [my ICLR'17 paper on SIF embeddings](https://openreview.net/pdf?id=SyK00v5xx) with Yingyu Liang and Tengyu Ma. 
 
 ## Existing methods
 
  [Topic modeling](https://dl.acm.org/citation.cfm?id=2133826) is a classic technique for unsupervised learning on text and it also yields a vector representation for a paragraph (or longer document), specifically, the vector of "topics" occuring in this document and their relative proportions. Unfortunately, I am not aware of an appropriate variant of topic modeling that leads to the good cosine similarity property that we desire. 
  
- *Recurrent neural net* is the default  deep learning technique  to train a [language model](https://www.tensorflow.org/tutorials/recurrent). It scans the text from left to right, maintaining a fixed dimensional representation of the text it has seen so far. The training objective is to use this representation to predict the next word at each time step. To give an example,  given a text fragment *I went to the cafe and ordered a ...."* 
-  a well-trained prediction model would assign high probability to *"coffee", "croissant"* etc. and low probability to
-  *"puppy"*. Myriad variations of such language models exist, such as using biLSTMs which have some long-term memory and can scan the text forward and backwards. 
+ *Recurrent neural net* is the default  deep learning technique  to train a [language model](https://www.tensorflow.org/tutorials/recurrent). It scans the text from left to right, maintaining a fixed-dimensional vector-representation of the text it has seen so far. It's goal is to use this representation to predict the next word at each time step, and the training objective is to maximise log-likelihood of the data (or similar). Thus for example, a well-trained model when given a text fragment *I went to the cafe and ordered a ...."*   would assign high probability to *"coffee", "croissant"* etc. and low probability to  *"puppy"*. Myriad variations of such language models exist, such as using biLSTMs which have some long-term memory and can scan the text forward and backwards. 
  
  One obtains a text representation by peeking at the internal representation (i.e., node activations) at the top layer of this deep model. After all, when the model is scanning through text, its ability to predict  the next word must imply that this internal representation implicitly captures a gist of all it has seen, reflecting rules of grammar, common-sense etc. (e.g., that you don't order a puppy at a cafe). Some notable modern efforts along such lines are [Hierarchichal Neural Autoencoder of Li et al.](https://arxiv.org/abs/1506.01057) as well as [Palangi et al](https://arxiv.org/abs/1502.06922), and  [*Skipthought* of Kiros et al.](https://arxiv.org/abs/1506.06726).
  
