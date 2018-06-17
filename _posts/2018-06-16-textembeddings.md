@@ -64,9 +64,11 @@ Conventional wisdom in information retrieval holds that "frequent words carry le
   A notable part of our paper is to give a theoretical justification for this weighting using a generative model for text similar to one used in our [word embedding paper in TACL'16](http://aclweb.org/anthology/Q16-1028) as described in [my old post](http://www.offconvex.org/2016/02/14/word-embeddings-2/).
   That model tries to give the causative relationship between word meanings and their cooccurence probabilities.  It  thinks of corpus generation as a dynamic process, where the $t$-th word is produced at step $t$. The model says that the process is driven by the random walk of a *discourse* vector $c_t \in \Re^d$. It is a unit vector whose direction in space represents *what is being talked about.*
  Each word has a  (time-invariant) latent vector $v_w \in \Re^d$ that captures its correlations with the discourse vector. We model this bias with a loglinear word production model:
+ 
  $$
  \Pr[w~\mbox{emitted at time $t$}~|~c_t] \propto \exp(c_t\cdot v_w). \qquad (2)
  $$
+ 
  The discourse vector does a slow geometric random walk over the unit sphere in $\Re^d$. Thus $c_{t+1}$ is obtained by a small random displacement from $c_t$. Since expression (2) places much higher probability on words that are clustered around $c_t$, and  $c_t$ moves slowly. If the discourse vector moves slowly, then we can assume a single discourse vector gave rise to the entire sentence or short paragraph. Thus given a sentence, a plausible vector representation of its "meaning" is a  *max a posteriori* (MAP) estimate of the discourse vector that generated it. 
  
  Such models have been empirically studied for a while, but our paper gave a theoretical analysis, and showed that various subcases imply standard word embedding methods such as word2vec and GloVe. For example, it shows that MAP estimate of the discourse vector is the simple average of the embeddings of the preceding $k$ words -- in other words,  the average word vector!  
