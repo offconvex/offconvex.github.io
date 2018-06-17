@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Deep-learning free Text and Sentence Embeddings
+title: Deep-learning-free Text and Sentence Embedding, Part 1
 date:  2018-6-17 10:00:00
 author: Sanjeev Arora
 visible: True
