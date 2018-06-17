@@ -87,7 +87,7 @@ Conventional wisdom in information retrieval holds that "frequent words carry le
  
  is the normalizing constant (the partition function). We see that the model allows a word $w$ unrelated to the discourse $c_s$ to be emitted for two reasons: a) by chance from the term $\alpha p(w)$; b) if $w$ is correlated with the common direction $c_0$. 
  
- The paper shows that the MAP estimate of the $c_s$ vector corresponds to the SIF embeddings described earlier.
+ The paper shows that the MAP estimate of the $c_s$ vector corresponds to the SIF embeddings described earlier, where the top singular vector used in their construction is an estimate of the $c_0$ vector in the model. 
   
 ## Empirical performance 
 
