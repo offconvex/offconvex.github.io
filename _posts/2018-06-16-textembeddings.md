@@ -80,7 +80,7 @@ Conventional wisdom in information retrieval holds that "frequent words carry le
  Concretely, given the discourse vector $c_s$ that produces sentence $s$, the probability of a word $w$ is emitted in the sentence $s$  is modeled as follows, where $\tilde{c}_{s}  = \beta c_0 + (1-\beta) c_s, c_0 \perp c_s$,
   $\alpha$ and $\beta$ are scalar hyperparameters:
  
- $$ \Pr[w \mid s]  = \alpha p(w) + (1-\alpha) \frac{\exp(<\tilde{c}_{s}, v_w>}{Z_{\tilde{c,s}}}, $$
+ $$ \Pr[w \mid s]  = \alpha p(w) + (1-\alpha) \frac{\exp(<\tilde{c}_{s}, v_w>}){Z_{\tilde{c,s}}}, $$
  
   where
 
