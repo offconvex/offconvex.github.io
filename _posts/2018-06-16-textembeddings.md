@@ -14,7 +14,7 @@ Word embeddings (see my old [post1](http://www.offconvex.org/2015/12/12/word-emb
 <img src="/assets/textembeddingvectorslide.jpg" width="40%"  alt="What are text embeddings." />
 </p>
 
-More generally, one could ask for a text embedding that can be used as a proxy for the text in downstream classification tasks. The hope is that the method for producing text embeddings could leverage a large *unlabeled* text corpus (similar to word embeddings) and the resulting text embeddings allow good performance on downstream classification tasks with few *labeled* examples. Thus the overall pipeline could look like this:
+A general hope behind computing text embeddings is that they can be learnt using a large *unlabeled* text corpus (similar to word embeddings) and then allow good performance on downstream classification tasks with few *labeled* examples. Thus the overall pipeline could look like this:
 
 <p style="text-align:center;">
 <img src="/assets/textembeddingpipeline.jpg" width="80%"  alt="How are text embeddings used in downstream classification task." />
