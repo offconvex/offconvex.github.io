@@ -26,7 +26,7 @@ Computing such representations is a form of [representation learning as well as 
 
  [Topic modeling](https://dl.acm.org/citation.cfm?id=2133826) is a classic technique for unsupervised learning on text and it also yields a vector representation for a paragraph (or longer document), specifically, the vector of "topics" occuring in this document and their relative proportions. Unfortunately, topic modeling is not accurate at producing good representations at the sentence or short paragraph level, and furthermore there appears to be no variant of topic modeling that leads to the good cosine similarity property that we desire. 
  
- *Recurrent neural net* is the default  deep learning technique  to train a [language model](https://www.tensorflow.org/tutorials/recurrent). It scans the text from left to right, maintaining a fixed-dimensional vector-representation of the text it has seen so far. It's goal is to use this representation to predict the next word at each time step, and the training objective is to maximise log-likelihood of the data (or similar). Thus for example, a well-trained model when given a text fragment *I went to the cafe and ordered a ...."*   would assign high probability to *"coffee", "croissant"* etc. and low probability to  *"puppy"*. Myriad variations of such language models exist, such as using biLSTMs which have some long-term memory and can scan the text forward and backwards. 
+ *Recurrent neural net* is the default  deep learning technique  to train a [language model](https://www.tensorflow.org/tutorials/recurrent). It scans the text from left to right, maintaining a fixed-dimensional vector-representation of the text it has seen so far. It's goal is to use this representation to predict the next word at each time step, and the training objective is to maximise log-likelihood of the data (or similar). Thus for example, a well-trained model when given a text fragment *"I went to the cafe and ordered a ...."*   would assign high probability to *"coffee", "croissant"* etc. and low probability to  *"puppy"*. Myriad variations of such language models exist, many using biLSTMs which have some long-term memory and can scan the text forward and backwards. 
  
  One obtains a text representation by peeking at the internal representation (i.e., node activations) at the top layer of this deep model. After all, when the model is scanning through text, its ability to predict  the next word must imply that this internal representation implicitly captures a gist of all it has seen, reflecting rules of grammar, common-sense etc. (e.g., that you don't order a puppy at a cafe). Some notable modern efforts along such lines are [Hierarchichal Neural Autoencoder of Li et al.](https://arxiv.org/abs/1506.01057) as well as [Palangi et al](https://arxiv.org/abs/1502.06922), and  [*Skipthought* of Kiros et al.](https://arxiv.org/abs/1506.06726).
  
@@ -38,6 +38,7 @@ Computing such representations is a form of [representation learning as well as 
 In practice, many NLP applications rely on a simple sentence embedding: the average of the embeddings of the words in it. This makes some intuitive sense, because recall that the [Word2Vec paper](https://arxiv.org/pdf/1310.4546.pdf) uses  the following expression (in the their simpler CBOW word embedding) 
   
   $$\Pr[w~|~w_1,w_2, w_3, w_4, w_5] \propto \exp(v_w \cdot (\frac{1}{5} \sum_i v_{w_i}). \qquad  (1)$$
+  
   which suggests that the sense of a sequence of words is captured via simple average of word vectors.
 
 While this simple average has only fair performance in capturing sentence similarity via cosine similarity, it can be quite powerful in downstream classification tasks (after passing through a single layer neural net)   as shown in a 
@@ -79,7 +80,7 @@ Conventional wisdom in information retrieval holds that "frequent words carry le
  Concretely, given the discourse vector $c_s$ that produces sentence $s$, the probability of a word $w$ is emitted in the sentence $s$  is modeled as follows, where $\tilde{c}_{s}  = \beta c_0 + (1-\beta) c_s, c_0 \perp c_s$,
   $\alpha$ and $\beta$ are scalar hyperparameters:
  
- $$ \Pr[w \mid s]  = \alpha p(w) + (1-\alpha) \frac{\exp(<\tilde{c}_{s}, v_w>}{Z_{\tilde{c}_{s}}}, $$
+ $$ \Pr[w \mid s]  = \alpha p(w) + (1-\alpha) \frac{\exp(<\tilde{c}_{s}, v_w>}{Z_{\tilde{c,s}}}, $$
  
   where
 
