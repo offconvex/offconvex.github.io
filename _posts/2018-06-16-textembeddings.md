@@ -104,6 +104,7 @@ The performance of this embedding scheme appears in the figure below. Note that 
 
 In the next post, I will sketch improvements to the above embedding in two of our new papers. Special guest appearance: Compressed Sensing (aka Sparse Recovery).
  
+ The SIF embedding package is available [from our github page](https://github.com/PrincetonML/SIF)
 
 
 
