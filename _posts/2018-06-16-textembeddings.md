@@ -31,7 +31,7 @@ Computing such representations is a form of [representation learning as well as 
  One obtains a text representation by peeking at the internal representation (i.e., node activations) at the top layer of this deep model. After all, when the model is scanning through text, its ability to predict  the next word must imply that this internal representation implicitly captures a gist of all it has seen, reflecting rules of grammar, common-sense etc. (e.g., that you don't order a puppy at a cafe). Some notable modern efforts along such lines are [Hierarchichal Neural Autoencoder of Li et al.](https://arxiv.org/abs/1506.01057) as well as [Palangi et al](https://arxiv.org/abs/1502.06922), and  [*Skipthought* of Kiros et al.](https://arxiv.org/abs/1506.06726).
  
  As with all deep learning models, one wishes for interpretability: what information exactly did the machine choose to put into the text embedding? Besides [the usual reasons for seeking interpretability](https://people.csail.mit.edu/beenkim/papers/BeenK_FinaleDV_ICML2017_tutorial.pdf), in an NLP context it may help us leverage  additional external resources such as [WordNet](https://wordnet.princeton.edu/) in the task. Other motivations include
- transfer learning/domain adaptation (since sentence embeddings can be learnt on a large unrelated corpus, and then applied to classification tasks for a very different text corpus). 
+ transfer learning/domain adaptation (to solve classification tasks for a  small text corpus, leverage text embeddings trained on a large unrelated corpus). 
 
 ## Surprising power of simple linear representations
 
