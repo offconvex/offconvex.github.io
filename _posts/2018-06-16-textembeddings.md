@@ -11,7 +11,7 @@ Word embeddings (see my old [post1](http://www.offconvex.org/2015/12/12/word-emb
 
 
 <p style="text-align:center;">
-<img src="/assets/textembeddingvectorslide.jpg" width="40%"  alt="What are text embeddings." />
+<img src="/assets/textembeddingvectorslide.jpg" width="30%"  alt="What are text embeddings." />
 </p>
 
 A general hope behind computing text embeddings is that they can be learnt using a large *unlabeled* text corpus (similar to word embeddings) and then allow good performance on downstream classification tasks with few *labeled* examples. Thus the overall pipeline could look like this:
