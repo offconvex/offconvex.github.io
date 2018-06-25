@@ -51,8 +51,11 @@ On the much larger IMDB testbed, BonG still reigns at top (although DisC is not 
 <img src="/assets/clfperf_sst_imdb.png" width ="70%" alt ="Performance on SST and IMDB" />
 </div>
 
-Skip-thoughts does match or beat our DisC embeddings on some other classification tasks, but that's still not too shabby an outcome for such a simple method.  See Table 1 in [the paper.](https://openreview.net/pdf?id=B1e5ef-C-) (By contrast, LSTM methods can take days or weeks of training, and are quite slow to evaluate at test time on a new piece of text.) 
+Skip-thoughts does match or beat our DisC embeddings on some other classification tasks, but that's still not too shabby an outcome for such a simple method.  (By contrast, LSTM methods can take days or weeks of training, and are quite slow to evaluate at test time on a new piece of text.) 
 
+<div style="text-align:center;">
+<img src="/assets/sentenceembedtable.jpg" width ="70%" alt ="Performance on various classification tasks" />
+</div>
 ## Some theoretical analysis via compressed sensing
 
 A linear SIF-like embedding represents a document with Bag-of-Words vector $x$ as 
