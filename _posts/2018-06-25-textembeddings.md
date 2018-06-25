@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      Deep-learning-free Text and Sentence Embedding, Part 2
-date:       2018-07-01 8:00:00
+date:       2018-06-25 10:00:00
 author:     Sanjeev Arora, Mikhail Khodak, Nikunj Saunshi
-visible:    false
+visible:    True
 ---
 
 This post continues [Sanjeev's post](http://www.offconvex.org/2018/06/17/textembeddings/) and describes further attempts to construct elementary and interpretable text embeddings. 
