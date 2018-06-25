@@ -71,7 +71,7 @@ Indeed, we find that so long as we raise the dimension of the word embeddings, t
 This is a surprising result, as compressed sensing does not imply this per se, since the ability to reconstruct the BoW vector from its compressed version doesn't directly imply that the compressed version gives the same performance as BoW on linear classification tasks. 
 However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression. Intuitively, this happens because of two facts.
 
-$$ \mbox{1). SVM theory implies that optimum linear classifier $c^*$ is convex combination of datapoints.} \quyad c^* = \sum_{i}\alpha_i x_i.$$ 
+$$ \mbox{1). Optimum linear classifier $c^*$ is convex combination of datapoints.} \quad c^* = \sum_{i}\alpha_i x_i.$$ 
 $$ \mbox{(2) $A$ approximately preserves inner product for sparse vectors} \qquad <Ax, Ax'> \approx <x, x'>.   \qquad (1) $$
 
 
