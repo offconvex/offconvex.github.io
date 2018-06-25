@@ -56,6 +56,7 @@ Skip-thoughts does match or beat our DisC embeddings on some other classificatio
 <div style="text-align:center;">
 <img src="/assets/sentenceembedtable.jpg" width ="70%" alt ="Performance on various classification tasks" />
 </div>
+
 ## Some theoretical analysis via compressed sensing
 
 A linear SIF-like embedding represents a document with Bag-of-Words vector $x$ as 
