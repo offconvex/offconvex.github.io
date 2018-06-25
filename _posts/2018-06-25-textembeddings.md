@@ -48,7 +48,7 @@ DisC embeddings also beat SIF and a standard LSTM-based method, Skipthoughts.
 On the much larger IMDB testbed, BonG still reigns at top (although DisC is not too far behind). 
 
 <div style="text-align:center;">
-<img src="/assets/clfperf_sst_imdb.png" width ="60%" alt ="Performance on SST and IMDB" />
+<img src="/assets/clfperf_sst_imdb.png" width ="70%" alt ="Performance on SST and IMDB" />
 </div>
 
 Skip-thoughts does match or beat our DisC embeddings on some other classification tasks, but that's still not too shabby an outcome for such a simple method. 
@@ -69,7 +69,11 @@ Thus one could try to use random word embeddings instead of GloVe vectors in the
 Indeed, we find that so long as we raise the dimension of the word embeddings, then text embeddings using random vectors do indeed converge to the performance of BonG representations. 
 
 This is a surprising result, as compressed sensing does not imply this per se, since the ability to reconstruct the BoW vector from its compressed version doesn't directly imply that the compressed version gives the same performance as BoW on linear classification tasks. 
-However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression.
+However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression. Intuitively, this happens because of two facts.
+
+$$ \mbox{1). SVM theory implies that optimum linear classifier $c^*$ is convex combination of datapoints.} \quyad c^* = \sum_{i}\alpha_i x_i.$$ 
+$$ \mbox{(2) $A$ approximately preserves inner product for sparse vectors} \qquad <Ax, Ax'> \approx <x, x'>.   \qquad (1) $$
+
 
 Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings computed using random word vectors, which can be seen as a linear compression of the BonG representation, can do as well as the original BonG representation on linear classification tasks. To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddings satisfy the  *Restricted Isometry Property (RIP)* introduced in the seminal paper of [Candes & Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf). The theorem relies upon [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) and says that then the performance of DisC embeddings on linear classification tasks approaches that of BonG vectors as we increase the dimension. 
 Please see our paper for details of the proof.
@@ -104,7 +108,7 @@ Using pre-trained embeddings (such as GloVe) in DisC gives higher performance th
 
 Even though the matrix of embeddings does not satisfy these classical compressed sensing properties, we find that using Basis Pursuit, a sparse recovery approach related to LASSO with provable guarantees for RIP matrices, we can recover Bag-of-Words information better using GloVe-based text embeddings than from embeddings using random word vectors (measuring success via the $F_1$-score of the recovered words — higher is better). 
 
-<div stype="text-align:center;">
+<div style="text-align:center;">
 <img src="/assets/recovery.png" width ="60%" />
 </div>
 
