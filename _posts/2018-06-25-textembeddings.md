@@ -71,8 +71,8 @@ Indeed, we find that so long as we raise the dimension of the word embeddings, t
 This is a surprising result, as compressed sensing does not imply this per se, since the ability to reconstruct the BoW vector from its compressed version doesn't directly imply that the compressed version gives the same performance as BoW on linear classification tasks. 
 However, a result of [Calderbank, Jafarpour, & Schapire](https://pdfs.semanticscholar.org/627c/14fe9097d459b8fd47e8a901694198be9d5d.pdf) shows that the compressed sensing condition that implies optimal recovery also implies good performance on linear classification under compression. Intuitively, this happens because of two facts.
 
-$$ \mbox{1). Optimum linear classifier $c^*$ is convex combination of datapoints.} \quad c^* = \sum_{i}\alpha_i x_i.$$ 
-$$ \mbox{(2) RIP condition} \rightarrow <Ax, Ax'> \approx <x, x'>~\mbox{for $k$-sparse}~x, x'.   $$
+$$ \mbox{1) Optimum linear classifier $c^*$ is convex combination of datapoints.} \quad c^* = \sum_{i}\alpha_i x_i.$$ 
+$$ \mbox{(2) RIP condition implies}  <Ax, Ax'> \approx <x, x'>~\mbox{for $k$-sparse}~x, x'.   $$
 
 
 Furthermore, by extending these ideas to the $n$-gram case, we show that our DisC embeddings computed using random word vectors, which can be seen as a linear compression of the BonG representation, can do as well as the original BonG representation on linear classification tasks. To do this we prove that the "sensing" matrix $A$ corresponding to DisC embeddings satisfy the  *Restricted Isometry Property (RIP)* introduced in the seminal paper of [Candes & Tao](https://statweb.stanford.edu/~candes/papers/DecodingLP.pdf). The theorem relies upon [compressed sensing results for bounded orthonormal systems](http://www.cis.pku.edu.cn/faculty/vision/zlin/A%20Mathematical%20Introduction%20to%20Compressive%20Sensing.pdf) and says that then the performance of DisC embeddings on linear classification tasks approaches that of BonG vectors as we increase the dimension. 
