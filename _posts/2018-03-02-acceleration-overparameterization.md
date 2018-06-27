@@ -116,3 +116,4 @@ For example, is it possible to rigorously analyze the acceleration effect of the
 Treatment of non-linear deep networks is of course also of interest, as well as more extensive empirical evaluation.
 
 [Nadav Cohen](http://www.cohennadav.com/)
+ 
