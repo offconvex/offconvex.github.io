@@ -9,6 +9,7 @@ visible: True
 Neural network optimization is fundamentally non-convex, and yet simple gradient-based algorithms seem to consistently solve such problems.
 This phenomenon is one of the central pillars of deep learning, and forms a mystery many of us theorists are trying to unravel.
 
+------- START OF CONTENT TO EXCLUDE -------
 
 ## Landscape Approach
 
@@ -45,6 +46,17 @@ Finally, perhaps the most potent evidence pointing to limitations of the landsca
 This was shown by systematic empirical studies (e.g. [Sutskever et al. 2013](http://proceedings.mlr.press/v28/sutskever13.html)), and lately also by theory (as discussed below).
 In its current spirit, the landscape approach typically decouples analysis of objective geometry from particularities of the optimization procedure, including the way it is initialized.
 Capturing phenomena by which some initialization schemes result in successful optimization while others fail is somewhat contradictory to such decoupling.
+
+------- END OF CONTENT TO EXCLUDE -------
+
+## Landscape approach and its limitations
+An implicit assumption in many recent papers is that rigorous understanding of deep learning will follow from estabilishing properties of the loss landscape, specifically of critical points (i.e., points where the gradient vanishes). For example, using intuition from Ising models,  a conjecture was made that all local minima are also approximate global optima. This was established in settings such as matrix completion and matrix sensing (cite) that can be viewed as simple shallow nets.  It has also been shown that gradient descent with added noise in each step can evade saddle points (see Rong and Chi's posts..) and arrive at approximate local minima, which under the conjecture would be approximate global optima. 
+
+However, the landscape approach runs into the issue that the landscape of even depth 3 nets undoubtedly have many saddle points, as well as local minima that are far from globally optimal (cite). 
+
+But this landscape-based viewpoint has clear limitations. Proper initialization clearly plays a role, as does properties of the trajectory in the landscape taken by the optimization. Simple changes to the trajectory --e.g. batch normalization---can greatly affect outcomes. 
+
+My [previous blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/), based upon an ICML'18 paper with Sanjeev Arora and Elad Hazan, showed that adding (redundant) linear layers to a classic linear model can accelerate gradient-based optimization, without any gain in expressiveness, and despite introducing non-convexity to a formerly convex problem. Any landscape analysis that relies on properties of critical points alone will have difficulty explaining this phenomenon, as through such lens, nothing is easier to optimize than a convex objective with a single critical point which is the global minimum.
 
 
 ## A Way Out?
