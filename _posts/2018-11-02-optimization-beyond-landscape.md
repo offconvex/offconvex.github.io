@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Do landscape analyses suffice for understanding optimization in deep learning?
-date: 2018-3-2 13:00:00
+date: 2018-11-2 18:00:00
 author: Nadav Cohen
 visible: True
 ---
