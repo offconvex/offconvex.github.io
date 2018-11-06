@@ -1,31 +1,37 @@
 ---
 layout: post
 title: Do landscape analyses suffice for understanding optimization in deep learning?
-date: 2018-11-2 18:00:00
+date: 2018-11-6 18:00:00
 author: Nadav Cohen
 visible: True
 ---
 
 Neural network optimization is fundamentally non-convex, and yet simple gradient-based algorithms seem to consistently solve such problems.
-This phenomenon is one of the central pillars of deep learning, and forms a mystery many of us theorists are trying to unravel. This post surveys some recent attempts, finishing with a discussion of my recent paper with ... which shows...
+This phenomenon is one of the central pillars of deep learning, and forms a mystery many of us theorists are trying to unravel. 
+In this post I'll survey some recent attempts, and finish with a discussion on my [new paper with Sanjeev Arora, Noah Golowich and Wei Hu](https://arxiv.org/pdf/1810.02281.pdf), which for the case of gradient descent over deep linear neural networks, provides a guarantee for convergence to global minimum at a linear rate.
 
 
 ## Landscape Approach and Its Limitations
 
 Many papers on optimization in deep learning implicitly assume that a rigorous understanding will follow from establishing geometric properties of the loss *landscape*, and in particular, of *critical points* (points where the gradient vanishes).
-For example, through an analogy with the spherical spin-glass model from condensed matter physics, [Choromanska et al. 2015](http://proceedings.mlr.press/v38/choromanska15.pdf) made the following conjecture about deep learning:
+For example, through an analogy with the spherical spin-glass model from condensed matter physics, [Choromanska et al. 2015](http://proceedings.mlr.press/v38/choromanska15.pdf) argued for what has become a colloquial conjecture in deep learning:
 
->(Landscape Conjecture) Suboptimal critical points are overwhelmingly likely to have negative eigenvalues to their Hessian. In other words, there are *no poor local minima*, and all *saddle points are strict*. 
+> **Landscape Conjecture:**
+> In neural network optimization problems, suboptimal critical points are very likely to have negative eigenvalues to their Hessian. 
+> In other words, there are almost *no poor local minima*, and nearly all *saddle points are strict*. 
 
-Subsequently stronger forms of this conjecture were proved for loss landscapes for various simpler problems involving **shallow** (two layer) models, e.g. [matrix sensing](https://papers.nips.cc/paper/6271-global-optimality-of-local-search-for-low-rank-matrix-recovery.pdf), [matrix completion](https://papers.nips.cc/paper/6048-matrix-completion-has-no-spurious-local-minimum.pdf), [orthogonal tensor decomposition](http://proceedings.mlr.press/v40/Ge15.pdf), [phase retrieval](https://arxiv.org/pdf/1602.06664.pdf), and [neural networks with quadratic activation](http://proceedings.mlr.press/v80/du18a/du18a.pdf).
-There was also work on establishing fast convergence of gradient descent if the Landscape Conjecture holds, as described in the excellent posts on this blog by [Rong Ge](http://www.offconvex.org/2016/03/22/saddlepoints/), [Ben Recht](http://www.offconvex.org/2016/03/24/saddles-again/) and [Chi Jin and Michael Jordan](http://www.offconvex.org/2017/07/19/saddle-efficiency/). They describe how gradient descent can efficiently arrive to second order local minima by escaping all strict saddle points, provided perturbations are added to the gradient descent. Note that under the landscape conjecture, second order local minima are also global optima.
+Strong forms of this conjecture were proven for loss landscapes of various simple problems involving **shallow** (two layer) models, e.g. [matrix sensing](https://papers.nips.cc/paper/6271-global-optimality-of-local-search-for-low-rank-matrix-recovery.pdf), [matrix completion](https://papers.nips.cc/paper/6048-matrix-completion-has-no-spurious-local-minimum.pdf), [orthogonal tensor decomposition](http://proceedings.mlr.press/v40/Ge15.pdf), [phase retrieval](https://arxiv.org/pdf/1602.06664.pdf), and [neural networks with quadratic activation](http://proceedings.mlr.press/v80/du18a/du18a.pdf).
+There was also work on establishing convergence of gradient descent to global minimum when the Landscape Conjecture holds, as described in the excellent posts on this blog by [Rong Ge](http://www.offconvex.org/2016/03/22/saddlepoints/), [Ben Recht](http://www.offconvex.org/2016/03/24/saddles-again/) and [Chi Jin and Michael Jordan](http://www.offconvex.org/2017/07/19/saddle-efficiency/). 
+They describe how gradient descent can arrive at a second order local minimum (critical point whose Hessian is positive semidefinite) by escaping all strict saddle points, and how this process is efficient given that perturbations are added to the algorithm. 
+Note that under the Landscape Conjecture, i.e. when there are no poor local minima and non-strict saddles, second order local minima are also global minima.
 
 <p style="text-align:center;">
 <img src="/assets/optimization-beyond-landscape-points.png" width="100%" alt="Local minima and saddle points" />
 </p>
 
-However, it has also become clear that the landscape approach (and the Landscape Conjecture) cannot be applied as is to **deep** (three or more layer) networks, since these typically induce non-strict saddles (e.g. at the point where all weights are zero, see [Kawaguchi 2016](https://papers.nips.cc/paper/6112-deep-learning-without-poor-local-minima.pdf)).
-Second, a landscape perspective largely ignores algorithmic aspects that empirically are known to greatly affect convergence --- for example the [type of initialization](http://proceedings.mlr.press/v28/sutskever13.html), or [batch normalization](http://proceedings.mlr.press/v37/ioffe15.pdf).
+However, it has become clear that the landscape approach (and the Landscape Conjecture) cannot be applied as is to **deep** (three or more layer) networks, for several reasons.
+First, deep networks typically induce non-strict saddles (e.g. at the point where all weights are zero, see [Kawaguchi 2016](https://papers.nips.cc/paper/6112-deep-learning-without-poor-local-minima.pdf)).
+Second, a landscape perspective largely ignores algorithmic aspects that empirically are known to greatly affect convergence with deep networks --- for example the [type of initialization](http://proceedings.mlr.press/v28/sutskever13.html), or [batch normalization](http://proceedings.mlr.press/v37/ioffe15.pdf).
 Finally, as I argued in my [previous blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/), based upon [work with Sanjeev Arora and Elad Hazan](http://proceedings.mlr.press/v80/arora18a/arora18a.pdf), adding (redundant) linear layers to a classic linear model can sometimes accelerate gradient-based optimization, without any gain in expressiveness, and despite introducing non-convexity to a formerly convex problem. 
 Any landscape analysis that relies on properties of critical points alone will have difficulty explaining this phenomenon, as through such lens, nothing is easier to optimize than a convex objective with a single critical point which is the global minimum.
 
