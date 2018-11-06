@@ -7,23 +7,24 @@ visible: True
 ---
 
 Neural network optimization is fundamentally non-convex, and yet simple gradient-based algorithms seem to consistently solve such problems.
-This phenomenon is one of the central pillars of deep learning, and forms a mystery many of us theorists are trying to unravel.
+This phenomenon is one of the central pillars of deep learning, and forms a mystery many of us theorists are trying to unravel. This post surveys some recent attempts, finishing with a discussion of my recent paper with ... which shows...
 
 
 ## Landscape Approach and Its Limitations
 
-Many papers on optimization in deep learning implicitly assume that a rigorous understanding will follow from establishing geometric properties of the loss landscape, and in particular, of critical points (points where the gradient vanishes).
-For example, through an analogy with the spherical spin-glass model from condensed matter physics, [Choromanska et al. 2015](http://proceedings.mlr.press/v38/choromanska15.pdf) argued that in deep learning, suboptimal critical points are overwhelmingly likely to have negative eigenvalues to their Hessian.
-The latter essentially means that there are *no poor local minima*, and that *saddle points are strict* --- properties which have been formally proven for problems involving different **shallow** (two layer) models, e.g. [matrix sensing](https://papers.nips.cc/paper/6271-global-optimality-of-local-search-for-low-rank-matrix-recovery.pdf), [matrix completion](https://papers.nips.cc/paper/6048-matrix-completion-has-no-spurious-local-minimum.pdf), [orthogonal tensor decomposition](http://proceedings.mlr.press/v40/Ge15.pdf), [phase retrieval](https://arxiv.org/pdf/1602.06664.pdf), and [neural networks with quadratic activation](http://proceedings.mlr.press/v80/du18a/du18a.pdf).
-In their excellent posts on this blog, [Rong Ge](http://www.offconvex.org/2016/03/22/saddlepoints/), [Ben Recht](http://www.offconvex.org/2016/03/24/saddles-again/) and [Chi Jin and Michael Jordan](http://www.offconvex.org/2017/07/19/saddle-efficiency/) told us that gradient descent escapes strict saddle points, and that this process is efficient if random perturbations are added to the algorithm.
-This means that the above treatments of shallow models, and, roughly speaking, any landscape analysis that rules out existence of poor local minima and non-strict saddles, immediately imply convergence of gradient descent to global minimum!
+Many papers on optimization in deep learning implicitly assume that a rigorous understanding will follow from establishing geometric properties of the loss *landscape*, and in particular, of *critical points* (points where the gradient vanishes).
+For example, through an analogy with the spherical spin-glass model from condensed matter physics, [Choromanska et al. 2015](http://proceedings.mlr.press/v38/choromanska15.pdf) made the following conjecture about deep learning:
+
+>(Landscape Conjecture) Suboptimal critical points are overwhelmingly likely to have negative eigenvalues to their Hessian. In other words, there are *no poor local minima*, and all *saddle points are strict*. 
+
+Subsequently stronger forms of this conjecture were proved for loss landscapes for various simpler problems involving **shallow** (two layer) models, e.g. [matrix sensing](https://papers.nips.cc/paper/6271-global-optimality-of-local-search-for-low-rank-matrix-recovery.pdf), [matrix completion](https://papers.nips.cc/paper/6048-matrix-completion-has-no-spurious-local-minimum.pdf), [orthogonal tensor decomposition](http://proceedings.mlr.press/v40/Ge15.pdf), [phase retrieval](https://arxiv.org/pdf/1602.06664.pdf), and [neural networks with quadratic activation](http://proceedings.mlr.press/v80/du18a/du18a.pdf).
+There was also work on establishing fast convergence of gradient descent if the Landscape Conjecture holds, as described in the excellent posts on this blog by [Rong Ge](http://www.offconvex.org/2016/03/22/saddlepoints/), [Ben Recht](http://www.offconvex.org/2016/03/24/saddles-again/) and [Chi Jin and Michael Jordan](http://www.offconvex.org/2017/07/19/saddle-efficiency/). They describe how gradient descent can efficiently arrive to second order local minima by escaping all strict saddle points, provided perturbations are added to the gradient descent. Note that under the landscape conjecture, second order local minima are also global optima.
 
 <p style="text-align:center;">
 <img src="/assets/optimization-beyond-landscape-points.png" width="100%" alt="Local minima and saddle points" />
 </p>
 
-Despite the elegance and achievements of the landscape approach, it suffers from inherent limitations in the context of deep learning.
-First, it cannot be applied as is to **deep** (three or more layer) networks, since these typically induce non-strict saddles (e.g. at the point where all weights are zero, see [Kawaguchi 2016](https://papers.nips.cc/paper/6112-deep-learning-without-poor-local-minima.pdf)).
+However, it has also become clear that the landscape approach (and the Landscape Conjecture) cannot be applied as is to **deep** (three or more layer) networks, since these typically induce non-strict saddles (e.g. at the point where all weights are zero, see [Kawaguchi 2016](https://papers.nips.cc/paper/6112-deep-learning-without-poor-local-minima.pdf)).
 Second, a landscape perspective largely ignores algorithmic aspects that empirically are known to greatly affect convergence --- for example the [type of initialization](http://proceedings.mlr.press/v28/sutskever13.html), or [batch normalization](http://proceedings.mlr.press/v37/ioffe15.pdf).
 Finally, as I argued in my [previous blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/), based upon [work with Sanjeev Arora and Elad Hazan](http://proceedings.mlr.press/v80/arora18a/arora18a.pdf), adding (redundant) linear layers to a classic linear model can sometimes accelerate gradient-based optimization, without any gain in expressiveness, and despite introducing non-convexity to a formerly convex problem. 
 Any landscape analysis that relies on properties of critical points alone will have difficulty explaining this phenomenon, as through such lens, nothing is easier to optimize than a convex objective with a single critical point which is the global minimum.
