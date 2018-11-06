@@ -65,9 +65,11 @@ Considering different data-label distributions (which boil down to what they ref
 In a [new paper with Sanjeev Arora, Noah Golowich and Wei Hu](https://arxiv.org/pdf/1810.02281.pdf), we take an additional step forward in virtue of the trajectory-based approach.
 Specifically, we analyze trajectories of gradient descent for any linear neural network that does not include "bottleneck layers", i.e. whose hidden dimensions are no smaller than the minimum between the input and output dimensions ($d_j \geq \min\{d_0,d_N\}$, $\forall j$), and prove convergence to global minimum, at a linear rate, provided that initialization meets the following two conditions:
 
-> **Approximate Balancedness:** $W_{j+1}^\top W_{j+1} \approx W_j W_j^\top$, $\forall j$
+> (i) **Approximate Balancedness:** $W_{j+1}^\top W_{j+1} \approx W_j W_j^\top$, $\forall j$
 
-> **Deficiency Margin:** initial loss is smaller than the loss of any rank deficient solution.
+and
+
+> (ii) **Deficiency Margin:** initial loss is smaller than the loss of any rank deficient solution.
 
 We show that both conditions are necessary, in the sense that violating any one of them may lead to a trajectory that fails to converge.
 Approximate balancedness at initialization is trivially met in the special case of linear residual networks, and also holds for the customary setting of initialization via small random perturbations centered at zero.
