@@ -67,8 +67,6 @@ Specifically, we analyze trajectories of gradient descent for any linear neural 
 
 > **Approximate Balancedness:** $W_{j+1}^\top W_{j+1} \approx W_j W_j^\top$, $\forall j$
 
-and
-
 > **Deficiency Margin:** initial loss is smaller than the loss of any rank deficient solution.
 
 We show that both conditions are necessary, in the sense that violating any one of them may lead to a trajectory that fails to converge.
