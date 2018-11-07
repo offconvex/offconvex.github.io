@@ -75,7 +75,8 @@ Key to our analysis is the observation that if weights are initialized to be app
 In other words, trajectories taken by the optimizer adhere to a special characterization:
 
 > **Trajectory Characterization:**
-> $$W_{j+1}^\top(t) W_{j+1}(t) \approx W_j(t) W_j^\top$(t), \quad j=1,\ldots,N-1, \quad t=0,1,\ldots$$,
+>
+> $$W_{j+1}^\top(t) W_{j+1}(t) \approx W_j(t) W_j^\top(t), \quad j=1,\ldots,N-1, \quad t=0,1,\ldots$$,
 
 which means that throughout the entire timeline, all layers have (approximately) the same set of singular values, and the left singular vectors of each layer (approximately) coincide with the right singular vectors of the layer that follows.
 We show that this regularity implies steady progress for gradient descent, thereby demonstrating that even in cases where the loss landscape is complex as a whole (includes many non-strict saddle points), it may be particularly well-behaved around the specific trajectories taken by the optimizer.
