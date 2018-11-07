@@ -74,8 +74,8 @@ For the case $d_N=1$, i.e. scalar regression, we provide a random initialization
 Key to our analysis is the observation that if weights are initialized to be approximately balanced, they will remain that way throughout the iterations of gradient descent.
 In other words, trajectories taken by the optimizer adhere to a special characterization:
 
-> **Trajectory Characterization:** <br/>
-> $W_{j+1}^\top(t) W_{j+1}(t) \approx W_j(t) W_j^\top$(t), $j=1,\ldots,N-1$, $t=0,1,\ldots$,
+> **Trajectory Characterization:**
+> $$W_{j+1}^\top(t) W_{j+1}(t) \approx W_j(t) W_j^\top$(t), \quad j=1,\ldots,N-1, \quad t=0,1,\ldots$$,
 
 which means that throughout the entire timeline, all layers have (approximately) the same set of singular values, and the left singular vectors of each layer (approximately) coincide with the right singular vectors of the layer that follows.
 We show that this regularity implies steady progress for gradient descent, thereby demonstrating that even in cases where the loss landscape is complex as a whole (includes many non-strict saddle points), it may be particularly well-behaved around the specific trajectories taken by the optimizer.
