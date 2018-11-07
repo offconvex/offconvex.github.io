@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Do landscape analyses suffice for understanding optimization in deep learning?
-date: 2018-11-6 18:00:00
+date: 2018-11-7 12:00:00
 author: Nadav Cohen
 visible: True
 ---
@@ -64,17 +64,20 @@ Considering different data-label distributions (which boil down to what they ref
 
 In a [new paper with Sanjeev Arora, Noah Golowich and Wei Hu](https://arxiv.org/pdf/1810.02281.pdf), we take an additional step forward in virtue of the trajectory-based approach.
 Specifically, we analyze trajectories of gradient descent for any linear neural network that does not include "bottleneck layers", i.e. whose hidden dimensions are no smaller than the minimum between the input and output dimensions ($d_j \geq \min\{d_0,d_N\}$, $\forall j$), and prove convergence to global minimum, at a linear rate, provided that initialization meets the following two conditions:
-
-> *(i)* **Approximate Balancedness:** $W_{j+1}^\top W_{j+1} \approx W_j W_j^\top$, $\forall j$
-
-and
-
-> *(ii)* **Deficiency Margin:** initial loss is smaller than the loss of any rank deficient solution.
-
+(i) *approximate balancedness* --- $W_{j+1}^\top W_{j+1} \approx W_j W_j^\top$, $\forall j$;
+and (ii) *deficiency margin* --- initial loss is smaller than the loss of any rank deficient solution.
 We show that both conditions are necessary, in the sense that violating any one of them may lead to a trajectory that fails to converge.
 Approximate balancedness at initialization is trivially met in the special case of linear residual networks, and also holds for the customary setting of initialization via small random perturbations centered at zero.
 The latter also leads to deficiency margin with positive probability.
-For the case $d_N=1$, i.e. scalar regression, we provide a random initialization scheme under which both conditions are met, and thus convergence to global minimum at linear rate takes place, with constant probability. 
+For the case $d_N=1$, i.e. scalar regression, we provide a random initialization scheme under which both conditions are met, and thus convergence to global minimum at linear rate takes place, with constant probability.
+
+Key to our analysis is the observation that if weights are initialized to be approximately balanced, they will remain that way throughout the iterations of gradient descent.
+In other words, trajectories taken by the optimizer adhere to a special characterization:
+
+> **Trajectory Characterization:** $W_{j+1}^\top(t) W_{j+1}(t) \approx W_j(t) W_j^\top$(t), $j=1,2,\ldots,N-1$, $t=0,1,2,\ldots$,
+
+which means that throughout the entire timeline, all layers have (approximately) the same set of singular values, and the left singular vectors of each layer (approximately) coincide with the right singular vectors of the layer that follows.
+We show that this regularity implies steady progress for gradient descent, thereby demonstrating that even in cases where the loss landscape is complex as a whole (includes many non-strict saddle points), it may be particularly well-behaved around the specific trajectories taken by the optimizer.
 
 
 ## Conclusion
