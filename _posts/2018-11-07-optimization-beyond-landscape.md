@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Do landscape analyses suffice for understanding optimization in deep learning?
+title: Understanding optimization in deep learning by analyzing trajectories of gradient descent
 date: 2018-11-7 12:00:00
 author: Nadav Cohen
 visible: True
@@ -74,7 +74,7 @@ For the case $d_N=1$, i.e. scalar regression, we provide a random initialization
 Key to our analysis is the observation that if weights are initialized to be approximately balanced, they will remain that way throughout the iterations of gradient descent.
 In other words, trajectories taken by the optimizer adhere to a special characterization:
 
-> **Trajectory Characterization:** <\br>
+> **Trajectory Characterization:** <br/>
 >
 > $$W_{j+1}^\top(t) W_{j+1}(t) \approx W_j(t) W_j^\top(t), \quad j=1,\ldots,N-1, \quad t=0,1,\ldots$$,
 
