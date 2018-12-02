@@ -2,6 +2,7 @@
 layout:     post
 title:      Why go off the convex path?
 date:       2015-12-11 11:34:00
+author: 	blogmasters
 visible:    true
 ---
 
