@@ -15,7 +15,7 @@ layout: default
       </a>
     </h3>
         <p class="post-summary">
-        <span class="post-meta">{{ post.date | date: site.date_format }}.&nbsp;&nbsp;</span>
+        <span class="post-meta">{{ post.author }}({{ post.date | date: site.date_format }}).&nbsp;&nbsp;</span>
 {{ post.content | strip_html | truncatewords:20}} <a href="{{ post.url }}">Continue</a>
         </p>
       </div>
