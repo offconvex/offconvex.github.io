@@ -19,7 +19,7 @@ language to another.
 You may wonder: how can a 300-dimensional vector capture the many
 nuances of word meaning? And what the heck does it mean to "capture meaning?"
 
-##Properties of Word Embeddings
+## Properties of Word Embeddings
 A simple property of embeddings obtained by all the methods I’ll
 describe is *cosine similarity*: the  *similarity* between two words 
 (as rated by humans on a $[-1,1]$ scale) correlates with the *cosine*
@@ -51,7 +51,7 @@ Good embeddings have other properties that will be covered in a future
 post. (Also, I can't resist mentioning  that fMRI-imaging of the brain suggests that word embeddings are related to how the human brain
 encodes meaning; see the [well-known paper of Mitchell et al.](http://www.cs.cmu.edu/~tom/pubs/science2008.pdf).) 
 
-##Computing Word embeddings (via Firth's Hypothesis)
+## Computing Word embeddings (via Firth's Hypothesis)
 
 In all methods, the word vector is a succinct representation of the *distribution* of other words around this word. That this suffices to capture meaning is asserted by [*Firth’s hypothesis*](https://en.wikipedia.org/wiki/Distributional_semantics)
 from 1957, "*You shall know a word by the company it keeps.*"  To give an example, if I
