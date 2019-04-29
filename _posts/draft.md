@@ -70,8 +70,9 @@ The structure of such solutions would be pretty messy ---if not impossible---to 
 
 > (Takeaway 1): Different optimization algorithms for deep learning ---SGD, Adam, etc. etc.-- may induce very different trajectories, which may translate into finding solutions with very different properties. Thus the trajectory  may lie at the root of the observed behavior, and not how much/how fast they lower the training objective.
 
-
 > (Takewaway 2) Classic optimization work often takes the "landscape view" where one worries about how stationary points, gradient norms, Hessian norms, smoothness etc. behave in the full loss landscape. For deep learning we need a new vocabulary for reasoning about trajectories, and mathematics explaining what kinds of trajectories arise during gradient-based training. Note that trajectories depend on initialization, so there is in principle a continuum of trajectories to think about. 
+
+
 
 >(Takeway 3): Sanjeev wishes he'd learnt a few tricks about ODEs/PDEs/Dynamical Systems in college, so he were better equipped for reasoning about trajectories. 
 
