@@ -65,11 +65,11 @@ It is also interesting to note that we empirically find that Adam, the celebrate
 ## Conclusions/Takeways
 
 
-> (1): Different optimization algorithms for deep learning ---SGD, Adam, AdaGrad etc. etc.-- may induce very different trajectories, which may translate into finding solutions with very different properties. Thus the trajectory  may lie at the root of the observed behavior, and not how much/how fast they lower the training objective. 
+(1): Different optimization algorithms for deep learning ---SGD, Adam, AdaGrad etc. etc.-- may induce very different trajectories, which may translate into finding solutions with very different properties. Thus the trajectory  may lie at the root of the observed behavior, and not how much/how fast they lower the training objective. 
 
-> (2) Classic optimization research often takes the "landscape view" where one worries about stationary points, gradient norms, Hessian norms, smoothness etc. For deep learning we need a new vocabulary (and mathematics) for reasoning about trajectories arising during gradient-based training. Caution: trajectories depend on initialization! 
+(2) Classic optimization research often takes the "landscape view" where one worries about stationary points, gradient norms, Hessian norms, smoothness etc. For deep learning we need a new vocabulary (and mathematics) for reasoning about trajectories arising during gradient-based training. Caution: trajectories depend on initialization! 
 
->(3): I wish I had learnt a few tricks about ODEs/PDEs/Dynamical Systems in college, to be in better shape to reason about trajectories!
+(3): I wish I had learnt a few tricks about ODEs/PDEs/Dynamical Systems in college, to be in better shape to reason about trajectories!
 
 
 
