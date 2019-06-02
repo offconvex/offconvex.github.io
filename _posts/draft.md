@@ -1,18 +1,21 @@
 ---
 layout: post
-title: Is Optimization the Right Language for Deep Learning?
+title: Is Optimization a Sufficient Language for Understanding Deep Learning?
 date:  2019-3-11 13:00:00
 author: SA + ?? 
 visible: False
 ---
 
-Clearly optimization is a useful component of machine learning. Most or even all machine learning today consists of trying to optimize some training objective. Finding a solution with low objective value is tantamount to forcing the learner to classify/perform well on the training data, which it surely needs to learn to do.  Little wonder that hundreds of papers at leading machine learning conference each year are devoted to various aspects of optimization.
+In this Deep Learning era, machine learning usually boils down to selecting a network architecture, then defining a suitable objective/cost function for the learning task at hand, and finally, optimizing this function using some variant of gradient descent (implemented via backpropagation).  Little wonder that hundreds of ML papers each year are devoted to various aspects of optimization.
 
-While optimization is a useful way to think about machine learning, the point of this blog post is that if our goal is mathematical understanding of deep learning, then  optimization alone increasingly looks like a very limited language ---at least in the classical view:
+Of course, optimization is a necessary component of machine learning, since finding a solution with low objective value is tantamount to forcing the learner to classify/perform well on the training data, which it surely needs to learn to do.
+But the point of this blog post is that if our goal is mathematical understanding of deep learning, then  the optimization viewpoint increasingly looks like an insufficient language ---at least in the classical view:
 
-> **(Classic view in optimization)**: Find me a solution of minimum possible value of the objective, as fast as possible. 
+> **(Classic view of optimization)**: *Find me a solution of minimum possible value of the objective, as fast as possible. *
 
-The inadequacy of this view has become clear while trying to understand the overparametrization phenomenon: deep nets in practice often have far more parameters than number of training data. Then the training objective usually has not one but *lots* of global optima, including those that fit randomly labeled data, and throwing in regularizers etc. does not fundamentally change this picture (Zhang et al.). Thus the goal in deep learning is not to find any old global optimum of the objective, but a solution that performs best on unseen/held-out data i.e., generalizes. And in studying this the classical view of optimization seems to reach its limits, since the value of the objective function or the speed of reaching that value may not correlate with better generalization. 
+The reason this is insufficient is that deep nets are vastly overparametrized and thus have multiple optima, including those that fit randomly labeled data.  So an important job of the training algorithm is to choose among  optima, and find one that performs best on unseen/held-out data ---i.e., *generalizes.* 
+
+overparametrization phenomenon: deep nets in practice often have far more parameters than number of training data. Then the training objective usually has not one but *lots* of global optima, including those that fit randomly labeled data, and throwing in regularizers etc. does not fundamentally change this picture (Zhang et al.). Thus the goal in deep learning is not to find any old global optimum of the objective, but a solution that performs best on unseen/held-out data i.e., generalizes. And in studying this the classical view of optimization seems to reach its limits, since the value of the objective function or the speed of reaching that value may not correlate with better generalization. 
 
 Of course experts will immediately ask: "Wasn't generalization theory invented precisely for this reason as the "second leg" in the formal framework, where optimization is the first leg?" For instance this theory shows how to add regularizers to the training objective to ensure the solution generalizes. Or that *early stopping* (stopping before the optimum is reached) or even adding noise ---e.g. via stochastic gradient updates---  can be preferable to complete optimization even in simple settings such as regression. 
 
