@@ -23,11 +23,11 @@ However, in practice regularizers  and related tricks such as dropout or gradien
 
 > Even vanilla gradient descent (GD) is good at finding models with reasonable generalization. Furthermore, methods to speed up gradient descent (e.g., acceleration or adaptive regularization) can sometimes lead to worse generalization. 
 
-In other words, GD has an innate bias towards finding solutions with good generalization. I suspect that much of the magic of deep learning happens due to the precise flavor of  gradient descent, and this magic is not captured in the Cobjective. Given this importance of the trajectory of optimization we're reminded of the old adage. 
+In other words, GD has an innate bias towards finding solutions with good generalization. I suspect that much of the magic of deep learning happens due to the precise flavor of  gradient descent, and this magic is not captured in the objective. Given this importance of the trajectory of optimization we're reminded of the old adage. 
 
 > The journey is more important than the goal. 
 
-Below to illustrate this viewpoint I describe new papers which involve rigorous analysis of gradient descent in two simple but suggestive settings.  
+Below to illustrate this viewpoint I describe new papers which involve rigorous analysis of gradient descent in two simple but suggestive settings. I am barely sketching the results and hope that we will have more detailed blog posts in future. 
 
 Acknowledgements: My views on this topic were shaped by the excellent papers from TTI Chicago group regarding the implicit bias of gradient descent (Cite), and were solidified by the new work sketched below. 
 
@@ -64,16 +64,14 @@ It is also interesting to note that we empirically find that Adam, the celebrate
 
 ## Conclusions/Takeways
 
-The above results involve analysing trajectories of gradient flow (i.e., gradient descent with infinitesimal learning rate). Gradient flow makes parsimonius updates of a special kind that result in very special solutions.
-The structure of such solutions would be pretty messy ---if not impossible---to completely capture as a classical optimization problem with a single objective. 
+I started with the suggestion that the Conventional View of Optimization is a somewhat impoverished way to think about what happens during deep learning, and that the trajectory of optimization plays an important role. The above results analyse the trajectory of gradient flow (i.e., gradient descent with infinitesimal learning rate).
 
-> (Takeaway 1): Different optimization algorithms for deep learning ---SGD, Adam, etc. etc.-- may induce very different trajectories, which may translate into finding solutions with very different properties. Thus the trajectory  may lie at the root of the observed behavior, and not how much/how fast they lower the training objective.
+> (Takeaway 1): Different optimization algorithms for deep learning ---SGD, Adam, etc. etc.-- may induce very different trajectories, which may translate into finding solutions with very different properties. Thus the trajectory  may lie at the root of the observed behavior, and not how much/how fast they lower the training objective. 
 
-> (Takewaway 2) Classic optimization work often takes the "landscape view" where one worries about how stationary points, gradient norms, Hessian norms, smoothness etc. behave in the full loss landscape. For deep learning we need a new vocabulary for reasoning about trajectories, and mathematics explaining what kinds of trajectories arise during gradient-based training. Note that trajectories depend on initialization, so there is in principle a continuum of trajectories to think about. 
-
+> (Takewaway 2) Classic optimization work often takes the "landscape view" where one worries about stationary points, gradient norms, Hessian norms, smoothness etc. For deep learning we need a new vocabulary for reasoning about trajectories, and mathematics explaining what kinds of trajectories arise during gradient-based training. Note that trajectories depend on initialization, so there is in principle a continuum of trajectories to think about. 
 
 
->(Takeway 3): Sanjeev wishes he'd learnt a few tricks about ODEs/PDEs/Dynamical Systems in college, so he were better equipped for reasoning about trajectories. 
+>(Takeway 3): I wish I had learnt a few tricks about ODEs/PDEs/Dynamical Systems in college, so I was better equipped for reasoning about trajectories!
 
 
 
