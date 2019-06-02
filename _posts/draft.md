@@ -11,9 +11,9 @@ In this Deep Learning era, machine learning usually boils down to selecting a ne
 Of course, optimization is a necessary component of machine learning, since finding a solution with low objective value is tantamount to forcing the learner to classify/perform well on the training data, which it surely needs to learn to do.
 But the point of this blog post is that if our goal is mathematical understanding of deep learning, then  the optimization viewpoint increasingly looks like an insufficient language ---at least in the classical view:
 
-> **(Classic View of optimization)**: *Find me a solution of minimum possible value of the objective, as fast as possible. *
+> **(Classic View of optimization)**: Find me a solution of minimum possible value of the objective, as fast as possible. 
 
-Over in euroscience, there is longstanding controversy about whether or not learning in the brain boils down to optimizing a cost function, since brain components appear to have been repurposed/cobbled together through various accidents of evolution and the whole assemblage may or may not boil down to classic optimization. See [this survey by Marblestone et al](https://arxiv.org/pdf/1606.03813.pdf)). Interestingly, it takes as given that learning in machines is *different* because, of course, it is driven by optimization of a single cost function.  
+Interestingly, Neuroscience has a longstanding controversy about whether or not learning in the brain boils down to optimizing a cost function, since brain components appear to have been repurposed/cobbled together through various accidents of evolution and the whole assemblage may or may not boil down to classic optimization. See [this survey by Marblestone et al](https://arxiv.org/pdf/1606.03813.pdf)). Interestingly, it takes as a given that learning in machines is *different* because, of course, it is driven by optimization of a single cost function.  
 
 I am suggesting that the Classic View may be insufficient even for deep learning. The reason is that deep nets, being vastly overparametrized, have multiple optima. An  important job of the training algorithm is to choose among  the optima, and find one that performs well on unseen/held-out data ---i.e., *generalizes.* This important job is left out out of the classical view.
 
