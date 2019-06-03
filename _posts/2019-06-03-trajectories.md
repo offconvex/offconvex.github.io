@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Is Optimization a Sufficient Language for Understanding Deep Learning?
-date:  2019-06-02 10:00:00
+date:  2019-06-03 10:00:00
 author: Sanjeev Arora
-visible: False
+visible: True
 ---
 
 In this Deep Learning era, machine learning usually boils down to defining a suitable objective/cost function for the learning task at hand, and then optimizing this function using some variant of gradient descent (implemented via backpropagation).  Little wonder that hundreds of ML papers each year are devoted to various aspects of optimization. Today I will suggest that if our goal is mathematical understanding of deep learning, then  the optimization viewpoint is potentially insufficient ---at least in the conventional view:
