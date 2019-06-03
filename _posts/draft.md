@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Is Optimization a Sufficient Language for Understanding Deep Learning?
-date:  2019-3-11 13:00:00
-author: SA + ?? 
+date:  2019-06-02 10:00:00
+author: Sanjeev Arora
 visible: False
 ---
 
