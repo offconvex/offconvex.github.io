@@ -67,9 +67,9 @@ NB: Empirically we find that Adam, the celebrated  acceleration method for deep 
 
 Though the above settings are simple, I think they suggest that to understand deep learning we have to go beyond the Conventional View of optimization, which focuses only on the value of the objective and the rate of convergence.
 
-(1): The same objective function can be used to derive multiple learning algorithms ---SGD, Adam, AdaGrad etc. etc.   These may induce very different trajectories, which lead to different properties in the solution. 
+(1): Different optimization strategies ---GD, SGD, Adam, AdaGrad etc. ----lead to different learning algorithms. They induce different trajectories, which may lead to solutions with different generalization properties. 
 
-(2) Studying trajectories takes us beyond the usual "landscape view" where one worries about stationary points, gradient norms, Hessian norms, smoothness etc. We need to develop a new vocabulary (and mathematics) to reason about trajectories. Caution: trajectories depend on initialization! 
+(2) We need to develop a new vocabulary (and mathematics) to reason about trajectories. This goes beyond the usual "landscape view" where one worries about stationary points, gradient norms, Hessian norms, smoothness etc. Caution: trajectories depend on initialization! 
 
 (3): I wish I had learnt a few tricks about ODEs/PDEs/Dynamical Systems in college, to be in better shape to reason about trajectories!
 
