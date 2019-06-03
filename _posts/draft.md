@@ -26,7 +26,7 @@ In other words, GD has an innate bias towards finding solutions with good genera
 
 Below to illustrate this viewpoint I describe new papers with rigorous analysis of gradient descent in two simple but suggestive settings. I am barely sketching the results and hope that more details will appear in future blog posts.
 
-Acknowledgements: My views on this topic were shaped by the excellent papers from TTI Chicago group regarding the implicit bias of gradient descent (Cite), and were solidified by the new work sketched below. 
+Acknowledgements: My views on this topic were initially shaped by the excellent papers from TTI Chicago group regarding the implicit bias of gradient descent ([Behnam Neyshabur's thesis](https://arxiv.org/pdf/1709.01953.pdf) is a good starting point), and of course by my various coauthors. 
 
 ## Computing with Infinitely Wide Deep Nets 
 
