@@ -22,7 +22,7 @@ However, in practice explicit regularizers  and noising tricks can't prevent dee
 
 In other words, GD has an innate bias towards finding solutions with good generalization. Magic happens along the GD trajectory and is not captured in the objective value per se. We're reminded of the old adage. 
 
-> The journey is more important than the goal. 
+> The journey matters more than the destination. 
 
 Below to illustrate this viewpoint I describe new papers with rigorous analysis of gradient descent in two simple but suggestive settings. I am barely sketching the results and hope that more details will appear in future blog posts.
 
