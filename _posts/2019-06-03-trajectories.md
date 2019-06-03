@@ -51,7 +51,7 @@ Understandably, such questions can seem hopeless and pointless: all the computin
   
 $$\textbf{minimize} \sum_{(ij) \in S} (M_{ij} - b_{ij})^2 + \lambda |M|_{*}.$$ 
 
-[Gunasekar et al.](http://papers.nips.cc/paper/7195-implicit-regularization-in-matrix-factorization) made an interesting suggestion: suppose we forget entirely about the nuclear norm and try to recover the missing entries by  simply training a linear net with two layers via simple gradient descent/backpropagation. This linear net is just a multiplication of two $n\times n $ matrices (you can read about linear deep nets in this [earlier blog post by Nadav Cohen](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)) so we obtain the following  where $e_i$ is the vector with all entries $0$ except for $1$ in the $i$th position:
+In case you didn't know about nuclear norms, you will like the interesting suggestion made by [Gunasekar et al.](http://papers.nips.cc/paper/7195-implicit-regularization-in-matrix-factorization): let us forget entirely about the nuclear norm and try to recover the missing entries by  simply training a linear net with two layers via simple gradient descent/backpropagation. This linear net is just a multiplication of two $n\times n $ matrices (you can read about linear deep nets in this [earlier blog post by Nadav Cohen](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)) so we obtain the following  where $e_i$ is the vector with all entries $0$ except for $1$ in the $i$th position:
 
 $$ \textbf{minimize} \sum_{(ij) \in S} (e_i^T(M_2M_1)e_j - b_{ij})^2, $$
 
