@@ -8,7 +8,7 @@ visible: False
 
 In this Deep Learning era, machine learning usually boils down to defining a suitable objective/cost function for the learning task at hand, and then optimizing this function using some variant of gradient descent (implemented via backpropagation).  Little wonder that hundreds of ML papers each year are devoted to various aspects of optimization. Today I will suggest that if our goal is mathematical understanding of deep learning, then  the optimization viewpoint is potentially insufficient ---at least in the conventional view:
 
-> **Conventional View (CV) of Optimization**: Find me a solution of minimum possible value of the objective, as fast as possible. 
+> **Conventional View (CV) of Optimization**: Find a solution of minimum possible value of the objective, as fast as possible. 
 
 Note that *a priori* it is not obvious if all learning should involve optimizing a single objective. Whether or not this is true for the working of the brain is a longstanding open question in neuroscience. Brain components appear to have been repurposed/cobbled together through various accidents of evolution and the whole assemblage may or may not boil down to optimization of an objective. See [this survey by Marblestone et al](https://arxiv.org/pdf/1606.03813.pdf). 
 
