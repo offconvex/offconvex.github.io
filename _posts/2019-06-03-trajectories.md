@@ -10,7 +10,7 @@ In this Deep Learning era, machine learning usually boils down to defining a sui
 
 > **Conventional View (CV) of Optimization**: Find a solution of minimum possible value of the objective, as fast as possible. 
 
-Note that *a priori* it is not obvious if all learning should involve optimizing a single objective. Whether or not this is true for the learning in the brain is a longstanding open question in neuroscience. Brain components appear to have been repurposed/cobbled together through various accidents of evolution and the whole assemblage may or may not boil down to optimization of an objective. See [this survey by Marblestone et al](https://arxiv.org/pdf/1606.03813.pdf). 
+Note that *a priori* it is not obvious if all learning should involve optimizing a single objective. Whether or not this is true for  learning in the brain is a longstanding open question in neuroscience. Brain components appear to have been repurposed/cobbled together through various accidents of evolution and the whole assemblage may or may not boil down to optimization of an objective. See [this survey by Marblestone et al](https://arxiv.org/pdf/1606.03813.pdf). 
 
 I am suggesting that deep learning algorithms also have important properties that are not always reflected in the objective value. Current deep nets, being vastly overparametrized, have multiple optima. They are trained until the objective is almost zero (i.e., close to optimality) and training is said to succeed if the optimum (or near-optimum) model thus found also performs well on unseen/held-out data ---i.e., *generalizes.* The catch here is that the value of the objective may imply nothing about generalization (see [Zhang et al.](https://arxiv.org/abs/1611.03530)). 
 
