@@ -65,7 +65,7 @@ NB: Empirically we find that Adam, the celebrated  acceleration method for deep 
 
 ## Conclusions/Takeways
 
-Though the above settings are simple, I think they suggest that to understand deep learning we have to go beyond the Conventional View of optimization, which focuses only on the value of the objective and the rate of convergence.
+Though the above settings are simple, they suggest that to understand deep learning we have to go beyond the Conventional View of optimization, which focuses only on the value of the objective and the rate of convergence.
 
 (1): Different optimization strategies ---GD, SGD, Adam, AdaGrad etc. ----lead to different learning algorithms. They induce different trajectories, which may lead to solutions with different generalization properties. 
 
