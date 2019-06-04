@@ -34,7 +34,7 @@ Since overparametrization does not appear to hurt deep nets too much, researcher
 
 Understandably, such questions can seem hopeless and pointless: all the computing in the world is insufficient to train an infinite net, and we theorists already have our hands full trying to figure out finite nets.  But sometimes in math/physics one can derive insight into questions by studying them in the infinite limit.  Here where an infinite net is training on a finite dataset like CIFAR10, the number of optima is infinite and we are trying to understand what GD does. 
 
- Thanks to insights in recent papers on provable learning by overparametrized deep nets (some of the key papers are: [Allen-Zhou et al 1](https://arxiv.org/abs/1811.04918), [Allen-Zhu et al 2](https://arxiv.org/abs/1811.03962) [Du et al](https://arxiv.org/abs/1811.03804), [Zou et al](https://arxiv.org/abs/1811.08888)) researchers have realized that a nice limiting structure emerges:
+ Thanks to insights in recent papers on provable learning by overparametrized deep nets (some of the key papers are: [Allen-Zhu et al 1](https://arxiv.org/abs/1811.04918), [Allen-Zhu et al 2](https://arxiv.org/abs/1811.03962) [Du et al](https://arxiv.org/abs/1811.03804), [Zou et al](https://arxiv.org/abs/1811.08888)) researchers have realized that a nice limiting structure emerges:
  
  > As width $\rightarrow \infty$, trajectory approaches the trajectory of GD for a kernel regression problem, where the (fixed) kernel in question is the so-called  *Neural Tangent Kernel* (NTK). (For convolutional nets the kernel is *Convolutional NTK or CNTK.* )
  
