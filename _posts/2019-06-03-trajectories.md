@@ -71,7 +71,7 @@ Though the above settings are simple, I think they suggest that to understand de
 
 (2) We need to develop a new vocabulary (and mathematics) to reason about trajectories. This goes beyond the usual "landscape view" of stationary points, gradient norms, Hessian norms, smoothness etc. Caution: trajectories depend on initialization! 
 
-(3): I wish I had learnt a few tricks about ODEs/PDEs/Dynamical Systems in college, to be in better shape to reason about trajectories!
+(3): I wish I had learnt a few tricks about ODEs/PDEs/Dynamical Systems/Lagrangians in college, to be in better shape to reason about trajectories!
 
 
 
