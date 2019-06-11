@@ -98,7 +98,7 @@ The crux of this construction appears in steps (3) and (4). When we are going fr
 The number of line segments in the path is linear in the number of layers. As mentioned, the paper also gives stronger results under stronger assumptions on noise stability, where we can actually consruct a path with constant number of line segments.
 
 
-##Conclusions
+## Conclusions
 
 Our results are a first-cut explanation for how mode-connectivity can arise in realistic deep nets. Our methods do not answer all mysteries about mode connectivity. In particular, in many cases (especially when the number of parameters is not as large) the solutions found in practice are not as robust as we require in our theorems (either in terms of dropout stability or noise stability), yet empirically it is still possible to find simple paths connecting the solutions. Are there other properties satisfied by these solutions that allow them to be connected? Also, our result can be extended to convolutional neural networks via *channel-wise dropout*, where one randomly turn off half of the channels (this was considered before in [Thompson et al. 2015](https://arxiv.org/abs/1411.4280),[Keshari et al.2018](https://arxiv.org/abs/1812.03965)). While it is possible to train networks that are robust to channel-wise dropout, standard networks or even the ones trained with standard dropout do not satisfy this property.
 
