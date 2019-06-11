@@ -15,7 +15,7 @@ The current post is about our new paper with Rohith Kuditipudi, Xiang Wang, Hold
 > **Mode connectivity** ([Garipov et al. 2018](https://papers.nips.cc/paper/8095-loss-surfaces-mode-connectivity-and-fast-ensembling-of-dnns.pdf), [Draxler et al. 2018](https://arxiv.org/abs/1803.00885)) All pairs of low-cost solutions found via gradient descent  can actually be connected by simple paths in the parameter space, such that every point on the path is another solution of almost the same cost. In fact the low-cost path connecting two near-optima  can be *piecewise linear* with two line-segments, or a Bezier curve, see Figure below (Figure 1 from [Garipov et al. 2018](https://papers.nips.cc/paper/8095-loss-surfaces-mode-connectivity-and-fast-ensembling-of-dnns.pdf)) for an illustration.
 
 <div style="text-align:center;">
-<img style="width:300px;" src="http://www.offconvex.org/assets/modes.PNG" />
+<img style="width:200px;" src="http://www.offconvex.org/assets/modes.PNG" />
 <br>
 <b>Figure 1</b> Mode Connectivity. Warm colors represent low loss. The straight line path between solutions A and B goes through solutions with high cost. But one can find a point C such that the paths AC and CB only pass through low-cost region.
 </div>
@@ -27,7 +27,7 @@ $$f_1(x) = U_1^TW_1x~~~~f_2(x) = U_2^T W_2 x$$
 respectively where $x, U_1, U_2 \in \Re^n$
 and matrices $W_1, W_2$ are $n\times n$. Then the straight line connecting them in parameter space corresponds to nets of the type $(\alpha U_1 + (1-\alpha)U_2)^T(alpha W_1 + (1-\alpha)W_2)$ which can be rewritten as
 <div style="text-align:center;">
-<img style="width:600px" src="http://www.offconvex.org/assets/hybridnet.jpg" /> 
+<img style="width:500px" src="http://www.offconvex.org/assets/hybridnet.jpg" /> 
 </div>
 
 Note that the middle terms correspond to putting the top layer of one net on top of the bottom of the other, which in general is a nonsensical net (reminiscent of *centaur*, a mythical half-man half-beast) that in general would be expected to have high loss.  
