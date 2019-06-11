@@ -23,7 +23,7 @@ The current post is about our new paper with Rohith Kuditipudi, Xiang Wang, Hold
 
 Using a very simple example let us see that this phenomenon is highly counterintuitive. Suppose we're talking about 2-layer nets with linear activations and a real-valued output. Let the two nets $\Theta_A$ and 
 $\Theta_B$  with zero loss be
-$$f_1(x) = U_1^TW_1x~~~~f_2(x) = U_2^T W_2 x$$  
+$$f_1(x) = U_1^TW_1x \quad f_2(x) = U_2^T W_2 x$$  
 respectively where $x, U_1, U_2 \in \Re^n$
 and matrices $W_1, W_2$ are $n\times n$. Then the straight line connecting them in parameter space corresponds to nets of the type $(\alpha U_1 + (1-\alpha)U_2)^T(alpha W_1 + (1-\alpha)W_2)$ which can be rewritten as
 <div style="text-align:center;">
