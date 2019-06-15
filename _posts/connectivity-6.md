@@ -8,7 +8,7 @@ visible:    False
 ---
 
 
-A big mystery about deep learning is how, in a highly nonconvex loss landscape, gradient descent often finds near-optimal solutions ---those with training cost almost zero--- even starting from a random initialization. This conjures an image of a landscape filled with deep pits.  Gradient descent started at a random point falls easily to the bottom of the nearest pit. In this mental image the pits are disconnected from each other, so there is no way to go from the bottom of one pit to bottom of another without going through regions of high cost. 
+A big mystery about deep learning is how, in a highly nonconvex loss landscape, gradient descent often finds near-optimal solutions ---those with training cost almost zero--- even starting from a random initialization. This conjures an image of a landscape filled with deep pits.  Gradient descent started at a random point falls easily to the bottom of the nearest pit. In this mental image the pits are disconnected from each other, so there is no way to go from the bottom of one pit to the bottom of another without going through regions of high cost. 
 
 The current post is about our new paper with Rohith Kuditipudi, Xiang Wang, Holden Lee, Yi Zhang, Wei Hu, Zhiyuan Li and Sanjeev Arora which provides a mathematical explanation of  the following surprising phenomenon reported last year.
 
