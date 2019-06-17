@@ -17,7 +17,7 @@ The current post is about our [new paper with Rohith Kuditipudi, Xiang Wang, Hol
 <div style="text-align:center;">
 <img style="width:300px;" src="http://www.offconvex.org/assets/modes.PNG" />
 <br>
-<b>Figure 1</b> Mode Connectivity. Warm colors represent low loss. The straight line path between solutions A and B goes through solutions with high cost. But one can find a point C such that the paths AC and CB only pass through low-cost region.
+<b>Figure 1</b> Mode Connectivity. Warm colors represent low loss. Solutions A and B have low cost but the line connecting them goes through solutions with high cost. But we can find C of low cost such that paths AC and CB only pass through low-cost region.
 </div>
 
 
@@ -27,7 +27,7 @@ $$f_1(x) = U_1^\top W_1x \quad f_2(x) = U_2^\top W_2 x$$
 respectively where $x, U_1, U_2 \in \Re^n$
 and matrices $W_1, W_2$ are $n\times n$. Then the straight line connecting them in parameter space corresponds to nets of the type $(\alpha U_1 + (1-\alpha)U_2)^\top(\alpha W_1 + (1-\alpha)W_2)$ which can be rewritten as
 <div style="text-align:center;">
-<img style="width:500px" src="http://www.offconvex.org/assets/hybridnet.jpg" /> 
+<img style="width:650px" src="http://www.offconvex.org/assets/hybridnet.jpg" /> 
 </div>
 
 Note that the middle terms correspond to putting the top layer of one net on top of the bottom of the other, which in general is a nonsensical net (reminiscent of a *centaur*, a mythical half-man half-beast) that in general would be expected to have high loss.  
