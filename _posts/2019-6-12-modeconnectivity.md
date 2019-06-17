@@ -19,7 +19,7 @@ See Figure 1 below from [Garipov et al. 2018](https://papers.nips.cc/paper/8095-
 <div style="text-align:center;">
 <img style="width:300px;" src="http://www.offconvex.org/assets/modes.PNG" />
 <br>
-<b>Figure 1</b> Mode Connectivity between solutions A and B. Warm colors represent low loss. 
+<b>Figure 1</b> Mode Connectivity. Warm colors represent low loss. 
 </div>
 
 
