@@ -1,16 +1,16 @@
 ---
 layout:     post
 title:      Landscape Connectivity of Low Cost Solutions for Multilayer Nets
-date:       2019-06-08 9:00:00
+date:       2019-06-16 19:00:00
 summary:    This post describes our recent work that gives some explanations on why near optimal solutions of neural networks are often connected by simple paths.
 author:     Rong Ge
-visible:    False
+visible:    True
 ---
 
 
 A big mystery about deep learning is how, in a highly nonconvex loss landscape, gradient descent often finds near-optimal solutions ---those with training cost almost zero--- even starting from a random initialization. This conjures an image of a landscape filled with deep pits.  Gradient descent started at a random point falls easily to the bottom of the nearest pit. In this mental image the pits are disconnected from each other, so there is no way to go from the bottom of one pit to bottom of another without going through regions of high cost. 
 
-The current post is about our new paper with Rohith Kuditipudi, Xiang Wang, Holden Lee, Yi Zhang, Wei Hu, Zhiyuan Li and Sanjeev Arora which provides a mathematical explanation of  the following surprising phenomenon reported last year.
+The current post is about our [new paper with Rohith Kuditipudi, Xiang Wang, Holden Lee, Yi Zhang, Wei Hu, Zhiyuan Li and Sanjeev Arora](https://arxiv.org/abs/1906.06247) which provides a mathematical explanation of  the following surprising phenomenon reported last year.
 
 > **Mode connectivity** ([Garipov et al. 2018](https://papers.nips.cc/paper/8095-loss-surfaces-mode-connectivity-and-fast-ensembling-of-dnns.pdf), [Draxler et al. 2018](https://arxiv.org/abs/1803.00885)) All pairs of low-cost solutions found via gradient descent  can actually be connected by simple paths in the parameter space, such that every point on the path is another solution of almost the same cost. In fact the low-cost path connecting two near-optima  can be *piecewise linear* with two line-segments, or a Bezier curve, see Figure below (Figure 1 from [Garipov et al. 2018](https://papers.nips.cc/paper/8095-loss-surfaces-mode-connectivity-and-fast-ensembling-of-dnns.pdf)) for an illustration.
 
