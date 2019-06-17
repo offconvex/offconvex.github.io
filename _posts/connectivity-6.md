@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Landscape Connectivity of Low Cost Solutions for Multilayer Nets
-date:       2019-06-16 16:00:00
+date:       2019-06-16 13:00:00
 summary:    This post describes our recent work that gives some explanations on why near optimal solutions of neural networks are often connected by simple paths.
 author:     Rong Ge
 visible:    True
