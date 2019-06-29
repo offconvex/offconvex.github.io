@@ -10,19 +10,26 @@ In his [recent blog post](http://www.offconvex.org/2019/06/03/trajectories/), Sa
 As an example of analyzing optimizer trajectories for understanding generalization, he briefly described our [new paper with Yuping Luo](https://arxiv.org/abs/1905.13655), which focuses on deep linear neural networks for the task of [matrix completion](https://en.wikipedia.org/wiki/Matrix_completion).
 In this post we'll provide more details on the trajectory analysis carried out in the paper, and explain why we believe it is necessary for comprehending the *implicit regularization* at play.
 
+Before we begin, let us recall the setting of matrix completion.
+We are given a collection of entries $\\\{ M_{i, j} \\\}_{(i, j) \in \Omega}$ from some unknown *ground truth* matrix $M$, and our goal is to recover its remaining entries.
+This can be thought of as a classification (regression) problem, where the training examples are the observed entries of $M$, the model is a matrix $W$ trained with the loss:
+$$L(W) = \sum\nolimits_{(i, j) \in \Omega} (W_{i, j} - M_{i, j})^2 ~,$$
+and generalization corresponds to how similar $W$ is to $M$ in the unobserved locations.
+Obviously the problem is ill-posed if we assume nothing about $M$ $-$ the loss $L(W)$ is underdetermined, i.e. has multiple global minima, and it would be impossible to tell (without access to unobserved entries) if one solution is better than another.
+The standard assumption (which has many [practical applications](https://en.wikipedia.org/wiki/Matrix_completion#Applications)) is that the ground truth matrix $M$ is low-rank, and thus the goal is to find, of all global minima for the loss $L(W)$, one which has minimal rank.
+
 ## Linear Neural Networks
 
 Linear neural networks are fully-connected neural networks with linear (no) activation. 
 Namely, a depth-$N$ linear neural network is a parameterization of a linear mapping as a product of $N$ matrices: $W = W_N W_{N-1} \cdots W_1$.
-Besides being more amenable to theoretical analysis, a major advantage of linear neural networks over non-linear models is that they decouple implicit regularization from expressiveness.
-That is, the effect of a linear neural network's architecture (depth, hidden layer widths) on the implicit regularization of gradient descent is manifested by an implicit algorithm induced on the *end-to-end matrix* $W$.
+Besides being more amenable to analysis, a major advantage (from a theoretical perspective) of linear neural networks over non-linear models is that they decouple implicit regularization from expressiveness $-$ the effect of a linear neural network's architecture (depth, hidden layer widths) on the implicit regularization of gradient descent boils down to an implicit algorithm induced on the *end-to-end matrix* $W$.
 We have characterized this algorithm, and specifically, the dynamics it entails for the singular value decomposition of $W$.
 
 ## Implicit Regularization Towards Low-Rank
 
-Suppose we are interested in learning a matrix $W$ through minimization of some training loss $L(W)$.
+Suppose we are interested in learning a matrix $W$ through minimization of some training loss $L(W)$ (e.g. the loss of a matrix completion problem $-$ see above).
 Denote the singular values of $W$ by $\\{ \sigma_r \\}_r$, and the corresponding left and right singular vectors by $\\{ \mathbf{u}_r \\}_r$ and $\\{ \mathbf{v}_r \\}_r$ respectively.
-One can show that minimizing $L(W)$ via gradient descent with small learning rate $\eta$ leads the singular values of W to evolve by:
+One can show that minimizing $L(W)$ via gradient descent with small learning rate $\eta$ leads the singular values of $W$ to evolve by:
 $$ \sigma_r(t + 1) \leftarrow \sigma_r(t) - \eta \cdot \langle \nabla L(W(t)) , \mathbf{u}_r(t) \mathbf{v}_r^\top(t) \rangle ~,
 \qquad (1)$$
 which means that the movement of a singular value is proportional to the projection of the gradient on the corresponding singular component.
@@ -38,7 +45,7 @@ Moreover, the enhancement/attenuation becomes more significant as $N$ (network d
 $$\color{red}{\text{TODO: add illustrative figure}}$$
 
 The enhancement/attenuation effect induced by a linear neural network ($\color{purple}{\text{purple}}$ term in Equation $(2)$) leads each singular value to progress very slowly after initialization, when close to zero, and then, upon reaching a certain threshold, move rapidly, with the transition from slow to rapid movement being sharper in case of a deeper network (larger $N$).
-If the loss $L(W)$ is underdetermined, i.e. has multiple global minima, these dynamics promote solutions that have a few large singular values and many small ones (that have yet to reach the phase transition between slow and rapid movement), with a gap that is more extreme the deeper the network is. 
+If the loss $L(W)$ is underdetermined (has multiple global minima) these dynamics promote solutions that have a few large singular values and many small ones (that have yet to reach the phase transition between slow to rapid movement), with a gap that is more extreme the deeper the network is. 
 This is an implicit regularization towards low-rank, which intensifies with depth.
 In the paper we support the intuition with empirical evaluations and theoretical illustrations demonstrating how adding depth to a linear neural network subject to an underdetermined loss leads gradient descent (with small learning rate and initialization near the origin) to produce solutions closer to low-rank.
 For example, the following plots, corresponding to a task of matrix completion, show evolution of singular values throughout training of linear neural networks with varying depths $-$ as can be seen, adding layers admits a final solution whose spectrum is closer to low-rank, thereby improving generalization (reconstruction of low-rank ground truth).
