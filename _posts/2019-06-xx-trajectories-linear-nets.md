@@ -3,7 +3,7 @@ layout: post
 title: Understanding implicit regularization in deep learning by analyzing trajectories of gradient descent
 date: 2019-06-xx 12:00:00
 author: Nadav Cohen and Wei Hu
-visible: True
+visible: False
 ---
 
 In his [recent blog post](http://www.offconvex.org/2019/06/03/trajectories/), Sanjeev argued that the conventional view of optimization may be insufficient for understanding deep learning, as the *trajectories* taken by optimizers seem to have profound impact on the quality, i.e. the generalization, of obtained solutions.
