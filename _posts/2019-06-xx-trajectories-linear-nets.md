@@ -94,7 +94,7 @@ For example, the following plots, corresponding to a task of matrix completion, 
 <div style="text-align:center;">
 <img style="width:900px;" src="http://www.offconvex.org/assets/trajectories-linear-nets-exp-dynamics.png" />
 <br>
-<b>Table 1:</b> Dynamics of singular values in training matrix factorizations (LNN).
+<b>Figure 1:</b> Dynamics of singular values in training matrix factorizations (LNN).
 </div>
 
 ## Do the Trajectories Minimize Some Regularized Objective?
