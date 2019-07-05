@@ -6,83 +6,137 @@ author: Nadav Cohen and Wei Hu
 visible: False
 ---
 
-Sanjeev's [recent blog post](http://www.offconvex.org/2019/06/03/trajectories/) suggested that the conventional view of optimization may be insufficient for fully understanding deep learning, since value of the training objective seems insufficient to understand *generalization*, and one needs to consider the *trajectory*  of optimization. 
-One of the illustrative examples  was our [new paper with Yuping Luo](https://arxiv.org/abs/1905.13655), which studies how to use deep linear neural networks for solving [matrix completion](https://en.wikipedia.org/wiki/Matrix_completion) better than the classic convex programming approach. 
-This post provides more details on this result.
+Sanjeev's [recent blog post](http://www.offconvex.org/2019/06/03/trajectories/) suggested that the conventional view of optimization is insufficient for fully understanding deep learning, as the value of the training objective does not reliably gauge generalization.
+He argued that instead, we need to consider the *trajectories* of optimization.
+One of the illustrative examples given was our [new paper with Yuping Luo](https://arxiv.org/abs/1905.13655), which studies the use of deep linear neural networks for solving [*matrix completion*](https://en.wikipedia.org/wiki/Matrix_completion) more accurately than the classic convex programming approach. 
+The current post provides more details on this result.
 
-Recall that in *matrix completion* 
-we are given some entries $\\\{ M_{i, j} \\\}_{(i, j) \in \Omega}$ of an unknown *ground truth* matrix $M$, and our goal is to recover the remaining entries.
+Recall that in matrix completion we are given some entries $\\\{ M_{i, j} \\\}_{(i, j) \in \Omega}$ of an unknown *ground truth* matrix $M$, and our goal is to recover the remaining entries.
 This can be thought of as a classification (regression) problem, where the training examples are the observed entries of $M$, the model is a matrix $W$ trained with the loss:
-$$L(W) = \sum\nolimits_{(i, j) \in \Omega} (W_{i, j} - M_{i, j})^2 ~,$$
+\[
+L(W) = \sum\nolimits_{(i, j) \in \Omega} (W_{i, j} - M_{i, j})^2 ~,
+\]
 and generalization corresponds to how similar $W$ is to $M$ in the unobserved locations.
-Obviously the problem is ill-posed if we assume nothing about $M$ $-$ the loss $L(W)$ is underdetermined, i.e. has multiple global minima, and it would be impossible to tell (without access to unobserved entries) if one solution is better than another.
-The standard assumption (which has many [practical applications](https://en.wikipedia.org/wiki/Matrix_completion#Applications)) is that the ground truth matrix $M$ is low-rank, and thus the goal is to find, from among all global minima for the loss $L(W)$, one with minimal rank. The classic algorithm finds the matrix of minimum [nuclear norm](https://en.wikipedia.org/wiki/Matrix_norm#Schatten_norms). that also fits all the observed entries. Under some reasonable assumptions and given enough matrix entries, this algorithm recovers the ground truth matrix exactly(cf. [Candes and Recht](https://statweb.stanford.edu/~candes/papers/MatrixCompletion.pdf)). We're interested in the regime when the number of revealed entries is too small for the classic algorithm to succeed, and it can be beaten by a simple deep learning approach described next. 
+Obviously the problem is ill-posed if we assume nothing about $M$ $-$ the loss $L(W)$ is underdetermined, i.e. has multiple optima, and it would be impossible to tell (without access to unobserved entries) if one solution is better than another.
+The standard assumption (which has many [practical applications](https://en.wikipedia.org/wiki/Matrix_completion#Applications)) is that the ground truth matrix $M$ is low-rank, and thus the goal is to find, from among all global minima of the loss $L(W)$, one with minimal rank. 
+The classic algorithm for achieving this is to find the matrix with minimum [*nuclear norm*](https://en.wikipedia.org/wiki/Matrix_norm#Schatten_norms). 
+This is a convex program, which given enough observed entries (and under mild technical assumptions) recovers the ground truth matrix exactly (cf. [Candes and Recht](https://statweb.stanford.edu/~candes/papers/MatrixCompletion.pdf)). 
+We're interested in the regime where the number of revealed entries is too small for the classic algorithm to succeed.
+There it can be beaten by a simple deep learning approach, as described next. 
 
-## Linear Neural Networks
+## Linear Neural Networks (LNN)
 
-A depth $N$ linear neural network is a fully-connected neural network with linear  activation (i.e., no nonlinearity). If $W_i$ is the matrix in layer $i$ the end-to-end function is given by $W = W_N W_{N-1} \cdots W_1$. Our method to solve matrix completion involves finding the unknown matrix as such a $W$, where depth $N\geq 3$. This can be viewed as a deep learning problem with squared loss, and gradient descent can be implemented via backpropagation as usual. Note that the loss does not have any regularizer term involving the layer matrices $W_i$'s or their norms. 
+A linear neural network (LNN) is a fully-connected neural network with linear activation (i.e. no non-linearity).
+If $W_j$ is the weight matrix in layer $j$ of a depth $N$ network, the *end-to-end matrix* is given by $W = W_N W_{N-1} \cdots W_1$.
+Our method for solving matrix completion involves minimizing the loss $L(W)$ by running gradient descent (GD) on this (over-)parameterization, with depth $N \geq 2$ and hidden dimensions that do not constrain rank.
+This can be viewed as a deep learning problem with $\ell_2$ loss, and gradient descent can be implemented through the chain rule as usual.
+Note that the training objective does not include any regularization term controlling the layer matrices $\\{ W_j \\}_j$.
 
-At first sight, such an algorithm seems dangerously naive, since a multilayer linear net is equivalent to a single-layer net. However, matrix completion is an underdetermined problem with multiple optima. Running simple gradient descent (GD) makes us choose one of these optima. Thus this setup isolates the role of GD in selecting optima that generalize well. 
+At first glance our algorithm seems naive, since parameterization by a LNN (that does not constrain rank) is equivalent to parameterization by a single matrix $W$, and obviously running GD on $L(W)$ directly with no regularization is not a good approach (nothing will be learned in the unobserved locations).
+However, since matrix completion is an underdetermined problem (has multiple optima), the optimum reached by GD can vary depending on the chosen parameterization.
+Our setup isolates the role of over-parameterization in implicitly biasing GD towards certain optima, that hopefully generalize well.
 
-Note that the subcase $N=2$ is also a traditional approach to matrix completion,  named *matrix factorization*. By analogy, we can refer to the case $N\geq 3$ as *deep matrix factorization*. The figure below shows that $N=3$ solves matrix completion better than $N=2$ and the nuclear norm method. 
+Note that in the special case of depth $N = 2$ our method reduces to a traditional approach for matrix completion,  named *matrix factorization*. 
+By analogy, we refer to the case $N \geq 3$ as *deep matrix factorization*. 
+The table below shows reconstruction errors (generalization) on a matrix completion task where the number of observed entries is too small for nuclear norm minimization to succeed.
+As can be seen, it is outperformed by matrix factorization, which itself is outperformed by deep matrix factorization.
 
->GIVE FIGURE HERE!!! INCLUDING depth 2, nuclear norm, and depth 3.
+<div style="text-align:center;">
+<img style="width:700px;" src="http://www.offconvex.org/assets/trajectories-linear-nets-exp-reconst-errs.png" />
+<br>
+<b>Table 1:</b> Results for matrix completion with small number of observations.
+</div>
+<br />
+The main focus of our paper is on developing a theoretical understanding of this phenomenon. 
 
-The main contribution of the paper is to develop theoretical understanding of this phenomenon. 
+## Trajectory Analysis: Implicit Regularization Towards Low Rank
 
-## Implicit Regularization Towards Low-Rank
+We are interested in understanding what end-to-end matrix $W$ emerges when we run GD on a LNN to minimize a general convex loss $L(W)$, and in particular the matrix completion loss given above. 
+Note that $L(W)$ is convex, but the objective obtained by over-parameterizing with a LNN is not.
+We analyze the trajectories of $W$, and specifically the dynamics of its singular value decomposition.
+Denote the singular values by $\\{ \sigma_r \\}_r$, and the corresponding left and right singular vectors by $\\{ \mathbf{u}_r \\}_r$ and $\\{ \mathbf{v}_r \\}_r$ respectively.
 
-We are interested in understanding what end-to-end matrix $W$ emerges when we use gradient descent (GD) to minimize a convex loss $L(W)$. (The specific loss $\L(\cdot)$ used for matrix completion was the squared loss. Note that it is convex in $W$ but not in the $W_i$'s.)  Denote the singular values of $W$ by $\\{ \sigma_r \\}_r$, and the corresponding left and right singular vectors by $\\{ \mathbf{u}_r \\}_r$ and $\\{ \mathbf{v}_r \\}_r$ respectively. 
+We start by considering GD applied to $L(W)$ directly (no over-parameterization).
 
-> Minimizing $L(W)$ via GD with small learning rate $\eta$ leads the singular values of $W$ to evolve by:
-$$ \sigma_r(t + 1) \leftarrow \sigma_r(t) - \eta \cdot \langle \nabla L(W(t)) , \mathbf{u}_r(t) \mathbf{v}_r^\top(t) \rangle ~,
-\qquad (1).$$
+> **Known result:**
+> Minimizing $L(W)$ directly by GD (with small learning rate $\eta$) leads the singular values of $W$ to evolve by:
+\[
+\sigma_r(t + 1) \leftarrow \sigma_r(t) - \eta \cdot \langle \nabla L(W(t)) , \mathbf{u}_r(t) \mathbf{v}_r^\top(t) \rangle ~,
+\qquad (1)
+\]
 
-The above statement implies that the movement of a singular value is proportional to the projection of the gradient on the corresponding singular component.
+This statement implies that the movement of a singular value is proportional to the projection of the gradient onto the corresponding singular component.
 
-Now suppose that we parameterize $W$ with a depth-$N$ linear neural network, i.e. as $W = W_N W_{N-1} \cdots W_1$.
-In previous work (described in [Nadav's earlier blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)) we have shown that running gradient descent on the linear neural network, with small learning rate $\eta$ and initialization close to the origin, leads the end-to-end matrix $W$ to evolve by:
-$$ W(t+1) \leftarrow W(t) - \eta \cdot \sum\nolimits_{j=1}^{N} \left[ W(t) W^\top(t) \right]^\frac{j-1}{N} \nabla{L}(W(t)) \left[ W^\top(t) W(t) \right]^\frac{N-j}{N} ~.$$
-In the new paper we prove that this implies the following dynamics for the singular values:
-$$ \sigma_r(t + 1) \leftarrow \sigma_r(t) - \eta \cdot \color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}} \cdot \langle \nabla L(W(t)) , \mathbf{u}_r(t) \mathbf{v}_r^\top(t) \rangle ~. \qquad (2)$$
-Comparing this to Equation $(1)$, we see that (over-)parameterizing the loss $L(W)$ with a depth-$N$ linear neural network introduces the multiplicative factors $\color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}}$ to the evolution of singular values.
+Now suppose that we parameterize $W$ with a $N$-layer LNN, i.e. as $W = W_N W_{N-1} \cdots W_1$.
+In previous work (described in [Nadav's earlier blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)) we have shown that running GD on the LNN, with small learning rate $\eta$ and initialization close to the origin, leads the end-to-end matrix $W$ to evolve by:
+$$
+W(t+1) \leftarrow W(t) - \eta \cdot \sum\nolimits_{j=1}^{N} \left[ W(t) W^\top(t) \right]^\frac{j-1}{N} \nabla{L}(W(t)) \left[ W^\top(t) W(t) \right]^\frac{N-j}{N} ~.
+$$
+In the new paper we rely on this result to prove the following:
+
+> **Theorem:**
+> Minimizing $L(W)$ by running GD (with small learning rate $\eta$ and initialization close to the origin) on a $N$-layer LNN leads the singular values of $W$ to evolve by:
+\[ \sigma_r(t + 1) \leftarrow \sigma_r(t) - \eta \cdot \color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}} \cdot \langle \nabla L(W(t)) , \mathbf{u}_r(t) \mathbf{v}_r^\top(t) \rangle ~.
+\]
+
+Comparing this to Equation $(1)$, we see that over-parameterizing the loss $L(W)$ with a $N$-layer LNN introduces the multiplicative factors $\color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}}$ to the evolution of singular values.
 While the constant $N$ does not change relative dynamics (can be absorbed into the learning rate $\eta$), the terms $(\sigma_r(t))^{2 - 2 / N}$ do $-$ they enhance movement of large singular values, and on the hand attenuate that of small ones.
 Moreover, the enhancement/attenuation becomes more significant as $N$ (network depth) grows.
+
 $$\color{red}{\text{TODO: add illustrative figure}}$$
 
-The enhancement/attenuation effect induced by a linear neural network ($\color{purple}{\text{purple}}$ term in Equation $(2)$) leads each singular value to progress very slowly after initialization, when close to zero, and then, upon reaching a certain threshold, move rapidly, with the transition from slow to rapid movement being sharper in case of a deeper network (larger $N$).
-If the loss $L(W)$ is underdetermined (has multiple global minima) these dynamics promote solutions that have a few large singular values and many small ones (that have yet to reach the phase transition between slow to rapid movement), with a gap that is more extreme the deeper the network is. 
-This is an implicit regularization towards low-rank, which intensifies with depth.
-In the paper we support the intuition with empirical evaluations and theoretical illustrations demonstrating how adding depth to a linear neural network subject to an underdetermined loss leads gradient descent (with small learning rate and initialization near the origin) to produce solutions closer to low-rank.
-For example, the following plots, corresponding to a task of matrix completion, show evolution of singular values throughout training of linear neural networks with varying depths $-$ as can be seen, adding layers admits a final solution whose spectrum is closer to low-rank, thereby improving generalization (reconstruction of low-rank ground truth).
-$$\color{red}{\text{TODO: add figure showing evolution of singular values and final reconstruction errors}}$$
+The enhancement/attenuation effect induced by a LNN (factors $\color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}}$) leads each singular value to progress very slowly after initialization, when close to zero, and then, upon reaching a certain threshold, move rapidly, with the transition from slow to rapid movement being sharper in case of a deeper network (larger $N$).
+If the loss $L(W)$ is underdetermined (has multiple optima) these dynamics promote solutions that have a few large singular values and many small ones (that have yet to reach the phase transition between slow to rapid movement), with a gap that is more extreme the deeper the network is. 
+This is an implicit regularization towards low rank, which intensifies with depth.
+In the paper we support the intuition with empirical evaluations and theoretical illustrations, demonstrating how adding depth to a LNN can lead GD to produce solutions closer to low-rank.
+For example, the following plots, corresponding to a task of matrix completion, show evolution of singular values throughout training of networks with varying depths $-$ as can be seen, adding layers indeed admits a final solution whose spectrum is closer to low-rank, thereby improving generalization.
 
-## Do Trajectories minimize some regularized objective?
+<div style="text-align:center;">
+<img style="width:900px;" src="http://www.offconvex.org/assets/trajectories-linear-nets-exp-dynamics.png" />
+<br>
+<b>Table 1:</b> Dynamics of singular values in training matrix factorizations (LNN).
+</div>
 
-In recent years researchers have come to realize the power of implicit regularization due to the choice of optimization algorithm, which directly motivated us. However, given the strong gravitational pull of the optimization worldview, these papers  focused on trying to capture the effect in language of standard regularizers. 
-For example, it is known that over linear models, i.e. depth-$1$ networks, gradient descent finds the solution with minimal Frobenius norm (cf. Section 5 in [Zhang et al.](https://openreview.net/pdf?id=Sy8gdB9xx)), and a common hypothesis is that this persists over more elaborate neural networks, with Frobenius norm potentially replaced by some other norm (or quasi-norm) that depends on network architecture.
+## Do the Trajectories Minimize Some Regularized Objective?
+
+In recent years, researchers have come to realize the importance of implicit regularization induced by the choice of optimization algorithm.
+The strong gravitational pull of the conventional view on optimization (see [Sanjeev's post](http://www.offconvex.org/2019/06/03/trajectories/)) has led most papers on this line to try and capture the effect in the language of regularized objectives. 
+For example, it is known that over linear models, i.e. depth $1$ networks, GD finds the solution with minimal Frobenius norm (cf. Section 5 in [Zhang et al.](https://openreview.net/pdf?id=Sy8gdB9xx)), and a common hypothesis is that this persists over more elaborate neural networks, with Frobenius norm potentially replaced by some other norm (or quasi-norm) that depends on network architecture.
 [Gunasekar et al.](https://papers.nips.cc/paper/7195-implicit-regularization-in-matrix-factorization.pdf) explicitly conjectured:
 
-> **Conjecture (by Gunasekar et al., informal):**
-> Gradient descent (with small learning rate and near-zero initialization) training a depth-$2$ linear neural network for matrix completion finds a solution with minimum [nuclear norm](https://en.wikipedia.org/wiki/Matrix_norm#Schatten_norms).
+> **Conjecture (by [Gunasekar et al.](https://papers.nips.cc/paper/7195-implicit-regularization-in-matrix-factorization.pdf), informal):**
+> GD (with small learning rate and near-zero initialization) training a matrix factorization finds a solution with minimum [nuclear norm](https://en.wikipedia.org/wiki/Matrix_norm#Schatten_norms).
 
-This conjecture essentially states that matrix factorization (i.e. depth $2$ linear net) trained by GD is equivalent to the famous method of nuclear norm minimization.
-Gunasekar et al. motivated the conjecture with *empirical* evidence, as well as some *mathematical* evidence in the form of a proof for the conjecture in (very) restricted setting.
+This conjecture essentially states that matrix factorization (i.e. $2$-layer LNN) trained by GD is equivalent to the famous method of nuclear norm minimization.
+Gunasekar et al. motivated the conjecture with some *empirical* evidence, as well as *mathematical* evidence in the form of a proof for a (very) restricted setting.
 
-Given that deep matrix factorization solves matrix completion even better in practice, it would be natural to extend the above conjecture (as we did too at the start of our investigation) to assert that the implicit regularization from  depths $3$ and higher corresponds to minimizing a different norm (or quasi-norm) of $W$ that approximates rank more closely.
+Given the empirical observation by which adding depth to a matrix factorization can improve results in matrix completion, it would be natural to extend the conjecture of Gunasekar et al., and assert that the implicit regularization with depth $3$ or higher corresponds to minimizing some other norm (or quasi-norm) that approximates rank better than nuclear norm does.
 For example, a natural candidate would be a [Schatten-$p$ quasi-norm](https://en.wikipedia.org/wiki/Schatten_norm) with some $0 < p < 1$.
 
-However, in the course of our investigation we came to disbelieve the Gunasekar et al style conjectures. 
+Our investigation began with this approach, but ultimately, we became skeptical of the entire "implicit regularization as norm minimization" line of reasoning, and in particular of the conjecture by Gunasekar et al. 
 
-> (Mathematical evidence against conjecture) In the same simple settings where  Gunasekar et al. proved their conjecture, nuclear norm is minimized not only by matrix factorizations of depth-$2$, but also by factorizations of arbitrary depth.
+> **Theorem (mathematical evidence against the conjecture):**
+> In the same simple setting for which Gunasekar et al. proved their conjecture, nuclear norm is minimized by GD over matrix factorization not only with depth $2$, but with any depth $\geq 3$ as well.
 
-Since empirically there is a notable difference in performance of depth $3$ vs depth $2$, this 
- calls into question the theoretical direction suggested by Gunasekar et al..
+This theorem disqualifies Schatten quasi-norms as the implicit regularization in deep matrix factorizations, and instead suggests that all depths correspond to nuclear norm.
+However, empirically we found a notable difference in performance between different depths, so the conceptual leap from a proof in the restricted setting to a general conjecture, as done by Gunasekar et al., seems questionable.
 
-Furthermore, the empirical evidence of Gunasekar et al. also is somewhat incomplete. Their experiments were in the regime where enough matrix entries are revealed that the  nuclear norm algorithm is optimal. Our experiments are in the regime where the number of matrix entries revealed is a bit lower, and the nuclear norm algorithm is suboptimal. Here both depth $2$ and depth $3$ factorizations do better empirically, which suggests to us that even depth $2$ nets have a stronger implicit bias towards low-rank than nuclear norm, in contrast to the conjecture of Gunasekar et al.
-$$\color{red}{\text{TODO: add figure showing reconstruction errors of matrix factorizations vs nuclear norm}}$$
+The empirical evidence provided by Gunasekar et al. in favor of their conjecture is also arguable.
+Most of their experiments were in the regime where enough entries are observed for nuclear norm minimization to be optimal, hence it is impossible to distinguish between that and a different form of implicit regularization that also leads to low rank.
+They did run some experiments with less observed entries, where nuclear norm minimization is suboptimal.
+In these cases there was actually a discernible gap between minimum nuclear norm and matrix factorizations, but it was not investigated further.
+Our experiments on the other hand focus specifically on such data-scarce (few observation) settings, as we believe they are the only ones allowing true assessment of the conjecture.
+Here we find that matrix factorizations consistently outperform nuclear norm minimization (see for example Table 1).
+This holds in particular with depth $2$, so that implicitly induces a bias towards low rank stronger than nuclear norm minimization, in contrast to the conjecture of Gunasekar et al.
 
-Together, our theory and experiments suggest that neither nuclear norm nor Schatten quasi-norms fully encompass the implicit regularization of linear neural networks for matrix completion.
-Adding to that the fact that gradient descent on such models leads the end-to-end matrix to follow dynamics that cannot be emulated via any regularizer (see [Nadav's earlier blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)), we are led to believe that it should not be possible to capture the implicit regularization of linear neural networks with a single mathematical norm (or quasi-norm). Clearly, capturing the effects in more complex deep learning models may be even harder and a detailed account for optimization trajectories might be necessary.
+Together, our theory and experiments suggest that neither nuclear norm nor Schatten quasi-norms fully encompass the implicit regularization of LNN for matrix completion.
+Adding to that the fact that GD on such models leads the end-to-end matrix to follow dynamics that cannot be emulated via any regularizer (see [Nadav's earlier blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)), we are led to believe that it may not be possible to capture the implicit regularization in LNN with a single mathematical norm (or quasi-norm).
 
 ## Conclusion
+
+Focusing on deep linear neural networks for matrix completion, we studied the implicit regularization of gradient descent.
+The [conventional view of optimization](http://www.offconvex.org/2019/06/03/trajectories/) led us to extend the conjecture of [Gunasekar et al.](https://papers.nips.cc/paper/7195-implicit-regularization-in-matrix-factorization.pdf), and assert that the implicit regularization can be described as minimization of some norm (or quasi-norm).
+However, as our investigation progressed, mounting theoretical and empirical evidence made us skeptical of this approach.
+We shifted our attention to the trajectories of gradient descent, and derived results that are not as elegant as norm minimization, but nonetheless, seem to actually comply with empirical evidence.
+It is becoming widely accepted that trajectories are critical for analzying optimization in deep learning (see [Nadav's post on the matter](http://www.offconvex.org/2018/11/07/optimization-beyond-landscape/)).
+We now believe that they are key for understanding generalization as well, for linear neural networks, and even more so for non-linear models.
