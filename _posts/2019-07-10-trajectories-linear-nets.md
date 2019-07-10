@@ -11,7 +11,7 @@ He argued that instead, we need to consider the *trajectories* of optimization.
 One of the illustrative examples given was our [new paper with Yuping Luo](https://arxiv.org/abs/1905.13655), which studies the use of deep linear neural networks for solving [*matrix completion*](https://en.wikipedia.org/wiki/Matrix_completion) more accurately than the classic convex programming approach. 
 The current post provides more details on this result.
 
-Recall that in matrix completion we are given some entries $\\\{ M_{i, j} \\\}_{(i, j) \in \Omega}$ of an unknown *ground truth* matrix $M$, and our goal is to recover the remaining entries.
+Recall that in matrix completion we are given some entries $\\{ M_{i, j} \\}_{(i, j) \in \Omega}$ of an unknown *ground truth* matrix $M$, and our goal is to recover the remaining entries.
 This can be thought of as a supervised learning (regression) problem, where the training examples are the observed entries of $M$, the model is a matrix $W$ trained with the loss:
 \[
 L(W) = \sum\nolimits_{(i, j) \in \Omega} (W_{i, j} - M_{i, j})^2 ~,
