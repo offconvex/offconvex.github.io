@@ -6,13 +6,13 @@ author: Nadav Cohen and Wei Hu
 visible: True
 ---
 
-Sanjeev's [recent blog post](http://www.offconvex.org/2019/06/03/trajectories/) suggested that the conventional view of optimization is insufficient for understanding deep learning, as the value of the training objective does not reliably gauge generalization.
+Sanjeev's [recent blog post](http://www.offconvex.org/2019/06/03/trajectories/) suggested that the conventional view of optimization is insufficient for understanding deep learning, as the value of the training objective does not reliably capture generalization.
 He argued that instead, we need to consider the *trajectories* of optimization.
 One of the illustrative examples given was our [new paper with Yuping Luo](https://arxiv.org/abs/1905.13655), which studies the use of deep linear neural networks for solving [*matrix completion*](https://en.wikipedia.org/wiki/Matrix_completion) more accurately than the classic convex programming approach. 
 The current post provides more details on this result.
 
 Recall that in matrix completion we are given some entries $\\\{ M_{i, j} \\\}_{(i, j) \in \Omega}$ of an unknown *ground truth* matrix $M$, and our goal is to recover the remaining entries.
-This can be thought of as a classification (regression) problem, where the training examples are the observed entries of $M$, the model is a matrix $W$ trained with the loss:
+This can be thought of as a supervised learning (regression) problem, where the training examples are the observed entries of $M$, the model is a matrix $W$ trained with the loss:
 \[
 L(W) = \sum\nolimits_{(i, j) \in \Omega} (W_{i, j} - M_{i, j})^2 ~,
 \]
@@ -20,7 +20,7 @@ and generalization corresponds to how similar $W$ is to $M$ in the unobserved lo
 Obviously the problem is ill-posed if we assume nothing about $M$ $-$ the loss $L(W)$ is underdetermined, i.e. has multiple optima, and it would be impossible to tell (without access to unobserved entries) if one solution is better than another.
 The standard assumption (which has many [practical applications](https://en.wikipedia.org/wiki/Matrix_completion#Applications)) is that the ground truth matrix $M$ is low-rank, and thus the goal is to find, from among all global minima of the loss $L(W)$, one with minimal rank. 
 The classic algorithm for achieving this is to find the matrix with minimum [*nuclear norm*](https://en.wikipedia.org/wiki/Matrix_norm#Schatten_norms). 
-This is a convex program, which *given enough observed entries* (and under mild technical assumptions) recovers the ground truth matrix exactly (cf. [Candes and Recht](https://statweb.stanford.edu/~candes/papers/MatrixCompletion.pdf)). 
+This is a convex program, which *given enough observed entries* (and under mild technical assumptions $-$ "incoherence") recovers the ground truth exactly (cf. [Candes and Recht](https://statweb.stanford.edu/~candes/papers/MatrixCompletion.pdf)). 
 We're interested in the regime where the number of revealed entries is too small for the classic algorithm to succeed.
 There it can be beaten by a simple deep learning approach, as described next. 
 
@@ -32,7 +32,7 @@ Our method for solving matrix completion involves minimizing the loss $L(W)$ by 
 This can be viewed as a deep learning problem with $\ell_2$ loss, and GD can be implemented through the chain rule as usual.
 Note that the training objective does not include any regularization term controlling the individual layer matrices $\\{ W_j \\}_j$.
 
-At first glance our algorithm seems naive, since parameterization by a LNN (that does not constrain rank) is equivalent to parameterization by a single matrix $W$, and obviously running GD on $L(W)$ directly with no regularization is not a good approach (nothing will be learned in the unobserved locations).
+At first glance our algorithm seems naive, since parameterization by an LNN (that does not constrain rank) is equivalent to parameterization by a single matrix $W$, and obviously running GD on $L(W)$ directly with no regularization is not a good approach (nothing will be learned in the unobserved locations).
 However, since matrix completion is an underdetermined problem (has multiple optima), the optimum reached by GD can vary depending on the chosen parameterization.
 Our setup isolates the role of over-parameterization in implicitly biasing GD towards certain optima (that hopefully generalize well).
 
@@ -51,8 +51,8 @@ The main focus of our paper is on developing a theoretical understanding of this
 
 ## Trajectory Analysis: Implicit Regularization Towards Low Rank
 
-We are interested in understanding what end-to-end matrix $W$ emerges when we run GD on a LNN to minimize a general convex loss $L(W)$, and in particular the matrix completion loss given above. 
-Note that $L(W)$ is convex, but the objective obtained by over-parameterizing with a LNN is not.
+We are interested in understanding what end-to-end matrix $W$ emerges when we run GD on an LNN to minimize a general convex loss $L(W)$, and in particular the matrix completion loss given above. 
+Note that $L(W)$ is convex, but the objective obtained by over-parameterizing with an LNN is not.
 We analyze the trajectories of $W$, and specifically the dynamics of its singular value decomposition.
 Denote the singular values by $\\{ \sigma_r \\}_r$, and the corresponding left and right singular vectors by $\\{ \mathbf{u}_r \\}_r$ and $\\{ \mathbf{v}_r \\}_r$ respectively.
 
@@ -67,7 +67,7 @@ We start by considering GD applied to $L(W)$ directly (no over-parameterization)
 
 This statement implies that the movement of a singular value is proportional to the projection of the gradient onto the corresponding singular component.
 
-Now suppose that we parameterize $W$ with a $N$-layer LNN, i.e. as $W = W_N W_{N-1} \cdots W_1$.
+Now suppose that we parameterize $W$ with an $N$-layer LNN, i.e. as $W = W_N W_{N-1} \cdots W_1$.
 In previous work (described in [Nadav's earlier blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)) we have shown that running GD on the LNN, with small learning rate $\eta$ and initialization close to the origin, leads the end-to-end matrix $W$ to evolve by:
 $$
 W(t+1) \leftarrow W(t) - \eta \cdot \sum\nolimits_{j=1}^{N} \left[ W(t) W^\top(t) \right]^\frac{j-1}{N} \nabla{L}(W(t)) \left[ W^\top(t) W(t) \right]^\frac{N-j}{N} ~.
@@ -75,11 +75,11 @@ $$
 In the new paper we rely on this result to prove the following:
 
 > **Theorem:**
-> Minimizing $L(W)$ by running GD (with small learning rate $\eta$ and initialization close to the origin) on a $N$-layer LNN leads the singular values of $W$ to evolve by:
+> Minimizing $L(W)$ by running GD (with small learning rate $\eta$ and initialization close to the origin) on an $N$-layer LNN leads the singular values of $W$ to evolve by:
 \[ \sigma_r(t + 1) \leftarrow \sigma_r(t) - \eta \cdot \langle \nabla L(W(t)) , \mathbf{u}_r(t) \mathbf{v}_r^\top(t) \rangle \cdot \color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}} ~.
 \]
 
-Comparing this to Equation $(1)$, we see that over-parameterizing the loss $L(W)$ with a $N$-layer LNN introduces the multiplicative factors $\color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}}$ to the evolution of singular values.
+Comparing this to Equation $(1)$, we see that over-parameterizing the loss $L(W)$ with an $N$-layer LNN introduces the multiplicative factors $\color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}}$ to the evolution of singular values.
 While the constant $N$ does not change relative dynamics (can be absorbed into the learning rate $\eta$), the terms $(\sigma_r(t))^{2 - 2 / N}$ do $-$ they enhance movement of large singular values, and on the hand attenuate that of small ones.
 Moreover, the enhancement/attenuation becomes more significant as $N$ (network depth) grows.
 
@@ -90,10 +90,10 @@ Moreover, the enhancement/attenuation becomes more significant as $N$ (network d
 </div>
 <br />
 
-The enhancement/attenuation effect induced by a LNN (factors $\color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}}$) leads each singular value to progress very slowly after initialization, when close to zero, and then, upon reaching a certain threshold, move rapidly, with the transition from slow to rapid movement being sharper in case of a deeper network (larger $N$).
+The enhancement/attenuation effect induced by an LNN (factors $\color{purple}{N \cdot (\sigma_r(t))^{2 - 2 / N}}$) leads each singular value to progress very slowly after initialization, when close to zero, and then, upon reaching a certain threshold, move rapidly, with the transition from slow to rapid movement being sharper in case of a deeper network (larger $N$).
 If the loss $L(W)$ is underdetermined (has multiple optima) these dynamics promote solutions that have a few large singular values and many small ones (that have yet to reach the phase transition between slow to rapid movement), with a gap that is more extreme the deeper the network is. 
 This is an implicit regularization towards low rank, which intensifies with depth.
-In the paper we support the intuition with empirical evaluations and theoretical illustrations, demonstrating how adding depth to a LNN can lead GD to produce solutions closer to low-rank.
+In the paper we support the intuition with empirical evaluations and theoretical illustrations, demonstrating how adding depth to an LNN can lead GD to produce solutions closer to low-rank.
 For example, the following plots, corresponding to a task of matrix completion, show evolution of singular values throughout training of networks with varying depths $-$ as can be seen, adding layers indeed admits a final solution whose spectrum is closer to low-rank, thereby improving generalization.
 
 <div style="text-align:center;">
@@ -131,11 +131,11 @@ We find that in the regime where nuclear norm minimization is suboptimal (few ob
 This holds in particular with depth $2$, in contrast to the conjecture's prediction.
 Together, our theory and experiments lead us to believe that it may not be possible to capture the implicit regularization in LNN with a single mathematical norm (or quasi-norm).
 
+Full details behind our results on "implicit regularization as norm minimization" can be found in Section 2 of [the paper](https://arxiv.org/abs/1905.13655).
+The trajectory analysis we discussed earlier appears in Section 3 there.
+
 ## Conclusion
 
-Distilling important concepts while abstracting away unnecessary details is a fundamental goal in science and engineering.
-It is only natural then that the [conventional view of optimization](http://www.offconvex.org/2019/06/03/trajectories/), which measures learning through the value of objective functions, is popular among theorists trying to understand deep learning.
-The philosophical takeaway from our study is that one must be open to the possibility that this viewpoint, and more generally, our vocabulary of abstract concepts from optimization and machine learning theory, are simply insufficient for the task.
-Analyzing trajectories of gradient descent means accounting for the entire process of learning, bringing back to stage center many details that are often disregarded.
-We believe this is necessary for making progress in the current state of affairs.
-Hopefully, doing so will eventually lead to a new vocabulary that will abstract away all but the key ingredients of deep learning.
+The [conventional view of optimization](http://www.offconvex.org/2019/06/03/trajectories/) has been integral to the theory of machine learning. 
+Our study suggests that the associated vocabulary may not suffice for understanding generalization in deep learning, and one should instead analyze trajectories of optimization, taking into account that speed of convergence does not necessarily correlate with generalization.
+We hope this work will motivate development of a new vocabulary for analyzing deep learning.
