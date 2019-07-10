@@ -69,9 +69,9 @@ This statement implies that the movement of a singular value is proportional to 
 
 Now suppose that we parameterize $W$ with an $N$-layer LNN, i.e. as $W = W_N W_{N-1} \cdots W_1$.
 In previous work (described in [Nadav's earlier blog post](http://www.offconvex.org/2018/03/02/acceleration-overparameterization/)) we have shown that running GD on the LNN, with small learning rate $\eta$ and initialization close to the origin, leads the end-to-end matrix $W$ to evolve by:
-$$
+\[
 W(t+1) \leftarrow W(t) - \eta \cdot \sum\nolimits_{j=1}^{N} \left[ W(t) W^\top(t) \right]^\frac{j-1}{N} \nabla{L}(W(t)) \left[ W^\top(t) W(t) \right]^\frac{N-j}{N} ~.
-$$
+\]
 In the new paper we rely on this result to prove the following:
 
 > **Theorem:**
