@@ -8,7 +8,7 @@ visible: True
 
 Sanjeev's [recent blog post](http://www.offconvex.org/2019/06/03/trajectories/) suggested that the conventional view of optimization is insufficient for understanding deep learning, as the value of the training objective does not reliably capture generalization.
 He argued that instead, we need to consider the *trajectories* of optimization.
-One of the illustrative examples given was our [new paper with Yuping Luo](https://arxiv.org/abs/1905.13655), which studies the use of deep linear neural networks for solving [*matrix completion*](https://en.wikipedia.org/wiki/Matrix_completion) more accurately than the classic convex programming approach. 
+One of the illustrative examples given was our [new paper with Sanjeev Arora and Yuping Luo](https://arxiv.org/abs/1905.13655), which studies the use of deep linear neural networks for solving [*matrix completion*](https://en.wikipedia.org/wiki/Matrix_completion) more accurately than the classic convex programming approach. 
 The current post provides more details on this result.
 
 Recall that in matrix completion we are given some entries $\\{ M_{i, j} : (i, j) \in \Omega \\}$ of an unknown *ground truth* matrix $M$, and our goal is to recover the remaining entries.
