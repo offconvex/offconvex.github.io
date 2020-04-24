@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      Exponential Learning Rate Schedules for Deep Learning (Part 1)
-date:       2020-04-24 10:00:00
+date:       2020-04-24 02:00:00
 author:     Zhiyuan Li and Sanjeev Arora
-visible:    False
+visible:    True
 ---
 
 This blog post concerns our [ICLR20 paper](https://arxiv.org/pdf/1910.07454.pdf) on a surprising discovery about learning rate (LR), the most basic hyperparameter in deep learning.
