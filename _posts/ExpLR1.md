@@ -94,8 +94,8 @@ As mentioned, reaching state-of-the-art accuracy  requires reducing the learning
 >**Modification when entering a new phase $I$**: (1). switching to some smaller exponential growing rate; (2). divinding the current LR by $C_I$.
 
 <div style="text-align:center;">
-<img style="width:300px;" src="http://www.offconvex.org/assets/texp_lr.png" />
-<img style="width:450px;" src="http://www.offconvex.org/assets/TEXP.png" />
+<img style="width:235px;" src="http://www.offconvex.org/assets/texp_lr.png" />
+<img style="width:500px;" src="http://www.offconvex.org/assets/TEXP.png" />
 </div>
 **Figure 5.** PreResNet32 trained with Step Decay (as in Figure 1) and its corresponding TEXP schedule. As predicted by Theorem 2, they have similar trajectories and performances. 
 
