@@ -15,7 +15,7 @@ As illustrated in many online blogs, setting LR too small  might slow down the o
 Many practitioners use a 'step decay' LR schedule, which systematically drops the LR after specific training epochs. One often hears the intuition---with some mathematical justification if one treats SGD as a random walk in the  loss landscape--- that large learning rates are useful in the initial ("exploration") phase of training whereas lower rates  in later epochs allow a slow settling down to a local minimum in the landscape. Intriguingly, this intuition is called into  question by the success of exotic learning rate schedules such as [cosine](https://arxiv.org/abs/1608.03983) (Loshchilov&Hutter, 2016), and [triangular](https://arxiv.org/abs/1506.01186) (Smith, 2015), featuring an oscillatory LR.  These divergent approaches suggest that LR, the most basic and intuitive hyperparameter in deep learning, has not revealed all its mysteries yet. 
 
 <div style="text-align:center;">
-<img style="width:300px;" src="http://www.offconvex.org/assets/lr_schedules.png" />
+<img style="width:200px;" src="http://www.offconvex.org/assets/lr_schedules.png" />
 <br>
 <b>Figure 1.</b> Examples of Step Decay, Triangular and Cosine LR schedules.
 </div>
@@ -44,7 +44,7 @@ At first sight such a claim may seem difficult (if not impossible) to prove give
 
 
 <div style="text-align:center;">
-<img style="width:350px;" src="http://www.offconvex.org/assets/exp_lr.png" />
+<img style="width:250px;" src="http://www.offconvex.org/assets/exp_lr.png" />
 </div>
 **Figure 2.** Training PreResNet32 on CIFAR10 with fixed LR $0.1$, momentum $0.9$ and other standard hyperparameters. Trajectory was unchanged when WD was turned off  and LR at iteration $t$ was $\tilde{\eta}_ t = 0.1\times1.481^t$. (The constant $1.481$ is predicted by our theory given the original hyperparameters.) Plot on right shows  weight norm $\pmb{w}$ of the first convolutional layer in the second residual block. It grows exponentially as one would expect, satisfying $\|\pmb{w}_ t\|_ 2^2/\tilde{\eta}_ t = $ constant.
 
@@ -74,7 +74,7 @@ For batch ${\mathcal{B}}=\{x_ i\}_ {i=1}^B$, network parameter ${\pmb{\theta}}$,
 
  The first property immediately implies that $\|{\pmb{\theta}}_ t\|$ is monotone increasing for SGD if WD is turned off by Pythagoren Theorem. And based on this, [our previous work](https://arxiv.org/pdf/1812.03981.pdf) with Kaifeng Lyu shows that GD with any fixed learning rate can reach $\varepsilon$ approximate stationary point for scale invariant objectives in $O(1/\varepsilon^2)$. 
 <div style="text-align:center;">
-<img style="width:300px;" src="http://www.offconvex.org/assets/inv_lemma.png" />
+<img style="width:200px;" src="http://www.offconvex.org/assets/inv_lemma.png" />
 <br>
 <b>Figure 3.</b> Illustration of Lemma 1. 
 </div>
@@ -96,8 +96,8 @@ As mentioned, reaching state-of-the-art accuracy  requires reducing the learning
 >**Modification when entering a new phase $I$**: (1). switching to some smaller exponential growing rate; (2). divinding the current LR by $C_I$.
 
 <div style="text-align:center;">
-<img style="width:235px;" src="http://www.offconvex.org/assets/texp_lr.png" />
-<img style="width:300px;" src="http://www.offconvex.org/assets/TEXP.png" />
+<img style="width:175px;" src="http://www.offconvex.org/assets/texp_lr.png" />
+<img style="width:200px;" src="http://www.offconvex.org/assets/TEXP.png" />
 </div>
 **Figure 5.** PreResNet32 trained with Step Decay (as in Figure 1) and its corresponding TEXP schedule. As predicted by Theorem 2, they have similar trajectories and performances. 
 
