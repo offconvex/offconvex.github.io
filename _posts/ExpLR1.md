@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      Ultra-Wide Deep Nets and Ne
-date:       2019-10-03 10:00:00
+title:      Exponential Learning Rate Schedules for Deep Learning
+date:       2020-04-24 10:00:00
 author:     Zhiyuan Li and Sanjeev Arora
 visible:    False
 ---
