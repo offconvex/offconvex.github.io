@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Equilibria in nonconvex-nonconcave min-max optimization  
+title:      An Equilibrium in Nonconvex-Nonconcave Min-Max Optimization  
 date:       2020-06-24 15:00:00
 summary:    Present a new notion of local equilibrium in general min-max optimization. 
 author:     Oren Mangoubi and Nisheeth Vishnoi
@@ -57,16 +57,16 @@ In other words we assume the min-player is able to accurately compute the ``glob
 The ability to compute the global max function $G(\cdot)$ allows the min-player to accurately predict the max-player's response before updating $x$.
 If $x$ is a global minimum of $G(x)$, the min-player is aware of this fact and will have no incentive to update $x$.
 
-On the other hand, if the min-player can only simulate the max-player's updates in a small ball (as is the case in local saddle and a  [related notion](https://arxiv.org/abs/1902.00618) of local optimality, also used [here](https://arxiv.org/pdf/1910.07512.pdf)),
+On the other hand, if the min-player can only simulate the max-player's updates in a small ball (as is the case in local saddle),
 then the min-player may be willing to update her strategy even when doing so may allow the max-player to respond in a way that leads to a net increase in the objective function.
-The reason this can happen is because the min-player is not powerful enough to simulate this response, and is unaware of the max-player's capabilities.
+The reason this can happen is because the min-player is not powerful enough to simulate this response, and is unaware of the max-player's capabilities. (See also a  [related notion](https://arxiv.org/abs/1902.00618) of local optimality, also used [here](https://arxiv.org/pdf/1910.07512.pdf)) with similar existence issues due to vanishingly small updates.)
 
-The fact that players can only make local predictions are
+The fact that players who can only make local predictions are
 unable to predict their opponents' responses can lead to problems in many popular algorithms. 
 For example, in  gradient descent ascent (GDA) each player updates her strategy based only on the local gradient information.
 This means that the min-player may update $x$ in such a way that allows the max-player to respond by making an update which increases the value of $f$.
 Since the players only make updates based on local information, GDA may never converge to any point, and the value of $f$ may keep oscilating forever.
-This non-convergence behavior can occur if the function has no local saddle point (e.g. the function $sin(x+y)$  mentioned above), and can even happen on some functions, like $f(x,y) = xy$ (as well as [other funtions](https://arxiv.org/abs/1906.02027)) which do have a local saddle points.
+This non-convergence behavior can occur if the function has no local saddle point (e.g. the function $sin(x+y)$  mentioned above), and can even happen on some functions, like $f(x,y) = xy$ (as well as [other funtions](https://arxiv.org/abs/1906.02027)) which do have a local saddle point.
 
 
 <div style="text-align:center;">
@@ -77,7 +77,7 @@ This non-convergence behavior can occur if the function has no local saddle poin
 <br />
 
 
-## Greedy max: a computationally tractable alternative to global max based on second-order optimization
+## Greedy max: a computationally tractable alternative to global max
 
 To allow for a more stable min-player, and a more stable notion of local optimality, we would like to empower the min-player to more effectively simulate the max-player's response. 
 While the notion of global min-max does exactly this by having the min-player compute the global max function $\max_y(f(\cdot,y))$, computing the global maximum may be intractable. 
@@ -88,7 +88,7 @@ More specifically, we restrict the max-player to updating $y$ by traveling along
 
 
 > **Greedy path:** A unit-speed path $\varphi:[0,\tau] \rightarrow \mathbb{R}^d$ is greedy if $f$ is non-decreasing over this path, and for every $t\in[0,\tau]$
->$$\frac{d}{\mathrm{d}t} f(x, \varphi(t)) > \varepsilon \ \  \textrm{or} \ \ \frac{\mathrm{d}^2}{\mathrm{d}t^2} f(x, \varphi(t)) > \sqrt{\varepsilon}.$$
+>$$\frac{\mathrm{d}}{\mathrm{d}t} f(x, \varphi(t)) > \varepsilon \ \  \textrm{or} \ \ \frac{\mathrm{d}^2}{\mathrm{d}t^2} f(x, \varphi(t)) > \sqrt{\varepsilon}.$$
 
 Roughly speaking, when restricted to updates obtained from greedy paths, the max-player will always be able to reach a point which is an approximate local maximum for $f(x,\cdot)$, although there may not be a greedy path which leads the max-player to a global maximum.
 
@@ -137,18 +137,16 @@ This allows us to define a notion of greedy min-max equilibrium.  We say that a 
 > <b>Greedy min-max equilibrium:</b>
 >$(x^{\star}, y^{\star})$ is a greedy min-max equilibrium if
 > $$   \|\nabla_y f(x^\star,y^\star)\| \leq \varepsilon, \qquad \nabla^2_y f(x^\star,y^\star) \preceq \sqrt{\varepsilon},$$
->$$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_y S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon}, \\$$ 
+>$$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_x S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon}, \\$$ 
 >where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
 
 
 
-
-
 ## Greedy min-max equilibria always exist! (And can be found efficiently)
-In [this paper](https://arxiv.org/abs/2006.12363) we show: A greedy min-max equilibrium is always guaranteed to exist provided that $f$ is uniformly bounded, Lipschitz, and has Lipschitz gradient and Hessian. We do so by providing an algorithm which converges to a greedy min-max equilibrium, and, moreover, we show that it is able to do this in polynomial time from any initial point:
+In [this paper](https://arxiv.org/abs/2006.12363) we show: A greedy min-max equilibrium is always guaranteed to exist provided that $f$ is uniformly bounded with Lipschitz Hessian. We do so by providing an algorithm which converges to a greedy min-max equilibrium, and, moreover, we show that it is able to do this in polynomial time from any initial point:
 
-> <b>Main theorem:</b> Suppose that we are given access to a smooth function $f:\mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$ and to its gradient and Hessian.  And suppose that $f$ is unformly bounded by some number $b>0$ and is $L_1$-Lipchitz, with $L_2$-Lipschitz gradient and $L_3$-Lipschitz Hessian for some $L_1,L_2,L_3>0$.
-Then given any initial point, our algorithm returns an $\varepsilon$-greedy min-max equilibrium $(x^\star,y^\star)$ of $f$ in $\mathrm{poly}(b, L_1, L_2, L_3, d, \frac{1}{\varepsilon})$ time.
+> <b>Main theorem:</b> Suppose that we are given access to a smooth function $f:\mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$ and to its gradient and Hessian.  And suppose that $f$ is unformly bounded by $b>0$ and has $L$-Lipschitz Hessian.
+Then given any initial point, our algorithm returns an $\varepsilon$-greedy min-max equilibrium $(x^\star,y^\star)$ of $f$ in $\mathrm{poly}(b, L, d, \frac{1}{\varepsilon})$ time.
 
 There are a number of difficulties that our algorithm and proof must overcome:
 One difficulty in designing an algorithm is that the greedy max function may be discontinuous. 
