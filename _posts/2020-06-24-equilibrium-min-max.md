@@ -118,7 +118,7 @@ Unfortunately, even if $f$ is smooth, the greedy max function may not be differe
 
 
 <div style="text-align:center;">
-<img src="/assets/discontinuity2_grid_t.png" alt="" /> <img src="/assets/discontinuity2g_grid_t.png" alt="" /> 
+<img src="/assets/discontinuity2_grid_t.png" width=300 alt="" /> <img src="/assets/discontinuity2g_grid_t.png" width=300 alt="" /> 
 <br>
  <b>Figure 3.</b> <i>Left:</i> If we change $x$ from one value $x$ to a very close value $\hat{x}$, the largest value of $f$ reachable by greedy path undergoes a discontinuous change.  <i>Right:</i>  This means the greedy max function $g(x,y)$ is discontinuous in $x$.</div>
 <br />
@@ -158,7 +158,7 @@ In other words the greedy max function $g$ may be intractable to compute.
 
 
 <div style="text-align:center;">
-<img src="/assets/greedy_paths_no_axes_t.png" alt="" /> 
+<img src="/assets/greedy_paths_no_axes_t.png" width=200 alt="" /> 
 <br>
  <b>Figure 4.</b>There are many different greedy paths that start at the same point $A$.  They can end up at different local maxima ($B$, $D$), with different values of $f$.  In many cases it may be intractable to search over all these paths to compute the greedy max function.
  </div>
