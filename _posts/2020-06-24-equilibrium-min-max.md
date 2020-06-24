@@ -18,7 +18,8 @@ In this post we present the key ideas behind a second-order notion of local min-
 
 Min-max optimization of an objective function $f:\mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$
 
-$$  \min_x \max_y f(x,y),$$
+>$$  \min_x \max_y f(x,y),$$
+
 is a powerful framework in optimization, economics, and ML as it allows one to model learning in the presence of multiple agents with competing objectives.
 In ML applications, such as [GANs](https://arxiv.org/abs/1406.2661) and [adversarial robustness](https://adversarial-ml-tutorial.org), the min-max objective function may be nonconvex-nonconcave.
 We know that min-max optimization is at least as hard as minimization, hence, we cannot hope to find a globally optimal solution to min-max problems for general functions.
