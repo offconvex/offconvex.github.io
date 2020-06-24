@@ -40,17 +40,13 @@ Then we can always find a direction to travel in along which either $\mathcal{L}
 >Is there an analogous definition with similar properties for min-max optimization? 
 
 ## Problems with current local optimality notions
-There has been much recent work on extending theoretical results in nonconvex minimization to min-max optimization (see \href{https://arxiv.org/abs/1906.00331}{\textcolor{blue}{here}}, \href{https://papers.nips.cc/paper/9430-efficient-algorithms-for-smooth-minimax-optimization}{\textcolor{blue}{here}} , \href{https://arxiv.org/pdf/1807.02629.pdf}{\textcolor{blue}{here}},  \href{https://papers.nips.cc/paper/9631-solving-a-class-of-non-convex-min-max-games-using-iterative-first-order-methods.pdf}{\textcolor{blue}{here}}, \href{https://arxiv.org/abs/1910.07512}{\textcolor{blue}{here}}).
-%
+There has been much recent work on extending theoretical results in nonconvex minimization to min-max optimization (see [here](https://arxiv.org/abs/1906.00331), [here](https://papers.nips.cc/paper/9430-efficient-algorithms-for-smooth-minimax-optimization), [here](https://arxiv.org/pdf/1807.02629.pdf),  [here](https://papers.nips.cc/paper/9631-solving-a-class-of-non-convex-min-max-games-using-iterative-first-order-methods.pdf), [here](https://arxiv.org/abs/1910.07512).
 One way to extend the notion of local minimum to the min-max setting is to seek a solution point called a ``local saddle''--a point $(x,y)$ where 
-\begin{enumerate}
 
-\item $y$ is a local maximum for $f(x, \cdot)$ and 
+1) $y$ is a local maximum for $f(x, \cdot)$ and 
 
-\item $x$ is a local minimum for $f(\cdot, y).$
-\end{enumerate}
+2) $x$ is a local minimum for $f(\cdot, y).$
 
-\noindent
 For instance,
  this is used  [here](https://arxiv.org/abs/1706.08500), [here](https://arxiv.org/pdf/1901.00838.pdf), [here](https://arxiv.org/pdf/1705.10461.pdf), and [here](http://proceedings.mlr.press/v89/adolphs19a.html).
 But, there are very simple examples of two-dimensional bounded functions where a local saddle does not exist.
