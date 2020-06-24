@@ -52,7 +52,10 @@ As pointed  [here](https://arxiv.org/abs/1902.00618), we can easily check that n
 
 The fact that no local saddle exists may be surprising, since an $\varepsilon$-global solution to a min-max optimization problem *is* guaranteed to exist as long as the objective function is uniformly bounded.
 Roughly, this is because, in a global min-max setting, the max-player is empowered to globally maximize the function $f(x,\cdot)$, and the min-player is empowered to minimize $\max_y(f(x, \cdot))$.
-In other words we assume the min-player is able to accurately compute the ``global max" function $G(x) := \max_y(f(x, \cdot))$ at any point $x$.
+In other words we assume the min-player is able to accurately compute the ``global max" function.
+
+> **Global max:** $G(x) := \max_y(f(x, \cdot))$ at any point $x$.
+
 
 The ability to compute the global max function $G(\cdot)$ allows the min-player to accurately predict the max-player's response before updating $x$.
 If $x$ is a global minimum of $G(x)$, the min-player is aware of this fact and will have no incentive to update $x$.
