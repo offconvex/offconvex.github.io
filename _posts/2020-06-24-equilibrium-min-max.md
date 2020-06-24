@@ -1,10 +1,10 @@
 ---
 layout:     post
 title:      An equilibrium in nonconvex-nonconcave min-max optimization  
-date:       2020-06-24 11:00:00
+date:       2020-06-24 10:00:00
 summary:    Present a new notion of second-order local equilibrium in general min-max optimization. 
 author:     Oren Mangoubi and Nisheeth Vishnoi
-visible:    False
+visible:    True
 ---
 
 While there has been incredible progress in convex and nonconvex minimization, a multitude of problems in ML today are in need of efficient algorithms to solve min-max optimization problems. 
