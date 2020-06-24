@@ -99,7 +99,7 @@ Roughly speaking, when restricted to updates obtained from greedy paths, the max
 <div style="text-align:center;">
 <img src="/assets/greedy_region_omega_t" alt="" /> <img src="/assets/global_max_path_no_axes_t" alt="" /> 
 <br>
-<b>Figure 2.</b> *Left:* The light-colored region $\Omega$ is reachable from the initial point $A$ by a greedy path; the dark region is not reachable. *Right:* There is always a greedy path from any point $A$ to a local maximum ($B$), but a global maximum ($C$) may not be reachable by any greedy path.
+ <b>Figure 2.</b> <i>Left:</i> The light-colored region $\Omega$ is reachable from the initial point $A$ by a greedy path; the dark region is not reachable. <i>Right:</i> There is always a greedy path from any point $A$ to a local maximum ($B$), but a global maximum ($C$) may not be reachable by any greedy path.
 </div>
 <br />
 
