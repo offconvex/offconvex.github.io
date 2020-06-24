@@ -18,7 +18,7 @@ In this post we present the key ideas behind a second-order notion of local min-
 
 Min-max optimization of an objective function $f:\mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$
 
->$$  \min_x \max_y f(x,y),$$
+$$  \min_x \max_y f(x,y)$$
 
 is a powerful framework in optimization, economics, and ML as it allows one to model learning in the presence of multiple agents with competing objectives.
 In ML applications, such as [GANs](https://arxiv.org/abs/1406.2661) and [adversarial robustness](https://adversarial-ml-tutorial.org), the min-max objective function may be nonconvex-nonconcave.
@@ -138,8 +138,8 @@ This allows us to define a notion of greedy min-max equilibrium.  We say that a 
 $(x^{\star}, y^{\star})$ is a greedy min-max equilibrium if
 > $$   \|\nabla_y f(x^\star,y^\star)\| \leq \varepsilon, \qquad \nabla^2_y f(x^\star,y^\star) \preceq \sqrt{\varepsilon},$$
 $$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_y S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon},$$ 
->
-> where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
+
+where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
 
 
 
