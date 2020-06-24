@@ -83,11 +83,12 @@ While the notion of global min-max does exactly this by having the min-player co
 
 Instead, we replace the global max function $\max_y (f(\cdot ,y))$ with a computationally tractable alternative. 
 Towards this end, we restrict the max-player's response, and the min-player's simulation of this response, to updates which can be computed using any algorithm from a class of second-order optimization algorithms.
-More specifically, we restrict the max-player to updating $y$ by traveling along continuous paths which start at the current value of $y$ and along which either $f$ is increasing or the second derivative of $f$ is positive.  We refer to such paths as greedy paths since they model a class of second-order ``greedy" optimization algorithms:
+More specifically, we restrict the max-player to updating $y$ by traveling along continuous paths which start at the current value of $y$ and along which either $f$ is increasing or the second derivative of $f$ is positive.  
+We refer to such paths as greedy paths since they model a class of second-order ``greedy" optimization algorithms.
 
 
 > **Greedy path:** A unit-speed path $\varphi:[0,\tau] \rightarrow \mathbb{R}^d$ is greedy if $f$ is non-decreasing over this path, and for every $t\in[0,\tau]$
-$$\frac{d}{\mathrm{d}t} f(x, \varphi(t)) > \varepsilon \qquad \textrm{or} \qquad \frac{\mathrm{d}^2}{\mathrm{d}t^2} f(x, \varphi(t)) > \sqrt{\varepsilon}$$
+$$\frac{d}{\mathrm{d}t} f(x, \varphi(t)) > \varepsilon \qquad \textrm{or} \qquad \frac{\mathrm{d}^2}{\mathrm{d}t^2} f(x, \varphi(t)) > \sqrt{\varepsilon}.$$
 
 Roughly speaking, when restricted to updates obtained from greedy paths, the max-player will always be able to reach a point which is an approximate local maximum for $f(x,\cdot)$, although there may not be a greedy path which leads the max-player to a global maximum.
 
@@ -120,17 +121,18 @@ Unfortunately, even if $f$ is smooth, the greedy max function may not be differe
 <div style="text-align:center;">
 <img src="/assets/discontinuity2_grid_t" alt="" /> <img src="/assets/discontinuity2g_grid_t" alt="" /> 
 <br>
- <b>Figure 3.</b> <i>Left:</i> If we change $x$ from one value $x$ to a very close value $\hat{x}$, the largest value of $f$ reachable by greedy path undergoes a discontinuous change.  <i>Right:</i>  This means the greedy max function $g(x,y)$ is discontinuous in $x$./div>
+ <b>Figure 3.</b> <i>Left:</i> If we change $x$ from one value $x$ to a very close value $\hat{x}$, the largest value of $f$ reachable by greedy path undergoes a discontinuous change.  <i>Right:</i>  This means the greedy max function $g(x,y)$ is discontinuous in $x$.</div>
 <br />
 
 
 This creates a problem, since the definition of $\varepsilon$-local minimum only applies to smooth functions.
 
 To solve this problem we would ideally like to smooth $g$ by convolution with a Gaussian.
-Unfortunately, convolution can cause the local minima of a function to ``shift"-- a point which is a local minimum for $g$ may no longer be a local minimum for the convolved version of $g$ (to see why, try convolving the function $f(x) = x - 3x \mathbbm{1}(x\leq 0) + \mathbbm{1}(x \leq 0)$ with a Gaussian $N(0,\sigma^2)$ for any $\sigma>0$).
+Unfortunately, convolution can cause the local minima of a function to ``shift"-- a point which is a local minimum for $g$ may no longer be a local minimum for the convolved version of $g$ (to see why, try convolving the function $f(x) = x - 3x I(x\leq 0) + I(x \leq 0)$ with a Gaussian $N(0,\sigma^2)$ for any $\sigma>0$).
 To avoid this, we instead consider a "truncated" version of $g$, and then convolve this function in the $x$ variable with a Gaussian to obtain our smoothed version of $g$.
 
 This allows us to define a notion of greedy min-max equilibrium.  We say that a point $(x^\star, y^\star)$ is a greedy min-max equilibrium if $y^\star$ is an approximate local maximum of $f(x^\star, \cdot)$, and $x^\star$ is an $\varepsilon$-local minimum of this smoothed version of $g(\cdot, y^\star)$.
+
 
 > <b>Greedy min-max equilibrium:</b>
 $(x^{\star}, y^{\star})$ is a greedy min-max equilibrium if
@@ -159,7 +161,7 @@ In other words the greedy max function $g$ may be intractable to compute.
 <div style="text-align:center;">
 <img src="/assets/greedy_paths_no_axes_t" alt="" /> 
 <br>
- <b>Figure 4.</b>There are many different greedy paths that start at the same point $A$.  They can end up at different local maxima ($B$, $D$), with different values of $f$.  In many cases it may be intractable to search over all these paths to compute the greedy max function./div>
+ <b>Figure 4.</b>There are many different greedy paths that start at the same point $A$.  They can end up at different local maxima ($B$, $D$), with different values of $f$.  In many cases it may be intractable to search over all these paths to compute the greedy max function.</div>
 <br />
 
 
