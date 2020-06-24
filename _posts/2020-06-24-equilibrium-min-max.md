@@ -34,7 +34,7 @@ $$    \|\nabla \mathcal{L}(x)\| \leq \varepsilon  \ \ \mathrm{and} \ \  \nabla^2
 
 
 <div style="text-align:center;">
-<img src="/assets/GDA_spiral.gif" alt="" />
+<img src="/assets/GDA_spiral_fast.gif" alt="" />
 <br>
 <b>Figure 1.</b> GDA spirals off to infinity from almost every starting point on the objective function $f(x,y) = xy$. 
 </div>
