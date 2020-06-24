@@ -93,7 +93,7 @@ Roughly speaking, when restricted to updates obtained from greedy paths, the max
 
 
 <div style="text-align:center;">
-<img src="/assets/greedy_region_omega_t.png" width=400 hspace-30 alt="" /> <img src="/assets/global_max_path_no_axes_t.png" width=400 alt="" /> 
+<img style="width:400;" src="/assets/greedy_region_omega_t.png" alt="" /> <img style="width:400;" src="/assets/global_max_path_no_axes_t.png"  alt="" /> 
 <br>
  <b>Figure 2.</b> <i>Left:</i> The light-colored region $\Omega$ is reachable from the initial point $A$ by a greedy path; the dark region is not reachable. <i>Right:</i> There is always a greedy path from any point $A$ to a local maximum ($B$), but a global maximum ($C$) may not be reachable by any greedy path.
 </div>
@@ -118,7 +118,7 @@ Unfortunately, even if $f$ is smooth, the greedy max function may not be differe
 
 
 <div style="text-align:center;">
-<img src="/assets/discontinuity2_grid_t.png" width=400 hspace=30 alt="" /> <img src="/assets/discontinuity2g_grid_t.png" width=400 alt="" /> 
+<img style="width:400;" src="/assets/discontinuity2_grid_t.png"  alt="" /> <img style="width:400;" src="/assets/discontinuity2g_grid_t.png" alt="" /> 
 <br>
  <b>Figure 3.</b> <i>Left:</i> If we change $x$ from one value $x$ to a very close value $\hat{x}$, the largest value of $f$ reachable by greedy path undergoes a discontinuous change.  <i>Right:</i>  This means the greedy max function $g(x,y)$ is discontinuous in $x$.</div>
 <br />
@@ -158,7 +158,7 @@ In other words the greedy max function $g$ may be intractable to compute.
 
 
 <div style="text-align:center;">
-<img src="/assets/greedy_paths_no_axes_t.png" width=400 alt="" /> 
+<img style="width:400;" src="/assets/greedy_paths_no_axes_t.png"  alt="" /> 
 <br>
  <b>Figure 4.</b>There are many different greedy paths that start at the same point $A$.  They can end up at different local maxima ($B$, $D$), with different values of $f$.  In many cases it may be intractable to search over all these paths to compute the greedy max function.
  </div>
