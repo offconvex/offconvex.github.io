@@ -83,17 +83,23 @@ This non-convergence behavior can occur if the function has no local saddle poin
 ## Greedy max: a computationally tractable alternative to global max based on second-order optimization
 
 To allow for a more stable min-player, and a more stable notion of local optimality, we would like to empower the min-player to more effectively simulate the max-player's response. 
-%
 While the notion of global min-max does exactly this by having the min-player compute the global max function $\max_y(f(\cdot,y))$, computing the global maximum may be intractable. 
 
 Instead, we replace the global max function $\max_y (f(\cdot ,y))$ with a computationally tractable alternative. 
-%
 Towards this end, we restrict the max-player's response, and the min-player's simulation of this response, to updates which can be computed using any algorithm from a class of second-order optimization algorithms.
-%
 More specifically, we restrict the max-player to updating $y$ by traveling along continuous paths which start at the current value of $y$ and along which either $f$ is increasing or the second derivative of $f$ is positive.  We refer to such paths as greedy paths since they model a class of second-order ``greedy" optimization algorithms:
-%
+
 
 > **Greedy path:** A unit-speed path $\varphi:[0,\tau] \rightarrow \mathbb{R}^d$ is greedy if $f$ is non-decreasing over this path, and for every $t\in[0,\tau]$
 $$\frac{d}{\mathrm{d}t} f(x, \varphi(t)) > \varepsilon \qquad \textrm{or} \qquad \frac{\mathrm{d}^2}{\mathrm{d}t^2} f(x, \varphi(t)) > \sqrt{\varepsilon}$$
-Roughly speaking, when restricted to updates obtained from greedy paths, the max-player will always be able to reach a point which is an approximate local maximum for $f(x,\cdot)$, although there may not be a greedy path which leads the max-player to a global maximum:
+
+Roughly speaking, when restricted to updates obtained from greedy paths, the max-player will always be able to reach a point which is an approximate local maximum for $f(x,\cdot)$, although there may not be a greedy path which leads the max-player to a global maximum.
+
+
+<div style="text-align:center;">
+<img src="/assets/greedy_region_omega_t" alt="" /> <img src="/assets/global_max_path_no_axes_t" alt="" /> 
+<br>
+<b>Figure 2.</b> *Left:* The light-colored region $\Omega$ is reachable from the initial point $A$ by a greedy path; the dark region is not reachable. *Right:* There is always a greedy path from any point $A$ to a local maximum ($B$), but a global maximum ($C$) may not be reachable by any greedy path.
+</div>
+<br />
 
