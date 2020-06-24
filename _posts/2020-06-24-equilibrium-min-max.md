@@ -83,18 +83,17 @@ While the notion of global min-max does exactly this by having the min-player co
 
 Instead, we replace the global max function $\max_y (f(\cdot ,y))$ with a computationally tractable alternative. 
 Towards this end, we restrict the max-player's response, and the min-player's simulation of this response, to updates which can be computed using any algorithm from a class of second-order optimization algorithms.
-More specifically, we restrict the max-player to updating $y$ by traveling along continuous paths which start at the current value of $y$ and along which either $f$ is increasing or the second derivative of $f$ is positive.  
-We refer to such paths as greedy paths since they model a class of second-order ``greedy" optimization algorithms.
+More specifically, we restrict the max-player to updating $y$ by traveling along continuous paths which start at the current value of $y$ and along which either $f$ is increasing or the second derivative of $f$ is positive.  We refer to such paths as greedy paths since they model a class of second-order ``greedy" optimization algorithms.
 
 
 > **Greedy path:** A unit-speed path $\varphi:[0,\tau] \rightarrow \mathbb{R}^d$ is greedy if $f$ is non-decreasing over this path, and for every $t\in[0,\tau]$
-$$\frac{d}{\mathrm{d}t} f(x, \varphi(t)) > \varepsilon \qquad \textrm{or} \qquad \frac{\mathrm{d}^2}{\mathrm{d}t^2} f(x, \varphi(t)) > \sqrt{\varepsilon}.$$
+>$$\frac{d}{\mathrm{d}t} f(x, \varphi(t)) > \varepsilon \ \  \textrm{or} \ \ \frac{\mathrm{d}^2}{\mathrm{d}t^2} f(x, \varphi(t)) > \sqrt{\varepsilon}.$$
 
 Roughly speaking, when restricted to updates obtained from greedy paths, the max-player will always be able to reach a point which is an approximate local maximum for $f(x,\cdot)$, although there may not be a greedy path which leads the max-player to a global maximum.
 
 
 <div style="text-align:center;">
-<img src="/assets/greedy_region_omega_t" alt="" /> <img src="/assets/global_max_path_no_axes_t" alt="" /> 
+<img src="/assets/greedy_region_omega_t.png" alt="" /> <img src="/assets/global_max_path_no_axes_t.png" alt="" /> 
 <br>
  <b>Figure 2.</b> <i>Left:</i> The light-colored region $\Omega$ is reachable from the initial point $A$ by a greedy path; the dark region is not reachable. <i>Right:</i> There is always a greedy path from any point $A$ to a local maximum ($B$), but a global maximum ($C$) may not be reachable by any greedy path.
 </div>
@@ -106,7 +105,7 @@ We refer to the value of $f$ at this point as the *greedy max function*, and den
 
 > **Greedy max function:** 
     $g(x,y) = \max_{z \in \Omega} f(x,z),$
- where $\Omega:= \{\textrm{points reachable from $y$ by greedy path}\}$.
+ > where $\Omega$ is points reachable from $y$ by greedy path.
 
 ## Our greedy min-max equilibrium
 We use the greedy max function to define a new second-order notion of local optimality for min-max optimization, which we refer to as a greedy min-max equilibrium.
@@ -119,7 +118,7 @@ Unfortunately, even if $f$ is smooth, the greedy max function may not be differe
 
 
 <div style="text-align:center;">
-<img src="/assets/discontinuity2_grid_t" alt="" /> <img src="/assets/discontinuity2g_grid_t" alt="" /> 
+<img src="/assets/discontinuity2_grid_t.png" alt="" /> <img src="/assets/discontinuity2g_grid_t.png" alt="" /> 
 <br>
  <b>Figure 3.</b> <i>Left:</i> If we change $x$ from one value $x$ to a very close value $\hat{x}$, the largest value of $f$ reachable by greedy path undergoes a discontinuous change.  <i>Right:</i>  This means the greedy max function $g(x,y)$ is discontinuous in $x$.</div>
 <br />
@@ -136,9 +135,9 @@ This allows us to define a notion of greedy min-max equilibrium.  We say that a 
 
 > <b>Greedy min-max equilibrium:</b>
 $(x^{\star}, y^{\star})$ is a greedy min-max equilibrium if
- $$   \|\nabla_y f(x^\star,y^\star)\| \leq \varepsilon, \qquad \nabla^2_y f(x^\star,y^\star) \preceq \sqrt{\varepsilon},$$
-   $$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_y S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon},$$ 
- where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
+> $$   \|\nabla_y f(x^\star,y^\star)\| \leq \varepsilon, \qquad \nabla^2_y f(x^\star,y^\star) \preceq \sqrt{\varepsilon},$$
+ >  $$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_y S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon},$$ 
+   > where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
 
 
 
@@ -159,15 +158,14 @@ In other words the greedy max function $g$ may be intractable to compute.
 
 
 <div style="text-align:center;">
-<img src="/assets/greedy_paths_no_axes_t" alt="" /> 
+<img src="/assets/greedy_paths_no_axes_t.png" alt="" /> 
 <br>
  <b>Figure 4.</b>There are many different greedy paths that start at the same point $A$.  They can end up at different local maxima ($B$, $D$), with different values of $f$.  In many cases it may be intractable to search over all these paths to compute the greedy max function.
  </div>
 <br />
 
 
-To get around this problem, rather than computing the exact value of $g(x,y)$, we instead compute a lower bound $h(x,y)$ for the greedy max function.  
-Since we are able to obtain this lower bound by computing only a *single* greedy path, it is much easier to compute than greedy max function.
+To get around this problem, rather than computing the exact value of $g(x,y)$, we instead compute a lower bound $h(x,y)$ for the greedy max function. Since we are able to obtain this lower bound by computing only a *single* greedy path, it is much easier to compute than greedy max function.
 
 In our paper, we prove that if 1) $x^\star$ is an approximate local minimum for the this lower bound $h(\cdot, y^\star)$, and  2) $y^\star$ is a an approximate local maximum for $f(x^\star, \cdot)$, then $x^\star$ is also an approximate local minimum for the greedy max $g(\cdot, y^\star)$.
 This allows us to design an algorithm which obtains a greedy min-max point by minimizing the computationally tractable lower bound $h$, instead of the greedy max function which may be intractable to compute.
@@ -177,5 +175,7 @@ This allows us to design an algorithm which obtains a greedy min-max point by mi
 
 In this post we have shown how to extend a notion of second-order equilibrium for minimization to min-max optimization which is guaranteed to exist for any function which is bounded and Lipschitz, with Lipschitz gradient and Hessian.
 We have also shown that our algorithm is able to find this equilibrium in  polynomial time from any initial point. 
-Our results do not require any additional assumptions such as convexity, monotonicity, or sufficient bilinearity.
+
+>Our results do not require any additional assumptions such as convexity, monotonicity, or sufficient bilinearity.
+
 In an upcoming blog post we will show how one can use some of the ideas from here to obtain a new min-max optimization algorithm with applications to stably training GANs. 
