@@ -51,10 +51,7 @@ For instance, take $f(x,y) = sin(x+y)$.
 As pointed  [here](https://arxiv.org/abs/1902.00618), we can easily check that none of the points on this function are simultaneously a local minimum for $x$ and local maximum for $y$.
 
 The fact that no local saddle exists may be surprising, since an $\varepsilon$-global solution to a min-max optimization problem *is* guaranteed to exist as long as the objective function is uniformly bounded.
-Roughly, this is because, in a global min-max setting, the max-player is empowered to globally maximize the function $f(x,\cdot)$, and the min-player is empowered to minimize $\max_y(f(x, \cdot))$.
-In other words we assume the min-player is able to accurately compute the ``global max" function.
-
-> **Global max:** $G(x) := \max_y(f(x, \cdot))$.
+Roughly, this is because, in a global min-max setting, the max-player is empowered to globally maximize the function $f(x,\cdot)$, and the min-player is empowered to minimize the "global max" function $\max_y(f(x, \cdot))$.
 
 
 The ability to compute the global max function $G(\cdot)$ allows the min-player to accurately predict the max-player's response before updating $x$.
@@ -65,11 +62,8 @@ then the min-player may be willing to update her strategy even when doing so may
 The reason this can happen is because the min-player is not powerful enough to simulate this response, and is unaware of the max-player's capabilities. (See also a  [related notion](https://arxiv.org/abs/1902.00618) of local optimality, also used [here](https://arxiv.org/pdf/1910.07512.pdf) with similar existence issues due to vanishingly small updates.)
 
 The fact that players who can only make local predictions are
-unable to predict their opponents' responses can lead to problems in many popular algorithms. 
-For example, in  gradient descent ascent (GDA) each player updates her strategy based only on the local gradient information.
-This means that the min-player may update $x$ in such a way that allows the max-player to respond by making an update which increases the value of $f$.
-Since the players only make updates based on local information, GDA may never converge to any point, and the value of $f$ may keep oscilating forever.
-This non-convergence behavior can occur if the function has no local saddle point (e.g. the function $sin(x+y)$  mentioned above), and can even happen on some functions, like $f(x,y) = xy$ (as well as [other funtions](https://arxiv.org/abs/1906.02027)) which do have a local saddle point.
+unable to predict their opponents' responses can lead to convergence problems in many popular algorithms such as  
+gradient descent ascent (GDA). This non-convergence behavior can occur if the function has no local saddle point (e.g. the function $sin(x+y)$  mentioned above), and can even happen on some functions, like $f(x,y) = xy$ which do have a local saddle point.
 
 
 <div style="text-align:center;">
@@ -87,7 +81,7 @@ While the notion of global min-max does exactly this by having the min-player co
 
 Instead, we replace the global max function $\max_y (f(\cdot ,y))$ with a computationally tractable alternative. 
 Towards this end, we restrict the max-player's response, and the min-player's simulation of this response, to updates which can be computed using any algorithm from a class of second-order optimization algorithms.
-More specifically, we restrict the max-player to updating $y$ by traveling along continuous paths which start at the current value of $y$ and along which either $f$ is increasing or the second derivative of $f$ is positive.  We refer to such paths as greedy paths since they model a class of second-order ``greedy" optimization algorithms.
+More specifically, we restrict the max-player to updating $y$ by traveling along continuous paths which start at the current value of $y$ and along which either $f$ is increasing or the second derivative of $f$ is positive.  We refer to such paths as greedy paths since they model a class of second-order "greedy" optimization algorithms.
 
 
 > **Greedy path:** A unit-speed path $\varphi:[0,\tau] \rightarrow \mathbb{R}^d$ is greedy if $f$ is non-decreasing over this path, and for every $t\in[0,\tau]$
@@ -131,7 +125,7 @@ Unfortunately, even if $f$ is smooth, the greedy max function may not be differe
 This creates a problem, since the definition of $\varepsilon$-local minimum only applies to smooth functions.
 
 To solve this problem we would ideally like to smooth $g$ by convolution with a Gaussian.
-Unfortunately, convolution can cause the local minima of a function to ``shift"-- a point which is a local minimum for $g$ may no longer be a local minimum for the convolved version of $g$ (to see why, try convolving the function $f(x) = x - 3x I(x\leq 0) + I(x \leq 0)$ with a Gaussian $N(0,\sigma^2)$ for any $\sigma>0$).
+Unfortunately, convolution can cause the local minima of a function to "shift"-- a point which is a local minimum for $g$ may no longer be a local minimum for the convolved version of $g$ (to see why, try convolving the function $f(x) = x - 3x I(x\leq 0) + I(x \leq 0)$ with a Gaussian $N(0,\sigma^2)$ for any $\sigma>0$).
 To avoid this, we instead consider a "truncated" version of $g$, and then convolve this function in the $x$ variable with a Gaussian to obtain our smoothed version of $g$.
 
 This allows us to define a notion of greedy min-max equilibrium.  We say that a point $(x^\star, y^\star)$ is a greedy min-max equilibrium if $y^\star$ is an approximate local maximum of $f(x^\star, \cdot)$, and $x^\star$ is an $\varepsilon$-local minimum of this smoothed version of $g(\cdot, y^\star)$.
