@@ -59,7 +59,7 @@ If $x$ is a global minimum of $G(x)$, the min-player is aware of this fact and w
 
 On the other hand, if the min-player can only simulate the max-player's updates in a small ball (as is the case in local saddle),
 then the min-player may be willing to update her strategy even when doing so may allow the max-player to respond in a way that leads to a net increase in the objective function.
-The reason this can happen is because the min-player is not powerful enough to simulate this response, and is unaware of the max-player's capabilities. (See also a  [related notion](https://arxiv.org/abs/1902.00618) of local optimality, also used [here](https://arxiv.org/pdf/1910.07512.pdf)) with similar existence issues due to vanishingly small updates.)
+The reason this can happen is because the min-player is not powerful enough to simulate this response, and is unaware of the max-player's capabilities. (See also a  [related notion](https://arxiv.org/abs/1902.00618) of local optimality, also used [here](https://arxiv.org/pdf/1910.07512.pdf) with similar existence issues due to vanishingly small updates.)
 
 The fact that players who can only make local predictions are
 unable to predict their opponents' responses can lead to problems in many popular algorithms. 
