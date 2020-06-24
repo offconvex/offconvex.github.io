@@ -47,19 +47,17 @@ One way to extend the notion of local minimum to the min-max setting is to seek 
 For instance,
  this is used  [here](https://arxiv.org/abs/1706.08500), [here](https://arxiv.org/pdf/1901.00838.pdf), [here](https://arxiv.org/pdf/1705.10461.pdf), and [here](http://proceedings.mlr.press/v89/adolphs19a.html).
 But, there are very simple examples of two-dimensional bounded functions where a local saddle does not exist.
-For instance, take $f(x,y) = sin(x+y)$.
-As pointed  [here](https://arxiv.org/abs/1902.00618), we can easily check that none of the points on this function are simultaneously a local minimum for $x$ and local maximum for $y$.
+
+>For instance, consider $f(x,y) = sin(x+y)$ from [here](https://arxiv.org/abs/1902.00618). Check that none of the points on this function are simultaneously a local minimum for $x$ and local maximum for $y$.
 
 The fact that no local saddle exists may be surprising, since an $\varepsilon$-global solution to a min-max optimization problem *is* guaranteed to exist as long as the objective function is uniformly bounded.
 Roughly, this is because, in a global min-max setting, the max-player is empowered to globally maximize the function $f(x,\cdot)$, and the min-player is empowered to minimize the "global max" function $\max_y(f(x, \cdot))$.
 
-
-The ability to compute the global max function $G(\cdot)$ allows the min-player to accurately predict the max-player's response before updating $x$.
-If $x$ is a global minimum of $G(x)$, the min-player is aware of this fact and will have no incentive to update $x$.
-
-On the other hand, if the min-player can only simulate the max-player's updates in a small ball (as is the case in local saddle),
-then the min-player may be willing to update her strategy even when doing so may allow the max-player to respond in a way that leads to a net increase in the objective function.
-The reason this can happen is because the min-player is not powerful enough to simulate this response, and is unaware of the max-player's capabilities. (See also a  [related notion](https://arxiv.org/abs/1902.00618) of local optimality, also used [here](https://arxiv.org/pdf/1910.07512.pdf) with similar existence issues due to vanishingly small updates.)
+The ability to compute the global max  allows the min-player to  predict the max-player's response.
+If $x$ is a global minimum of $\max_y(f(x, \cdot))$, the min-player is aware of this fact and will have no incentive to update $x$.
+On the other hand, if the min-player can only simulate the max-player's updates locally (as in local saddle),
+then the min-player may try to update her strategy even when it leads to a net increase in $f$.
+This can happen because the min-player is not powerful enough to accurately simulate the max-player's response. (See  a  [related notion](https://arxiv.org/abs/1902.00618) of local optimality with similar issues due to vanishingly small updates.)
 
 The fact that players who can only make local predictions are
 unable to predict their opponents' responses can lead to convergence problems in many popular algorithms such as  
