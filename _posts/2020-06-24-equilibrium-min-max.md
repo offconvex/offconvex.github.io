@@ -42,7 +42,7 @@ Then we can always find a direction to travel in along which either $\mathcal{L}
 
 ## Problems with current local optimality notions
 There has been much recent work on extending theoretical results in nonconvex minimization to min-max optimization (see [here](https://arxiv.org/abs/1906.00331), [here](https://papers.nips.cc/paper/9430-efficient-algorithms-for-smooth-minimax-optimization), [here](https://arxiv.org/pdf/1807.02629.pdf),  [here](https://papers.nips.cc/paper/9631-solving-a-class-of-non-convex-min-max-games-using-iterative-first-order-methods.pdf), [here](https://arxiv.org/abs/1910.07512).
-One way to extend the notion of local minimum to the min-max setting is to seek a solution point called a ``local saddle''--a point $(x,y)$ where 1) $y$ is a local maximum for $f(x, \cdot)$ and 2) $x$ is a local minimum for $f(\cdot, y).$
+One way to extend the notion of local minimum to the min-max setting is to seek a solution point called a "local saddle"--a point $(x,y)$ where 1) $y$ is a local maximum for $f(x, \cdot)$ and 2) $x$ is a local minimum for $f(\cdot, y).$
 
 For instance,
  this is used  [here](https://arxiv.org/abs/1706.08500), [here](https://arxiv.org/pdf/1901.00838.pdf), [here](https://arxiv.org/pdf/1705.10461.pdf), and [here](http://proceedings.mlr.press/v89/adolphs19a.html).
@@ -54,7 +54,7 @@ The fact that no local saddle exists may be surprising, since an $\varepsilon$-g
 Roughly, this is because, in a global min-max setting, the max-player is empowered to globally maximize the function $f(x,\cdot)$, and the min-player is empowered to minimize $\max_y(f(x, \cdot))$.
 In other words we assume the min-player is able to accurately compute the ``global max" function.
 
-> **Global max:** $G(x) := \max_y(f(x, \cdot))$ at any point $x$.
+> **Global max:** $G(x) := \max_y(f(x, \cdot))$.
 
 
 The ability to compute the global max function $G(\cdot)$ allows the min-player to accurately predict the max-player's response before updating $x$.
