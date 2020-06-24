@@ -161,7 +161,8 @@ In other words the greedy max function $g$ may be intractable to compute.
 <div style="text-align:center;">
 <img src="/assets/greedy_paths_no_axes_t" alt="" /> 
 <br>
- <b>Figure 4.</b>There are many different greedy paths that start at the same point $A$.  They can end up at different local maxima ($B$, $D$), with different values of $f$.  In many cases it may be intractable to search over all these paths to compute the greedy max function.</div>
+ <b>Figure 4.</b>There are many different greedy paths that start at the same point $A$.  They can end up at different local maxima ($B$, $D$), with different values of $f$.  In many cases it may be intractable to search over all these paths to compute the greedy max function.
+ </div>
 <br />
 
 
