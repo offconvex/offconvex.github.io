@@ -1,19 +1,19 @@
 ---
 layout:     post
-title:      Training GANs -- From Theory to Practice
+title:      Training GANs - From Theory to Practice
 date:       2020-07-06 10:00:00
 summary:    Present a new algorithm convergent min-max optimization algorithm for training GANs 
-author:     Oren Mangoubi and Sushant Sachdeva and Nisheeth Vishnoi
+author:     Oren Mangoubi, Sushant Sachdeva and Nisheeth Vishnoi
 visible:    False
 ---
 
-GANs, that were originally discovered in the context of unsupervised learning, have had far reaching implications to science, engineering, and society. However, training GANs remains challenging (in part) due to the lack of convergent algorithms for nonconvex-nonconcave min-max optimization. In this post, we present a new first-order algorithm for min-max optimization which is particularly suited to GANs. This algorithm is guaranteed to converge to an equilibrium, is competitive in terms of time and memory with gradient descent-ascent and, most importantly, GANs trained on it seem to be stable.
+GANs, originally discovered in the context of unsupervised learning, have had far reaching implications to science, engineering, and society. However, training GANs remains challenging (in part) due to the lack of convergent algorithms for nonconvex-nonconcave min-max optimization. In this post, we present a new first-order algorithm for min-max optimization which is particularly suited to GANs. This algorithm is guaranteed to converge to an equilibrium, is competitive in terms of time and memory with gradient descent-ascent and, most importantly, GANs trained on it seem to be stable.
 
 
 
 ## GANs and min-max optimization
 
-Starting with the work of [Goodfellow et al.](http://papers.nips.cc/paper/5423-generative-adversarial-nets), Generative Adversarial Nets (GANs) have become a critical component in various ML systems; for prior posts on GANs, see [here](https://www.offconvex.org/2018/03/12/bigan/) for a post on  GAN architechture, and [here](https://www.offconvex.org/2017/03/15/GANs/) and [here](https://www.offconvex.org/2017/07/06/GANs3/) for posts which discuss  some of the many difficulties arising when training GANs. Mathematically, a GAN consists of a generator neural network $\mathcal{G}$ and a discriminator neural network $\mathcal{D}$ that are competing against each other in a way that, together,  learn the unknown distribution from which a given dataset arises.  The generator takes a random "noise" vector as input and maps this vector to a point, for instance an image. The discriminator takes points -- "fake" ones produced by the generator and "real" ones from the given dataset -- as inputs.  The discriminator then tries to classify these points as "real" or "fake". As a designer, we would like the generated points to be indistinguishable from those of the dataset. Thus, our goal is to choose weights $x$ for the generator network that allow it to generate points which are difficult for any discriminator to tell apart from real images. This leads to a min-max optimization problem where we look for weights $x$ which *minimize* the rate (measured by a loss function $f$) at which the discriminator correctly classifies the real and fake points. Simultaneously, we seek weights $y$ for the discriminator network which *maximize* this rate.
+Starting with the work of [Goodfellow et al.](http://papers.nips.cc/paper/5423-generative-adversarial-nets), Generative Adversarial Nets (GANs) have become a critical component in various ML systems; for prior posts on GANs, see [here](https://www.offconvex.org/2018/03/12/bigan/) for a post on  GAN architechture, and [here](https://www.offconvex.org/2017/03/15/GANs/) and [here](https://www.offconvex.org/2017/07/06/GANs3/) for posts which discuss  some of the many difficulties arising when training GANs. Mathematically, a GAN consists of a generator neural network $\mathcal{G}$ and a discriminator neural network $\mathcal{D}$ that are competing against each other in a way that, together, they learn the unknown distribution from which a given dataset arises.  The generator takes a random "noise" vector as input and maps this vector to a point, for instance an image. The discriminator takes points -- "fake" ones produced by the generator and "real" ones from the given dataset -- as inputs.  The discriminator then tries to classify these points as "real" or "fake". As a designer, we would like the generated points to be indistinguishable from those of the dataset. Thus, our goal is to choose weights $x$ for the generator network that allow it to generate points which are difficult for any discriminator to tell apart from real images. This leads to a min-max optimization problem where we look for weights $x$ which *minimize* the rate (measured by a loss function $f$) at which the discriminator correctly classifies the real and fake points. Simultaneously, we seek weights $y$ for the discriminator network which *maximize* this rate.
 
 > **Min-max formulation of GANs** <br> <br> 
 >
@@ -55,7 +55,7 @@ $$x_{i+1} = x_i -2\nabla_x f(x_i,y_i) + \nabla_x f(x_{i-1},y_{i-1})$$
 
 $$y_{i+1} = y_i +2\nabla_y f(x_i,y_i)- \nabla_y f(x_{i-1},y_{i-1}).$$
 
-The advantage of such algorithms is that they are quite practical. The problem. as discussed next, is that they are not always guaranteed to converge. Most of these guarantees only hold for special classes of loss functions $f$ such as concavity (see [here](https://papers.nips.cc/paper/9430-efficient-algorithms-for-smooth-minimax-optimization.pdf) and [here](https://arxiv.org/abs/1906.00331)) or [monotonicity](https://papers.nips.cc/paper/9631-solving-a-class-of-non-convex-min-max-games-using-iterative-first-order-methods.pdf), or under the assumptions that these algorithms are provided with special starting points (see [here](https://arxiv.org/abs/1706.08500), [here](https://arxiv.org/abs/1910.07512)).
+The advantage of such algorithms is that they are quite practical. The problem, as discussed next, is that they are not always guaranteed to converge. Most of these guarantees only hold for special classes of loss functions $f$ such as concavity (see [here](https://papers.nips.cc/paper/9430-efficient-algorithms-for-smooth-minimax-optimization.pdf) and [here](https://arxiv.org/abs/1906.00331)) or [monotonicity](https://papers.nips.cc/paper/9631-solving-a-class-of-non-convex-min-max-games-using-iterative-first-order-methods.pdf), or under the assumptions that these algorithms are provided with special starting points (see [here](https://arxiv.org/abs/1706.08500), [here](https://arxiv.org/abs/1910.07512)).
 
 
 
@@ -92,7 +92,7 @@ To solve the min-max optimization problem, at any point $(x,y)$, we should ideal
 
 > **Idea 1: Use a local approximation to global max**
 ><br><br>
-> Starting at the point $(x,y)$, update $y$ by computing multiple gradient ascent steps for $y$ until a point $w$ is reached where $\|\nabla_y f(x,w)\|$ is close to zero and define $h(x,y) := f(x,w)$.
+> Starting at the point $(x,y)$, update $y$ by computing multiple gradient ascent steps for $y$ until a point $w$ is reached where $$\|\nabla_y f(x,w)\|$$ is close to zero and define $h(x,y) := f(x,w)$.
 
 We would like the generator to minimize $h(\cdot,y)$. To minimize $h$, we would ideally like to update $x$ in the direction $-\nabla_x h$.  However, $h$ may be discontinuous in $x$ (see our [previous post](https://www.offconvex.org/2020/06/24/equilibrium-min-max/) for why this can happen). Moreover, even at points where $h$ is differentiable, computing the gradient of $h$ can take a long time and requires a large amount of memory.
 
