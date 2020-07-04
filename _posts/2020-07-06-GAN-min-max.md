@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      A convergent and practical algorithm for GANs
+title:      Training GANs -- From Theory to Practice
 date:       2020-07-06 10:00:00
 summary:    Present a new algorithm convergent min-max optimization algorithm for training GANs 
 author:     Oren Mangoubi and Nisheeth Vishnoi
