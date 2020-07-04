@@ -7,7 +7,7 @@ author:     Oren Mangoubi, Sushant Sachdeva and Nisheeth Vishnoi
 visible:    False
 ---
 
-GANs, originally discovered in the context of unsupervised learning, have had far reaching implications to science, engineering, and society. However, training GANs remains challenging (in part) due to the lack of convergent algorithms for nonconvex-nonconcave min-max optimization. In this post, we present a new first-order algorithm for min-max optimization which is particularly suited to GANs. This algorithm is guaranteed to converge to an equilibrium, is competitive in terms of time and memory with gradient descent-ascent and, most importantly, GANs trained on it seem to be stable.
+GANs, originally discovered in the context of unsupervised learning, have had far reaching implications to science, engineering, and society. However, training GANs remains challenging (in part) due to the lack of convergent algorithms for nonconvex-nonconcave min-max optimization. In this post, we present a [new first-order algorithm](https://arxiv.org/abs/2006.12376) for min-max optimization which is particularly suited to GANs. This algorithm is guaranteed to converge to an equilibrium, is competitive in terms of time and memory with gradient descent-ascent and, most importantly, GANs trained on it seem to be stable.
 
 
 
