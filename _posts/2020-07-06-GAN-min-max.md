@@ -84,7 +84,7 @@ As for examples relevant to ML, when using GDA to train a GAN on a dataset consi
 
 <br/>
 
-In algorithms such as GDA where the discriminator only makes local updates, cycling can happen for the following reason: Once the discriminator learns to identify one of the modes (say mode "A"), the generator can update $x$ in a way that greatly decreases f, by (at least temporarily) “fooling” the discriminator. The generator does this by learning to generate samples from a different mode (say mode "B") which the discriminator has not yet learned to identify, and stops generating samples from the mode A. However, after many iterations, the discriminator “catches up” to the generator and learns how to identify mode B. Since the generator is no longer generating samples from mode A, the discriminator may then “forget” how to identify samples from this mode. And this can cause the generator to switch back to generating only mode A.
+In algorithms such as GDA where the discriminator only makes local updates, cycling can happen for the following reason: Once the discriminator learns to identify one of the modes (say mode "A"), the generator can update $x$ in a way that greatly decreases f, by (at least temporarily) “fooling” the discriminator. The generator does this by learning to generate samples from a different mode (say mode "B") which the discriminator has not yet learned to identify, and stops generating samples from mode A. However, after many iterations, the discriminator “catches up” to the generator and learns how to identify mode B. Since the generator is no longer generating samples from mode A, the discriminator may then “forget” how to identify samples from this mode. And this can cause the generator to switch back to generating only mode A.
 
 
 
