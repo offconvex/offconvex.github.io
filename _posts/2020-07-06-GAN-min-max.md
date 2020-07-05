@@ -82,7 +82,7 @@ As for examples relevant to ML, when using GDA to train a GAN on a dataset consi
 
 <br/>
 
- In algorithms such as GDA where the discriminator only makes local updates, this cycling behavior can happen for the following reason: Once the discriminator learns to identify one of the modes (say the "$0$" mode), the generator can update $x$ in a way that greatly decreases $f$, by (at least temporarily) "fooling" the discriminator. The generator does this by learning to generate samples from the "$1$" mode which the discriminator has not yet learned to identify, and stops generating samples from the "$0$" mode. However, after many iterations, the discriminator "catches up" to the generator and learns how to identify the "$1$" mode. Since the generator is no longer generating samples from the "$0$" mode, the discriminator may then "forget" how to identify samples from this mode. And this can cause the generator to switch back to generating only the "$0$" mode.
+In algorithms such as GDA where the discriminator only makes local updates, cycling can happen for the following reason: Once the discriminator learns to identify one of the modes (say mode "A"), the generator can update $x$ in a way that greatly decreases f, by (at least temporarily) “fooling” the discriminator. The generator does this by learning to generate samples from a different mode (say mode "B") which the discriminator has not yet learned to identify, and stops generating samples from the mode A. However, after many iterations, the discriminator “catches up” to the generator and learns how to identify mode B. Since the generator is no longer generating samples from mode A, the discriminator may then “forget” how to identify samples from this mode. And this can cause the generator to switch back to generating only mode A.
 
 
 
@@ -98,7 +98,7 @@ We would like the generator to minimize $h(\cdot,y)$. To minimize $h$, we would 
 
 Thus, realistically, we have only zeroth-order access to $h$. A naive approach to minimizing $h$ would be to propose a random update to $x$, for instance an update sampled from a standard Gaussian, and then only accept this update if it causes the value of $h$ to decrease. Unfortunately, this does not lead to fast algorithms as even at points where $h$ is differentiable, in high dimensions, a random Gaussian step will be almost orthogonal to the steepest descent direction $-\nabla_x h(x,y)$, making the progress slow.
 
-Another idea is to propose an update in the direction of the gradient $-\nabla_x f(x,y)$. To see why this may be a reasonable thing to do, notice that once the generator proposes an update $v$ to $x$, the discriminator will only make updates which increase the value of $f$ or, $h(x+v,y)\geq f(x+v,y)$.  And, since $y$ is a first-order stationary point for $f(x,\cdot)$ (because $y$ was computed using gradient ascent in the previous iteration), we also have that $h(x,y) = f(x,y)$. Hence,
+Another idea is to have the generator propose at each iteration an update in the direction of the gradient $-\nabla_x f(x,y)$, and to then have the discriminator update $y$ using gradient ascent. To see why this may be a reasonable thing to do, notice that once the generator proposes an update $v$ to $x$, the discriminator will only make updates which increase the value of f or, $h(x+v,y) \geq f(x+v,y)$. And, since $y$ is a first-order stationary point for $f(x, \cdot)$ (because $y$ was computed using gradient ascent in the *previous* iteration), we also have that $h(x,y)=f(x,y)$. Hence,
 
 $$ f(x+v,y) \leq h(x+v,y) < h(x,y) = f(x,v).$$ 
 
@@ -134,7 +134,7 @@ A final issue, that applies even in the special case of minimization, is that co
 
 
 
-In our paper, we show that our algorithm is guaranteed to converge to a type of local min-max equilibrium in $\mathrm{poly}(\frac{1}{\varepsilon},d, b, L)$ time whenever $f$ is bounded by some $b>0$ and has $L$-Lipschitz gradients. Our algorithm does not require any special starting points, or any additional assumptions on $f$ such as convexity or monotonicity. (See Definition 3.2 and Theorem 3.3 in [our paper](https://arxiv.org/abs/2006.12376))
+In our paper, we show that our algorithm is guaranteed to converge to a type of local min-max equilibrium in $\mathrm{poly}(\frac{1}{\varepsilon},d, b, L)$ time whenever $f$ is bounded by some $b>0$ and has $L$-Lipschitz gradients. Our algorithm does not require any special starting points, or any additional assumptions on $f$ such as convexity or monotonicity. (See Definition 3.2 and Theorem 3.3 in our paper.)
 
 <div style="text-align:center;">
 <img style="width:400px;" src="/assets/GDA_spiral_2.gif" alt="" />
@@ -161,13 +161,13 @@ When training a GAN on the mixture of four Gaussians dataset, we found that our 
  <div style="text-align:center;">
 <img src="/assets/MNIST_bothAlgorithms.gif" alt="" />
 <br>
-<b>Figure 5.</b> We trained a GAN with GDA and our algorithm on the 0-1 MNIST dataset.  During the first 1000 iterations, GDA "forgets" how to generate $0$'s, while our algorithm learns how to
+<b>Figure 5.</b> We trained a GAN with GDA and our algorithm on the 0-1 MNIST dataset.  During the first 1000 iterations, GDA forgets how to generate $0$'s, while our algorithm learns how to
 generate both $0$'s and $1$'s early on and does not stop generating either digit.
 </div>
 
 <br/>
 
-While here we have focused on comparing our algorithm to GDA, in [our paper](https://arxiv.org/abs/2006.12376) we include as well a comparison to [Unrolled GANs](https://arxiv.org/abs/1611.02163), which also exhibits cycling between modes. We also present results for CIFAR-10 (see Figures 3 and 7 in our paper), where we compute FID scores to track the progress of our algorithm. See our paper for more details; the code is available on [GitHub](https://github.com/mangoubi/Min-max-optimization-algorithm-for-training-GANs).
+While here we have focused on comparing our algorithm to GDA, in our paper we also include a comparison to [Unrolled GANs](https://arxiv.org/abs/1611.02163), which exhibits cycling between modes. We also present results for CIFAR-10 (see Figures 3 and 7 in our paper), where we compute FID scores to track the progress of our algorithm. See our paper for more details; the code is available on [GitHub](https://github.com/mangoubi/Min-max-optimization-algorithm-for-training-GANs).
 
 
 
