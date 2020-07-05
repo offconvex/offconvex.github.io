@@ -128,11 +128,11 @@ A final issue, that applies even in the special case of minimization, is that co
 >
 > For $i = 1,2, \ldots$ <br>
 > <br>
-> *Step 1:* Generate a batch gradient $v$ with mean $-\nabla_x f(x,y)$ and propose the generator update $x+v$.
+> **Step 1:** Generate a batch gradient $v$ with mean $-\nabla_x f(x,y)$ and propose the generator update $x+v$.
 ><br><br>
-> *Step 2:* Compute $h(x+v, y) = f(x+v, w)$, by simulating a discriminator update $w$ via gradient ascent on $f(x+v, \cdot)$ starting at $y$.
+> **Step 2:** Compute $h(x+v, y) = f(x+v, w)$, by simulating a discriminator update $w$ via gradient ascent on $f(x+v, \cdot)$ starting at $y$.
 ><br><br>
-> *Step 3:*  If $h(x+v, y)$ is less than $h(x,y) = f(x,y)$, accept both updates: $(x,y) = (x+v, w)$. Else, accept both updates with some small probability.
+> **Step 3:**  If $h(x+v, y)$ is less than $h(x,y) = f(x,y)$, accept both updates: $(x,y) = (x+v, w)$. Else, accept both updates with some small probability.
 
 
 
