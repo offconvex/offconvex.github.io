@@ -33,7 +33,7 @@ $$f_{\zeta, \xi}(x,y) := \log(\mathcal{D}(y;\zeta)) + \log(1-\mathcal{D}(y;\math
 
 See [here](https://machinelearningmastery.com/generative-adversarial-network-loss-functions/) for a summary and comparison of different loss functions.
 
-Once we fix the loss function (and the architecture of the generator and discriminator), we can compute unbiased estimates of the value of $f$ and its gradients $\nabla_x f$ and $\nabla_y f$ using batches consisting of random Gaussian noise vectors $\xi_1,\ldots \xi_n \sim N(0,I_d)$ and random samples from the dataset $\zeta_1, \ldots, \zeta_n$.  For example, the stochastic batch gradient
+Once we fix the loss function (and the architecture of the generator and discriminator), we can compute unbiased estimates of the value of $f$ and its gradients $\nabla_x f$ and $\nabla_y f$ using batches consisting of random Gaussian noise vectors $\xi_1,\ldots, \xi_n \sim N(0,I_d)$ and random samples from the dataset $\zeta_1, \ldots, \zeta_n$.  For example, the stochastic batch gradient
 
 $$  \frac{1}{n} \sum_{i=1}^n \nabla_x f_{\zeta_i, \xi_i}(x,y)$$
 
