@@ -15,7 +15,7 @@ GANs, originally discovered in the context of unsupervised learning, have had fa
 
 Starting with the work of [Goodfellow et al.](http://papers.nips.cc/paper/5423-generative-adversarial-nets), Generative Adversarial Nets (GANs) have become a critical component in various ML systems; for prior posts on GANs, see [here](https://www.offconvex.org/2018/03/12/bigan/) for a post on  GAN architecture, and [here](https://www.offconvex.org/2017/03/15/GANs/) and [here](https://www.offconvex.org/2017/07/06/GANs3/) for posts which discuss  some of the many difficulties arising when training GANs. 
 
-Mathematically, a GAN consists of a generator neural network $\mathcal{G}$ and a discriminator neural network $\mathcal{D}$ that are competing against each other in a way that, together, they learn the unknown distribution from which a given dataset arises.  The generator takes a random "noise" vector as input and maps this vector to a sample, for instance an image. The discriminator takes samples -- "fake" ones produced by the generator and "real" ones from the given dataset -- as inputs.  The discriminator then tries to classify these samples as "real" or "fake". As a designer, we would like the generated samples to be indistinguishable from those of the dataset. Thus, our goal is to choose weights $x$ for the generator network that allow it to generate samples which are difficult for *any* discriminator to tell apart from real samples. This leads to a min-max optimization problem where we look for weights $x$ which *minimize* the rate (measured by a loss function $f$) at which any discriminator correctly classifies the real and fake samples. And, we seek weights $y$ for the discriminator network which *maximize* this rate.
+Mathematically, a GAN consists of a generator neural network $\mathcal{G}$ and a discriminator neural network $\mathcal{D}$ that are competing against each other in a way that, together, they learn the unknown distribution from which a given dataset arises.  The generator takes a random "noise" vector as input and maps this vector to a sample; for instance, an image. The discriminator takes samples -- "fake" ones produced by the generator and "real" ones from the given dataset -- as inputs.  The discriminator then tries to classify these samples as "real" or "fake". As a designer, we would like the generated samples to be indistinguishable from those of the dataset. Thus, our goal is to choose weights $x$ for the generator network that allow it to generate samples which are difficult for *any* discriminator to tell apart from real samples. This leads to a min-max optimization problem where we look for weights $x$ which *minimize* the rate (measured by a loss function $f$) at which any discriminator correctly classifies the real and fake samples. And, we seek weights $y$ for the discriminator network which *maximize* this rate.
 
 > **Min-max formulation of GANs** <br> <br> 
 >
@@ -23,7 +23,7 @@ Mathematically, a GAN consists of a generator neural network $\mathcal{G}$ and a
 >
 > $$f(x,y) :=  \mathbb{E}[ f_{\zeta, \xi}(x,y)],$$
 >
-> where $\zeta$ is a random point from the dataset, and $\xi \sim N(0,I_d)$ is a noise vector which the generator maps to a fake point.  $f_{\zeta, \xi}$ measures how accurately the discriminator $\mathcal{D}(y;\cdot)$ classifies $\zeta$ from $\mathcal{G}(x;\xi)$ produced by the generator using the input noise $\xi$.
+> where $\zeta$ is a random sample from the dataset, and $\xi \sim N(0,I_d)$ is a noise vector which the generator maps to a "fake" sample.  $f_{\zeta, \xi}$ measures how accurately the discriminator $\mathcal{D}(y;\cdot)$ distinguishes $\zeta$ from $\mathcal{G}(x;\xi)$ produced by the generator using the input noise $\xi$.
 
 
 
@@ -63,17 +63,16 @@ The advantage of such algorithms is that they are quite practical. The problem, 
 
 ## Convergence problems with current algorithms
 
-Unfortunately there are simple functions (such as $f(x,y) = xy$) for which some min-max optimization algorithms, such as GDA, may never converge to *any* point (see Figure 1, and our [previous post](https://www.offconvex.org/2020/06/24/equilibrium-min-max/) for a more detailed discussion).
+Unfortunately there are simple functions for which some min-max optimization algorithms may never converge to *any* point.  For instance GDA may not converge on $f(x,y) = xy$  (see Figure 1, and our [previous post](https://www.offconvex.org/2020/06/24/equilibrium-min-max/) for a more detailed discussion).
 
 <div>
 <img src="/assets/GDA_spiral_2.gif" alt="" />
 <br>
 <b>Figure 1.</b> GDA on $f(x,y) = xy, \, \, \, \, x,y \in [-5,5]$ (the red line is the set of global min-max points). GDA is non-convergent from almost every initial point. 
 </div>
-
 <br/>
 
-As for examples relevant to ML, when using GDA to train a GAN on a dataset consisting of points sampled from a mixture of four Gaussians in $\mathbb{R}^2$, we observe that GDA tends to cause the generator to cycle between two or more of these Gaussian modes. We also used GDA to train a GAN on the subset of the MNIST digits which have "0" or "1" as their label, which we refer to as the 0-1 MNIST dataset.  We observed a cycling behavior for this dataset as well: After learning how to generate images of $0$'s, the GAN trained by GDA then forgets how to generate $0$'s for a long time and only generates $1$'s.
+As for examples relevant to ML, when using GDA to train a GAN on a dataset consisting of points sampled from a mixture of four Gaussians in $\mathbb{R}^2$, we observe that GDA tends to cause the generator to cycle between different modes corresponding to the four Gaussians. We also used GDA to train a GAN on the subset of the MNIST digits which have "0" or "1" as their label, which we refer to as the 0-1 MNIST dataset.  We observed a cycling behavior for this dataset as well: After learning how to generate images of $0$'s, the GAN trained by GDA then forgets how to generate $0$'s for a long time and only generates $1$'s.
 
 <div>
 <img style="width:400px;" src="/assets/GDA_Gaussian.gif" alt="" />
@@ -84,7 +83,7 @@ As for examples relevant to ML, when using GDA to train a GAN on a dataset consi
 
 <br/>
 
-In algorithms such as GDA where the discriminator only makes local updates, cycling can happen for the following reason: Once the discriminator learns to identify one of the modes (say mode "A"), the generator can update $x$ in a way that greatly decreases f, by (at least temporarily) “fooling” the discriminator. The generator does this by learning to generate samples from a different mode (say mode "B") which the discriminator has not yet learned to identify, and stops generating samples from mode A. However, after many iterations, the discriminator “catches up” to the generator and learns how to identify mode B. Since the generator is no longer generating samples from mode A, the discriminator may then “forget” how to identify samples from this mode. And this can cause the generator to switch back to generating only mode A.
+In algorithms such as GDA where the discriminator only makes local updates, cycling can happen for the following reason: Once the discriminator learns to identify one of the modes (say mode "A"), the generator can update $x$ in a way that greatly decreases f, by (at least temporarily) ìfoolingî the discriminator. The generator does this by learning to generate samples from a different mode (say mode "B") which the discriminator has not yet learned to identify, and stops generating samples from mode A. However, after many iterations, the discriminator ìcatches upî to the generator and learns how to identify mode B. Since the generator is no longer generating samples from mode A, the discriminator may then ìforgetî how to identify samples from this mode. And this can cause the generator to switch back to generating only mode A.
 
 
 
@@ -98,7 +97,7 @@ To solve the min-max optimization problem, at any point $(x,y)$, we should ideal
 
 We would like the generator to minimize $h(\cdot,y)$. To minimize $h$, we would ideally like to update $x$ in the direction $-\nabla_x h$.  However, $h$ may be discontinuous in $x$ (see our [previous post](https://www.offconvex.org/2020/06/24/equilibrium-min-max/) for why this can happen). Moreover, even at points where $h$ is differentiable, computing the gradient of $h$ can take a long time and requires a large amount of memory.
 
-Thus, realistically, we have only  access to the value of $h$. A naive approach to minimizing $h$ would be to propose a random update to $x$, for instance an update sampled from a standard Gaussian, and then only accept this update if it causes the value of $h$ to decrease. Unfortunately, this does not lead to fast algorithms as even at points where $h$ is differentiable, in high dimensions, a random Gaussian step will be almost orthogonal to the steepest descent direction $-\nabla_x h(x,y)$, making the progress slow.
+Thus, realistically, we only have access to the value of $h$. A naive approach to minimizing $h$ would be to propose a random update to $x$, for instance an update sampled from a standard Gaussian, and then only accept this update if it causes the value of $h$ to decrease. Unfortunately, this does not lead to fast algorithms as even at points where $h$ is differentiable, in high dimensions, a random Gaussian step will be almost orthogonal to the steepest descent direction $-\nabla_x h(x,y)$, making the progress slow.
 
 Another idea is to have the generator propose at each iteration an update in the direction of the gradient $-\nabla_x f(x,y)$, and to then have the discriminator update $y$ using gradient ascent. To see why this may be a reasonable thing to do, notice that once the generator proposes an update $v$ to $x$, the discriminator will only make updates which increase the value of f or, $h(x+v,y) \geq f(x+v,y)$. And, since $y$ is a first-order stationary point for $f(x, \cdot)$ (because $y$ was computed using gradient ascent in the *previous* iteration), we also have that $h(x,y)=f(x,y)$. Hence,
 
@@ -130,7 +129,7 @@ A final issue, that applies even in the special case of minimization, is that co
 > <br>
 > **Step 1:** Generate a batch gradient $v$ with mean $-\nabla_x f(x,y)$ and propose the generator update $x+v$.
 ><br><br>
-> **Step 2:** Compute $h(x+v, y) = f(x+v, w)$, by simulating  discriminator updates $w$ via gradient ascent on $f(x+v, \cdot)$ starting at $y$.
+> **Step 2:** Compute $h(x+v, y) = f(x+v, w)$, by simulating a discriminator update $w$ via gradient ascent on $f(x+v, \cdot)$ starting at $y$.
 ><br><br>
 > **Step 3:**  If $h(x+v, y)$ is less than $h(x,y) = f(x,y)$, accept both updates: $(x,y) = (x+v, w)$. Else, accept both updates with some small probability.
 
@@ -163,7 +162,9 @@ When training a GAN on the mixture of four Gaussians dataset, we found that our 
  <div>
 <img src="/assets/MNIST_bothAlgorithms.gif" alt="" />
 <br>
-<b>Figure 5.</b> We trained a GAN with GDA and our algorithm on the 0-1 MNIST dataset.  During the first 1000 iterations, GDA forgets how to generate $0$'s, while our algorithm learns how to
+<b>Figure 5.</b> We trained a GAN with GDA and our algorithm on the
+0-1 MNIST dataset.  During the first 1000 iterations, GDA (left)
+forgets how to generate $0$'s, while our algorithm (right) learns how to
 generate both $0$'s and $1$'s early on and does not stop generating either digit.
 </div>
 
@@ -176,4 +177,3 @@ While here we have focused on comparing our algorithm to GDA, in our paper we al
 ## Conclusion
 
 In this post we have shown how to develop a practical and convergent first-order algorithm for training GANs. Our algorithm synthesizes an approximation to the global max function based on first-order algorithms, random search using batch gradients, and simulated annealing. Our simulations show that a version of this algorithm can lead to more stable training of GANs. And yet the amount of memory and time required by each iteration of our algorithm is competitive with GDA. This post, together with the [previous post](https://www.offconvex.org/2020/06/24/equilibrium-min-max/), show that different local approximations to the global max function $\max_z f(x,z)$ can lead to different types of convergent algorithms for min-max optimization. We believe that this idea should be useful in other applications of min-max optimization.
-
