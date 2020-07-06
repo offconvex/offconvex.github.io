@@ -65,7 +65,7 @@ The advantage of such algorithms is that they are quite practical. The problem, 
 
 Unfortunately there are simple functions (such as $f(x,y) = xy$) for which some min-max optimization algorithms, such as GDA, may never converge to *any* point (see Figure 1, and our [previous post](https://www.offconvex.org/2020/06/24/equilibrium-min-max/) for a more detailed discussion).
 
-<div style="text-align:center;">
+<div>
 <img src="/assets/GDA_spiral_2.gif" alt="" />
 <br>
 <b>Figure 1.</b> GDA on $f(x,y) = xy, \, \, \, \, x,y \in [-5,5]$ (the red line is the set of global min-max points). GDA is non-convergent from almost every initial point. 
@@ -75,7 +75,7 @@ Unfortunately there are simple functions (such as $f(x,y) = xy$) for which some 
 
 As for examples relevant to ML, when using GDA to train a GAN on a dataset consisting of points sampled from a mixture of four Gaussians in $\mathbb{R}^2$, we observe that GDA tends to cause the generator to cycle between two or more of these Gaussian modes. We also used GDA to train a GAN on the subset of the MNIST digits which have "0" or "1" as their label, which we refer to as the 0-1 MNIST dataset.  We observed a cycling behavior for this dataset as well: After learning how to generate images of $0$'s, the GAN trained by GDA then forgets how to generate $0$'s for a long time and only generates $1$'s.
 
-<div style="text-align:center;">
+<div>
 <img style="width:400px;" src="/assets/GDA_Gaussian.gif" alt="" />
 <img style="width:400px;" src="/assets/GDA_MNIST.gif" alt="" />
 <br>
@@ -138,7 +138,7 @@ A final issue, that applies even in the special case of minimization, is that co
 
 In our paper, we show that our algorithm is guaranteed to converge to a type of local min-max equilibrium in $\mathrm{poly}(\frac{1}{\varepsilon},d, b, L)$ time whenever $f$ is bounded by some $b>0$ and has $L$-Lipschitz gradients. Our algorithm does not require any special starting points, or any additional assumptions on $f$ such as convexity or monotonicity. (See Definition 3.2 and Theorem 3.3 in our paper.)
 
-<div style="text-align:center;">
+<div>
 <img style="width:400px;" src="/assets/GDA_spiral_2.gif" alt="" />
 <img style="width:400px;" src="/assets/OurAlgorithm_surface_run1.gif" alt="" />
 <br>
@@ -151,7 +151,7 @@ In our paper, we show that our algorithm is guaranteed to converge to a type of 
 
 When training a GAN on the mixture of four Gaussians dataset, we found that our algorithm avoids the cycling behavior observed in GDA. We ran each algorithm multiple times, and evaluated the results visually. By the 1500'th iteration GDA learned only one mode in 100% of the runs, and tended to cycle between two or more modes. In contrast, our algorithm was able to learn all four modes 68% of the runs, and three modes 26% of the runs.
 
-<div style="text-align:center;">
+<div>
 <img src="/assets/Both_algorithms_Gaussian.gif" alt="" />
 <br>
 <b>Figure 4.</b> GAN trained using GDA and our algorithm on a four Gaussian mixture dataset. While GDA cycles between the Gaussian modes (red dots), our algorithm learns all four modes.
