@@ -160,7 +160,7 @@ When training a GAN on the mixture of four Gaussians dataset, we found that our 
 
  When training on the 0-1 MNIST dataset, we found that GDA tends to briefly generate shapes that look like a combination of $0$'s and $1$'s, then switches to generating only $1$'s, and then re-learns how to generate $0$'s. In contrast, our algorithm seems to learn how to generate both $0$'s and $1$'s early on and does not stop generating either digit. We repeated this simulation multiple times for both algorithms, and visually inspected the images at the 1000'th iteration. GANs trained using our algorithm generated both digits by the 1000'th iteration in 86% of the runs, while those trained using GDA only did so in 23% of the runs.
 
- <div style="text-align:center;">
+ <div>
 <img src="/assets/MNIST_bothAlgorithms.gif" alt="" />
 <br>
 <b>Figure 5.</b> We trained a GAN with GDA and our algorithm on the 0-1 MNIST dataset.  During the first 1000 iterations, GDA forgets how to generate $0$'s, while our algorithm learns how to
