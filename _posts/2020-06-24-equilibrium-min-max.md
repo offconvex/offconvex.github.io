@@ -130,7 +130,7 @@ This allows us to define a notion of greedy min-max equilibrium.  We say that a 
 
 
 > <b>Greedy min-max equilibrium:</b>
->$(x^{\star}, y^{\star})$ is a greedy min-max equilibrium if
+>$(x^{\star}, y^{\star})$ is a $\varepsilon#-greedy min-max equilibrium if
 > $$   \|\nabla_y f(x^\star,y^\star)\| \leq \varepsilon, \qquad \nabla^2_y f(x^\star,y^\star) \preceq \sqrt{\varepsilon},$$
 >$$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_x S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon}, \\$$ 
 >where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
@@ -142,7 +142,7 @@ Any point which is a local saddle point (talked about earlier) also satisifeis o
 ## Greedy min-max equilibria always exist! (And can be found efficiently)
 In [this paper](https://arxiv.org/abs/2006.12363) we show: A greedy min-max equilibrium is always guaranteed to exist provided that $f$ is uniformly bounded with Lipschitz Hessian. We do so by providing an algorithm which converges to a greedy min-max equilibrium, and, moreover, we show that it is able to do this in polynomial time from any initial point:
 
-> <b>Main theorem:</b> Suppose that we are given access to a smooth function $f:\mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$ and to its gradient and Hessian.  And suppose that $f$ is unformly bounded by $b>0$ and has $L$-Lipschitz Hessian.
+> <b>Main theorem:</b> Suppose that we are given access to a smooth function $f:\mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$ and to its gradient and Hessian.  And suppose that $f$ is uniformly bounded by $b>0$ and has $L$-Lipschitz Hessian.
 Then given any initial point, our algorithm returns an $\varepsilon$-greedy min-max equilibrium $(x^\star,y^\star)$ of $f$ in $\mathrm{poly}(b, L, d, \frac{1}{\varepsilon})$ time.
 
 There are a number of difficulties that our algorithm and proof must overcome:
