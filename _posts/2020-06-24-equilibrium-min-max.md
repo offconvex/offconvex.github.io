@@ -131,8 +131,11 @@ This allows us to define a notion of greedy min-max equilibrium.  We say that a 
 
 > <b>Greedy min-max equilibrium:</b>
 >$(x^{\star}, y^{\star})$ is an $\varepsilon$-greedy min-max equilibrium if
+<br>
 > $$   \|\nabla_y f(x^\star,y^\star)\| \leq \varepsilon, \qquad \nabla^2_y f(x^\star,y^\star) \preceq \sqrt{\varepsilon},$$
+<br>
 >$$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_x S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon}, \\$$ 
+<br>
 >where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
 
 Any point which is a local saddle point (talked about earlier) also satisifeis our equilibrium conditions. The converse, however, cannot be true as a local saddle point may not always exist. Further, for compactly supported convex-concave functions a point is a greedy min-max equilibrium (in an appropriate sense) if and only if it is a global min-max point. (See Section 7 and Appendix A respectively in [our paper](https://arxiv.org/abs/2006.12363).) 
