@@ -130,7 +130,7 @@ This allows us to define a notion of greedy min-max equilibrium.  We say that a 
 
 
 > <b>Greedy min-max equilibrium:</b>
->$(x^{\star}, y^{\star})$ is a $\varepsilon#-greedy min-max equilibrium if
+>$(x^{\star}, y^{\star})$ is an $\varepsilon#-greedy min-max equilibrium if
 > $$   \|\nabla_y f(x^\star,y^\star)\| \leq \varepsilon, \qquad \nabla^2_y f(x^\star,y^\star) \preceq \sqrt{\varepsilon},$$
 >$$   \|\nabla_x S(x^{\star},y^{\star})\| \leq \varepsilon \qquad \nabla^2_x S(x^{\star},y^{\star}) \succeq -\sqrt{\varepsilon}, \\$$ 
 >where $S(x,y):= \mathrm{smooth}_x(\mathrm{truncate}(g(x, y))$.
