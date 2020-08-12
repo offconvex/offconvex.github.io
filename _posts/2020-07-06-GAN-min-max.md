@@ -101,7 +101,7 @@ Thus, realistically, we only have access to the value of $h$. A naive approach t
 
 Another idea is to have the generator propose at each iteration an update in the direction of the gradient $-\nabla_x f(x,y)$, and to then have the discriminator update $y$ using gradient ascent. To see why this may be a reasonable thing to do, notice that once the generator proposes an update $v$ to $x$, the discriminator will only make updates which increase the value of f or, $h(x+v,y) \geq f(x+v,y)$. And, since $y$ is a first-order stationary point for $f(x, \cdot)$ (because $y$ was computed using gradient ascent in the *previous* iteration), we also have that $h(x,y)=f(x,y)$. Hence,
 
-$$ f(x+v,y) \leq h(x+v,y) < h(x,y) = f(x,v).$$ 
+$$ f(x+v,y) \leq h(x+v,y) < h(x,y) = f(x,y).$$ 
 
 *This means that decreasing $h$ requires us to decrease $f$ (the converse is not true). So it indeed makes sense to move in the direction $-\nabla_x f(x,y)$!*
 
