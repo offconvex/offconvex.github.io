@@ -26,11 +26,15 @@ The formulation of the sampling problem we will consider is as follows:
 This formalization subsumes a lot of inference tasks involving different kinds of probabilistic models. We give several common examples: 
 
  *Posterior inference*: Suppose our data is generated from a model with *unknown* parameters $\theta$, such that the data-generation process is given by $p(x|\theta)$ and we have a prior $p(\theta)$ over the model parameters. Then the *posterior distribution* $p(\theta|x)$, by Bayes's Rule, is given by
+ 
 $$p(\theta|x) = \frac{p(x|\theta)p(x)}{p(x)}\propto p(x|\theta)p(\theta).$$
+
 A canonical example of this is a *noisy inference task* where a signal (parametrized by $\theta$) is perturbed by noise (as specified by $p(x|\theta)$). 
 
 *Posteriors in latent-variable models*: If the data-generation process has a *latent (hidden) variable* $h$ associated to each data point, such that $h$ has a *known* prior $p(h)$ and a *known* conditional $p_\theta(x|h)$, then again by Bayes's rule, we have  
+
 $$p_\theta(h|x) = \frac{p_\theta(x|h)p_\theta(h)}{p_\theta(x)}\propto p_\theta(x|h)p_\theta(h).$$ 
+
 In typical latent-variable models, $p_\theta(x|h)$ and $p_\theta(h)$ have a simple parametric form, which makes it easy to evaluate $p_\theta(x|h)p_\theta(h)$. Some examples of latent-variable models are mixture models (where $h$ encodes which component a sample came from), topic models (where $h$ denote the topic proportions in a document), and noisy-OR networks (and latent-variable Bayesian belief networks).
 
  *Sampling from energy models*: in energy models, the distribution of the data is parametrized as $p(x) \propto \exp(-E(x))$ for some *energy* function $E(x)$ which is smaller on points in the data distribution. Recent works by [(Song, Ermon 2019)](https://arxiv.org/abs/1907.05600) and [(Du, Mordatch 2019)](https://arxiv.org/abs/1903.08689) have scaled up the training of these models on images so that the visual quality of the samples they produce is comparable to that of more popular generative models like GANs and flow models.   
