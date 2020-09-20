@@ -8,10 +8,10 @@ visible:    False
 ---
 
 
-As the growing number of posts on this blog would suggest, recent years have seen a lot of progress in understanding optimization beyond convexity. However, optimization is only one of the basic algorithmic primitives in machine learning  it's used by most forms of risk minimization and model fitting. Another important primitive is sampling, which is used by most forms of inference (i.e. answering probabilistic queries of a learned model). 
+As the growing number of posts on this blog would suggest, recent years have seen a lot of progress in understanding optimization beyond convexity. However, optimization is only one of the basic algorithmic primitives in machine learning — it's used by most forms of risk minimization and model fitting. Another important primitive is sampling, which is used by most forms of inference (i.e. answering probabilistic queries of a learned model). 
 
  
-It turns out that there is a natural analogue of convexity for sampling  *log-concavity*. Paralleling the state of affairs in optimization, we have a variety of (provably efficient) algorithms for sampling from log-concave distributions, under a variety of access models to the distribution. Log-concavity, however, is very restrictive and cannot model common properties of distributions we frequently wish to sample from in machine learning applications, for example multi-modality and manifold structure in the level sets, which is what we'll focus on in this and the upcoming post. 
+It turns out that there is a natural analogue of convexity for sampling — *log-concavity*. Paralleling the state of affairs in optimization, we have a variety of (provably efficient) algorithms for sampling from log-concave distributions, under a variety of access models to the distribution. Log-concavity, however, is very restrictive and cannot model common properties of distributions we frequently wish to sample from in machine learning applications, for example multi-modality and manifold structure in the level sets, which is what we'll focus on in this and the upcoming post. 
 
 Unlike non-convex optimization, the field of sampling beyond log-concavity is very nascent. In this post, we will survey the basic tools and difficulties for sampling beyond log-concavity. In the next post, we will survey recent progress in this direction, in particular with respect to handling multi-modality and manifold structure in the level sets, covering the papers [Simulated tempering Langevin Monte Carlo](https://arxiv.org/abs/1812.00793) by Rong Ge, Holden Lee, and Andrej Risteski and [Fast convergence for Langevin diffusion with matrix manifold structure](https://arxiv.org/abs/2002.05576) by Ankur Moitra and Andrej Risteski. 
 
@@ -40,7 +40,7 @@ The "exponential form" $e^{-f(x)}$ is also helpful in making an analogy to optim
 
 The computational hardness landscape for our sampling problem parallels the one for black-box optimization, in which the goal is to find the minimum of a function $f$, given value/gradient oracle access. When $f$ is *convex*, there is a unique local minimum, so that local search algorithms like *gradient descent* are efficient. When $f$ is non-convex, gradient descent can get trapped in potentially poor local minima, and in the worst case, an exponential number of queries is needed. 
 
-Similarly, for sampling, when $p$ is *log-concave*, the distribution is unimodal and a Markov Chain which is a close relative of gradient descent  *Langevin Monte Carlo*   is efficient. When $p$ is non-log-concave, Langevin Monte Carlo can get trapped in one of many modes, and and exponential number of queries may also be needed.
+Similarly, for sampling, when $p$ is *log-concave*, the distribution is unimodal and a Markov Chain which is a close relative of gradient descent — *Langevin Monte Carlo* —  is efficient. When $p$ is non-log-concave, Langevin Monte Carlo can get trapped in one of many modes, and and exponential number of queries may also be needed.
 
 > A distribution $p(x)\propto e^{-f(x)}$ is **log-concave** if $f(x) = -\log p(x)$ is convex. It is $\alpha$-strongly log-concave if $f(x)$ is $\alpha$-strongly convex.
 
@@ -51,25 +51,10 @@ As theorists, we'd like to develop theory that will lead to a better understandi
 
 The following table summarizes the comparisons we have come up with:
 
-<table>
-<thead>
-<tr>
-<th>Optimization: $\min_x f(x)$</th>
-<th>Sampling: $x\sim p(x)\propto e^{-f(x)}$</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Convex</strong>: Gradient descent finds global minimum.</td>
-<td><strong>Log-concave</strong>: Langevin Monte Carlo is efficient (enjoys rapid mixing).</td>
-</tr>
-<tr>
-<td><strong>Non-convex</strong>: $f$ can have many bad local minima. However, algorithms often work remarkably well in practice.</td>
-<td><strong>Non-log-concave</strong>: $p$ can be multimodal. Langevin diffusion can take exponential time, but temperature heuristics help.</td>
-</tr>
-</tbody>
-</table>
-<br/>
+<center>
+![](http://www.andrew.cmu.edu/user/aristesk/table_opt.jpg)
+</center>
+
 
 Before we move on to non-log-concave distributions, though, we need to understand the basic algorithm for sampling and its guarantees for log-concave distributions.
 
@@ -95,7 +80,7 @@ The crucial property of the above stochastic differential equation is that under
 ![](http://www.andrew.cmu.edu/user/aristesk/gd_ld_animated.gif)
 </center>
 
-Langevin Monte Carlo fits in the *Markov Chain Monte Carlo* (MCMC) paradigm: design a random walk, so that the stationary distribution is the desired distribution. Mixing means getting close to the stationary distribution, and rapid mixing means this happens quickly. 
+Langevin Monte Carlo fits in the *Markov Chain Monte Carlo* (MCMC) paradigm: design a random walk, so that the stationary distribution is the desired distribution. “Mixing” means getting close to the stationary distribution, and rapid mixing means this happens quickly. 
 
 Like in optimization, Langevin Monte Carlo is the most "basic" algorithm: for example, one can incorporate "acceleration" and obtain *underdamped* Langevin, or use the physics-inspired Hamiltonian Monte Carlo.
 
@@ -114,39 +99,10 @@ A small constant $C$ implies fast mixing in $\chi^2$ divergence, which implies f
 While it may not be obvious what the Poincaré inequality has to do with a spectral gap, it turns out that we can think of the right-hand side as a quadratic form involving the *infinitesimal generator* of Langevin process, which functions as the continuous analogue of a Laplacian for a graph random walk.
 
 The following table shows the analogy: we can put the discrete and continuous processes on the same footing by defining a quadratic form called the Dirichlet form from the Laplacian or infinitesimal generator.
+<center>
+![](http://www.andrew.cmu.edu/user/aristesk/table_mixing.jpg)
+</center>
 
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Lazy random walk on regular graph (Discrete Markov chain)</th>
-<th>Langevin dynamics (Continuous Markov process)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>Laplacian $L=I-A$, where $A=$transition matrix</td>
-<td>Infinitesimal generator $\mathcal L g = -\langle \nabla f,\nabla g\rangle +  \Delta g$</td>
-</tr>
-<tr>
-<td>Dirichlet form</td>
-<td>$\mathcal E(g,g)=\langle g, Lg\rangle_p$, $g$ vector</td>
-<td>$\mathcal E(g,g) = -\int_{\mathbb R^d} g(x)\mathcal L g(x) p(x)\,dx$ $=\int_{\mathbb R^d} \Vert \nabla g(x)\Vert^2p(x)\,dx$, $g$ function</td>
-</tr>
-<tr>
-<td>Poincaré inequality $\text{Var}_p(g)\le C\mathcal E(g,g)$</td>
-<td>$\text{Var}_p(g) \le C\langle g,Lg\rangle_p$</td>
-<td>$\text{Var}_p(g)\le C \int_{\mathbb R^d} \Vert\nabla g(x)\Vert^2 p(x)\,dx$</td>
-</tr>
-<tr>
-<td>Mixing</td>
-<td>$\chi^2(p_t\Vert p) \le (1-\frac 1C)^t \chi^2(p_0\Vert p)$</td>
-<td>$\chi^2(p_t\Vert p) \le e^{-t/C} \chi^2(p_0\Vert p)$</td>
-</tr>
-</tbody>
-</table>
-<br/>
 
 To see how the Poincaré inequality represents a spectral gap in the discrete case, we write it in a more explicit form in a familiar special case: a lazy random walk (i.e. a random walk that with probability $1/2$ stays in the current vertex, and with probability $1/2$ goes to a random neighbor) on a regular graph with $n$ vertices. In this case, $p$ is the uniform distribution, and $v_1=\mathbf 1,\ldots, v_n$ are the eigenvectors of $A$ with eigenvalues $1=\lambda_1\ge \lambda_2\ge \cdots \ge \lambda_n\ge 0$; normalize $v_1,\ldots, v_n$ so they have unit norm with respect to $p$, i.e. $\Vert v_i\Vert_p^2=\frac 1n\sum_j v_{ij}^2=1$. 
 
