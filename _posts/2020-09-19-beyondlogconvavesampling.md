@@ -8,7 +8,6 @@ visible:    True
 ---
 
 
-
 As the growing number of posts on this blog would suggest, recent years have seen a lot of progress in understanding optimization beyond convexity. However, optimization is only one of the basic algorithmic primitives in machine learning — it's used by most forms of risk minimization and model fitting. Another important primitive is sampling, which is used by most forms of inference (i.e. answering probabilistic queries of a learned model). 
 
  
@@ -25,19 +24,19 @@ The formulation of the sampling problem we will consider is as follows:
 
 This formalization subsumes a lot of inference tasks involving different kinds of probabilistic models. We give several common examples: 
 
- *Posterior inference*: Suppose our data is generated from a model with *unknown* parameters $\theta$, such that the data-generation process is given by $p(x|\theta)$ and we have a prior $p(\theta)$ over the model parameters. Then the *posterior distribution* $p(\theta|x)$, by Bayes's Rule, is given by
- 
-$$p(\theta|x) = \frac{p(x|\theta)p(x)}{p(x)}\propto p(x|\theta)p(\theta).$$
+*1.Posterior inference*: Suppose our data is generated from a model with *unknown* parameters $\theta$ , such that the data-generation process is given by $p(x \mid \theta)$ and we have a prior $p(\theta)$ over the model parameters. Then the *posterior distribution* $p(\theta \mid x)$ , by Bayes's Rule, is given by
 
-A canonical example of this is a *noisy inference task* where a signal (parametrized by $\theta$) is perturbed by noise (as specified by $p(x|\theta)$). 
+$$p(\theta \mid x) = \frac{p(x \mid \theta)p(x)}{p(x)}\propto p(x \mid \theta)p(\theta).$$  
 
-*Posteriors in latent-variable models*: If the data-generation process has a *latent (hidden) variable* $h$ associated to each data point, such that $h$ has a *known* prior $p(h)$ and a *known* conditional $p_\theta(x|h)$, then again by Bayes's rule, we have  
+A canonical example of this is a *noisy inference task* where a signal (parametrized by $\theta$ ) is perturbed by noise (as specified by $p(x \mid \theta)$ ). 
 
-$$p_\theta(h|x) = \frac{p_\theta(x|h)p_\theta(h)}{p_\theta(x)}\propto p_\theta(x|h)p_\theta(h).$$ 
+*2.Posteriors in latent-variable models*: If the data-generation process has a *latent (hidden) variable* $h$ associated to each data point, such that $h$ has a *known* prior $p(h)$ and a *known* conditional $p_\theta(x \mid h)$ , then again by Bayes's rule, we have
 
-In typical latent-variable models, $p_\theta(x|h)$ and $p_\theta(h)$ have a simple parametric form, which makes it easy to evaluate $p_\theta(x|h)p_\theta(h)$. Some examples of latent-variable models are mixture models (where $h$ encodes which component a sample came from), topic models (where $h$ denote the topic proportions in a document), and noisy-OR networks (and latent-variable Bayesian belief networks).
+$$p_\theta(h \mid x) = \frac{p_\theta(x \mid h)p_\theta(h)}{p_\theta(x)}\propto p_\theta(x \mid h)p_\theta(h).$$
 
- *Sampling from energy models*: in energy models, the distribution of the data is parametrized as $p(x) \propto \exp(-E(x))$ for some *energy* function $E(x)$ which is smaller on points in the data distribution. Recent works by [(Song, Ermon 2019)](https://arxiv.org/abs/1907.05600) and [(Du, Mordatch 2019)](https://arxiv.org/abs/1903.08689) have scaled up the training of these models on images so that the visual quality of the samples they produce is comparable to that of more popular generative models like GANs and flow models.   
+In typical latent-variable models, $p_\theta(x \mid h)$ and $p_\theta(h)$ have a simple parametric form, which makes it easy to evaluate $p_\theta(x \mid h)p_\theta(h)$ . Some examples of latent-variable models are mixture models (where $h$ encodes which component a sample came from), topic models (where $h$ denote the topic proportions in a document), and noisy-OR networks (and latent-variable Bayesian belief networks).
+
+*3.Sampling from energy models*: in energy models, the distribution of the data is parametrized as $p(x) \propto \exp(-E(x))$ for some *energy* function $E(x)$ which is smaller on points in the data distribution. Recent works by [(Song, Ermon 2019)](https://arxiv.org/abs/1907.05600) and [(Du, Mordatch 2019)](https://arxiv.org/abs/1903.08689) have scaled up the training of these models on images so that the visual quality of the samples they produce is comparable to that of more popular generative models like GANs and flow models.   
 
 The "exponential form" $e^{-f(x)}$ is also helpful in making an analogy to optimization. Namely, if we sample from $p(x)\propto e^{-f(x)}$, a particular point $x$ is more likely to be sampled if $f(x)$ is small. The key difference between with optimization is that while in optimization, we only want to get to the minimum, in sampling, we want to pick points with the correct probabilities. 
 
@@ -58,10 +57,7 @@ As theorists, we'd like to develop theory that will lead to a better understandi
 
 The following table summarizes the comparisons we have come up with:
 
-<center>
 ![](http://www.andrew.cmu.edu/user/aristesk/table_opt.jpg)
-</center>
-
 
 Before we move on to non-log-concave distributions, though, we need to understand the basic algorithm for sampling and its guarantees for log-concave distributions.
 
@@ -69,23 +65,26 @@ Before we move on to non-log-concave distributions, though, we need to understan
 
 Just as gradient descent is the canonical algorithm for optimization, *Langevin Monte Carlo* (LMC) is the canonical algorithm for our sampling problem. In a nutshell, it is gradient descent that also injects Gaussian noise:
 
-
 $$\text{Gradient descent:}\quad 
 x_{t+\eta} = x_t - \eta \nabla f(x_t)
-$$ $$\text{Langevin Monte Carlo:}\quad
+$$ 
+
+$$\text{Langevin Monte Carlo:}\quad
 x_{t+\eta} = x_t - \eta \nabla f(x_t) + \sqrt{2\eta}\xi_t,\quad \xi_t\sim N(0,I)
 $$
 
 
 Both of these processes can be considered as discretizations of a continuous process. For gradient descent, the limit is an *ordinary differential equation*, and for Langevin Monte Carlo a *stochastic differential equation*: 
-$$ \text{Gradient flow:} \quad dx_t = -\nabla f(x_t) dt$$ $$ \text{Langevin diffusion:} \quad dx_t = -\nabla f(x_t) dt + \sqrt{2} dB_t$$
+
+$$ \text{Gradient flow:} \quad dx_t = -\nabla f(x_t) dt$$ 
+
+$$ \text{Langevin diffusion:} \quad dx_t = -\nabla f(x_t) dt + \sqrt{2} dB_t$$
+
 where $B_t$ denotes Brownian motion of the appropriate dimension.
 
 The crucial property of the above stochastic differential equation is that under fairly mild assumptions on $f$, the stationary distribution is $p(x) \propto e^{-f(x)}$. (If you're more comfortable with optimization, note that while gradient descent generally converges to (local) minima, the Gaussian noise term prevents LMC from converging to a single point - rather, it converges to a *stationary distribution*. See animation below.)   
 
-<center>
 ![](http://www.andrew.cmu.edu/user/aristesk/gd_ld_animated.gif)
-</center>
 
 Langevin Monte Carlo fits in the *Markov Chain Monte Carlo* (MCMC) paradigm: design a random walk, so that the stationary distribution is the desired distribution. “Mixing” means getting close to the stationary distribution, and rapid mixing means this happens quickly. 
 
@@ -106,19 +105,23 @@ A small constant $C$ implies fast mixing in $\chi^2$ divergence, which implies f
 While it may not be obvious what the Poincaré inequality has to do with a spectral gap, it turns out that we can think of the right-hand side as a quadratic form involving the *infinitesimal generator* of Langevin process, which functions as the continuous analogue of a Laplacian for a graph random walk.
 
 The following table shows the analogy: we can put the discrete and continuous processes on the same footing by defining a quadratic form called the Dirichlet form from the Laplacian or infinitesimal generator.
-<center>
-![](http://www.andrew.cmu.edu/user/aristesk/table_mixing.jpg)
-</center>
 
+![](http://www.andrew.cmu.edu/user/aristesk/table_mixing.jpg)
 
 To see how the Poincaré inequality represents a spectral gap in the discrete case, we write it in a more explicit form in a familiar special case: a lazy random walk (i.e. a random walk that with probability $1/2$ stays in the current vertex, and with probability $1/2$ goes to a random neighbor) on a regular graph with $n$ vertices. In this case, $p$ is the uniform distribution, and $v_1=\mathbf 1,\ldots, v_n$ are the eigenvectors of $A$ with eigenvalues $1=\lambda_1\ge \lambda_2\ge \cdots \ge \lambda_n\ge 0$; normalize $v_1,\ldots, v_n$ so they have unit norm with respect to $p$, i.e. $\Vert v_i\Vert_p^2=\frac 1n\sum_j v_{ij}^2=1$. 
 
-Writing $g= \sum_i a_i v_i$, since $v_2,\ldots, v_n$ are orthogonal to $v_1=\mathbf 1$, we have $\langle g, \mathbf 1\rangle_p =  a_1$, so  $$\text{Var}_p(g) = \frac{1}{n}(\sum_i  g_i^2) - a_1^2 = \sum_{i=2}^n a_i^2$$
+Writing $g= \sum_i a_i v_i$, since $v_2,\ldots, v_n$ are orthogonal to $v_1=\mathbf 1$, we have $\langle g, \mathbf 1\rangle_p =  a_1$, so 
+
+$$\text{Var}_p(g) = \frac{1}{n}(\sum_i  g_i^2) - a_1^2 = \sum_{i=2}^n a_i^2$$
 
 Furthermore, we have 
+
 $$\langle g, Lg \rangle_p = \langle \sum_i a_iv_i, (I- A)(\sum_i a_iv_i)\rangle_p=  \sum_{i=2}^n a_i^2(1-\lambda_i)$$ 
+
 These coefficients are all at most $1-\lambda_2$, i.e. the *spectral gap*, so 
+
 $$\langle g, Lg \rangle_p \ge (1-\lambda_2)\text{Var}_p(g), $$
+
 which shows the Poincaré inequality with constant $(1-\lambda_2)^{-1}$.
 
 A classic theorem establishes a Poincaré inequality for (strongly) log-concave distributions.
