@@ -7,14 +7,6 @@ author:     Holden Lee, Andrej Risteski
 visible:    True
 ---
 
----
-layout:     post
-title:      Beyond log-concave sampling
-date:       2020-09-18 14:00:00
-summary:    Beyond log-concave sampling
-author:     Holden Lee, Andrej Risteski
-visible:    False
----
 
 
 As the growing number of posts on this blog would suggest, recent years have seen a lot of progress in understanding optimization beyond convexity. However, optimization is only one of the basic algorithmic primitives in machine learning — it's used by most forms of risk minimization and model fitting. Another important primitive is sampling, which is used by most forms of inference (i.e. answering probabilistic queries of a learned model). 
