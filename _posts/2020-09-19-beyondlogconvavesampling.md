@@ -7,14 +7,6 @@ author:     Holden Lee, Andrej Risteski
 visible:    False
 ---
 
-<style>
-table {border: 1px solid black;
-border-collapse:collapse;
-font-size: medium}
-th {border: 1px solid black}
-td {border: 1px solid black}
-</style>
-
 
 As the growing number of posts on this blog would suggest, recent years have seen a lot of progress in understanding optimization beyond convexity. However, optimization is only one of the basic algorithmic primitives in machine learning  it's used by most forms of risk minimization and model fitting. Another important primitive is sampling, which is used by most forms of inference (i.e. answering probabilistic queries of a learned model). 
 
