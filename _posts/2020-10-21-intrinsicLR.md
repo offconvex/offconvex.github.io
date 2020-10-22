@@ -98,7 +98,7 @@ This actually was a prediction of the new theoretical analysis we came up with. 
 
 
 <div style="text-align:center;">
-<img style="width:25%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_test_acc.png" />
+<<img style="width:15%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_test_acc.png" />
 <img style="width:25%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_train_acc.png" />
 </div>
 
@@ -113,8 +113,8 @@ Note the  surprise here is that generalization was not hurt from drastically sma
 Actually the evidence against global mixing exists already via the phenomenon of Stochastic Weight Averaging (SWA) ([Izmailov et al., 2018](https://arxiv.org/abs/1803.05407)). Along the trajectory of SGD, if  the network parameters from two different epochs are averaged, then the average has test loss lower than either.  Improvement via averaging continues to  work for run times 10X longer  than usual as shown in Figure 3. However, the accuracy improvement doesn't happen for SWA between two solutions obtained from different initialization.  Thus checking whether SWA holds distinguishes between  pairs of solutions drawn from the same trajectory and pairs drawn from different trajectories, which  shows the diffusion process hasn't mixed to stationary distribution within normal training times. (This is not surprising, since the theoretical analysis of mixing does not suggest it happens rapidly at all.) 
 
 <div style="text-align:center;">
-<img style="width:30%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_test_acc.png" />
-<img style="width:26%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_dist.png" />
+<img style="width:20%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_test_acc.png" />
+<img style="width:16%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_dist.png" />
 </div>
 
 **Figure 3**. Stochastic Weight Averaging improves the test accuracy of ResNet trained with
