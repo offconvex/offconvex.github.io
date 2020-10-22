@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:     Mismatches between Traditional Optimization Analyses and Modern Deep Learning (Part 1)
+title:     Mismatches between Traditional Optimization Analyses and Modern Deep Learning 
 date:       2020-10-21 22:00:00
 author:     Zhiyuan Li and Sanjeev Arora
 visible:    True 
