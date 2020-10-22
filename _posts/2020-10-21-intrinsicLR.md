@@ -1,9 +1,9 @@
 ---
 layout:     post
-title:      Reconciling Traditional Optimization Analyses and Modern Deep Learning the Intrinsic Learning Rate (Part 1)
-date:       2020-10-20 22:00:00
+title:     Mismatches between Traditional Optimization Analyses and Modern Deep Learning (Part 1)
+date:       2020-10-21 22:00:00
 author:     Zhiyuan Li and Sanjeev Arora
-visible:    False
+visible:    True 
 ---
 
 You may remember our [previous blog post](http://www.offconvex.org/2020/04/24/ExpLR1/) showing that it is possible to do state-of-the-art deep learning with learning rate that increases exponentially during training.  It was meant to be a dramatic illustration that what we learned in optimization classes and books isn't always a good fit for modern deep learning, specifically, *normalized nets*, which is our term for nets that use any one of popular normalization schemes,e.g. [BatchNorm (BN)](https://arxiv.org/abs/1502.03167), [GroupNorm (GN)](https://arxiv.org/abs/1803.08494), [WeightNorm (WN)](https://arxiv.org/abs/1602.07868). Today's post (based upon [our paper](https://arxiv.org/abs/2010.02916) with Kaifeng Lyu at NeurIPS20)  identifies other surprising incompatibilities between normalized nets and traditional analyses. We hope this will change the way you teach and think about deep learning! 
