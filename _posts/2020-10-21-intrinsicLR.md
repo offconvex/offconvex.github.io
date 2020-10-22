@@ -98,8 +98,8 @@ This actually was a prediction of the new theoretical analysis we came up with. 
 
 
 <div style="text-align:center;">
-<<img style="width:15%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_test_acc.png" />
-<img style="width:25%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_train_acc.png" />
+<img style="height:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_test_acc.png" />
+<img style="height:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_train_acc.png" />
 </div>
 
 **Figure 2**. ResNet trained on CIFAR10 with SGD with normal LR schedule (baseline) as well as a schedule with 100 times smaller initial LR.  The latter matches performance of baseline after one more LR decay!  Note it needs  5000 epochs which is 10x higher! See our paper for details. (Batch size is 128, WD is 0.0005, and LR is divided by 10 for each decay.)
