@@ -73,7 +73,8 @@ We now describe the actual discoveries for normalized nets, which show that the 
 > (Against CW1): Full batch gradient descent $\neq$ gradient flow. 
 
  It's well known that if LR is smaller than the inverse of the smoothness, then the trajectory of gradient descent will be close to that of gradient flow. But for normalized networks, the loss function is scale-invariant and thus provably non-smooth (i.e., smoothness becomes unbounded)  around the origin ([Li&Arora, 2019](https://arxiv.org/abs/1910.07454)). We show that this non-smoothness issue is very real and makes training unstable and even chaotic for full batch SGD with any nonzero learning rate. This occurs both empirically and provably so with some toy losses. 
- 
+
+
 <div style="text-align:center;">
 <img style="width:60%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/gd_not_gf.png" />
 </div>
@@ -98,8 +99,8 @@ This actually was a prediction of the new theoretical analysis we came up with. 
 
 
 <div style="text-align:center;">
-<img style="height:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_test_acc.png" />
-<img style="height:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_train_acc.png" />
+<img style="width:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_test_acc.png" />
+<img style="width:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/blog_sgd_8000_train_acc.png" />
 </div>
 
 **Figure 2**. ResNet trained on CIFAR10 with SGD with normal LR schedule (baseline) as well as a schedule with 100 times smaller initial LR.  The latter matches performance of baseline after one more LR decay!  Note it needs  5000 epochs which is 10x higher! See our paper for details. (Batch size is 128, WD is 0.0005, and LR is divided by 10 for each decay.)
@@ -113,8 +114,8 @@ Note the  surprise here is that generalization was not hurt from drastically sma
 Actually the evidence against global mixing exists already via the phenomenon of Stochastic Weight Averaging (SWA) ([Izmailov et al., 2018](https://arxiv.org/abs/1803.05407)). Along the trajectory of SGD, if  the network parameters from two different epochs are averaged, then the average has test loss lower than either.  Improvement via averaging continues to  work for run times 10X longer  than usual as shown in Figure 3. However, the accuracy improvement doesn't happen for SWA between two solutions obtained from different initialization.  Thus checking whether SWA holds distinguishes between  pairs of solutions drawn from the same trajectory and pairs drawn from different trajectories, which  shows the diffusion process hasn't mixed to stationary distribution within normal training times. (This is not surprising, since the theoretical analysis of mixing does not suggest it happens rapidly at all.) 
 
 <div style="text-align:center;">
-<img style="width:20%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_test_acc.png" />
-<img style="width:16%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_dist.png" />
+<img style="width:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_test_acc.png" />
+<img style="width:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/swa_sgd_dist.png" />
 </div>
 
 **Figure 3**. Stochastic Weight Averaging improves the test accuracy of ResNet trained with
@@ -143,7 +144,7 @@ Further analysis shows that a better measure of speed of learning is   $\eta \la
 To explain the meaning of mixing in function space, let's view SGD (carried out for a fixed number of steps) as a way to sample a trained net from a  distribution over trained nets. Thus the end result of SGD from a fixed initialization can be viewed as a probabilistic classifier whose output on any datapoint is the $K$-dimenstional vector whose $i$th coordinate is the probability of outputting label $i$. (Here $K$ is the total number of labels.) Now if two different initializations both cause SGD to produce classifiers with error $5$ percent on heldout datapoints, then  *a priori* one would imagine that  on a given held-out datapoint the classifier from the first distribution **disagrees**  with the classifier from the second distribution with roughly $2 * 5 =10$ percent probability. (More precisely, $2 * 5 * (1-0.05) = 9.5$ percent.) However, convergence to an equilibrium distribution in function space means that the probability of disagreement is almost $0$, i.e., the distribution is almost the same regardless of the initialization! This is indeed what we experimentally find, to our big surprise. Our theory is built around this new phenomenon.    
  
 <div style="text-align:center;">
-<img style="width:60%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/conjecture.png" />
+<img style="width:300px;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/conjecture.png" />
 </div>
 **Figure 4**: A simple 4-layer normalized CNN trained on MNIST with three schedules converge to the same equilibrium after intrinsic LRs become equal at epoch 81. We use Monte Carlo ($500$ trials) to estimate $\ell_1$ distances between distributions. 
  
