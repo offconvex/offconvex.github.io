@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Questionnable Conventional Wisdom about Deep Learning
+title:      Reconciling Traditional Optimization Analyses and Modern Deep Learning the Intrinsic Learning Rate (Part 1)
 date:       2020-10-20 22:00:00
 author:     Zhiyuan Li and Sanjeev Arora
 visible:    False
@@ -45,7 +45,7 @@ The above reasoning shows very small LR is guaranteed to decrease the loss at le
 
 This is primarily an empirical finding: using too-small learning rates or too-large batch sizes from the start (all other hyper-parameters being fixed) is known to lead to worse generalization ([Bengio, 2012](https://arxiv.org/pdf/1206.5533.pdf); [Keskar et al., 2017](https://arxiv.org/abs/1609.04836)). 
 
-A popular explanation for this phenomenon is  that the noise in gradient estimation during SGD is beneficial for generalization. (As noted, this noise tends to averages out when LR is very small.)  Many authors have suggested that the noise helps becauses it keeps the trajectory away from sharp minima which are believed to generalize worse, although there is some difference of opinion here ([Hochreiter&Schmidhuber, 1997](http://www.bioinf.jku.at/publications/older/3304.pdf); [Keskar et al., 2017](https://arxiv.org/abs/1609.04836); [Li et al., 2018](https://arxiv.org/abs/1712.09913); [Izmailov et al., 2018](https://arxiv.org/abs/1803.05407); [He et al., 2019](https://arxiv.org/pdf/1902.00744.pdf)). [Li et al., 2019](https://arxiv.org/abs/1907.04595) also gave an example (a simple two-layer net) where this observation of worse generalization due to small LR is mathematically proved and also experimentally verified.
+A popular explanation for this phenomenon is  that the noise in gradient estimation during SGD is beneficial for generalization. (As noted, this noise tends to average out when LR is very small.)  Many authors have suggested that the noise helps becauses it keeps the trajectory away from sharp minima which are believed to generalize worse, although there is some difference of opinion here ([Hochreiter&Schmidhuber, 1997](http://www.bioinf.jku.at/publications/older/3304.pdf); [Keskar et al., 2017](https://arxiv.org/abs/1609.04836); [Li et al., 2018](https://arxiv.org/abs/1712.09913); [Izmailov et al., 2018](https://arxiv.org/abs/1803.05407); [He et al., 2019](https://arxiv.org/pdf/1902.00744.pdf)). [Li et al., 2019](https://arxiv.org/abs/1907.04595) also gave an example (a simple two-layer net) where this observation of worse generalization due to small LR is mathematically proved and also experimentally verified.
 
 
 >CW 3) Modeling SGD via a Stochastic Differential Equation (SDE) in the continuous-time limit with a fixed Gaussian noise. Namely, think of SGD as a diffusion process that **mixes**  to some Gibbs-like distribution on trained nets. 
@@ -59,7 +59,7 @@ where $\sigma_{W_t}$ is the covariance of stochastic gradient $ \nabla \mathcal
 
 In this story, SGD turns into a geometric random walk in the landscape, which can in principle explore the landscape more thoroughly, for instance by occasionally making loss-increasing steps. While an appealing view, rigorous analysis is difficult because we lack a mathematical description of the loss landscape.  Various papers assume the noise in SDE is isotropic Gaussian, and then derive an expression for the stationary distribution of the random walk in terms of the familiar Gibbs distribution. This view gives intuitively appealing explanation of some deep learning phenomena since the magnitude of noise (which is related to LR and batch size) controls the convergence speed and other properties. For instance it’s well-known that this SDE approximation implies the well-known *linear scaling rule* (Goyal et. al., 2017](https://arxiv.org/pdf/1706.02677.pdf)).
 
-Which raises the question: how well does the above SDE-based analysis accord with reality?  
+Which raises the question: *does SGD really behave like a diffusion process that mixes in the loss landscape?*
 
 <!--[A few lines explaining for why noise term has this form? e.g., show one step discretization]!-->
 
@@ -68,8 +68,7 @@ Which raises the question: how well does the above SDE-based analysis accord wit
 
 ## Conventional Wisdom challenged
 
-We describe how the above CW's are off for normalized nets.
-
+We now describe the actual discoveries for normalized nets, which show that the above CW's are quite off.
 
 > (Against CW1): Full batch gradient descent $\neq$ gradient flow. 
 
@@ -84,7 +83,8 @@ We describe how the above CW's are off for normalized nets.
 CIFAR10 containing 1000 images with full-batch GD (without momentum).  ResNet
 can easily get to 100% training accuracy but then veers off.  When WD is turned off at epoch 30000 it converges.
 
- Note that WD plays a crucial role in this effect since without WD the SGD moves away from the origin ([Arora et al., 2018](https://arxiv.org/abs/1812.03981)) and parameter norm increases monotonically.
+ Note that WD plays a crucial role in this effect since without WD the parameter norm increases monotonically 
+ ([Arora et al., 2018](https://arxiv.org/abs/1812.03981)) which implies SGD moves away from the origin at all times.
 
 
 Savvy readers might wonder whether using a smaller LR could fix this issue. Unfortunately, getting close to the origin is unavoidable because once the gradient gets small,  WD will dominate the dynamics and decrease the norm at a geometric rate, causing the gradient to rise again due to the scale invariance! (This happens so long as the gradient gets arbitrarily small, but not actually zero, as is the case in practice.) 
@@ -104,7 +104,7 @@ This actually was a prediction of the new theoretical analysis we came up with. 
 
 **Figure 2**. ResNet trained on CIFAR10 with SGD with normal LR schedule (baseline) as well as a schedule with 100 times smaller initial LR.  The latter matches performance of baseline after one more LR decay!  Note it needs  5000 epochs which is 10x higher! See our paper for details. (Batch size is 128, WD is 0.0005, and LR is divided by 10 for each decay.)
 
-Note the  surprise here is that drastically smaller LR at the beginning does not hurt even  *when no other hyperparameter changes*.  It is known empirically as well as rigorously (Lemma 2.4 in [Li&Arora, 2019](https://arxiv.org/abs/1910.07454))  that it is possible to compensate for small LR by other hyperparameter changes. 
+Note the  surprise here is that generalization was not hurt from drastically smaller LR even  *when no other hyperparameter changes*.  It is known empirically as well as rigorously (Lemma 2.4 in [Li&Arora, 2019](https://arxiv.org/abs/1910.07454))  that it is possible to compensate for small LR by other hyperparameter changes. 
 
 
 >(Against Wisdom 3) Random walk/SDE view of SGD is way off. There is no evidence of mixing as  traditionally understood, at least within normal training times.
@@ -120,7 +120,7 @@ Actually the evidence against global mixing exists already via the phenomenon of
 **Figure 3**. Stochastic Weight Averaging improves the test accuracy of ResNet trained with
 SGD on CIFAR10. **Left:** Test accuracy. **Right:** Pairwise distance between parameters from different epochs.
 
-Actually [Izmailov et al., 2018](https://arxiv.org/abs/1803.05407) already noticed the implication that SWA rules out that SGD as a diffusion process is mixing to a unique global equilibrium. They suggested instead that perhaps the trajectory of SGD could be well-approximated by a multivariate Ornstein-Uhlenbeck (OU) process around the *local minimizer* $W^ * $, assuming the loss surface is locally strongly convex. As the corresponding stationary is multi-dimensional Gaussian, $N(W^ *, \Sigma)$, around the local minimizer, $W^ *$, this explains why SWA helps to reduce the training loss.
+Actually [Izmailov et al., 2018](https://arxiv.org/abs/1803.05407) already noticed the implication that SWA rules out that SGD is a diffusion process which mixes to a unique global equilibrium. They suggested instead that perhaps the trajectory of SGD could be well-approximated by a multivariate Ornstein-Uhlenbeck (OU) process around the *local minimizer* $W^ * $, assuming the loss surface is locally strongly convex. As the corresponding stationary is multi-dimensional Gaussian, $N(W^ *, \Sigma)$, around the local minimizer, $W^ *$, this explains why SWA helps to reduce the training loss.
 
 However, we note that ([Izmailov et al., 2018](https://arxiv.org/abs/1803.05407))'s suggestion is also refuted by the fact that we can show $\ell_2$ distance between weights from epochs $T$ and $T+\Delta$ monotonically increases with $\Delta$ for every $T$ (See Figure 3), while $ \mathbf{E} [ \| W_ T-W_ {T+\Delta} \|^2]$ should converge to the constant $2Tr[\Sigma]$ as $T, \Delta \to +\infty$ in the OU process. This suggests that all these weights are correlated, unlike the hypothesized OU process. 
   
@@ -135,12 +135,12 @@ Further analysis shows that a better measure of speed of learning is   $\eta \la
 
  While previous papers have noticed qualitatively that LR and WD have a close interaction, our ExpLR paper   [Li&Arora, 2019](https://arxiv.org/abs/1910.07454))  gave mathematical proof that *if WD\* LR, i.e., $\lambda\eta$ is fixed, then the effect of changing LR on the dynamics is equivalent to rescaling the initial parameters*.  As far as we can tell, performance of SGD on modern architectures is quite robust to (indeed usually independent of) scale of the initialization, so the effect of changing initial LR while keeping intrinsic LR fixed is also negligible. 
   
- Our paper gives insight into the role of intrinsic LR $\lambda_e$ by giving a new SDE-style analysis of SGD for normalized nets, leading to the following conclusion (partly supported by experiments):
+ Our paper gives insight into the role of intrinsic LR $\lambda_e$ by giving a new SDE-style analysis of SGD for normalized nets, leading to the following conclusion (which rests in part on experiments):
  
 > In normalized nets SGD does indeed lead to rapid mixing, but in **function space** (i.e., input-output behavior of the net). Mixing happens after $O(1/\lambda_e)$ iterations, in contrast to the exponentially slow mixing guaranteed in the parameter space by traditional analysis of diffusion walks. 
 
 
-To explain the meaning of mixing in function space, let's view SGD (carried out for a fixed number of steps) as a way to sample a trained net from a  distribution over trained nets. Thus the result of SGD from a fixed initialization can be viewed as a probabilistic classifier whose output on any datapoint is the $K$-dimenstional vector whose $i$th coordinate is the probability of outputting label $i$. (Here $K$ is the total number of labels.) Now if two different initializations both cause SGD to produce classifiers with error $5$ percent on heldout datapoints, then  *a priori* one would imagine that  on a given held-out datapoint the classifier from the first distribution **disagrees**  with the classifier from the second distribution with roughly $2 * 5 =10$ percent probability. (More precisely, $2 * 5 * (1-0.05) = 9.5$ percent.) However, convergence to an equilibrium distribution in function space means that the probability of disagreement is almost $0$, i.e., the distribution is almost the same regardless of the initialization! This is indeed what we experimentally find, to our big surprise. Our theory is built around this new phenomenon.    
+To explain the meaning of mixing in function space, let's view SGD (carried out for a fixed number of steps) as a way to sample a trained net from a  distribution over trained nets. Thus the end result of SGD from a fixed initialization can be viewed as a probabilistic classifier whose output on any datapoint is the $K$-dimenstional vector whose $i$th coordinate is the probability of outputting label $i$. (Here $K$ is the total number of labels.) Now if two different initializations both cause SGD to produce classifiers with error $5$ percent on heldout datapoints, then  *a priori* one would imagine that  on a given held-out datapoint the classifier from the first distribution **disagrees**  with the classifier from the second distribution with roughly $2 * 5 =10$ percent probability. (More precisely, $2 * 5 * (1-0.05) = 9.5$ percent.) However, convergence to an equilibrium distribution in function space means that the probability of disagreement is almost $0$, i.e., the distribution is almost the same regardless of the initialization! This is indeed what we experimentally find, to our big surprise. Our theory is built around this new phenomenon.    
  
 <div style="text-align:center;">
 <img style="width:80%;" src="https://www.cs.princeton.edu/~zl4/small_lr_blog_images/additional_blog_image/conjecture.png" />
