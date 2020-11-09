@@ -73,8 +73,13 @@ By this we affirm Conjecture 2, and in fact go beyond it in the following sense:
 and
 *(ii)* not only are norms not necessarily minimized, but they can grow towards infinity.
 
-The idea behind our analysis is remarkably simple $-$ we show that during GD over matrix factorization (i.e. over the objective $\phi ( W_1 , W_2 , \ldots , W_L)$ defined by Equations $\color{purple}{\text(1)}$ and $\color{purple}{\text(2)}$), if the learning rate is sufficiently small and initialization sufficiently close to the origin, then the determinant of the product matrix $W_{1: L}$ (Equation $\color{purple}{\text(3)}$) does not change sign.
-Specifically, if $\det ( W_{L : 1} )$ is positive at initialization (an event whose probability is $0.5$ under any reasonable initialization scheme), then it stays that way throughout.
+The idea behind our analysis is remarkably simple.
+We prove the following:
+
+> **Theorem (informally stated):**
+> During GD over matrix factorization (i.e. over $\phi ( W_1 , W_2 , \ldots , W_L)$ defined by Equations $\color{purple}{\text(1)}$ and $\color{purple}{\text(2)}$), if learning rate is sufficiently small and initialization sufficiently close to the origin, then the determinant of the product matrix $W_{1: L}$ (Equation $\color{purple}{\text(3)}$) doesn't change sign.
+
+A corollary is that if $\det ( W_{L : 1} )$ is positive at initialization (an event whose probability is $0.5$ under any reasonable initialization scheme), then it stays that way throughout.
 This seemingly benign observation has far-reaching implications.
 As a simple example, consider the following matrix completion problem ($\*$ here stands for unobserved entry):
 \[
