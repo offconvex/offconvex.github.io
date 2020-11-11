@@ -90,7 +90,7 @@ We also released a [challenge dataset](https://github.com/Hazelsuko07/InstaHide_
 ## Google Team's recent attack on InstaHide
 
 
-Recently, researchers at Google have shared with us a manuscript with a two-step reconstruction attack[3] against InstaHide. 
+Recently, researchers at Google have shared with us a manuscript with a two-step reconstruction attack (ref 3)  against InstaHide. 
 
 ***TL;DR: They used 12 hours on Google's best GPUs to get partial recovery of our 100 challenge encryptions and  130 CPU hours to break the encryption completely. Furthermore, the latter was possible entirely because we used an insecure random number generator, and they used exhaustive search over random seeds.***
 
