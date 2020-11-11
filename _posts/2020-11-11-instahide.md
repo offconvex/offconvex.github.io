@@ -54,14 +54,14 @@ Which brings us to the question we started with: *Could consumers allow machine 
 
 InstaHide is a new concept: it hides oor "encrypts" images to protect them somewhat,  while still allowing standard deep learning pipelines to be applied on them. The deep model is trained entirely on encrypted images. 
  
-- The training speed and accuracy is only slightly worse than vanilla training: one can achieve a test accuracy of ~ 90 percent on CIFAR10 using encrypted images with a computation overhead < 5 percent.
+- The training speed and accuracy is only slightly worse than vanilla training: one can achieve a test accuracy of ~ 90 percent on CIFAR10 using encrypted images with a computation overhead $< 5$ percent.
 
 - When it comes to privacy, like every other form of cryptography, its security is based upon conjectured difficulty of the underlying computational problem.
 (But we don't expect breaking it to be as difficult as say breaking RSA.) 
 
 ### How InstaHide encryption works
 
-Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup [2]. It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
+Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup (ref 2). It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
 
 <p style="text-align:center;">
 <img src="/assets/mixup.png" width="60%" />
@@ -80,9 +80,9 @@ InstaHide has a parameter $k$ denoting how many images are mixed; in the picture
 When plugged into the standard deep learning with a private dataset of $n$ images, in each epoch of training (say $T$ epochs in total), InstaHide will re-encrypt each image in the  dataset using a random one-time key. This will gives $n\times T$ encrypted images in total.
 
 ### The security argument
-<!-- *(Yangsibo: I am not sure whether we should still keep the conjecture; put here in case)* -->
 
-We conjecture, based upon intuitions from computational complexity of the k-vector-subset-sum problem (citations), that extracting information about the images could time $N^{k-2}$. Here $N$, the size of the public dataset, can be tens or hundreds of millions, so it might be infeasible for real-life attackers.
+
+We conjectured, based upon intuitions from computational complexity of the k-vector-subset-sum problem (citations), that extracting information about the images could time $N^{k-2}$. Here $N$, the size of the public dataset, can be tens or hundreds of millions, so it might be infeasible for real-life attackers.
 
 We also released a [challenge dataset](https://github.com/Hazelsuko07/InstaHide_Challenge) with $k=6, n=100, T=50$ to enable further investigation of InstaHide's security. 
 
