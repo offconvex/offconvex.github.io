@@ -8,11 +8,11 @@ visible:    True
 
 Today's online world and the emerging internet of things is built around a Faustian bargain:  consumers (and their internet of things) hand over their data, and in return get customization of the world to their needs.  Is this exchange of privacy for convenience inherent? At first sight one sees no way around because, of course, to allow machine learning on our data we have to hand our data over to the training algorithm. 
 
-Similar issues arise in settings other than consumer devices. For instance, hospitals may wish to pool together their patient data to train a large deep model. But privacy laws such as HIPAA forbid them from sharing the data itself, so somehow they have to train a deep net on their data without revealing their data. Frameworks such as Federated Learning have been proposed for this but it is known that sharing gradients in that environment leaks a lot of information about the data (ref 7). 
+Similar issues arise in settings other than consumer devices. For instance, hospitals may wish to pool together their patient data to train a large deep model. But privacy laws such as HIPAA forbid them from sharing the data itself, so somehow they have to train a deep net on their data without revealing their data. Frameworks such as Federated Learning ([Konečný et al., 2016](https://arxiv.org/abs/1610.05492)) have been proposed for this but it is known that sharing gradients in that environment leaks a lot of information about the data ([Zhu et al., 2019](https://arxiv.org/abs/1906.08935)). 
 
 Methods to achieve some of the above  so could completely change the privacy/utility tradeoffs implicit in today's organization of the online world.
 
-This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, InstaHide (ref 1), that we proposed, and takeaways from a recent attack on it by a Google team. 
+This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, [InstaHide](http://arxiv.org/abs/2010.02772), that we proposed, and takeaways from a recent attack on it by a Google team. 
 
 ## Existing solutions in Cryptography  
 
@@ -23,7 +23,7 @@ Significant research efforts are being made to try to overcome these obstacles a
 
 ##  Differential Privacy (DP)
 
- Differential privacy involves adding carefully calculated amounts of noise during training. This is a modern and rigorous version of classic    *data anonymization* techniques whose canonical application is release of noised census data to protect privacy of individuals.
+ Differential privacy ([Dwork et al., 2006](https://www.iacr.org/archive/eurocrypt2006/40040493/40040493.pdf), [Dwork&Roth, 2014](https://www.cis.upenn.edu/~aaroth/Papers/privacybook.pdf)) involves adding carefully calculated amounts of noise during training. This is a modern and rigorous version of classic    *data anonymization* techniques whose canonical application is release of noised census data to protect privacy of individuals.
  
 This notion was adapted to machine learning by positing that "privacy" in machine learning refers to trained classifiers not being dependent on data of individuals. In other words, if the classifier is trained on data from N individuals, it's behavior should be essentially unchanged (statistically speaking) if we omit data from any individual. Note that this is a weak notion of privacy: it does not in any way hide the data from the company. 
 
@@ -52,7 +52,7 @@ Which brings us to the question we started with: *Could consumers allow machine 
 
 ## A proposed solution: InstaHide
 
-InstaHide is a new concept: it hides oor "encrypts" images to protect them somewhat,  while still allowing standard deep learning pipelines to be applied on them. The deep model is trained entirely on encrypted images. 
+InstaHide is a new concept: it hides or "encrypts" images to protect them somewhat,  while still allowing standard deep learning pipelines to be applied on them. The deep model is trained entirely on encrypted images. 
  
 - The training speed and accuracy is only slightly worse than vanilla training: one can achieve a test accuracy of ~ 90 percent on CIFAR10 using encrypted images with a computation overhead $< 5$ percent.
 
@@ -61,7 +61,7 @@ InstaHide is a new concept: it hides oor "encrypts" images to protect them somew
 
 ### How InstaHide encryption works
 
-Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup (ref 2). It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
+Here are some details. InstaHide  belongs to the class of subset-sum type encryptions ([Bhattacharyya et al., 2011](https://www.cs.cmu.edu/afs/cs/user/dwoodruf/www/biwx.pdf)), and was inspired by a data augmentation technique called Mixup ([Zhang et al., 2018](https://arxiv.org/abs/1710.09412)). It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
 
 <p style="text-align:center;">
 <img src="/assets/mixup.png" width="60%" />
@@ -90,9 +90,9 @@ We also released a [challenge dataset](https://github.com/Hazelsuko07/InstaHide_
 ## Google Team's recent attack on InstaHide
 
 
-Recently, researchers at Google have shared with us a manuscript with a two-step reconstruction attack (ref 3)  against InstaHide. 
+Recently, researchers at Google have shared with us a manuscript with a two-step reconstruction attack ([Carlini et al., 2020](https://arxiv.org/pdf/2011.05315.pdf))  against InstaHide. 
 
-***TL;DR: They used 12 hours on Google's best GPUs to get partial recovery of our 100 challenge encryptions and  130 CPU hours to break the encryption completely. Furthermore, the latter was possible entirely because we used an insecure random number generator, and they used exhaustive search over random seeds.***
+***TL;DR: They used 11 hours on Google's best GPUs to get partial recovery of our 100 challenge encryptions and  120 CPU hours to break the encryption completely. Furthermore, the latter was possible entirely because we used an insecure random number generator, and they used exhaustive search over random seeds.***
 
 Now the details. 
 
@@ -107,7 +107,7 @@ The attack takes $n\times T$ InstaHide-encrypted images as the input, ($n$ is th
 Using Google's powerful GPU, it took them 10 hours to train the neural network for similarity annotation, and about another hour to get an approximation of our challenge set of $100$ images with $k=6, n=100, T=50$. This gave them vaguely correct images, with significant unclear areas and color shift.
 
 
-They also proposed a different strategy which abuses the vulnerability of NumPy and PyTorch's random number generator (* Aargh; we didn't use a secure random number generator.*) They did  brute force search of $2^{32}$ possible initial random seeds, which allows them to reproduce the randomness during encryption, and thus perform a pixel-perfect reconstruction. As they reported, this attack takes 120 CPU hours (they parallelize across 100 cores to obtain the solution in a little over an hour). We will have this implementation flaw fixed in an updated version.
+They also proposed a different strategy which abuses the vulnerability of NumPy and PyTorch's random number generator (*Aargh; we didn't use a secure random number generator.*) They did  brute force search of $2^{32}$ possible initial random seeds, which allows them to reproduce the randomness during encryption, and thus perform a pixel-perfect reconstruction. As they reported, this attack takes 120 CPU hours (they parallelize across 100 cores to obtain the solution in a little over an hour). We will have this implementation flaw fixed in an updated version.
 
 
 
@@ -117,7 +117,7 @@ Though the attack is clever and impressive, we feel that the long-term take-away
 
 > Variants of InstaHide seem to evade the attack. 
 
-The challenge set contained 50 encryptions each of 100 images. This corresponds to using encrypted images for 50 epochs. But as done in existing settings that use DP, one can pretrain the deep model using non-private images and then fine-tune it with fewer epochs of the private images. Using a similar pipeline DPSGD (ref. 4), by pretraining a ResNet-18 on CIFAR100 (the public dataset) and finetuning  for $10$ epochs on CIFAR10 (the private dataset)  gives accuracy of 83 percent, still far better than any provable guarantees using DP on this dataset. The Google team conceded that their attack probably would not work in this setting. 
+The challenge set contained 50 encryptions each of 100 images. This corresponds to using encrypted images for 50 epochs. But as done in existing settings that use DP, one can pretrain the deep model using non-private images and then fine-tune it with fewer epochs of the private images. Using a similar pipeline DPSGD ([Abadi et al., 2016](https://arxiv.org/abs/1607.00133)), by pretraining a ResNet-18 on CIFAR100 (the public dataset) and finetuning  for $10$ epochs on CIFAR10 (the private dataset)  gives accuracy of 83 percent, still far better than any provable guarantees using DP on this dataset. The Google team conceded that their attack probably would not work in this setting. 
 
 Similarly using InstaHide purely at inference time (i.e., using ML, instead of training ML) still should be completely secure since only one encryption of the image is released. The Google attack can't work here at all.  
 
@@ -125,7 +125,7 @@ Similarly using InstaHide purely at inference time (i.e., using ML, instead of t
 
 InstaHide is designed to give users and the internet of things a *light-weight* encryption method that allows them to use machine learning without giving eavesdroppers or servers access to their raw data. There is no other cost-effective alternative to InstaHide for this application. If it takes Google's powerful computers a few hours  to break our challenge set of 100 images, this is not yet a cost-effective attack  in the intended settings. 
 
-More important, the challenge dataset corresponded to an ambitious form of security, where the encrypted images themselves are released to the world. The more typical application is a Federated Learning[5] scenario: the adversary observes shared gradients that are computed using encrypted images (he also has access to the trained model). The attacks in this paper do not currently apply to that scenario. This is also the idea in **TextHide**, an adaptation of InstaHide to text data. 
+More important, the challenge dataset corresponded to an ambitious form of security, where the encrypted images themselves are released to the world. The more typical application is a Federated Learning ([Konečný et al., 2016](https://arxiv.org/abs/1610.05492)) scenario: the adversary observes shared gradients that are computed using encrypted images (he also has access to the trained model). The attacks in this paper do not currently apply to that scenario. This is also the idea in [**TextHide**](https://arxiv.org/abs/2010.06053), an adaptation of InstaHide to text data. 
 
 ## Takeways
 
@@ -134,7 +134,7 @@ Users need lightweight encryptions that can be applied in real time to large amo
 InstaHide is the only such tool right now, and we now know that it provides moderate security that may be enough for many applications. 
 
 
-
+<!-- 
 ### References
 [1] [**InstaHide: Instance-hiding Schemes for Private Distributed Learning**](http://arxiv.org/abs/2010.02772), *Yangsibo Huang, Zhao Song, Kai Li, Sanjeev Arora*, ICML 2020
 
@@ -148,4 +148,4 @@ InstaHide is the only such tool right now, and we now know that it provides mode
 
 [6] [**A method for obtaining digital signatures and public-key cryptosystems**](https://people.csail.mit.edu/rivest/Rsapaper.pdf), *R.L. Rivest, A. Shamir, and L. Adleman*, Communications of the ACM 1978
 
-[7] [**Deep leakage from gradients**](https://arxiv.org/abs/1906.08935), *Ligeng Zhu, Zhijian Liu, and Song Han.* Neurips19.
+[7] [**Deep leakage from gradients**](https://arxiv.org/abs/1906.08935), *Ligeng Zhu, Zhijian Liu, and Song Han.* Neurips19. -->
