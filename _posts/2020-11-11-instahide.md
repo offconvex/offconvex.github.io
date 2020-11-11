@@ -8,11 +8,11 @@ visible:    True
 
 Today's online world and the emerging internet of things is built around a Faustian bargain:  consumers (and their internet of things) hand over their data, and in return get customization of the world to their needs.  Is this exchange of privacy for convenience inherent? At first sight one sees no way around because, of course, to allow machine learning on our data we have to hand our data over to the training algorithm. 
 
-Similar issues arise in settings other than consumer devices. For instance, hospitals may wish to pool together their patient data to train a large deep model. But privacy laws such as HIPAA forbid them from sharing the data itself, so somehow they have to train a deep net on their data without revealing their data. Frameworks such as Federated Learning have been proposed for this but it is known that sharing gradients in that environment leaks a lot of information about the data ([7]). 
+Similar issues arise in settings other than consumer devices. For instance, hospitals may wish to pool together their patient data to train a large deep model. But privacy laws such as HIPAA forbid them from sharing the data itself, so somehow they have to train a deep net on their data without revealing their data. Frameworks such as Federated Learning have been proposed for this but it is known that sharing gradients in that environment leaks a lot of information about the data (ref 7). 
 
 Methods to achieve some of the above  so could completely change the privacy/utility tradeoffs implicit in today's organization of the online world.
 
-This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, InstaHide [1], that we proposed. 
+This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, InstaHide (ref 1), that we proposed, and takeaways from a recent attack on it by a Google team. 
 
 ## Existing solutions in Cryptography  
 
@@ -52,7 +52,7 @@ Which brings us to the question we started with: *Could consumers allow machine 
 
 ## A proposed solution: InstaHide
 
-InstaHide[1] is a new concept: it hides oor "encrypts" images to protect them somewhat,  while still allowing standard deep learning pipelines to be applied on them. The deep model is trained entirely on encrypted images. 
+InstaHide is a new concept: it hides oor "encrypts" images to protect them somewhat,  while still allowing standard deep learning pipelines to be applied on them. The deep model is trained entirely on encrypted images. 
  
 - The training speed and accuracy is only slightly worse than vanilla training: one can achieve a test accuracy of ~ 90 percent on CIFAR10 using encrypted images with a computation overhead < 5 percent.
 
@@ -61,7 +61,7 @@ InstaHide[1] is a new concept: it hides oor "encrypts" images to protect them so
 
 ### How InstaHide encryption works
 
-Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup[2]. It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
+Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup [2]. It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
 
 <p style="text-align:center;">
 <img src="/assets/mixup.png" width="60%" />
@@ -113,17 +113,17 @@ They also proposed a different strategy which abuses the vulnerability of NumPy 
 
 ### Thoughts on this attack
 
-Though the attack is clever and impressive, we feel that the long-term takeaway is still unclear for several reasons.
+Though the attack is clever and impressive, we feel that the long-term take-away is still unclear for several reasons.
 
-> Variants of InstaHide seem to undermine the attack performance. 
+> Variants of InstaHide seem to evade the attack. 
 
-The challenge set contained 50 encryptions of each image. This corresponds to using encrypted images for all or most epochs. But as done in existing settings that use DP, one can pretrain the deep model using non-private images and then fine-tune it with a few epochs of the private images. Using a similar pipeline to DPSGD[4] did, by pretraining a ResNet-18 on CIFAR100 (the public dataset) and finetuning it on CIFAR10 (the private dataset) for $10$ epochs gives accuracy of 83 percent. The Google team conceded that their attack probably would not work in this setting. 
+The challenge set contained 50 encryptions each of 100 images. This corresponds to using encrypted images for 50 epochs. But as done in existing settings that use DP, one can pretrain the deep model using non-private images and then fine-tune it with fewer epochs of the private images. Using a similar pipeline DPSGD (ref. 4), by pretraining a ResNet-18 on CIFAR100 (the public dataset) and finetuning  for $10$ epochs on CIFAR10 (the private dataset)  gives accuracy of 83 percent, still far better than any provable guarantees using DP on this dataset. The Google team conceded that their attack probably would not work in this setting. 
 
-Also using InstaHide purely at inference time (i.e., using ML, instead of training ML) still should be completely secure since only one encryption of the image is released. 
+Similarly using InstaHide purely at inference time (i.e., using ML, instead of training ML) still should be completely secure since only one encryption of the image is released. The Google attack can't work here at all.  
 
 > InstaHide was never intended to be a mission-critical encryption like RSA.
 
-InstaHide is designed to give users and the internet of things a light-weight encryption method that allows them to use machine learning without giving eavesdroppers or servers access to their raw data. There is no other cost-effective alternative to InstaHide for this application. If it takes Google's powerful computers a few hours  to break our challenge set of 100 images, this is not yet a cost-effective attack  in the intended settings. 
+InstaHide is designed to give users and the internet of things a *light-weight* encryption method that allows them to use machine learning without giving eavesdroppers or servers access to their raw data. There is no other cost-effective alternative to InstaHide for this application. If it takes Google's powerful computers a few hours  to break our challenge set of 100 images, this is not yet a cost-effective attack  in the intended settings. 
 
 More important, the challenge dataset corresponded to an ambitious form of security, where the encrypted images themselves are released to the world. The more typical application is a Federated Learning[5] scenario: the adversary observes shared gradients that are computed using encrypted images (he also has access to the trained model). The attacks in this paper do not currently apply to that scenario. This is also the idea in **TextHide**, an adaptation of InstaHide to text data. 
 
@@ -148,4 +148,4 @@ InstaHide is the only such tool right now, and we now know that it provides mode
 
 [6] [**A method for obtaining digital signatures and public-key cryptosystems**](https://people.csail.mit.edu/rivest/Rsapaper.pdf), *R.L. Rivest, A. Shamir, and L. Adleman*, Communications of the ACM 1978
 
-[7] [** Deep leakage from gradients**](https://arxiv.org/abs/1906.08935), *Ligeng Zhu, Zhijian Liu, and Song Han.* Neurips19.
+[7] [**Deep leakage from gradients**](https://arxiv.org/abs/1906.08935), *Ligeng Zhu, Zhijian Liu, and Song Han.* Neurips19.
