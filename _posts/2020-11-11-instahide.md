@@ -2,7 +2,7 @@
 layout:     post
 title:      How to allow deep learning on your data without revealing the data 
 date:       2020-11-11 10:00:00
-author:      Sanjeev Arora
+author:     Sanjeev Arora
 visible:    True
 ---
 
