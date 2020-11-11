@@ -64,7 +64,7 @@ InstaHide[1] is a new concept: it hides oor "encrypts" images to protect them so
 Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup[2]. It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
 
 <p style="text-align:center;">
-<img src="/assets/mixup.png" width="80%" />
+<img src="/assets/mixup.png" width="60%" />
 </p>
 
 
