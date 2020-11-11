@@ -134,4 +134,4 @@ More important, the challenge dataset corresponded to an ambitious form of secur
 
 [6] [**A method for obtaining digital signatures and public-key cryptosystems**](https://people.csail.mit.edu/rivest/Rsapaper.pdf), *R.L. Rivest, A. Shamir, and L. Adleman*, Communications of the ACM 1978
 
-[7] [** Deep leakage from gradients.**](https://arxiv.org/abs/1906.08935) Ligeng Zhu, Zhijian Liu, and Song Han. Neurips19.
+[7] [** Deep leakage from gradients**](https://arxiv.org/abs/1906.08935), *Ligeng Zhu, Zhijian Liu, and Song Han.* Neurips19.
