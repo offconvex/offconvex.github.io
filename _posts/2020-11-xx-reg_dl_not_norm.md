@@ -37,7 +37,7 @@ Matrix factorization represents an alternative, deep learning approach to matrix
 The idea is to use a *linear neural network* (fully-connected neural network with linear activation), and optimize the resulting objective via gradient descent (GD).
 More specifically, rather than working with the loss $\ell(W)$ directly, we choose a depth $L \in \mathbb{N}$, and run GD on the *overparameterized objective*:
 \[
-\phi ( W_1 , W_2 , \ldots , W_L ) = \ell ( W_L W_{L - 1} \cdots W_1) ~. ~~\qquad~ \color{purple}{\text{(2)}}
+\phi ( W_1 , W_2 , \ldots , W_L ) := \ell ( W_L W_{L - 1} \cdots W_1) ~. ~~\qquad~ \color{purple}{\text{(2)}}
 \]
 Our solution to the matrix completion problem is then:
 \[
@@ -48,7 +48,7 @@ While (for $L \geq 2$) it is possible to constrain the rank of $W_{L : 1}$ by li
 In this case there is *no explicit regularization*, and the kind of solution GD will converge to is determined implicitly by the parameterization.
 The degenerate case $L = 1$ is obviously uninteresting (nothing is learned in the unobserved locations), but what happens when depth is added ($L \geq 2$)?
 
-In their [NeurIPS 2017 paper](https://papers.nips.cc/paper/2017/file/58191d2a914c6dae66371c9dcdc91b41-Paper.pdf), Gunasekar et al. showed empirically that with with depth $L = 2$, if GD is run with small learning rate starting from near-zero initialization, then the implicit regularization in matrix factorization tends to produce low-rank solutions (yielding good generalization under the standard assumption of $M$ having low rank).
+In their [NeurIPS 2017 paper](https://papers.nips.cc/paper/2017/file/58191d2a914c6dae66371c9dcdc91b41-Paper.pdf), Gunasekar et al. showed empirically that with depth $L = 2$, if GD is run with small learning rate starting from near-zero initialization, then the implicit regularization in matrix factorization tends to produce low-rank solutions (yielding good generalization under the standard assumption of $M$ having low rank).
 They conjectured that behind the scenes, what takes place is the classic nuclear norm minimization algorithm:
 
 > **Conjecture 1 ([Gunasekar et al. 2017](https://papers.nips.cc/paper/7195-implicit-regularization-in-matrix-factorization.pdf); informally stated):**
@@ -114,8 +114,8 @@ to increase (which in turn means norms increase) as loss decreases.
 
 If the implicit regularization in matrix factorization is not minimizing a norm, what is it doing?
 While a complete theoretical characterization is still lacking, there are signs that a potentially useful interpretation is ***minimization of rank***.
-In our aforementioned [NeurIPS 2019 paper](https://papers.nips.cc/paper/2019/file/c0c783b5fc0d7d808f1d14a6e9c8280d-Paper.pdf), we derived a dynamical characterization (and showed supporting experiments) suggesting that matrix factorization is implicitly conducting a greedy low-rank search (see [previous blog post](http://www.offconvex.org/2019/07/10/trajectories-linear-nets/) for details).
-This phenomenon actually facilitated a novel autoencoding architecture suggested in a recent [empirical paper](https://arxiv.org/pdf/2010.00679.pdf) (to appear at NeurIPS 2020) by Yann LeCun and his team at Facebook AI.
+In our aforementioned [NeurIPS 2019 paper](https://papers.nips.cc/paper/2019/file/c0c783b5fc0d7d808f1d14a6e9c8280d-Paper.pdf), we derived a dynamical characterization (and showed supporting experiments) suggesting that matrix factorization is implicitly conducting some kind of greedy low-rank search (see [previous blog post](http://www.offconvex.org/2019/07/10/trajectories-linear-nets/) for details).
+This phenomenon actually facilitated a new autoencoding architecture suggested in a recent [empirical paper](https://arxiv.org/pdf/2010.00679.pdf) (to appear at NeurIPS 2020) by Yann LeCun and his team at Facebook AI.
 Going back to the example in Equation $\color{purple}{\text(4)}$, notice that in this matrix completion problem all solutions have rank $2$, but it is possible to essentially minimize rank to $1$ by taking (absolute value of) unobserved entry to infinity.
 As we've seen, this is exactly what the implicit regularization in matrix factorization does!
 
@@ -130,8 +130,8 @@ Here's a representative result from one of our experiments:
 <br>
 <i><b>Figure 2:</b> 
 In analogy with matrix factorization, the implicit regularization of tensor factorization (high dimensional extension) strives to find a low (tensor) rank solution.
-Plots show reconstruction error and (tensor) rank of final solution on multiple tensor completion problems differing in the # of observations.
-GD over tensor factorization is compared against "linear" method $-$ GD over direct parameterization of tensor initialized at zero (equivalent to fitting observations while placing zeros in unobserved locations).
+Plots show reconstruction error and (tensor) rank of final solution on multiple tensor completion problems differing in the number of observations.
+GD over tensor factorization is compared against "linear" method $-$ GD over direct parameterization of tensor initialized at zero (this is equivalent to fitting observations while placing zeros in unobserved locations).
 </i>
 <br>
 <br>
