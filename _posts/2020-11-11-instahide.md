@@ -12,7 +12,7 @@ Similar issues arise in settings other than consumer devices. For instance, hosp
 
 Methods to achieve some of the above  so could completely change the privacy/utility tradeoffs implicit in today's organization of the online world.
 
-This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, [InstaHide](http://arxiv.org/abs/2010.02772), that we proposed, and takeaways from a recent attack on it by a Google team. 
+This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, [InstaHide](http://arxiv.org/abs/2010.02772), that we proposed, and takeaways from a recent attack on it by Carlini et al.
 
 ## Existing solutions in Cryptography  
 
@@ -90,7 +90,7 @@ We also released a [challenge dataset](https://github.com/Hazelsuko07/InstaHide_
 ## Google Team's recent attack on InstaHide
 
 
-Recently, researchers at Google have shared with us a manuscript with a two-step reconstruction attack ([Carlini et al., 2020](https://arxiv.org/pdf/2011.05315.pdf))  against InstaHide. 
+Recently, Carlini et al. have shared with us a manuscript with a two-step reconstruction attack ([Carlini et al., 2020](https://arxiv.org/pdf/2011.05315.pdf))  against InstaHide. 
 
 ***TL;DR: They used 11 hours on Google's best GPUs to get partial recovery of our 100 challenge encryptions and  120 CPU hours to break the encryption completely. Furthermore, the latter was possible entirely because we used an insecure random number generator, and they used exhaustive search over random seeds.***
 
