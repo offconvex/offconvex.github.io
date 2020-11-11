@@ -10,7 +10,9 @@ Today's online world and the emerging internet of things is built around a Faust
 
 Similar issues arise in settings other than consumer devices. For instance, hospitals may wish to pool together their patient data to train a large deep model. But privacy laws such as HIPAA forbid them from sharing the data itself, so somehow they have to train a deep net on their data without revealing their data. Frameworks such as Federated Learning have been proposed for this but it is known that sharing gradients in that environment leaks a lot of information about the data ([7]). 
 
-This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, InstaHide, that we proposed.   
+Methods to achieve some of the above  so could completely change the privacy/utility tradeoffs implicit in today's organization of the online world.
+
+This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, InstaHide [1], that we proposed. 
 
 ## Existing solutions in Cryptography  
 
@@ -59,16 +61,21 @@ InstaHide[1] is a new concept: it hides oor "encrypts" images to protect them so
 
 ### How InstaHide encryption works
 
-Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup[2]. It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
+Here are some details. InstaHide  belongs to the class of subset-sum type encryptions, and was inspired by a data augmentation technique called Mixup[2]. It views images as vectors of pixel values. With vectors you can take linear combinations. The figure below shows the result of a typical MixUp: adding  0.6 times the bird image  with 0.4 times the airplane image. The image labels can also be treated as one-hot vectors, and they are mixed using the same coefficients in front of the image samples.
 
-![An illustration of Mixup with a bird image and an airplane image](./figs/mixup.png)
+<p style="text-align:center;">
+<img src="/assets/mixup.png" width="80%" />
+</p>
+
 
 To encrypt the bird image, InstaHide does mixup (i.e., combination with nonnegative coefficients) with one other randomly chosen training image, and with two  other images chosen randomly from a large public dataset like imagenet.  The coefficients 0.6., 0.4 etc. in the figure  are also chosen at random. Then it takes this composite image and for every pixel value, it randomly flips the sign. With that, we get the encrypted images and labels. All random choices made in this encryption act as a one-time key that is never re-used to encrypt other images. 
 
-InstaHide has a parameter $k$ denoting how many images are mixed; in the picture, we have $k=4$. 
+InstaHide has a parameter $k$ denoting how many images are mixed; in the picture, we have $k=4$. The figure below shows this encryption mechanism. 
 
+<p style="text-align:center;">
+<img src="/assets/instahide.png" width="80%" />
+</p>
 
-![An illustration of encrypting the bird image using InstaHide (k=4)](./figs/instahide.png)
 
 When plugged into the standard deep learning with a private dataset of $n$ images, in each epoch of training (say $T$ epochs in total), InstaHide will re-encrypt each image in the  dataset using a random one-time key. This will gives $n\times T$ encrypted images in total.
 
@@ -112,12 +119,19 @@ Though the attack is clever and impressive, we feel that the long-term takeaway 
 
 The challenge set contained 50 encryptions of each image. This corresponds to using encrypted images for all or most epochs. But as done in existing settings that use DP, one can pretrain the deep model using non-private images and then fine-tune it with a few epochs of the private images. Using a similar pipeline to DPSGD[4] did, by pretraining a ResNet-18 on CIFAR100 (the public dataset) and finetuning it on CIFAR10 (the private dataset) for $10$ epochs gives accuracy of 83 percent. The Google team conceded that their attack probably would not work in this setting. 
 
+Also using InstaHide purely at inference time (i.e., using ML, instead of training ML) still should be completely secure since only one encryption of the image is released. 
+
 > InstaHide was never intended to be a mission-critical encryption like RSA.
 
 InstaHide is designed to give users and the internet of things a light-weight encryption method that allows them to use machine learning without giving eavesdroppers or servers access to their raw data. There is no other cost-effective alternative to InstaHide for this application. If it takes Google's powerful computers a few hours  to break our challenge set of 100 images, this is not yet a cost-effective attack  in the intended settings. 
 
-More important, the challenge dataset corresponded to an ambitious form of security, where the encrypted images themselves are released to the world. The more typical application is a Federated Learning[5] scenario: the adversary observes shared gradients that are computed using encrypted images (he also has access to the trained model). The attacks in this paper do not currently apply to that scenario.
+More important, the challenge dataset corresponded to an ambitious form of security, where the encrypted images themselves are released to the world. The more typical application is a Federated Learning[5] scenario: the adversary observes shared gradients that are computed using encrypted images (he also has access to the trained model). The attacks in this paper do not currently apply to that scenario. This is also the idea in **TextHide**, an adaptation of InstaHide to text data. 
 
+## Takeways
+
+Users need lightweight encryptions that can be applied in real time to large amounts of data, and yet allow them to take benefit of Machine Learning on the cloud. Methods to do so could completely change the privacy/utility tradeoffs implicitly assumed in today's tech world. 
+
+InstaHide is the only such tool right now, and we now know that it provides moderate security that may be enough for many applications. 
 
 
 
