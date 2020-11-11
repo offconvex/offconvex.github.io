@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      How to allow deep learning on your data without revealing the data 
-date:       2020-10-20 10:00:00
+date:       2020-11-11 10:00:00
 author:      Sanjeev Arora
-visible:    False 
+visible:    True
 ---
 
 Today's online world and the emerging internet of things is built around a Faustian bargain:  consumers (and their internet of things) hand over their data, and in return get customization of the world to their needs.  Is this exchange of privacy for convenience inherent? At first sight one sees no way around because, of course, to allow machine learning on our data we have to hand our data over to the training algorithm. 
