@@ -8,7 +8,7 @@ visible:    False
 
 Today's online world and the emerging internet of things is built around a Faustian bargain:  consumers (and their internet of things) hand over their data, and in return get customization of the world to their needs.  Is this exchange of privacy for convenience inherent? At first sight one sees no way around because, of course, to allow machine learning on our data we have to hand our data over to the training algorithm. 
 
-Similar issues arise in settings other than consumer devices. For instance, hospitals may wish to pool together their patient data to train a large deep model. But privacy laws such as HIPAA forbid them from sharing the data itself, so somehow they have to train a deep net on their data without revealing their data. Frameworks such as Federated Learning have been proposed for this but it is known that sharing gradients in that environment leaks a lot of information about the data (citation). 
+Similar issues arise in settings other than consumer devices. For instance, hospitals may wish to pool together their patient data to train a large deep model. But privacy laws such as HIPAA forbid them from sharing the data itself, so somehow they have to train a deep net on their data without revealing their data. Frameworks such as Federated Learning have been proposed for this but it is known that sharing gradients in that environment leaks a lot of information about the data ([7]). 
 
 This blog post discusses the current set of solutions,  how they don't quite suffice for above questions, and the story of a new solution, InstaHide, that we proposed.   
 
@@ -23,9 +23,9 @@ Significant research efforts are being made to try to overcome these obstacles a
 
  Differential privacy involves adding carefully calculated amounts of noise during training. This is a modern and rigorous version of classic    *data anonymization* techniques whose canonical application is release of noised census data to protect privacy of individuals.
  
-This notion was adapted to machine learning by positing that "privacy" in machine learning refers to trained classifiers not being dependent on data of individuals. In other words, if the classifier is trained on data from N individuals, it's behavior should be essentially unchanged (statistically speaking) if we omit data from any individual. Note that this is a weak notion of privacy: for instance in a federated learning setting (e.g., hospitals trying to 
+This notion was adapted to machine learning by positing that "privacy" in machine learning refers to trained classifiers not being dependent on data of individuals. In other words, if the classifier is trained on data from N individuals, it's behavior should be essentially unchanged (statistically speaking) if we omit data from any individual. Note that this is a weak notion of privacy: it does not in any way hide the data from the company. 
 
-Many tech companies have adopted differential privacy but the following two caveats are important.
+Many tech companies have adopted differential privacy in deployed systems but the following two caveats are important.
 
 
 >(Caveat 1): In deep learning applications, DP's provable guarantees are very weak.
@@ -42,7 +42,7 @@ Thus it is no surprise that firms today usually apply DP with very low noise lev
 DP's provable guarantee (which as noted, does not hold in deployed systems due to the low noise level used) would only ensure that  a deployed ML software that was trained with data from tens of millions of users will not accidentally reveal private information of any user. 
 
 
-But that threat model would seem remote to the person on the street. The privacy issue they worry about more is that copious amounts of our data are continuously collected/stored/mined/sold, often by entities we do not even know about. While  lax regulation is primarily to blame,  there is also the technical hurdle  that  there  is no **practical way** for consumers to hide their data while at the same time benefiting from customized ML solutions that improve their lives. 
+But that threat model would seem remote to the person on the street. The privacy issue they worry about more is that copious amounts of our data are continuously collected/stored/mined/sold, often by entities we do not even know about. While  lax regulation is primarily to blame,  there is also the technical hurdle  that  there  is no **practical way** for consumers to hide their data while at the same time benefiting from customized ML solutions that improve their lives.  
 
 Which brings us to the question we started with: *Could consumers allow machine learning to be done on their data without revealing their data?*
 
@@ -133,3 +133,5 @@ More important, the challenge dataset corresponded to an ambitious form of secur
 [5] [**Federated learning: Strategies for improving communication efficiency**](https://arxiv.org/abs/1610.05492), *Jakub Konečný, H. Brendan McMahan, Felix X. Yu, Peter Richtárik, Ananda Theertha Suresh, Dave Bacon*, NeurIPS Workshop 2016
 
 [6] [**A method for obtaining digital signatures and public-key cryptosystems**](https://people.csail.mit.edu/rivest/Rsapaper.pdf), *R.L. Rivest, A. Shamir, and L. Adleman*, Communications of the ACM 1978
+
+[7] [** Deep leakage from gradients.] Ligeng Zhu, Zhijian Liu, and Song Han. Neurips19.
