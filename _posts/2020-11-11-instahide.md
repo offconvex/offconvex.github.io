@@ -117,7 +117,7 @@ Though the attack is clever and impressive, we feel that the long-term take-away
 
 > Variants of InstaHide seem to evade the attack. 
 
-The challenge set contained 50 encryptions each of 100 images. This corresponds to using encrypted images for 50 epochs. But as done in existing settings that use DP, one can pretrain the deep model using non-private images and then fine-tune it with fewer epochs of the private images. Using a similar pipeline DPSGD ([Abadi et al., 2016](https://arxiv.org/abs/1607.00133)), by pretraining a ResNet-18 on CIFAR100 (the public dataset) and finetuning  for $10$ epochs on CIFAR10 (the private dataset)  gives accuracy of 83 percent, still far better than any provable guarantees using DP on this dataset. The Google team conceded that their attack probably would not work in this setting. 
+The challenge set contained 50 encryptions each of 100 images. This corresponds to using encrypted images for 50 epochs. But as done in existing settings that use DP, one can pretrain the deep model using non-private images and then fine-tune it with fewer epochs of the private images. Using a similar pipeline DPSGD ([Abadi et al., 2016](https://arxiv.org/abs/1607.00133)), by pretraining a ResNet-18 on CIFAR100 (the public dataset) and finetuning  for $10$ epochs on CIFAR10 (the private dataset)  gives accuracy of 83 percent, still far better than any provable guarantees using DP on this dataset. Carlini et al.\ team conceded that their attack probably would not work in this setting. 
 
 Similarly using InstaHide purely at inference time (i.e., using ML, instead of training ML) still should be completely secure since only one encryption of the image is released. The Google attack can't work here at all.  
 
