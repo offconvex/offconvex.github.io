@@ -87,7 +87,7 @@ We conjectured, based upon intuitions from computational complexity of the k-vec
 We also released a [challenge dataset](https://github.com/Hazelsuko07/InstaHide_Challenge) with $k=6, n=100, T=50$ to enable further investigation of InstaHide's security. 
 
 
-## Google Team's recent attack on InstaHide
+## Carlini et al.'s recent attack on InstaHide
 
 
 Recently, Carlini et al. have shared with us a manuscript with a two-step reconstruction attack ([Carlini et al., 2020](https://arxiv.org/pdf/2011.05315.pdf))  against InstaHide. 
@@ -121,11 +121,12 @@ The challenge set contained 50 encryptions each of 100 images. This corresponds 
 
 Similarly using InstaHide purely at inference time (i.e., using ML, instead of training ML) still should be completely secure since only one encryption of the image is released. The Google attack can't work here at all.  
 
-> InstaHide was never intended to be a mission-critical encryption like RSA.
+> InstaHide was never intended to be a mission-critical encryption like RSA (which by the way also has no provable guarantees). 
 
 InstaHide is designed to give users and the internet of things a *light-weight* encryption method that allows them to use machine learning without giving eavesdroppers or servers access to their raw data. There is no other cost-effective alternative to InstaHide for this application. If it takes Google's powerful computers a few hours  to break our challenge set of 100 images, this is not yet a cost-effective attack  in the intended settings. 
 
 More important, the challenge dataset corresponded to an ambitious form of security, where the encrypted images themselves are released to the world. The more typical application is a Federated Learning ([Konečný et al., 2016](https://arxiv.org/abs/1610.05492)) scenario: the adversary observes shared gradients that are computed using encrypted images (he also has access to the trained model). The attacks in this paper do not currently apply to that scenario. This is also the idea in [**TextHide**](https://arxiv.org/abs/2010.06053), an adaptation of InstaHide to text data. 
+
 
 ## Takeways
 
