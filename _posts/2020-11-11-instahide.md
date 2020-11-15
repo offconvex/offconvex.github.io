@@ -41,8 +41,7 @@ Thus it is no surprise that firms today usually apply DP with very low noise lev
 
 > (Caveat 2): DP's guarantees (and even weaker guarantees applying to deployment scenarios) possibly act as a fig leaf that allows firms to not address  the kinds of privacy violations that the person on the street actually worries about.
 
-DP's provable guarantee (which as noted, does not hold in deployed systems due to the low noise level used) would only ensure that  a deployed ML software that was trained with data from tens of millions of users will not accidentally reveal private information of any user. 
-
+DP's provable guarantee (which as noted, does not hold in deployed systems due to the low noise level used) would only ensure that  a deployed ML software that was trained with data from tens of millions of users will not change its behavior depending upon private information of any single user. 
 
 But that threat model would seem remote to the person on the street. The privacy issue they worry about more is that copious amounts of our data are continuously collected/stored/mined/sold, often by entities we do not even know about. While  lax regulation is primarily to blame,  there is also the technical hurdle  that  there  is no **practical way** for consumers to hide their data while at the same time benefiting from customized ML solutions that improve their lives.  
 
