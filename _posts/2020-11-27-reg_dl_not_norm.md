@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Can implicit regularization in deep learning be explained by norms?
-date: 2020-11-xx xx:00:00
+date: 2020-11-27 09:00:00
 author: Nadav Cohen
-visible: False
+visible: True
 ---
 
 This post is based on my [recent paper](https://arxiv.org/pdf/2005.06398.pdf) with [Noam Razin](https://noamrazin.github.io/) (to appear at NeurIPS 2020), studying the question of whether norms can explain implicit regularization in deep learning.
