@@ -44,7 +44,7 @@ Our solution to the matrix completion problem is then:
 \qquad\qquad W_{L : 1} := W_L W_{L - 1} \cdots W_1 ~, \qquad\qquad\qquad \color{purple}{\text{(3)}}
 \] 
 which we refer to as the *product matrix*.
-While (for $L \geq 2$) it is possible to constrain the rank of $W_{L : 1}$ by limiting dimensions of the parameter matrices $\\{ W_j \\}_j$, from an implicit regularization standpoint, the case of interest is where rank is unconstrained (i.e. dimensions of $\\{ W_j \\}_j$ are large enough for $W_{L : 1}$ to take on any value).
+While (for $L \geq 2$) it is possible to constrain the rank of $W_{L : 1}$ by limiting dimensions of the parameter matrices $\\\{ W_j \\\}_j$, from an implicit regularization standpoint, the case of interest is where rank is unconstrained (i.e. dimensions of $\\\{ W_j \\\}_j$ are large enough for $W_{L : 1}$ to take on any value).
 In this case there is *no explicit regularization*, and the kind of solution GD will converge to is determined implicitly by the parameterization.
 The degenerate case $L = 1$ is obviously uninteresting (nothing is learned in the unobserved locations), but what happens when depth is added ($L \geq 2$)?
 
