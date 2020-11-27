@@ -59,7 +59,7 @@ Moreover, they were able to prove the conjecture in a certain restricted setting
 Two years after Conjecture 1 was made, in a [NeurIPS 2019 paper](https://papers.nips.cc/paper/2019/file/c0c783b5fc0d7d808f1d14a6e9c8280d-Paper.pdf) with Sanjeev, Wei and Yuping Luo, we presented empirical and theoretical evidence (see [previous blog post](http://www.offconvex.org/2019/07/10/trajectories-linear-nets/) for details) which led us to hypothesize the opposite, namely, that for any depth $L \geq 2$, the implicit regularization in matrix factorization can *not* be described as minimization of a norm:
 
 > **Conjecture 2 ([Arora et al. 2019](https://papers.nips.cc/paper/2019/file/c0c783b5fc0d7d808f1d14a6e9c8280d-Paper.pdf); informally stated):**
-> Given a depth $L \geq 2$ matrix factorization, for any norm $\\|{\,\cdot\,}\\|$, there exist matrix completion tasks on which GD (with small learning rate and near-zero initialization) finds solution that does not minimize $||{\,\cdot\,}||$.
+> Given a depth $L \geq 2$ matrix factorization, for any norm $\\|{\cdot}\\|$, there exist matrix completion tasks on which GD (with small learning rate and near-zero initialization) finds solution that does not minimize $\\|{\,\cdot\,}\\|$.
 
 Due to technical subtleties in their formal statements, Conjectures 1 and 2 do not necessarily contradict.
 However, they represent opposite views on the question of whether or not norms can explain implicit regularization in matrix factorization.
