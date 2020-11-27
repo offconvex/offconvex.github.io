@@ -85,7 +85,7 @@ As a simple example, consider the following matrix completion problem ($\*$ here
 \[
 \qquad\qquad
 \begin{pmatrix}
-\* & 1 \\
+\* & 1 \newline
 1 & 0 
 \end{pmatrix}
 ~. \qquad\qquad \color{purple}{\text{(4)}}
