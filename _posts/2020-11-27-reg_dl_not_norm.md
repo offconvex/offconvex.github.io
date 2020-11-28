@@ -104,9 +104,7 @@ Here's the result of an experiment with the setting of Equation $\color{purple}{
 <img style="width:300px;" src="http://www.offconvex.org/assets/reg_dl_not_norm_mf_exp.png" />
 <br>
 <i><b>Figure 1:</b> 
-Solving matrix completion problem defined by Equation $\color{purple}{\text(4)}$ <br> 
-using matrix factorization leads absolute value of unobserved entry <br>
-to increase (which in turn means norms increase) as loss decreases.
+Solving matrix completion problem defined by Equation $\color{purple}{\text(4)}$ using matrix factorization leads absolute value of unobserved entry to increase (which in turn means norms increase) as loss decreases.
 </i>
 </div>
 
@@ -144,9 +142,7 @@ It turns out that, similarly to how matrix factorizations correspond to predicti
 <img style="width:900px;" src="http://www.offconvex.org/assets/reg_dl_not_norm_mf_lnn_tf_cac.png" />
 <br>
 <i><b>Figure 3:</b> 
-The equivalence between matrix factorizations and linear neural <br>
-networks extends to an equivalence between tensor factorizations and a certain <br>
-type of non-linear neural networks named convolutional arithmetic circuits.
+The equivalence between matrix factorizations and linear neural networks extends to an equivalence between tensor factorizations and a certain type of non-linear neural networks named convolutional arithmetic circuits.
 </i>
 <br>
 <br>
