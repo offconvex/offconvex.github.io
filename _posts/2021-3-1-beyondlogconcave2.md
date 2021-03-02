@@ -42,9 +42,7 @@ More precisely, we show:
 The main idea is to create a meta-Markov chain (the simulated tempering chain) which has two types of moves: change the current "temperature" of the sample, or move "within" a temperature. The main intuition behind this is that at higher temperatures, the distribution is flatter, so the chain explores the landscape faster (see the figure below). 
 
 <center> 
-
-![](http://www.andrew.cmu.edu/user/aristesk/animation_tempering.gif)
-
+<img src="http://www.andrew.cmu.edu/user/aristesk/animation_tempering.gif">
 </center>
 
 More formally, the distribution at inverse temperature $\beta$ is given by $p_\beta(x) \propto e^{-\beta f(x)}$. The Langevin chain which corresponds to $\beta$ is given by
@@ -84,9 +82,7 @@ In applying the Madras-Randall framework with this partition, it's clear that po
 The intuition for why this path works is illustrated in the figure below: when transitioning from the set corresponding to the left mode at level $L$ to the right mode at level $L$, each of the steps up/down the temperatures are accepted with good probability if the neighboring temperatures are not too different; at the highest temperature, the chain mixes fast by point (1), and since each of the sets are not too small by point (2), there is a reasonable probability to end at the right mode at the highest temperature. 
 
 <center>
-
-![](http://www.andrew.cmu.edu/user/aristesk/animation_conductance.gif)
-
+<img src="http://www.andrew.cmu.edu/user/aristesk/animation_conductance.gif">
 </center>
 
 <!--(rework this picture?) This is a Markov chain with a small state space, so its spectral gap is easy to lower-bound (e.g., with Cheeger's inequality). The one thing we need to check is that there is no "bottleneck," i.e., one set in the partition that has low probability at high temperature and high probability at low temperature. -->
