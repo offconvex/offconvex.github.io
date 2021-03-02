@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Beyond log-concave sampling (Part 2)
-date:       2021-3-1 14:00:00
+date:       2021-03-01 14:00:00
 summary:    Beyond log-concave sampling
 author:     Holden Lee, Andrej Risteski
 visible:    True
