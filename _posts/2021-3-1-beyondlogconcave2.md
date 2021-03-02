@@ -8,7 +8,10 @@ visible:    True
 ---
 
 In our previous [blog post](http://www.offconvex.org/2020/09/19/beyondlogconvavesampling), we introduced the challenges of sampling distributions beyond log-concavity. 
-We first introduced the problem of sampling from a distibution $p(x) \propto e^{-f(x)}$ given value or gradient oracle access to $f$, as an analogous problem to black-box optimization with oracle access. We introduced the natural algorithm for sampling in this setup: Langevin Monte Carlo, a Markov Chain reminiscent of noisy gradient descent, $$x_{t+\eta} = x_t - \eta \nabla f(x_t) + \sqrt{2\eta}\xi_t,\quad \xi_t\sim N(0,I).$$
+We first introduced the problem of sampling from a distibution $p(x) \propto e^{-f(x)}$ given value or gradient oracle access to $f$, as an analogous problem to black-box optimization with oracle access. We introduced the natural algorithm for sampling in this setup: Langevin Monte Carlo, a Markov Chain reminiscent of noisy gradient descent, 
+
+$$x_{t+\eta} = x_t - \eta \nabla f(x_t) + \sqrt{2\eta}\xi_t,\quad \xi_t\sim N(0,I).$$
+
 Finally, we laid out the challenges when $f$ is not convex; in particular, LMC can suffer from slow mixing.
   
 
@@ -46,7 +49,9 @@ The main idea is to create a meta-Markov chain (the simulated tempering chain) w
 </center>
 
 More formally, the distribution at inverse temperature $\beta$ is given by $p_\beta(x) \propto e^{-\beta f(x)}$. The Langevin chain which corresponds to $\beta$ is given by
+
 $$x_{t+\eta} = x_t - \eta \beta \nabla f(x_t) + \sqrt{2\eta}\xi_t,\quad \xi_t\sim N(0,I).$$
+
 As in the figure above, a high temperature (low $\beta<1$) flattens out the distribution and causes the chain to mix faster (top distribution in figure). However, we can’t merely run Langevin at a higher temperature, because the stationary distribution of the high-temperature chain is wrong: it's $p_\beta(x)$. The idea behind simulated tempering is to run Langevin chains at different temperatures, sometimes swapping to another temperature to help lower-temperature chains explore. To maintain the right stationary distributions at each temperature, we use a Metropolis-Hastings filtering step.
 
 More formally, choosing a suitable sequence $0< \beta_1< \cdots <\beta_L=1$, we define the simulated tempering chain as follows.
@@ -90,3 +95,4 @@ The intuition for why this path works is illustrated in the figure below: when t
 Intuitively, the partition should track the "modes" of the distribution, but a technical hurdle in implementing this plan is in defining the partition when the modes overlap. One can either do this spectrally (i.e. showing that the Langevin chain has a spectral gap, and use theorems about [spectral graph partitioning](https://arxiv.org/abs/1309.3223), as we did in the [first version](https://arxiv.org/abs/1710.02736) of the paper), or use a functional "soft decomposition theorem" which is a more flexible version of the classical decomposition theorem, which we use in a [later version](https://arxiv.org/abs/1812.00793) of the paper.
 
 <!-- ![](http://holdenlee.github.io/pics/proj_chain.png)-->
+
