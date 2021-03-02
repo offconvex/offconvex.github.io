@@ -84,7 +84,9 @@ In applying the Madras-Randall framework with this partition, it's clear that po
 The intuition for why this path works is illustrated in the figure below: when transitioning from the set corresponding to the left mode at level $L$ to the right mode at level $L$, each of the steps up/down the temperatures are accepted with good probability if the neighboring temperatures are not too different; at the highest temperature, the chain mixes fast by point (1), and since each of the sets are not too small by point (2), there is a reasonable probability to end at the right mode at the highest temperature. 
 
 <center>
+
 ![](http://www.andrew.cmu.edu/user/aristesk/animation_conductance.gif)
+
 </center>
 
 <!--(rework this picture?) This is a Markov chain with a small state space, so its spectral gap is easy to lower-bound (e.g., with Cheeger's inequality). The one thing we need to check is that there is no "bottleneck," i.e., one set in the partition that has low probability at high temperature and high probability at low temperature. -->
