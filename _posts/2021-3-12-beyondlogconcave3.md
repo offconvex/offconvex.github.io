@@ -6,6 +6,7 @@ summary:    Beyond log-concave sampling
 author:     Andrej Risteski
 visible:    True
 ---
+---
 In the [first post](http://www.offconvex.org/2020/09/19/beyondlogconvavesampling) of this series, we introduced the challenges of sampling distributions beyond log-concavity. In [Part 2](http://www.offconvex.org/2021/03/01/beyondlogconcave2/) we tackled sampling from *multimodal* distributions: a typical obstacle occuring in problems involving statistical inference and posterior sampling in generative models. In this (final) post of the series, we consider sampling in the presence of *manifold structure in the level sets of the distribution* -- which also frequently manifests in the same settings. It will cover the paper [Fast convergence for Langevin diffusion with matrix manifold structure](https://arxiv.org/abs/2002.05576) by Ankur Moitra and Andrej Risteski .
 
 
@@ -72,7 +73,7 @@ The challenge in using the above framework is instantiating the decomposition: n
 
 To instantiate the above framework in a natural setting, we consider distributions exhibiting invariance under orthogonal transformations. Namely, we consider distributions of the type 
 
-$$p: \mathbb{R}^{d \times k} \to \mathbb{R}, \hspace{0.5cm} p(X) \propto e^{-\beta \|\mathcal{A}(XX^T) - b\|^2_F}$$ 
+$$p: \mathbb{R}^{d \times k} \to \mathbb{R}, \hspace{0.5cm} p(X) \propto e^{-\beta ||\mathcal{A}(XX^T) - b ||^2_2}$$ 
 
 where $b \in \mathbb{R}^{m}$ is a fixed vector and $\mathcal{A}$ is an operator that returns a $m$-dimensional vector given a $d \times d$ matrix. For this distribution, we have $p(X) = p(XO)$ for any orthogonal matrix $O$, since $XX^T = XO (XO)^T$ . Depending on the choice of $\mathcal{A}$, we can easily recover some familiar functions inside the exponential: e.g. the $l_2$ losses for (low-rank) matrix factorization, matrix sensing and matrix completion. These losses received a lot of attention as simple examples of objectives that are non-convex but can still be optimized using gradient descent. (See e.g. [Ge et al. '17](https://arxiv.org/abs/1704.00708).)  
 
@@ -80,9 +81,9 @@ These distributions also have a very natural statistical motivation. Namely, con
 
 $$b = \mathcal{A}(XX^T) + n, \hspace{0.5cm} n \sim N\left(0,\frac{1}{\sqrt{\beta}}I\right).$$
 
-Then, the distribution $p(X) \propto e^{-\beta \|\mathcal{A}(XX^T) - b\|^2_2}$ can be viewed as the posterior distribution over $X$ with a uniform prior. Thus, sampling from these distributions can be seen as the distributional analogue of problems like matrix factorization/sensing/completion, the difference being that we are not merely trying to find the *most likely* matrix $X$, but also trying to sample from the posterior.  
+Then, the distribution $p(X) \propto e^{-\beta ||\mathcal{A}(XX^T) - b ||^2_2 }$ can be viewed as the posterior distribution over $X$ with a uniform prior. Thus, sampling from these distributions can be seen as the distributional analogue of problems like matrix factorization/sensing/completion, the difference being that we are not merely trying to find the *most likely* matrix $X$, but also trying to sample from the posterior.  
 
-We will consider the case when $\beta$ is sufficiently large (in particular, $\beta = \Omega(\mbox{poly}(d))$: in this case, the distribution $p$ will concentrate over two (separated) manifolds: $E_1 = \\{X_0 R: R \mbox{ is orthogonal with det 1}\\}$ and $E_2 = \\{X_0 R: R \mbox{ is orthogonal with det }-1\\}$, where $X_0$ is any fixed minimizer of $\|\mathcal{A}(XX^T) - b\|^2_F$. Hence, when started near one of these manifolds, we expect Langevin to stay close to it for a long time (see figure below). 
+We will consider the case when $\beta$ is sufficiently large (in particular, $\beta = \Omega(\mbox{poly}(d))$: in this case, the distribution $p$ will concentrate over two (separated) manifolds: $E_1 = \\{X_0 R: R \mbox{ is orthogonal with det 1}\\}$ and $E_2 = \\{X_0 R: R \mbox{ is orthogonal with det }-1\\}$, where $X_0$ is any fixed minimizer of $||\mathcal{A}(XX^T) - b||^2_2$. Hence, when started near one of these manifolds, we expect Langevin to stay close to it for a long time (see figure below). 
 
 <center>
 <img  src="http://www.andrew.cmu.edu/user/aristesk/langevin_matrix.gif" width="500">
@@ -147,7 +148,7 @@ In a pinch, a Lie group is a group that also is a smooth manifold, and furthermo
 
 To apply the framework we sketched out as part of Theorem 1, we need to verify the conditions of the Theorem. 
 
-To prove **Condition 1**, we need to show that for large $\beta$, the random walk stays near to the manifold it's been initialized close to. The main tools for this are [Ito's lemma](https://en.wikipedia.org/wiki/It%C3%B4%27s_lemma), local convexity of the function $\|\mathcal{A}(XX^T) - b\|_2^2$ and basic results in the theory of [Cox-Ingersoll-Ross](https://en.wikipedia.org/wiki/Cox%E2%80%93Ingersoll%E2%80%93Ross_model) processes. Namely, Ito's lemma (which can be viewed as a "change-of-variables" formula for random variables) allows us to write down a stochastic differential equation for the evolution of the distance of $X$ from the manifold, which turns out to have a "bias" towards small values, due to the local convexity of $\|\mathcal{A}(XX^T) - b\|_2^2$. This can in turn be analyzed approximately as Cox-Ingersoll-Ross process - a well-studied type of non-negative stochastic process.  
+To prove **Condition 1**, we need to show that for large $\beta$, the random walk stays near to the manifold it's been initialized close to. The main tools for this are [Ito's lemma](https://en.wikipedia.org/wiki/It%C3%B4%27s_lemma), local convexity of the function $|| \mathcal{A}(XX^T) - b ||_2^2$ and basic results in the theory of [Cox-Ingersoll-Ross](https://en.wikipedia.org/wiki/Cox%E2%80%93Ingersoll%E2%80%93Ross_model) processes. Namely, Ito's lemma (which can be viewed as a "change-of-variables" formula for random variables) allows us to write down a stochastic differential equation for the evolution of the distance of $X$ from the manifold, which turns out to have a "bias" towards small values, due to the local convexity of $||\mathcal{A}(XX^T) - b||_2^2$. This can in turn be analyzed approximately as Cox-Ingersoll-Ross process - a well-studied type of non-negative stochastic process.  
 
 To prove **Condition 2**, we need to specify the partition of the space around the manifolds $E_i$. Describing the full partition is somewhat technical, but importantly, the manifolds $M^{\Delta}$ have the form $M^{\Delta} = \\{\Delta U: U \mbox{ is an orthogonal matrix with det 1}\\}$ for some matrix $\Delta \in \mathbb{R}^{n \times k}$. 
 
