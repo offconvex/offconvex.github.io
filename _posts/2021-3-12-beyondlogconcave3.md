@@ -1,10 +1,10 @@
 ---
 layout:     post
 title:      Beyond log-concave sampling (Part 3)
-date:       2020-12-10 14:00:00
+date:       2021-03-12 14:00:00
 summary:    Beyond log-concave sampling
 author:     Andrej Risteski
-visible:    False
+visible:    True
 ---
 In the [first post](http://www.offconvex.org/2020/09/19/beyondlogconvavesampling) of this series, we introduced the challenges of sampling distributions beyond log-concavity. In [Part 2](http://www.offconvex.org/2021/03/01/beyondlogconcave2/) we tackled sampling from *multimodal* distributions: a typical obstacle occuring in problems involving statistical inference and posterior sampling in generative models. In this (final) post of the series, we consider sampling in the presence of *manifold structure in the level sets of the distribution* -- which also frequently manifests in the same settings. It will cover the paper [Fast convergence for Langevin diffusion with matrix manifold structure](https://arxiv.org/abs/2002.05576) by Ankur Moitra and Andrej Risteski .
 
