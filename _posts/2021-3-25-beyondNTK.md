@@ -46,9 +46,12 @@ Our main tool for going beyond the NTK is the *Taylor expansion*. Consider a two
 f_{W_0 + W}(x) = \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \sigma( (w_{0,r} + w_r)^\top x).
 \]
 (Here, $W_0+W$ is an $m\times d$ weight matrix, where $W_0$ denotes the random initialization and $W$ denotes the trainable "movement" matrix initialized at zero). For small enough $W$, we can perform a Taylor expansion of the network around $W_0$ and get $f_{W_0+W}(x)$ is
-\[
- = \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \sigma(w_{0,r}^\top x) + \sum_{k=1}^\infty \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \frac{\sigma^{(k)} (w_{0,r}^\top x)}{k!} (w_r^\top x)^k := f^{(0)}_{W_0}(x) + \sum_{k=1}^\infty f^{(k)}_{W_0, W}(x).
-\]
+$$
+ = \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \sigma(w_{0,r}^\top x) + \sum_{k=1}^\infty \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \frac{\sigma^{(k)} (w_{0,r}^\top x)}{k!} (w_r^\top x)^k 
+ $$
+ which we is
+$$:= f^{(0)}_{W_0}(x) + \sum_{k=1}^\infty f^{(k)}_{W_0, W}(x).
+$$
 Above, $f^{(k)}_{W_0, W}(x)$ denotes the $k$-th order term in the Taylor expansion of $f$. For the moment, let us assume that $f^{(0)}_W(x)=0$ (this can be achieved via techniques such as the symmetric initialization).
 
 The key insight of the NTK theory can be described as the following **linearized approximation** property
