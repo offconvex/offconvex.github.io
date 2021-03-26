@@ -3,7 +3,7 @@ layout:     post
 title:      When are Neural Networks more powerful than Neural Tangent Kernels?
 date:       2021-03-25 14:00:00
 author:     Yu Bai, Minshuo Chen, Jason D. Lee
-visible:    True
+visible:    False
 ---
 
 The empirical success of deep learning has posed significant challenges to machine learning theory: Why can we efficiently train neural networks with gradient descent despite its highly non-convex optimization landscape? Why do over-parametrized networks generalize well? The recently proposed Neural Tangent Kernel (NTK) theory offers a powerful framework for understanding these, but yet still comes with its limitations.
