@@ -42,28 +42,27 @@ The key technical question here is to mathematically understand neural networks 
 
 ## Higher-order Taylor expansion
 Our main tool for going beyond the NTK is the *Taylor expansion*. Consider a two-layer neural network with $m$ neurons, where we only train the "bottom" nonlinear layer $W$:
-\[
+
+$$
 f_{W_0 + W}(x) = \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \sigma( (w_{0,r} + w_r)^\top x).
-\]
-(Here, $W_0+W$ is an $m\times d$ weight matrix, where $W_0$ denotes the random initialization and $W$ denotes the trainable "movement" matrix initialized at zero). For small enough $W$, we can perform a Taylor expansion of the network around $W_0$ and get $f_{W_0+W}(x)$ is
-
-\[
- = \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \sigma(w_{0,r}^\top x) + \sum_{k=1}^\infty \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \frac{\sigma^{(k)} (w_{0,r}^\top x)}{k!} (w_r^\top x)^k 
-\]
-
- which is
- 
-$$ = f^{(0)}_{W_0}(x) + \sum_{k=1}^\infty f^{(k)}_{W_0, W}(x).
 $$
 
-Above, $f^{(k)}_{W_0, W}(x)$ denotes the $k$-th order term in the Taylor expansion of $f$. For the moment, let us assume that $f^{(0)}_W(x)=0$ (this can be achieved via techniques such as the symmetric initialization).
+(Here, $W_0+W$ is an $m\times d$ weight matrix, where $W_0$ denotes the random initialization and $W$ denotes the trainable "movement" matrix initialized at zero). For small enough $W$, we can perform a Taylor expansion of the network around $W_0$ and get
+
+$$
+f_{W_0+W}(x) = \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \sigma(w_{0,r}^\top x) + \sum_{k=1}^\infty \frac{1}{\sqrt{m}} \sum_{r=1}^m a_r \frac{\sigma^{(k)} (w_{0,r}^\top x)}{k!} (w_r^\top x)^k 
+$$
+
+Let us denote the $k$-th order term as $ f^{(k)}_{W_0, W}$, and rewrite this as
+
+$$
+f_{W_0+W}(x) = f^{(0)}_{W_0}(x) + \sum_{k=1}^\infty f^{(k)}_{W_0, W}(x).
+$$
+
+For the moment also assume that $f^{(0)}_W(x)=0$ (this can be achieved via techniques such as the symmetric initialization).
 
 The key insight of the NTK theory can be described as the following **linearized approximation** property
-> For small enough $W$, we have
-\\[
-f_{W_0+W}(x) \approx f^{(1)}_{W_0, W}(x) = \langle \nabla_{W} f_{W_0}(x), W \rangle,
-\\]
-that is, the neural network is closely approximated by the linear model $f^{(1)}_{W_0,W}$.
+> For small enough $W$, the neural network $f_{W_0,W}$ is closely approximated by the linear model $f^{(1)}_{W_0,W} = \nabla_W f_{W_0}^\top W$.
 
 Towards moving beyond the linearized approximation, in our [Beyond Linearization paper](https://arxiv.org/abs/1910.01619), we start by asking
 > Why just $f^{(1)}$? Can we also utilize the higher-order term in the Taylor series such as $f^{(2)}$?
@@ -75,17 +74,23 @@ At first sight, this seems rather unlikely, as in Taylor expansions we always ex
 We bring forward the idea of *randomization*, which helps us escape the "domination" of $f^{(1)}$ and couple neural networks with their quadratic Taylor expansion term $f^{(2)}$. This idea appeared first in [Allen-Zhu et al. (2018)](https://arxiv.org/abs/1811.04918) for analyzing three-layer networks, and as we will show also applies to two-layer networks in a perhaps more intuitive fashion. 
 
 Let us now assign each weight movement $w_r$ with a *random sign* $s_r\in\\{\pm 1\\}$, and consider the randomized weights $\\{s_rw_r\\}$. The random signs satisfy the following basic properties:
-\\[
-E[s_r]=0~~~{\rm and}~~~s_r^2\equiv 1.
-\\]
+
+$$
+E[s_r]=0 \quad {\rm and} \quad s_r^2 \equiv 1.
+$$
+
 Therefore, let $SW\in\mathbb{R}^{m\times d}$ denote the randomized weight matrix, we can compare the first and second order terms in the Taylor expansion at $SW$:
-\\[
+
+$$
 E_{S} \left[f^{(1)}_{W_0, SW}(x)\right] = E_{S} \left[ \frac{1}{\sqrt{m}}\sum_{r\le m} a_r \sigma'(w_{0,r}^\top x) (s_rw_r^\top x) \right] = 0,
-\\]
+$$
+
 whereas
-\\[
-f^{(2)}_{W_0, SW}(x) = \frac{1}{\sqrt{m}}\sum_{r\le m} a_r \frac{\sigma''(w_{0,r}^\top x)}{2} (s_rw_r^\top x)^2 = \frac{1}{\sqrt{m}}\sum_{r\le m} a_r \frac{\sigma''(w_{0,r}^\top x)}{2} (w_r^\top x)^2 = f^{(2)}_{W_0, W}(x).
-\\]
+
+$$
+f^{(2)}_{W_0, SW}(x) = \frac{1}{\sqrt{m}}\sum_{r\le m} a_r \frac{\sigma^{(2)}(w_{0,r}^\top x)}{2} (s_rw_r^\top x)^2 = \frac{1}{\sqrt{m}}\sum_{r\le m} a_r \frac{\sigma^{(2)}(w_{0,r}^\top x)}{2} (w_r^\top x)^2 = f^{(2)}_{W_0, W}(x).
+$$
+
 Observe that the sign randomization keeps the quadratic term $f^{(2)}$ unchanged, but "kills" the linear term $f^{(1)}$ in expectation! 
 
 If we train such a randomized network with freshly sampled signs $S$ at each iteration, the linear term $f^{(1)}$ will keep oscillating around zero and does not have any power in fitting the data, whereas the quadratic term is not affected at all and thus becomes the leading force for fitting the data. (The keen reader may notice that this randomization is similar to Dropout, with the key difference being that we randomize the weight *movement* matrix, whereas vanilla Dropout randomizes the weight matrix itself.)
@@ -107,9 +112,11 @@ The proof builds on the quadratic approximation $E_S[f]\approx f^{(2)}$ and rece
 
 ### Generalization and sample complexity: Case study on learning low-rank polynomials
 We next study the generalization of these networks in the context of learning *low-rank degree-$p$ polynomials*:
-\[
-f_\star(x) = \sum_{s=1}^{r_\star} \alpha_s (\beta_s^\top x)^{p_s},~~~|\alpha_s|\le 1,~\|(\beta_s^\top x)^{p_s}\|_{L_2} \le 1,~p_s\le p~~~\textrm{for all}~s.
-\]
+
+$$
+f_\star(x) = \sum_{s=1}^{r_\star} \alpha_s (\beta_s^\top x)^{p_s}, \quad |\alpha_s|\le 1,\|(\beta_s^\top x)^{p_s}\|_{L_2} \le 1, p_s\le p \quad \textrm{for all } s.
+$$
+
 We are specifically interested in the case where $r_\star$ is small (e.g. $O(1)$), so that $y$ only depends on the projection of $x$ on a few directions. This for example captures teacher networks with polynomial activation of bounded degree and analytic activation (approximately), as well as constant depth teacher networks with polynomial activations.
 
 For the NTK, the sample complexity of learning polynomials have been studied extensively in [(Arora et al. 2019a)](https://arxiv.org/abs/1901.08584), [(Ghorbani et al. 2019)](https://arxiv.org/abs/1904.12191), and many concurrent work. Combined, they showed that the sample complexity for learning degree-$p$ polynomials is $\Theta(d^p)$, with matching lower and upper bounds:
