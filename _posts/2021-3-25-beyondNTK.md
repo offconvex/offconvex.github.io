@@ -59,10 +59,10 @@ $$
 f_{W_0+W}(x) = f^{(0)}_{W_0}(x) + \sum_{k=1}^\infty f^{(k)}_{W_0, W}(x).
 $$
 
-For the moment also assume that $f^{(0)}_W(x)=0$ (this can be achieved via techniques such as the symmetric initialization).
+Each term $ f^{(k)}_{W_0, W}$ is a $k$-th order polynomial of the trainable parameter $W$. For the moment assume that $ f^{(0)}_{W_0}(x)=0$ (this can be achieved via techniques such as the symmetric initialization).
 
 The key insight of the NTK theory can be described as the following **linearized approximation** property
-> For small enough $W$, the neural network $f_{W_0,W}$ is closely approximated by the linear model $f^{(1)}_{W_0,W} = \nabla_W f_{W_0}^\top W$.
+> For small enough $W$, the neural network $f_{W_0,W}$ is closely approximated by the linear model $f^{(1)}$.
 
 Towards moving beyond the linearized approximation, in our [Beyond Linearization paper](https://arxiv.org/abs/1910.01619), we start by asking
 > Why just $f^{(1)}$? Can we also utilize the higher-order term in the Taylor series such as $f^{(2)}$?
@@ -143,3 +143,4 @@ In this post, we explored higher-order Taylor expansions (in particular the quad
 * Convenient API for expeirmentation (cf. the [Neural Tangents](https://github.com/google/neural-tangents) package and the [Taylorized training](https://arxiv.org/abs/2002.04010) paper).
 
 We believe these advantages make the Taylor expansion a powerful tool for deep learning theory, and our results are just a beginning. We also remark that there are other theoretical frameworks such as the [Neural Tangent Hierarchy](https://arxiv.org/abs/1909.08156) or the [Mean-Field Theory](https://arxiv.org/abs/1804.06561) that go beyond the NTK with their own advantages in various angles, but without computational efficiency guarantees. See the [slides](https://jasondlee88.github.io/slides/beyond_ntk.pdf) for more on going beyond NTK. Making progress on any of these directions (or coming up with new ones) would be an exciting direction for future work.
+
