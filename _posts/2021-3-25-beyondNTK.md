@@ -8,7 +8,7 @@ visible:    True
 
 The empirical success of deep learning has posed significant challenges to machine learning theory: Why can we efficiently train neural networks with gradient descent despite its highly non-convex optimization landscape? Why do over-parametrized networks generalize well? The recently proposed Neural Tangent Kernel (NTK) theory offers a powerful framework for understanding these, but yet still comes with its limitations.
 
-In this blog post, we explore how to analyze wide neural networks beyond the NTK theory, based on our recent [Beyond Linearization paper](https://arxiv.org/abs/1910.01619) and follow-up [paper on understanding hierarchical learning](https://arxiv.org/abs/2006.13436). (This blog post is also cross-posted at the [Salesforce Research blog](blog.einstein.ai/beyond-ntk/).)
+In this blog post, we explore how to analyze wide neural networks beyond the NTK theory, based on our recent [Beyond Linearization paper](https://arxiv.org/abs/1910.01619) and follow-up [paper on understanding hierarchical learning](https://arxiv.org/abs/2006.13436). (This blog post is also cross-posted at the [Salesforce Research blog](https://blog.einstein.ai/beyond-ntk/).)
 
 ### Neural Tangent Kernels
 The Neural Tangent Kernel (NTK) is a recently proposed theoretical framework for establishing provable convergence and generalization guarantees for wide (over-parametrized) neural networks [(Jacot et al. 2018)](https://arxiv.org/abs/1806.07572). Roughly speaking, the NTK theory shows that
@@ -59,7 +59,7 @@ $$
 f_{W_0+W}(x) = f^{(0)}_{W_0}(x) + \sum_{k=1}^\infty f^{(k)}_{W_0, W}(x).
 $$
 
-Each term $ f^{(k)}_{W_0, W}$ is a $k$-th order polynomial of the trainable parameter $W$. For the moment assume that $ f^{(0)}_{W_0}(x)=0$ (this can be achieved via techniques such as the symmetric initialization).
+Above, term $f^{(k)}$ is a $k$-th order polynomial of the trainable parameter $W$. For the moment assume that $f^{(0)}(x)=0$ (this can be achieved via techniques such as the symmetric initialization).
 
 The key insight of the NTK theory can be described as the following **linearized approximation** property
 > For small enough $W$, the neural network $f_{W_0,W}$ is closely approximated by the linear model $f^{(1)}$.
