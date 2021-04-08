@@ -106,7 +106,7 @@ that would make sense to Rip van Winkle (e.g., [Huffman Coding](https://en.wikip
 is not counted towards the description length – provided the same method is used for all papers submitted to Rip van Winkle. To give an example, a 
 technique appearing in a text known to Rip van Winkle could be succinctly referred to using the book's ISBN number and page number.
 
-##Estimating MOE of ResNet-152
+## Estimating MOE of ResNet-152
 As an illustration, here we provide a suitable description allowing  Rip van Winkle to reproduce a mainstream ImageNet model, ResNet-152, which achieves $4.49\%$ top-5 
 test error. 
 
