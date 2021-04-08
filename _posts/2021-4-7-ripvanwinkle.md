@@ -32,7 +32,7 @@ which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam
 [mythical person who fell asleep for  20 years](https://en.wikipedia.org/wiki/Rip_Van_Winkle).
 
 <figure align="center" >
-<img src="http://www.offconvex.org/assets/ripvanwinkle.jpg" alt="drawing" width="70%"/>
+<img src="http://www.offconvex.org/assets/ripvanwinkle.jpg" alt="drawing" width="50%"/>
   <figcaption><b>Rip Van Winkle waking up from his 20 year sleep</b></figcaption>
 </figure>
 
@@ -127,7 +127,7 @@ reproducing DenseNet-264, which leads to $5.06\%$ upper bound on its meta-overfi
 Note that the number $5.06$ suggests higher precision than actually given by the method, since it is possible to quibble about the coding assumptions 
 that led to it.  Perhaps others might use a more classical coding mechanism and obtain an estimate of $6\%$ or $7\%$.
 
-But the important point is that unlike  existing bounds in Adaptive Data Analysis, there is **no** dependences on $t$, the number of models that have been tested before.
+But the important point is that unlike  existing bounds in Adaptive Data Analysis, there is **no** dependence on $t$, the number of models that have been tested before, and the bound is non-vacuous.
 
 ## Empirical evidence about lack of meta-overfitting 
 
