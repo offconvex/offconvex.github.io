@@ -1,8 +1,7 @@
 ---
 layout:     post
 title:      Rip van Winkle's Razor: A Simple New Estimate for Adaptive Data Analysis
-date:       2021-04-05 9:00:00
-summary:    
+date:       2021-04-07 19:00:00    
 author:     Sanjeev Arora and Yi Zhang
 visible:    False
 ---
