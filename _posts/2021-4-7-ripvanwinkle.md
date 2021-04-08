@@ -30,7 +30,7 @@ which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam
 
 <figure align="center" >
 <img src="http://www.offconvex.org/assets/ripvanwinkle.jpg" alt="drawing" width="50%"/>
-  <figcaption><it> Rip Van Winkle waking up from his 20 year sleep </it> </figcaption>
+  <figcaption> *Rip Van Winkle waking up from his 20 year sleep* </it> </figcaption>
 </figure>
 
 
@@ -51,8 +51,7 @@ However such recommended best practices do not help with understanding the MOE i
 inventors never tuned models using the test set, or didn't get inspiration from existing models that may have been designed that way.  Thus statistically 
 speaking the above results still give no reason to believe that a modern deep net such as ResNet152 has low MOE. 
 
-[Recht et al. 2019](http://proceedings.mlr.press/v97/recht19a/recht19a.pdf) summed up the MOE issue in a catchy title: *Do ImageNet Classifiers Generalize to ImageNet?*  
-They tried to answer their question experimentally by creating new test sets from scratch --we discuss their results later.
+[Recht et al. 2019](http://proceedings.mlr.press/v97/recht19a/recht19a.pdf) summed up the MOE issue in a catchy title: *Do ImageNet Classifiers Generalize to ImageNet?*  They tried to answer their question experimentally by creating new test sets from scratch --we discuss their results later.
 
 
 
@@ -76,13 +75,13 @@ similar performance using the (universally available) training and validation da
 While this phrasing may appear reminiscent of the review process for conferences and journals, there is a subtle difference  with respect to what the referee 
 can or cannot be assumed to know. (Clearly, assumptions about the referee can greatly affect description length ---e.g,  a referee ignorant of even basic 
 calculus might need a very long explanation!)
-<dl>
-  <dt>Informed and Unbiased Referee:</dt>
-  <dd> An *Informed* referee knows everything that was known to humanity (e.g., about deep learning, mathematics,optimization, statistics etc.) right up to the 
-moment of creation of the Test set. An *Unbiased* referee is one who knows nothing discovered since that moment.</dd>
-  <dt>Description length of a model:</dt>
-  <dd>the minimum number of bits in a description needed to allow an informed but unbiased referee to reproduce the claimed result. </dd>
-</dl>
+
+> **Informed and Unbiased Referee:** "Knows everything that was known to humanity (e.g., about deep learning, mathematics,optimization, statistics etc.) right up to the 
+moment of creation of the Test set."
+
+>**Unbiased Referee** is one who knows nothing discovered since that moment.
+
+ Thus *Description Length* of a model is the number of bits in the shortest description that allows an informed but unbiased referee to reproduce the claimed result. 
 
 Requiring the referees to be informed allows descriptions to be shorter, while requiring them to be unbiased requires longer descriptions but helps 
 rule out statistical contamination due to any interaction whatsoever with the test set. For example, momentum techniques in optimization were 
