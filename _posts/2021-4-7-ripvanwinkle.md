@@ -30,7 +30,7 @@ which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam
 
 <figure align="center" >
 <img src="http://www.offconvex.org/assets/ripvanwinkle.jpg" alt="drawing" width="50%"/>
-  <figcaption> *Rip Van Winkle waking up from his 20 year sleep* </it> </figcaption>
+  <figcaption> *Rip Van Winkle waking up from his 20 year sleep* </figcaption>
 </figure>
 
 
@@ -38,7 +38,7 @@ which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam
 
 It is well-known that for a model trained **without** ever querying the test set, MOE scales (with high probability over choice of the test set) as $1/\sqrt{N}$ where $N$ 
 is the size of the test set.  Furthermore standard concentration bounds imply that even if we train $t$ models without ever referring to the test set (in other words, 
-using proper data hygiene) then the maximum meta-overfitting error among the $t$ models scales whp as $O(\sqrt{\log(t)/ N})$. The trouble pinpointed by Dwork et al.\ 
+using proper data hygiene) then the maximum meta-overfitting error among the $t$ models scales whp as $O(\sqrt{\log(t)/ N})$. The trouble pinpointed by Dwork et al. 
 can happen only if models are designed adaptively, with test error of the previous models shaping the design of the next model.
 
 Adaptive Data Analysis has come up with many good practices for honest researchers to mitigate such issues. For instance, Dwork et al. showed that using 
@@ -76,10 +76,10 @@ While this phrasing may appear reminiscent of the review process for conferences
 can or cannot be assumed to know. (Clearly, assumptions about the referee can greatly affect description length ---e.g,  a referee ignorant of even basic 
 calculus might need a very long explanation!)
 
-> **Informed and Unbiased Referee:** "Knows everything that was known to humanity (e.g., about deep learning, mathematics,optimization, statistics etc.) right up to the 
+> **Informed Referee:** "Knows everything that was known to humanity (e.g., about deep learning, mathematics,optimization, statistics etc.) right up to the 
 moment of creation of the Test set."
 
->**Unbiased Referee** is one who knows nothing discovered since that moment.
+>**Unbiased Referee:** Knows nothing discovered since the Test set was created.
 
  Thus *Description Length* of a model is the number of bits in the shortest description that allows an informed but unbiased referee to reproduce the claimed result. 
 
