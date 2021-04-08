@@ -117,7 +117,7 @@ as *CONV, MaxPool, ReLU, SGD* etc., as well as a graph-theoretic notation/shorth
 including *Batch-Norm*, *Layer, Block* are defined precisely using Math, English, and other primitive concepts. 
 
 <figure align="center">
-<img  src="./assets/resnet_description.png" alt="drawing" width="700"/>
+<img  src="./assets/resnet_description.png" alt="drawing" width="80%"/>
   <figcaption><b>Description for reproducing ResNet-152</b></figcaption>
 </figure>
 
