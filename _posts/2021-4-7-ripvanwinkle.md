@@ -96,8 +96,7 @@ of as an infinitely well-informed researcher who went into deep sleep at the mom
 to start refereeing the  latest papers.  Real-life journal referees who luckily did not suffer this way should try to simulate the idealized Rip van Winkle 
 in their heads while perusing the description submitted by the researcher.
 
-To allow as short a  description as possible the researcher is allowed to compress the description of their new deep net non-destructively using any compression  
-that would make sense to Rip van Winkle (e.g., [Huffman Coding](https://en.wikipedia.org/wiki/Huffman_coding)). The description of the compression method itself 
+To allow as short a  description as possible the researcher is allowed to compress the description of their new deep net non-destructively using any compression  that would make sense to Rip van Winkle (e.g., [Huffman Coding](https://en.wikipedia.org/wiki/Huffman_coding)). The description of the compression method itself 
 is not counted towards the description length – provided the same method is used for all papers submitted to Rip van Winkle. To give an example, a 
 technique appearing in a text known to Rip van Winkle could be succinctly referred to using the book's ISBN number and page number.
 
