@@ -129,16 +129,11 @@ But the important point is that unlike  existing bounds in Adaptive Data Analysi
 Our estimates indicate that the issue of meta-overfitting on ImageNet for these mainstream models is mild. The reason is that despite the vast number
  of parameters and hyper-parameters in today's deep nets, the *information content* of these models is not high given  knowledge circa 2012.
 
-Recently Recht et al. [tried to reach an empirical upper bound on MOE by creating new test sets](https://arxiv.org/abs/1902.10811) for 
-ImageNet and [CIFAR-10](https://arxiv.org/abs/1806.00451). Carefully replicating the methodology used for constructing the original datasets, 
-they created new test sets and found that famous published models of the past seven years have test error higher by as much as 10-15% compared 
-to that on the original test set. On the face of it, this seemed to confirm a case of bad meta-overfitting but they  also presented some evidence 
-that the swing in test error was due to systemic effects during test set creation. For instance, a comparable swing happens also for models that
- predated the creation of ImageNet (and thus were not overfitted to the ImageNet test set). 
+Recently Recht et al. [tried to reach an empirical upper bound on MOE](https://arxiv.org/abs/1902.10811) for
+ImageNet and [CIFAR-10](https://arxiv.org/abs/1806.00451). They created new tests sets by carefully replicating the methodology used for constructing the original ones. They found that error of famous published models of the past seven years is as much as 10-15% higher on the new test set as compared to the original.  On the face of it, this seemed to confirm a case of bad meta-overfitting. But they  also presented evidence  that the swing in test error was due to systemic effects during test set creation. For instance, a comparable swing happens also for models that predated the creation of ImageNet (and thus were not overfitted to the ImageNet test set). 
 [A followup study](https://proceedings.neurips.cc/paper/2019/hash/ee39e503b6bedf0c98c388b7e8589aca-Abstract.html) of a hundred Kaggle competitions used fresh, 
 identically distributed test sets that were available from the official competition organizers. The authors concluded that MOE does not appear to be significant in modern ML. 
 
 
 ## Conclusions
-
-But to us the takeaway from Recht et al.'s results was the disquieting realization that  estimating MOE by creating a new test set is rife with systematic bias at best, and perhaps impossible, especially in datasets concerning rare or one-time phenomena (e.g., stock prices).  Thus their work left a pressing need for effective upper bounds on  meta-overfitting error. Our Rip van Winkle's razor is elementary, and easily deployable by the average researcher. We hope it becomes part of the standard toolbox in Adaptive Data Analysis.
+To us the  disquieting takeaway from Recht et al.'s results was that  estimating MOE by creating a new test set is rife with systematic bias at best, and perhaps impossible, especially in datasets concerning rare or one-time phenomena (e.g., stock prices).  Thus their work still left a pressing need for effective upper bounds on  meta-overfitting error. Our Rip van Winkle's Razor is elementary, and easily deployable by the average researcher. We hope it becomes part of the standard toolbox in Adaptive Data Analysis.
