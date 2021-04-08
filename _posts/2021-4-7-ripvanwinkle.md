@@ -1,9 +1,9 @@
 ---
 layout:     post
 title:      Rip van Winkle's Razor: A Simple New Estimate for Adaptive Data Analysis
-date:       2021-04-07 19:00:00    
+date:       2021-04-07 21:00:00    
 author:     Sanjeev Arora and Yi Zhang
-visible:    False
+visible:    True
 ---
 
 *Can you trust a model whose designer had access to the test/holdout set?* This implicit question 
