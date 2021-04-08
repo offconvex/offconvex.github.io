@@ -16,10 +16,7 @@ ImageNet etc.) the model designer has full access to the holdout set and is free
 Furthermore, even researchers who scrupulously follow the Basic Dictum may be unknowingly violating it when they take inspiration (and design choices) 
 from published works by others who presumably published *only the best of the many models they evaluated on the test set.* 
 
-Dwork et al. showed that if the test set has size $N$, and
-the designer is allowed to see the error of the first $i-1$ models on the test set before designing the $i$'th model, then a clever designer can  
-use so-called [*wacky boosting*](https://arxiv.org/pdf/1502.04585.pdf) (see this [blog post](http://blog.mrtz.org/2015/03/09/competition.html)) to ensure 
-the accuracy of the $t$'th model on the test set as high as $\Omega(\sqrt{t/N})$. In other words, the test set could become essentially useless once $t \gg N$, a 
+Dwork et al. showed that if the test set has size $N$, and the designer is allowed to see the error of the first $i-1$ models on the test set before designing the $i$'th model, then a clever designer can  use so-called [*wacky boosting*](https://arxiv.org/pdf/1502.04585.pdf) (see this [blog post](http://blog.mrtz.org/2015/03/09/competition.html)) to ensure the accuracy of the $t$'th model on the test set as high as $\Omega(\sqrt{t/N})$. In other words, the test set could become essentially useless once $t \gg N$, a 
 condition that holds in ML, whereby in popular datasets (CIFAR10, CIFAR100, ImageNet etc.)  $N$ is no more than $100,000$ and the total number of models being trained 
 world-wide is well in the millions if not higher (once you include hyperparameter searches). 
 
@@ -28,12 +25,12 @@ world-wide is well in the millions if not higher (once you include hyperparamete
 
 This blog post concerns [our new paper](https://arxiv.org/pdf/2102.13189.pdf), which gives meaningful upper bounds on this sort of trouble for popular 
 deep net architectures, whereas prior ideas from adaptive data analysis gave no nontrivial estimates. We call our estimate  *Rip van Winkle's Razor* 
-which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam%27s_razor)) and the 
+which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam%27s_razor) and the 
 [mythical person who fell asleep for  20 years](https://en.wikipedia.org/wiki/Rip_Van_Winkle).
 
 <figure align="center" >
 <img src="http://www.offconvex.org/assets/ripvanwinkle.jpg" alt="drawing" width="50%"/>
-  <figcaption><b>Rip Van Winkle waking up from his 20 year sleep</b></figcaption>
+  <figcaption><it> Rip Van Winkle waking up from his 20 year sleep </it> </figcaption>
 </figure>
 
 
