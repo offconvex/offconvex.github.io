@@ -83,8 +83,7 @@ moment of creation of the Test set."
 
  Thus *Description Length* of a model is the number of bits in the shortest description that allows an informed but unbiased referee to reproduce the claimed result. 
 
-Requiring the referees to be informed allows descriptions to be shorter, while requiring them to be unbiased requires longer descriptions but helps 
-rule out statistical contamination due to any interaction whatsoever with the test set. For example, momentum techniques in optimization were 
+Note that informed referees let descriptions get shorter. Unbiased require longer descriptions that rule out any statistical "contamination" due to any interaction whatsoever with the test set. For example, momentum techniques in optimization were 
 well-studied before the creation of ImageNet test set, so informed referees can be expected to understand a line like “SGD with momentum 0.9.” But a 
 line like "Use Batch Normalization" cannot be understood by unbiased referees since conceivably this technique (invented after 2012) might have
  become popular precisely because it leads to better performance on the test set of ImageNet.
