@@ -32,7 +32,7 @@ which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam
 [mythical person who fell asleep for  20 years](https://en.wikipedia.org/wiki/Rip_Van_Winkle).
 
 <figure align="center" >
-<img src="./assets/ripvanwinkle.jpg" alt="drawing" width="70%"/>
+<img src="http://www.offconvex.org/assets/ripvanwinkle.jpg" alt="drawing" width="70%"/>
   <figcaption><b>Rip Van Winkle waking up from his 20 year sleep</b></figcaption>
 </figure>
 
@@ -116,7 +116,7 @@ as *CONV, MaxPool, ReLU, SGD* etc., as well as a graph-theoretic notation/shorth
 including *Batch-Norm*, *Layer, Block* are defined precisely using Math, English, and other primitive concepts. 
 
 <figure align="center">
-<img  src="./assets/resnet_description.png" alt="drawing" width="80%"/>
+<img  src="http://www.offconvex.org/assets/resnet_description.png" alt="drawing" width="80%"/>
   <figcaption><b>Description for reproducing ResNet-152</b></figcaption>
 </figure>
 
