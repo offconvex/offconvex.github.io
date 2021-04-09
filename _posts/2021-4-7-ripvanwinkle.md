@@ -30,7 +30,7 @@ which combines references to [Occam's Razor](https://en.wikipedia.org/wiki/Occam
 
 <figure align="center" >
 <img src="http://www.offconvex.org/assets/ripvanwinkle.jpg" alt="drawing" width="50%"/>
-  <figcaption> *Rip Van Winkle waking up from his 20 year sleep* </figcaption>
+  <figcaption> Rip Van Winkle waking up from his 20 year sleep and clearly in need of a Razor </figcaption>
 </figure>
 
 
