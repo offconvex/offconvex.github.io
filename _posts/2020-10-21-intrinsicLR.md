@@ -55,7 +55,7 @@ This is the usual approach to  formal understanding of CW 2 ([Smith&Le, 2018](ht
 
 $$	dW_t = - \eta_t \lambda W_t dt - \eta_t \nabla \mathcal{L}(W_t) dt + \eta_t \Sigma_{W_t}^{1/2} dB_t,$$
 
-where $\sigma_{W_t}$ is the covariance of stochastic gradient $ \nabla \mathcal{L}(w_t; \mathcal{B}_t)$,  and $B_t$ denotes Brownian motion of the appropriate dimension. Several works have adopted this SDE view and given some rigorous analysis of the effect of noise. 
+where $\sigma_{W_t}$ is the covariance of stochastic gradient $ \nabla \mathcal{L}(w_t; \mathcal{B}_t)$,  and $B_t$ denotes Brownian motion of the appropriate dimension. Several works have adopted this SDE view and given some rigorous analysis of the effect of noise. 
 
 In this story, SGD turns into a geometric random walk in the landscape, which can in principle explore the landscape more thoroughly, for instance by occasionally making loss-increasing steps. While an appealing view, rigorous analysis is difficult because we lack a mathematical description of the loss landscape.  Various papers assume the noise in SDE is isotropic Gaussian, and then derive an expression for the stationary distribution of the random walk in terms of the familiar Gibbs distribution. This view gives intuitively appealing explanation of some deep learning phenomena since the magnitude of noise (which is related to LR and batch size) controls the convergence speed and other properties. For instance it’s well-known that this SDE approximation implies the well-known *linear scaling rule* (Goyal et. al., 2017](https://arxiv.org/pdf/1706.02677.pdf)).
 
