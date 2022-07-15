@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Implicit Regularization in Hierarchical Tensor Factorization and Deep Convolutional Networks
-date:       2022-07-15 00:00:00
+date:       2022-07-15 09:00:00
 author:     Noam Razin
 visible:    True
 ---
